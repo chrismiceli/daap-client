@@ -1,9 +1,0 @@
-#summary *DAAP client* is an application for android enabled devices.
-
-= Introduction =
-
-[http://en.wikipedia.org/wiki/Digital_Audio_Access_Protocol DAAP] is a protocol that was originally introduced by iTunes, but has been reversed engineered.  Since, iTunes has changed the protocl; however, many other music servers still support the original protocl.  DAAP client is an application that allows you to connect to DAAP servers and listen to the music.
-
-= Details =
-
-We are on version 0.7 right now.  The most recent version adds support for streaming (albeit in beta), large screen support, and fixes other bugs - noticeably it now remembers the list position when hitting back.
