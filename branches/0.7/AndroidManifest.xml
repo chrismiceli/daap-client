@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.mult.daap" android:versionCode="14" android:versionName=".7">
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<application android:icon="@drawable/icon" android:label="@string/app_name">
+		<activity android:name=".Servers" android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".MediaPlayback" android:label="@string/media_playback_activity"
+			android:launchMode="singleTop" />
+		<activity android:name=".SongBrowser" android:label="@string/song_browser_activity">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".TabMain" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".PlaylistBrowser" android:label="@string/playlist_browser_activity" />
+		<activity android:name=".ArtistBrowser" android:theme="@android:style/Theme.NoTitleBar">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".AlbumBrowser" android:theme="@android:style/Theme.NoTitleBar">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".QueueListBrowser" android:label="@string/queue_browser_activity" />
+		<activity android:name=".AddServerMenu" android:label="@string/add_server_menu_activity" />
+		<activity android:name=".Preferences" android:label="Preferences" />
+		<activity android:name=".SearchActivity" android:label="Search">
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable"
+				android:resource="@xml/searchable" />
+		</activity>
+	</application>
+	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
+</manifest>
