@@ -1,0 +1,5 @@
+#summary *DAAP client* is a [http://en.wikipedia.org/wiki/Digital_Audio_Access_Protocol DAAP] client for android.
+
+= Introduction =
+
+We are still working on the wiki.
