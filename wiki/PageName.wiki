@@ -1,5 +1,5 @@
-#summary *DAAP client* is a [http://en.wikipedia.org/wiki/Digital_Audio_Access_Protocol DAAP] client for android.
+#summary Home Page for DAAP
 
 = Introduction =
 
-We are still working on the wiki.
+*DAAP client* is a [http://en.wikipedia.org/wiki/Digital_Audio_Access_Protocol DAAP] client for android.  We are still working on the wiki.
