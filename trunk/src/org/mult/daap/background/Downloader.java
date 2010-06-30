@@ -33,6 +33,7 @@ public class Downloader extends Observable implements Runnable
     public static final Integer STARTED_PLAYBACK = new Integer(4);
     public static final Integer STOP_NOTIFICATION = new Integer(5);
     public static final Integer START_NEXT_SONG = new Integer(6);
+    public static final Integer REPEAT_SONG = new Integer(7);
 
     private boolean interrupted;
     private boolean finished;

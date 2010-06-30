@@ -72,6 +72,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 
     private static final int MENU_STOP = 0;
     private static final int MENU_DOWNLOAD = 1;
+    private static final int MENU_REPEAT = 2;
+    private static final int MENU_SHUFFLE = 3;
     private int mTouchSlop;
     private int mInitialX = -1;
     private int mLastX = -1;
@@ -255,6 +257,11 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
             stopNotification();
             handleDownloading();
         }
+        else if (message == Downloader.REPEAT_SONG.intValue())
+        {
+            Contents.mediaPlayer.seekTo(0);
+            Contents.mediaPlayer.start();
+        }
         else if (message == Downloader.SDERROR.intValue())
         {
             Toast tst1 = Toast.makeText(MediaPlayback.this,
@@ -415,7 +422,14 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         {
             try
             {
-                Contents.setNextSong();
+                if (Contents.shuffle)
+                {
+                    Contents.setRandomSong();
+                }
+                else
+                {
+                    Contents.setNextSong();
+                }
             } catch (IndexOutOfBoundsException e)
             {
                 handler.removeMessages(REFRESH);
@@ -481,6 +495,22 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         {
             menu.findItem(MENU_DOWNLOAD).setEnabled(false);
         }
+        if (Contents.shuffle)
+        {
+            menu.findItem(MENU_SHUFFLE).setIcon(R.drawable.ic_menu_shuffle_on);
+        }
+        else
+        {
+            menu.findItem(MENU_SHUFFLE).setIcon(R.drawable.ic_menu_shuffle);
+        }
+        if (Contents.repeat)
+        {
+            menu.findItem(MENU_REPEAT).setIcon(R.drawable.ic_menu_repeat_on);
+        }
+        else
+        {
+            menu.findItem(MENU_REPEAT).setIcon(R.drawable.ic_menu_repeat);
+        }
         return true;
     }
 
@@ -492,6 +522,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
                 android.R.drawable.ic_menu_close_clear_cancel);
         menu.add(0, MENU_DOWNLOAD, 1, R.string.save).setIcon(
                 android.R.drawable.ic_menu_save);
+        menu.add(0, MENU_REPEAT, 2, R.string.repeat);
+        menu.add(0, MENU_SHUFFLE, 3, R.string.shuffle);
         return true;
     }
 
@@ -500,6 +532,12 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
     {
         switch (item.getItemId())
         {
+            case MENU_SHUFFLE:
+                Contents.shuffle = !Contents.shuffle;
+                break;
+            case MENU_REPEAT:
+                Contents.repeat = !Contents.repeat;
+                break;
             case MENU_STOP:
                 Downloader downloadThread = Contents.downloadThread;
                 if (downloadThread != null)
