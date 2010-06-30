@@ -219,14 +219,29 @@ public class DownloadListener extends Observable implements Observer
             {
                 try
                 {
-                    Contents.setNextSong();
+                    if (Contents.repeat)
+                    {
+                        notifyAndSet(Downloader.REPEAT_SONG);
+                        return;
+                    }
+                    else if (Contents.shuffle)
+                    {
+                        Contents.setRandomSong();
+                        notifyAndSet(Downloader.START_NEXT_SONG);
+                        return;
+                    }
+                    else
+                    {
+                        Contents.setNextSong();
+                        notifyAndSet(Downloader.START_NEXT_SONG);
+                        return;
+                    }
                 } catch (IndexOutOfBoundsException e)
                 {
                     notifyAndSet(Downloader.STOP_NOTIFICATION);
                     Contents.clearState();
                     return;
                 }
-                notifyAndSet(Downloader.START_NEXT_SONG);
             }
         }
     };
