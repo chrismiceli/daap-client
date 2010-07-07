@@ -245,8 +245,8 @@ public class DaapHost extends Host {
       return password;
    }
 
-   @SuppressWarnings("unchecked")
-   public Collection getPlaylists() {
+	@SuppressWarnings("rawtypes")
+public Collection getPlaylists() {
       if (playlists == null)
          playlists = new ArrayList();
       return playlists;
