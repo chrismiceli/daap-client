@@ -11,60 +11,59 @@ import javax.jmdns.ServiceListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
-public class JmDNSListener implements ServiceListener {
+public class JmDNSListener {
+	private JmDNS jmdns = null;
+	private Handler handler = null;
 
-   private JmDNS jmdns = null;
-   private Handler handler = null;
+	private class Lookup extends Thread {
+		private final ServiceEvent e;
 
-   public JmDNSListener(Handler handler) {
-      try {
-         InetAddress addr = InetAddress.getLocalHost();
-         this.handler = handler;
-         jmdns = new JmDNS(addr);
-         jmdns.addServiceListener("_daap._tcp.local.", this);
+		public Lookup(final ServiceEvent e) {
+			this.e = e;
+		}
 
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
-   }
+		public void run() {
+			ServiceInfo si = jmdns.getServiceInfo(e.getType(), e.getName());
+			Log.v("JMDNSLISTENER", si.getHostAddress() + ":" + si.getPort());
+			Bundle bundle = new Bundle();
+			bundle.putString("name", si.getName());
+			bundle.putString("address",
+					si.getHostAddress() + ":" + si.getPort());
+			Message msg = Message.obtain();
+			msg.setTarget(handler);
+			msg.setData(bundle);
+			handler.sendMessage(msg);
+		}
+	}
 
-   private class resolveThread extends Thread {
-      private ServiceEvent event;
+	public JmDNSListener(Handler handler, InetAddress wifi) {
+		try {
+			this.handler = handler;
+			jmdns = JmDNS.create(wifi);
+			jmdns.addServiceListener("_daap._tcp.local.",
+					new ServiceListener() {
+						@Override
+						public void serviceResolved(ServiceEvent arg0) {
+						}
 
-      public resolveThread(ServiceEvent e) {
-         event = e;
-      }
+						@Override
+						public void serviceRemoved(ServiceEvent arg0) {
+						}
 
-      @Override
-      public void run() {
-         jmdns.requestServiceInfo(event.getType(), event.getName());
-      }
-   }
+						@Override
+						public void serviceAdded(ServiceEvent e) {
+							Lookup l = new Lookup(e);
+							l.start();
+						}
+					});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-   public void serviceAdded(ServiceEvent event) {
-      (new resolveThread(event)).start();
-   }
-
-   public void serviceRemoved(ServiceEvent event) {
-   }
-
-   public void serviceResolved(ServiceEvent event) {
-      if (event.getType().equals("_daap._tcp.local.") == false) {
-         return;
-      }
-      ServiceInfo info = event.getInfo();
-      if (info == null) {
-         return;
-      } else {
-         Bundle bundle = new Bundle();
-         bundle.putString("name", info.getName());
-         bundle.putString("address", info.getHostAddress() + ":"
-               + info.getPort());
-         Message msg = Message.obtain();
-         msg.setTarget(handler);
-         msg.setData(bundle);
-         handler.sendMessage(msg);
-      }
-   }
+	public void interrupt() {
+		jmdns.close();
+	}
 }

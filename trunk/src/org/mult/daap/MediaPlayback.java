@@ -278,13 +278,13 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         }
         else if (message == Downloader.MEDIA_PLAYBACK_ERROR.intValue())
         {
-            Toast tst = Toast
-                    .makeText(MediaPlayback.this,
-                            getString(R.string.media_playback_error),
-                            Toast.LENGTH_LONG);
-            tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2, tst
-                    .getYOffset() / 2);
-            tst.show();
+			//            Toast tst = Toast
+			//                    .makeText(MediaPlayback.this,
+			//                            getString(R.string.media_playback_error),
+			//                            Toast.LENGTH_LONG);
+			//            tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2, tst
+			//                    .getYOffset() / 2);
+			//            tst.show();
             stopNotification();
             Contents.clearState();
             observable.deleteObservers();

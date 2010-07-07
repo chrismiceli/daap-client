@@ -17,7 +17,7 @@ import java.util.List;
  */
 public abstract class BasicStatusObject {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private List status_listeners = new ArrayList();
 	private int status;
 

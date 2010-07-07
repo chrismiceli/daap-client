@@ -9,6 +9,9 @@
 	<string name="donate">Donnation</string>
 	<string name="repeat">Répeter</string>
 	<string name="delete_entry">Supprimer l\'entrée</string>
+	<string name="play_album">Jouer l\'Album</string>
+	<string name="play_artist">Jouer l\'Artist</string>
+	<string name="all_songs">Toutes Les Chansons</string>
 	<string name="current_song">Chanson en cours</string>
 	<string name="upcoming_song"></string>
 	<string name="share_name">Nom de partage DAAP</string>
