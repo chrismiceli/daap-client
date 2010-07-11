@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.mult.daap" android:versionName=".8.2" android:versionCode="17">
+	package="org.mult.daap" android:versionName=".8.3.1" android:versionCode="20">
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -26,6 +26,10 @@
 				android:value=".SearchActivity" />
 		</activity>
 		<activity android:name=".AlbumBrowser" android:theme="@android:style/Theme.NoTitleBar">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".ArtistAlbumBrowser">
 			<meta-data android:name="android.app.default_searchable"
 				android:value=".SearchActivity" />
 		</activity>

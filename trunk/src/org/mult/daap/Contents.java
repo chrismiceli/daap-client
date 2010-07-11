@@ -18,7 +18,6 @@ import org.mult.daap.client.StringIgnoreCaseComparator;
 import org.mult.daap.client.daap.DaapHost;
 
 import android.media.MediaPlayer;
-import android.util.Log;
 
 public class Contents {
 	public static ArrayList<Song> songList = new ArrayList<Song>();
@@ -29,8 +28,10 @@ public class Contents {
 	public static ArrayList<String> stringElements = new ArrayList<String>();
 	public static ArrayList<String> artistNameList = new ArrayList<String>();
 	public static ArrayList<String> albumNameList = new ArrayList<String>();
+	public static ArrayList<String> artistAlbumNameList = new ArrayList<String>();
 	public static TreeMap<String, ArrayList<Integer>> ArtistElements = new TreeMap<String, ArrayList<Integer>>();
 	public static TreeMap<String, ArrayList<Integer>> AlbumElements = new TreeMap<String, ArrayList<Integer>>();
+	public static TreeMap<String, ArrayList<Integer>> ArtistAlbumElements = new TreeMap<String, ArrayList<Integer>>();
 	public static DaapHost daapHost;
 	public static Downloader downloadThread = null;
 	public static GetSongsForPlaylist getSongsForPlaylist = null;
@@ -42,6 +43,7 @@ public class Contents {
 	public static File currentlyPlayingFile;
 	public static boolean shuffle = false;
 	public static boolean repeat = false;
+	public static boolean lastUsedAlbumActivity = false;
 	private static int position = 0;
 
 	public static void songListAdd(Song s) {
@@ -78,7 +80,6 @@ public class Contents {
 				throw new IndexOutOfBoundsException("End of list");
 		}
 		position = random.nextInt(activeList.size());
-		Log.v("Contents", "position = " + position);
 	}
 
 	public static void setPreviousSong() {

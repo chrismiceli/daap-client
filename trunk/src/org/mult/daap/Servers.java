@@ -14,6 +14,7 @@ import org.mult.daap.background.DBAdapter;
 import org.mult.daap.background.JmDNSListener;
 import org.mult.daap.background.LoginManager;
 import org.mult.daap.background.SeparatedListAdapter;
+import org.mult.daap.background.WrapMulticastLock;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,11 +29,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.net.wifi.WifiManager.MulticastLock;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -74,8 +73,9 @@ public class Servers extends Activity implements Observer {
 	private List<Map<String, String>> serversList = new ArrayList<Map<String, String>>();
 	private ArrayList<Bundle> discoveredServers = new ArrayList<Bundle>();
 	private ProgressDialog pd = null;
-	private MulticastLock fLock;
+	//	private MulticastLock fLock;
 	private boolean wiFi = false;
+	private WrapMulticastLock fLock;
 
 	public Map<String, ?> createItem(String title, String caption) {
 		Map<String, String> item = new HashMap<String, String>();
@@ -111,8 +111,6 @@ public class Servers extends Activity implements Observer {
 						public void onClick(View arg0) {
 							Contents.loginManager.interrupt();
 							Contents.loginManager.deleteObservers();
-							Log.v("SeRVERS", "password = "
-									+ password.getText().toString());
 							LoginManager lm = new LoginManager(
 									Contents.loginManager.name,
 									Contents.loginManager.address, password
@@ -158,7 +156,8 @@ public class Servers extends Activity implements Observer {
 				wiFi = false;
 			} else {
 				wiFi = true;
-				fLock = wifiManager.createMulticastLock("mylock");
+				fLock = new WrapMulticastLock(wifiManager);
+				//				fLock = wifiManager.createMulticastLock("mylock");
 				fLock.acquire();
 				byte[] wifiAddress = intToIp(wifiManager.getDhcpInfo().ipAddress);
 				InetAddress wifi = InetAddress.getByAddress(wifiAddress);
@@ -408,7 +407,6 @@ public class Servers extends Activity implements Observer {
 				startActivityForResult(intent, 1);
 			} else if (msg.what == LoginManager.PASSWORD_FAILED.intValue()) {
 				pd.dismiss();
-				//				Log.v("SERVERS", Contents.loginManager.address);
 				// Contents.loginManager = null;
 				showDialog(PASSWORD_DIALOG);
 				//				Contents.loginManager = null;

@@ -11,7 +11,6 @@ import javax.jmdns.ServiceListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 public class JmDNSListener {
 	private JmDNS jmdns = null;
@@ -26,7 +25,6 @@ public class JmDNSListener {
 
 		public void run() {
 			ServiceInfo si = jmdns.getServiceInfo(e.getType(), e.getName());
-			Log.v("JMDNSLISTENER", si.getHostAddress() + ":" + si.getPort());
 			Bundle bundle = new Bundle();
 			bundle.putString("name", si.getName());
 			bundle.putString("address",
