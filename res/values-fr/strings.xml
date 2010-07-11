@@ -47,7 +47,7 @@
 	<string name="options">Options</string>
 	<string name="fetching_music_title">Recupération de la musique...</string>
 	<string name="fetching_music_detail">Veuillez patienter pendant la récupération de la
-		musique .</string>
+		musique.</string>
 	<string name="unable_to_connect">Impossible de se connecter!</string>
 	<string name="connecting_title">Connection en cours ..</string>
 	<string name="connecting_detail">Soyez patient cela peut prendre du temps.
