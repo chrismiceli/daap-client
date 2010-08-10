@@ -17,6 +17,7 @@ public abstract class Playlist {
 	protected ArrayList status_listeners = new ArrayList();
 
 	public String name;
+	public boolean all_songs;
 	protected int status;
 
 	public static final int STATUS_NOT_INITIALIZED = 0;

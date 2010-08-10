@@ -53,10 +53,10 @@ public class PlaylistBrowser extends Activity implements Observer {
 		}
 		this.setContentView(R.xml.playlist_browser);
 		l = new ArrayList<DaapPlaylist>(Contents.daapHost.getPlaylists());
-		playlistList = (ListView) findViewById(R.id.playlistList);
 		l.add(0, new DaapPlaylist(Contents.daapHost,
-				getString(R.string.all_songs)));
+				getString(R.string.all_songs), true));
 		count = l.size();
+		playlistList = (ListView) findViewById(R.id.playlistList);
 		playlistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
 		playlistList.setOnItemClickListener(playlistGridListener);
 	}
@@ -186,6 +186,7 @@ public class PlaylistBrowser extends Activity implements Observer {
 			if (convertView == null) {
 				id = l.get(position).getName();
 				tv.setTextSize(24);
+				// tv.setTextColor(Color.rgb(0x00, 0x00, 0x00));
 				tv.setText(id);
 			} else {
 				tv = (TextView) convertView;

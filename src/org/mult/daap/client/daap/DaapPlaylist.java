@@ -30,11 +30,13 @@ public class DaapPlaylist extends Playlist {
 	public DaapPlaylist(DaapHost h) {
 		host = h;
 		setStatus(Playlist.STATUS_NOT_INITIALIZED);
+		this.all_songs = false;
 	}
 
-	public DaapPlaylist(DaapHost h, String n) {
+	public DaapPlaylist(DaapHost h, String n, boolean as) {
 		host = h;
 		name = n;
+		this.all_songs = as;
 		setStatus(Playlist.STATUS_NOT_INITIALIZED);
 	}
 
@@ -47,6 +49,7 @@ public class DaapPlaylist extends Playlist {
 			p = null;
 			setStatus(Playlist.STATUS_INITIALIZED);
 		} catch (BadResponseCodeException e) {
+			Log.v("DaapPlaylist", "BadResponse " + e.getMessage());
 			if (host.login()) {
 				initialize();
 				return;
