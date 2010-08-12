@@ -1,7 +1,6 @@
 // Copyright 2003-2005 Arthur van Hoff, Rick Blair
 // Licensed under Apache License version 2.0
 // Original license LGPL
-
 package javax.jmdns.impl;
 
 import java.io.ByteArrayOutputStream;
@@ -14,83 +13,57 @@ import java.util.Iterator;
 
 import android.util.Log;
 
-/**
- * DNS record
- * 
+/** DNS record
  * @version %I%, %G%
- * @author Arthur van Hoff, Rick Blair, Werner Randelshofer, Pierre Frisch
- */
+ * @author Arthur van Hoff, Rick Blair, Werner Randelshofer, Pierre Frisch */
 public abstract class DNSRecord extends DNSEntry {
 	public final static String TAG = DNSRecord.class.toString();
 	private int ttl;
 	private long created;
-
-	/**
-	 * This source is mainly for debugging purposes, should be the address that
-	 * sent this record.
-	 */
+	/** This source is mainly for debugging purposes, should be the address that
+	 * sent this record. */
 	private InetAddress source;
 
-	/**
-	 * Create a DNSRecord with a name, type, clazz, and ttl.
-	 */
+	/** Create a DNSRecord with a name, type, clazz, and ttl. */
 	DNSRecord(String name, int type, int clazz, int ttl) {
 		super(name, type, clazz);
 		this.ttl = ttl;
 		this.created = System.currentTimeMillis();
 	}
 
-	/**
-	 * True if this record is the same as some other record.
-	 */
+	/** True if this record is the same as some other record. */
 	public boolean equals(Object other) {
 		return (other instanceof DNSRecord) && sameAs((DNSRecord) other);
 	}
 
-	/**
-	 * True if this record is the same as some other record.
-	 */
+	/** True if this record is the same as some other record. */
 	boolean sameAs(DNSRecord other) {
 		return super.equals(other) && sameValue((DNSRecord) other);
 	}
 
-	/**
-	 * True if this record has the same value as some other record.
-	 */
+	/** True if this record has the same value as some other record. */
 	abstract boolean sameValue(DNSRecord other);
 
-	/**
-	 * True if this record has the same type as some other record.
-	 */
+	/** True if this record has the same type as some other record. */
 	boolean sameType(DNSRecord other) {
 		return type == other.type;
 	}
 
-	/**
-	 * Handles a query represented by this record.
-	 * 
+	/** Handles a query represented by this record.
 	 * @return Returns true if a conflict with one of the services registered
-	 *         with JmDNS or with the hostname occured.
-	 */
+	 * with JmDNS or with the hostname occured. */
 	abstract boolean handleQuery(JmDNSImpl dns, long expirationTime);
 
-	/**
-	 * Handles a responserepresented by this record.
-	 * 
+	/** Handles a responserepresented by this record.
 	 * @return Returns true if a conflict with one of the services registered
-	 *         with JmDNS or with the hostname occured.
-	 */
+	 * with JmDNS or with the hostname occured. */
 	abstract boolean handleResponse(JmDNSImpl dns);
 
-	/**
-	 * Adds this as an answer to the provided outgoing datagram.
-	 */
+	/** Adds this as an answer to the provided outgoing datagram. */
 	abstract DNSOutgoing addAnswer(JmDNSImpl dns, DNSIncoming in,
 			InetAddress addr, int port, DNSOutgoing out) throws IOException;
 
-	/**
-	 * True if this record is suppressed by the answers in a message.
-	 */
+	/** True if this record is suppressed by the answers in a message. */
 	boolean suppressedBy(DNSIncoming msg) {
 		try {
 			for (int i = msg.numAnswers; i-- > 0;) {
@@ -106,10 +79,8 @@ public abstract class DNSRecord extends DNSEntry {
 		}
 	}
 
-	/**
-	 * True if this record would be supressed by an answer. This is the case if
-	 * this record would not have a significantly longer TTL.
-	 */
+	/** True if this record would be supressed by an answer. This is the case if
+	 * this record would not have a significantly longer TTL. */
 	boolean suppressedBy(DNSRecord other) {
 		if (sameAs(other) && (other.ttl > ttl / 2)) {
 			return true;
@@ -117,52 +88,38 @@ public abstract class DNSRecord extends DNSEntry {
 		return false;
 	}
 
-	/**
-	 * Get the expiration time of this record.
-	 */
+	/** Get the expiration time of this record. */
 	long getExpirationTime(int percent) {
 		return created + (percent * ttl * 10L);
 	}
 
-	/**
-	 * Get the remaining TTL for this record.
-	 */
+	/** Get the remaining TTL for this record. */
 	int getRemainingTTL(long now) {
 		return (int) Math.max(0, (getExpirationTime(100) - now) / 1000);
 	}
 
-	/**
-	 * Check if the record is expired.
-	 */
+	/** Check if the record is expired. */
 	public boolean isExpired(long now) {
 		return getExpirationTime(100) <= now;
 	}
 
-	/**
-	 * Check if the record is stale, ie it has outlived more than half of its
-	 * TTL.
-	 */
+	/** Check if the record is stale, ie it has outlived more than half of its
+	 * TTL. */
 	boolean isStale(long now) {
 		return getExpirationTime(50) <= now;
 	}
 
-	/**
-	 * Reset the TTL of a record. This avoids having to update the entire record
-	 * in the cache.
-	 */
+	/** Reset the TTL of a record. This avoids having to update the entire record
+	 * in the cache. */
 	void resetTTL(DNSRecord other) {
 		created = other.created;
 		ttl = other.ttl;
 	}
 
-	/**
-	 * Write this record into an outgoing message.
-	 */
+	/** Write this record into an outgoing message. */
 	abstract void write(DNSOutgoing out) throws IOException;
 
-	/**
-	 * Address record.
-	 */
+	/** Address record. */
 	public static class Address extends DNSRecord {
 		InetAddress addr;
 
@@ -231,11 +188,9 @@ public abstract class DNSRecord extends DNSEntry {
 			return addr;
 		}
 
-		/**
-		 * Creates a byte array representation of this record. This is needed
+		/** Creates a byte array representation of this record. This is needed
 		 * for tie-break tests according to
-		 * draft-cheshire-dnsext-multicastdns-04.txt chapter 9.2.
-		 */
+		 * draft-cheshire-dnsext-multicastdns-04.txt chapter 9.2. */
 		private byte[] toByteArray() {
 			try {
 				ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -255,11 +210,9 @@ public abstract class DNSRecord extends DNSEntry {
 			}
 		}
 
-		/**
-		 * Does a lexicographic comparison of the byte array representation of
+		/** Does a lexicographic comparison of the byte array representation of
 		 * this record and that record. This is needed for tie-break tests
-		 * according to draft-cheshire-dnsext-multicastdns-04.txt chapter 9.2.
-		 */
+		 * according to draft-cheshire-dnsext-multicastdns-04.txt chapter 9.2. */
 		private int lexCompare(DNSRecord.Address that) {
 			byte[] thisBytes = this.toByteArray();
 			byte[] thatBytes = that.toByteArray();
@@ -275,9 +228,7 @@ public abstract class DNSRecord extends DNSEntry {
 			return thisBytes.length - thatBytes.length;
 		}
 
-		/**
-		 * Does the necessary actions, when this as a query.
-		 */
+		/** Does the necessary actions, when this as a query. */
 		@SuppressWarnings("rawtypes")
 		boolean handleQuery(JmDNSImpl dns, long expirationTime) {
 			DNSRecord.Address dnsAddress = dns.getLocalHost()
@@ -285,12 +236,10 @@ public abstract class DNSRecord extends DNSEntry {
 			if (dnsAddress != null) {
 				if (dnsAddress.sameType(this) && dnsAddress.sameName(this)
 						&& (!dnsAddress.sameValue(this))) {
-
 					Log.d(TAG,
 							"handleQuery() Conflicting probe detected. dns state "
 									+ dns.getState() + " lex compare "
 									+ lexCompare(dnsAddress));
-
 					// Tie-breaker test
 					if (dns.getState().isProbing()
 							&& lexCompare(dnsAddress) >= 0) {
@@ -311,9 +260,7 @@ public abstract class DNSRecord extends DNSEntry {
 			return false;
 		}
 
-		/**
-		 * Does the necessary actions, when this as a response.
-		 */
+		/** Does the necessary actions, when this as a response. */
 		@SuppressWarnings("rawtypes")
 		boolean handleResponse(JmDNSImpl dns) {
 			DNSRecord.Address dnsAddress = dns.getLocalHost()
@@ -322,7 +269,6 @@ public abstract class DNSRecord extends DNSEntry {
 				if (dnsAddress.sameType(this) && dnsAddress.sameName(this)
 						&& (!dnsAddress.sameValue(this))) {
 					Log.d(TAG, "handleResponse() Denial detected");
-
 					if (dns.getState().isProbing()) {
 						dns.getLocalHost().incrementHostName();
 						dns.getCache().clear();
@@ -348,12 +294,9 @@ public abstract class DNSRecord extends DNSEntry {
 			return toString(" address '"
 					+ (addr != null ? addr.getHostAddress() : "null") + "'");
 		}
-
 	}
 
-	/**
-	 * Pointer record.
-	 */
+	/** Pointer record. */
 	public static class Pointer extends DNSRecord {
 		String alias;
 
@@ -453,9 +396,7 @@ public abstract class DNSRecord extends DNSEntry {
 		}
 	}
 
-	/**
-	 * Service record.
-	 */
+	/** Service record. */
 	public static class Service extends DNSRecord {
 		int priority;
 		int weight;
@@ -479,7 +420,6 @@ public abstract class DNSRecord extends DNSEntry {
 				out.writeName(server, false);
 			} else {
 				out.writeUTF(server, 0, server.length());
-
 				// add a zero byte to the end just to be safe, this is the
 				// strange
 				// form
@@ -535,16 +475,13 @@ public abstract class DNSRecord extends DNSEntry {
 			if (info != null
 					&& (port != info.port || !server.equalsIgnoreCase(dns
 							.getLocalHost().getName()))) {
-
 				Log.d(TAG, "handleQuery() Conflicting probe detected from: "
 						+ getRecordSource());
-
 				DNSRecord.Service localService = new DNSRecord.Service(
 						info.getQualifiedName(), DNSConstants.TYPE_SRV,
 						DNSConstants.CLASS_IN | DNSConstants.CLASS_UNIQUE,
 						DNSConstants.DNS_TTL, info.priority, info.weight,
 						info.port, dns.getLocalHost().getName());
-
 				// This block is useful for debugging race conditions when jmdns
 				// is
 				// respoding to
@@ -558,9 +495,7 @@ public abstract class DNSRecord extends DNSEntry {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 				int comparison = lexCompare(localService);
-
 				if (comparison == 0) {
 					// the 2 records are identical this probably means we are
 					// seeing
@@ -576,7 +511,6 @@ public abstract class DNSRecord extends DNSEntry {
 							"handleQuery() Ignoring a identical service query");
 					return false;
 				}
-
 				// Tie breaker test
 				if (info.getState().isProbing() && comparison > 0) {
 					// We lost the tie break
@@ -588,7 +522,6 @@ public abstract class DNSRecord extends DNSEntry {
 					Log.d(TAG,
 							"handleQuery() Lost tie break: new unique name chosen:"
 									+ info.getName());
-
 					// We revert the state to start probing again with the new
 					// name
 					info.revertState();
@@ -598,9 +531,7 @@ public abstract class DNSRecord extends DNSEntry {
 					// See paragraph 3 of section 9.2 in mdns draft spec
 					return false;
 				}
-
 				return true;
-
 			}
 			return false;
 		}
@@ -613,7 +544,6 @@ public abstract class DNSRecord extends DNSEntry {
 					&& (port != info.port || !server.equalsIgnoreCase(dns
 							.getLocalHost().getName()))) {
 				Log.d(TAG, "handleResponse() Denial detected");
-
 				if (info.getState().isProbing()) {
 					String oldName = info.getQualifiedName().toLowerCase();
 					info.setName(dns.incrementName(info.getName()));
@@ -623,7 +553,6 @@ public abstract class DNSRecord extends DNSEntry {
 					Log.d(TAG,
 							"handleResponse() New unique name chose:"
 									+ info.getName());
-
 				}
 				info.revertState();
 				return true;

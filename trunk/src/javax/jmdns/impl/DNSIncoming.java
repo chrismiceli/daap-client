@@ -1,7 +1,6 @@
 // /Copyright 2003-2005 Arthur van Hoff, Rick Blair
 // Licensed under Apache License version 2.0
 // Original license LGPL
-
 package javax.jmdns.impl;
 
 import java.io.IOException;
@@ -14,30 +13,24 @@ import java.util.List;
 
 import android.util.Log;
 
-/**
- * Parse an incoming DNS message into its components.
- * 
+/** Parse an incoming DNS message into its components.
  * @version %I%, %G%
- * @author Arthur van Hoff, Werner Randelshofer, Pierre Frisch, Daniel Bobbert
- */
+ * @author Arthur van Hoff, Werner Randelshofer, Pierre Frisch, Daniel Bobbert */
 public final class DNSIncoming {
 	public final static String TAG = DNSIncoming.class.toString();
 	// This is a hack to handle a bug in the BonjourConformanceTest
 	// It is sending out target strings that don't follow the "domain name"
 	// format.
 	public static boolean USE_DOMAIN_NAME_FORMAT_FOR_SRV_TARGET = true;
-
 	// Implementation note: This vector should be immutable.
 	// If a client of DNSIncoming changes the contents of this vector,
 	// we get undesired results. To fix this, we have to migrate to
 	// the Collections API of Java 1.2. i.e we replace Vector by List.
 	// final static Vector EMPTY = new Vector();
-
 	private DatagramPacket packet;
 	private int off;
 	private int len;
 	private byte data[];
-
 	int id;
 	private int flags;
 	private int numQuestions;
@@ -45,15 +38,12 @@ public final class DNSIncoming {
 	private int numAuthorities;
 	private int numAdditionals;
 	private long receivedTime;
-
 	@SuppressWarnings("rawtypes")
 	private List questions;
 	@SuppressWarnings("rawtypes")
 	List answers;
 
-	/**
-	 * Parse a message from a datagram packet.
-	 */
+	/** Parse a message from a datagram packet. */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	DNSIncoming(DatagramPacket packet) throws IOException {
 		this.packet = packet;
@@ -64,7 +54,6 @@ public final class DNSIncoming {
 		this.questions = Collections.EMPTY_LIST;
 		this.answers = Collections.EMPTY_LIST;
 		this.receivedTime = System.currentTimeMillis();
-
 		try {
 			id = readUnsignedShort();
 			flags = readUnsignedShort();
@@ -72,7 +61,6 @@ public final class DNSIncoming {
 			numAnswers = readUnsignedShort();
 			numAuthorities = readUnsignedShort();
 			numAdditionals = readUnsignedShort();
-
 			// parse questions
 			if (numQuestions > 0) {
 				questions = Collections.synchronizedList(new ArrayList(
@@ -83,7 +71,6 @@ public final class DNSIncoming {
 					questions.add(question);
 				}
 			}
-
 			// parse answers
 			int n = numAnswers + numAuthorities + numAdditionals;
 			if (n > 0) {
@@ -96,7 +83,6 @@ public final class DNSIncoming {
 					int len = readUnsignedShort();
 					int end = off + len;
 					DNSRecord rec = null;
-
 					switch (type) {
 					case DNSConstants.TYPE_A: // IPv4
 					case DNSConstants.TYPE_AAAA: // IPv6 FIXME [PJYF Oct 14
@@ -133,7 +119,6 @@ public final class DNSIncoming {
 							// follow the
 							// "domain name"
 							// format.
-
 							if (USE_DOMAIN_NAME_FORMAT_FOR_SRV_TARGET) {
 								target = readName();
 							} else {
@@ -155,7 +140,6 @@ public final class DNSIncoming {
 					default:
 						break;
 					}
-
 					if (rec != null) {
 						rec.setRecordSource(source);
 						// Add a record, if we were able to create one.
@@ -184,23 +168,17 @@ public final class DNSIncoming {
 		}
 	}
 
-	/**
-	 * Check if the message is a query.
-	 */
+	/** Check if the message is a query. */
 	boolean isQuery() {
 		return (flags & DNSConstants.FLAGS_QR_MASK) == DNSConstants.FLAGS_QR_QUERY;
 	}
 
-	/**
-	 * Check if the message is truncated.
-	 */
+	/** Check if the message is truncated. */
 	public boolean isTruncated() {
 		return (flags & DNSConstants.FLAGS_TC) != 0;
 	}
 
-	/**
-	 * Check if the message is a response.
-	 */
+	/** Check if the message is a response. */
 	boolean isResponse() {
 		return (flags & DNSConstants.FLAGS_QR_MASK) == DNSConstants.FLAGS_QR_RESPONSE;
 	}
@@ -264,7 +242,6 @@ public final class DNSIncoming {
 		int off = this.off;
 		int len = get(off++);
 		readUTF(buf, off, len);
-
 		return buf.toString();
 	}
 
@@ -273,7 +250,6 @@ public final class DNSIncoming {
 		int off = this.off;
 		int next = -1;
 		int first = off;
-
 		while (true) {
 			int len = get(off++);
 			if (len == 0) {
@@ -310,9 +286,7 @@ public final class DNSIncoming {
 		return buf.toString();
 	}
 
-	/**
-	 * Debugging.
-	 */
+	/** Debugging. */
 	@SuppressWarnings("rawtypes")
 	String print(boolean dump) {
 		StringBuffer buf = new StringBuffer();
@@ -362,7 +336,6 @@ public final class DNSIncoming {
 					buf.append(((ch > ' ') && (ch < 127)) ? (char) ch : '.');
 				}
 				buf.append("\n");
-
 				// limit message size
 				if (off + 32 >= 256) {
 					buf.append("....\n");
@@ -418,12 +391,9 @@ public final class DNSIncoming {
 		return buf.toString();
 	}
 
-	/**
-	 * Appends answers to this Incoming.
-	 * 
+	/** Appends answers to this Incoming.
 	 * @throws IllegalArgumentException
-	 *             If not a query or if Truncated.
-	 */
+	 * If not a query or if Truncated. */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	void append(DNSIncoming that) {
 		if (this.isQuery() && this.isTruncated() && that.isQuery()) {
@@ -431,15 +401,12 @@ public final class DNSIncoming {
 				if (Collections.EMPTY_LIST.equals(this.questions))
 					this.questions = Collections
 							.synchronizedList(new ArrayList(that.numQuestions));
-
 				this.questions.addAll(that.questions);
 				this.numQuestions += that.numQuestions;
 			}
-
 			if (Collections.EMPTY_LIST.equals(answers)) {
 				answers = Collections.synchronizedList(new ArrayList());
 			}
-
 			if (that.numAnswers > 0) {
 				this.answers.addAll(this.numAnswers,
 						that.answers.subList(0, that.numAnswers));

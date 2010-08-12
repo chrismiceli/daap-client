@@ -1,34 +1,22 @@
 //Copyright 2003-2005 Arthur van Hoff, Rick Blair
 //Licensed under Apache License version 2.0
 //Original license LGPL
-
 package javax.jmdns.impl;
 
 import java.util.ArrayList;
 
-/**
- * DNSState defines the possible states for services registered with JmDNS.
- * 
+/** DNSState defines the possible states for services registered with JmDNS.
  * @author Werner Randelshofer, Rick Blair
- * @version 1.0 May 23, 2004 Created.
- */
+ * @version 1.0 May 23, 2004 Created. */
 @SuppressWarnings("rawtypes")
 public class DNSState implements Comparable {
-
 	private final String name;
-
-	/**
-	 * Ordinal of next state to be created.
-	 */
+	/** Ordinal of next state to be created. */
 	private static int nextOrdinal = 0;
-	/**
-	 * Assign an ordinal to this state.
-	 */
+	/** Assign an ordinal to this state. */
 	private final int ordinal = nextOrdinal++;
-	/**
-	 * Logical sequence of states. The sequence is consistent with the ordinal
-	 * of a state. This is used for advancing through states.
-	 */
+	/** Logical sequence of states. The sequence is consistent with the ordinal
+	 * of a state. This is used for advancing through states. */
 	private final static ArrayList sequence = new ArrayList();
 
 	@SuppressWarnings("unchecked")
@@ -49,51 +37,39 @@ public class DNSState implements Comparable {
 	public static final DNSState ANNOUNCED = new DNSState("announced");
 	public static final DNSState CANCELED = new DNSState("canceled");
 
-	/**
-	 * Returns the next advanced state. In general, this advances one step in
+	/** Returns the next advanced state. In general, this advances one step in
 	 * the following sequence: PROBING_1, PROBING_2, PROBING_3, ANNOUNCING_1,
 	 * ANNOUNCING_2, ANNOUNCED. Does not advance for ANNOUNCED and CANCELED
-	 * state.
-	 */
+	 * state. */
 	public final DNSState advance() {
 		return (isProbing() || isAnnouncing()) ? (DNSState) sequence
 				.get(ordinal + 1) : this;
 	}
 
-	/**
-	 * Returns to the next reverted state. All states except CANCELED revert to
-	 * PROBING_1. Status CANCELED does not revert.
-	 */
+	/** Returns to the next reverted state. All states except CANCELED revert to
+	 * PROBING_1. Status CANCELED does not revert. */
 	public final DNSState revert() {
 		return (this == CANCELED) ? this : PROBING_1;
 	}
 
-	/**
-	 * Returns true, if this is a probing state.
-	 */
+	/** Returns true, if this is a probing state. */
 	public boolean isProbing() {
 		return compareTo(PROBING_1) >= 0 && compareTo(PROBING_3) <= 0;
 	}
 
-	/**
-	 * Returns true, if this is an announcing state.
-	 */
+	/** Returns true, if this is an announcing state. */
 	public boolean isAnnouncing() {
 		return compareTo(ANNOUNCING_1) >= 0 && compareTo(ANNOUNCING_2) <= 0;
 	}
 
-	/**
-	 * Returns true, if this is an announced state.
-	 */
+	/** Returns true, if this is an announced state. */
 	public boolean isAnnounced() {
 		return compareTo(ANNOUNCED) == 0;
 	}
 
-	/**
-	 * Compares two states. The states compare as follows: PROBING_1 &lt;
+	/** Compares two states. The states compare as follows: PROBING_1 &lt;
 	 * PROBING_2 &lt; PROBING_3 &lt; ANNOUNCING_1 &lt; ANNOUNCING_2 &lt;
-	 * RESPONDING &lt; ANNOUNCED &lt; CANCELED.
-	 */
+	 * RESPONDING &lt; ANNOUNCED &lt; CANCELED. */
 	public int compareTo(Object o) {
 		return ordinal - ((DNSState) o).ordinal;
 	}

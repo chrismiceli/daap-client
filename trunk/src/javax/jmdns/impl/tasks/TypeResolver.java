@@ -1,7 +1,6 @@
 // Copyright 2003-2005 Arthur van Hoff, Rick Blair
 // Licensed under Apache License version 2.0
 // Original license LGPL
-
 package javax.jmdns.impl.tasks;
 
 import java.util.Iterator;
@@ -15,24 +14,19 @@ import javax.jmdns.impl.DNSRecord;
 import javax.jmdns.impl.DNSState;
 import javax.jmdns.impl.JmDNSImpl;
 
-/**
- * Helper class to resolve service types.
+/** Helper class to resolve service types.
  * <p/>
  * The TypeResolver queries three times consecutively for service types, and
  * then removes itself from the timer.
  * <p/>
- * The TypeResolver will run only if JmDNS is in state ANNOUNCED.
- */
+ * The TypeResolver will run only if JmDNS is in state ANNOUNCED. */
 public class TypeResolver extends TimerTask {
-
 	/**
      * 
      */
 	private final JmDNSImpl jmDNSImpl;
 
-	/**
-	 * @param jmDNSImpl
-	 */
+	/** @param jmDNSImpl */
 	public TypeResolver(JmDNSImpl jmDNSImpl) {
 		this.jmDNSImpl = jmDNSImpl;
 	}
@@ -42,9 +36,7 @@ public class TypeResolver extends TimerTask {
 				DNSConstants.QUERY_WAIT_INTERVAL);
 	}
 
-	/**
-	 * Counts the number of queries that were sent.
-	 */
+	/** Counts the number of queries that were sent. */
 	int count = 0;
 
 	@SuppressWarnings("rawtypes")

@@ -1,7 +1,6 @@
 //Copyright 2003-2005 Arthur van Hoff, Rick Blair
 //Licensed under Apache License version 2.0
 //Original license LGPL
-
 package javax.jmdns.impl;
 
 import java.io.ByteArrayOutputStream;
@@ -18,31 +17,21 @@ import javax.jmdns.impl.DNSRecord.Pointer;
 import javax.jmdns.impl.DNSRecord.Service;
 import javax.jmdns.impl.DNSRecord.Text;
 
-/**
- * JmDNS service information.
- * 
+/** JmDNS service information.
  * @version %I%, %G%
- * @author Arthur van Hoff, Jeff Sonstein, Werner Randelshofer
- */
+ * @author Arthur van Hoff, Jeff Sonstein, Werner Randelshofer */
 public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 	private JmDNSImpl dns;
-
 	// State machine
-	/**
-	 * The state of this service info. This is used only for services announced
+	/** The state of this service info. This is used only for services announced
 	 * by JmDNS.
 	 * <p/>
 	 * For proper handling of concurrency, this variable must be changed only
-	 * using methods advanceState(), revertState() and cancel().
-	 */
+	 * using methods advanceState(), revertState() and cancel(). */
 	private DNSState state = DNSState.PROBING_1;
-
-	/**
-	 * Task associated to this service info. Possible tasks are JmDNS.Prober,
-	 * JmDNS.Announcer, JmDNS.Responder, JmDNS.Canceler.
-	 */
+	/** Task associated to this service info. Possible tasks are JmDNS.Prober,
+	 * JmDNS.Announcer, JmDNS.Responder, JmDNS.Canceler. */
 	private TimerTask task;
-
 	String type;
 	private String name;
 	String server;
@@ -54,17 +43,12 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 	Hashtable props;
 	InetAddress addr;
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#create(String, String, int, String)
-	 */
+	/** @see javax.jmdns.ServiceInfo#create(String, String, int, String) */
 	public ServiceInfoImpl(String type, String name, int port, String text) {
 		this(type, name, port, 0, 0, text);
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int,
-	 *      String)
-	 */
+	/** @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, String) */
 	public ServiceInfoImpl(String type, String name, int port, int weight,
 			int priority, String text) {
 		this(type, name, port, weight, priority, (byte[]) null);
@@ -80,10 +64,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		}
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int,
-	 *      Hashtable)
-	 */
+	/** @see javax.jmdns.ServiceInfo#create(String, String, int, int, int,
+	 * Hashtable) */
 	@SuppressWarnings("rawtypes")
 	public ServiceInfoImpl(String type, String name, int port, int weight,
 			int priority, Hashtable props) {
@@ -122,10 +104,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		}
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int,
-	 *      byte[])
-	 */
+	/** @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, byte[]) */
 	public ServiceInfoImpl(String type, String name, int port, int weight,
 			int priority, byte text[]) {
 		this.type = type;
@@ -136,23 +115,18 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		this.setText(text);
 	}
 
-	/**
-	 * Construct a service record during service discovery.
-	 */
+	/** Construct a service record during service discovery. */
 	ServiceInfoImpl(String type, String name) {
 		if (!type.endsWith(".")) {
 			throw new IllegalArgumentException(
 					"type must be fully qualified DNS name ending in '.': "
 							+ type);
 		}
-
 		this.type = type;
 		this.name = name;
 	}
 
-	/**
-	 * During recovery we need to duplicate service info to reregister them
-	 */
+	/** During recovery we need to duplicate service info to reregister them */
 	ServiceInfoImpl(ServiceInfoImpl info) {
 		if (info != null) {
 			this.type = info.type;
@@ -164,47 +138,34 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		}
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getType()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getType() */
 	public String getType() {
 		return type;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getName()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getName() */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Sets the service instance name.
-	 * 
+	/** Sets the service instance name.
 	 * @param name
-	 *            unqualified service instance name, such as <code>foobar</code>
-	 */
+	 * unqualified service instance name, such as <code>foobar</code> */
 	void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getQualifiedName()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getQualifiedName() */
 	public String getQualifiedName() {
 		return name + "." + type;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getServer()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getServer() */
 	public String getServer() {
 		return server;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getHostAddress()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getHostAddress() */
 	public String getHostAddress() {
 		return (addr != null ? addr.getHostAddress() : "");
 	}
@@ -213,44 +174,32 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		return addr;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getInetAddress()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getInetAddress() */
 	public InetAddress getInetAddress() {
 		return addr;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getPort()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getPort() */
 	public int getPort() {
 		return port;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getPriority()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getPriority() */
 	public int getPriority() {
 		return priority;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getWeight()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getWeight() */
 	public int getWeight() {
 		return weight;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getTextBytes()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getTextBytes() */
 	public byte[] getTextBytes() {
 		return getText();
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getTextString()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getTextString() */
 	public String getTextString() {
 		if ((getText() == null) || (getText().length == 0)
 				|| ((getText().length == 1) && (getText()[0] == 0))) {
@@ -259,16 +208,12 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		return readUTF(getText(), 0, getText().length);
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getURL()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getURL() */
 	public String getURL() {
 		return getURL("http");
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getURL(java.lang.String)
-	 */
+	/** @see javax.jmdns.ServiceInfo#getURL(java.lang.String) */
 	public String getURL(String protocol) {
 		String url = protocol + "://" + getHostAddress() + ":" + getPort();
 		String path = getPropertyString("path");
@@ -282,16 +227,12 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		return url;
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getPropertyBytes(java.lang.String)
-	 */
+	/** @see javax.jmdns.ServiceInfo#getPropertyBytes(java.lang.String) */
 	public synchronized byte[] getPropertyBytes(String name) {
 		return (byte[]) getProperties().get(name);
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getPropertyString(java.lang.String)
-	 */
+	/** @see javax.jmdns.ServiceInfo#getPropertyString(java.lang.String) */
 	public synchronized String getPropertyString(String name) {
 		byte data[] = (byte[]) getProperties().get(name);
 		if (data == null) {
@@ -303,18 +244,14 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		return readUTF(data, 0, data.length);
 	}
 
-	/**
-	 * @see javax.jmdns.ServiceInfo#getPropertyNames()
-	 */
+	/** @see javax.jmdns.ServiceInfo#getPropertyNames() */
 	@SuppressWarnings("rawtypes")
 	public Enumeration getPropertyNames() {
 		Hashtable props = getProperties();
 		return (props != null) ? props.keys() : new Vector().elements();
 	}
 
-	/**
-	 * Write a UTF string with a length to a stream.
-	 */
+	/** Write a UTF string with a length to a stream. */
 	void writeUTF(OutputStream out, String str) throws IOException {
 		for (int i = 0, len = str.length(); i < len; i++) {
 			int c = str.charAt(i);
@@ -333,9 +270,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		}
 	}
 
-	/**
-	 * Read data bytes as a UTF stream.
-	 */
+	/** Read data bytes as a UTF stream. */
 	String readUTF(byte data[], int off, int len) {
 		StringBuffer buf = new StringBuffer();
 		for (int end = off + len; off < end;) {
@@ -397,7 +332,6 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 				for (; (i < len) && (getText()[off + i] != '='); i++) {
 					;
 				}
-
 				// get the property name
 				String name = readUTF(getText(), off, i);
 				if (name == null) {
@@ -418,9 +352,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		return props;
 	}
 
-	/**
-	 * JmDNS callback to update a DNS record.
-	 */
+	/** JmDNS callback to update a DNS record. */
 	public void updateRecord(JmDNSImpl jmdns, long now, DNSRecord rec) {
 		if ((rec != null) && !rec.isExpired(now)) {
 			switch (rec.type) {
@@ -429,7 +361,6 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 											// has not been tested
 				if (rec.name.equals(server)) {
 					addr = ((DNSRecord.Address) rec).getAddress();
-
 				}
 				break;
 			case DNSConstants.TYPE_SRV:
@@ -470,41 +401,31 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		}
 	}
 
-	/**
-	 * Returns true if the service info is filled with data.
-	 */
+	/** Returns true if the service info is filled with data. */
 	public boolean hasData() {
 		return server != null && addr != null && getText() != null;
 	}
 
 	// State machine
-	/**
-	 * Sets the state and notifies all objects that wait on the ServiceInfo.
-	 */
+	/** Sets the state and notifies all objects that wait on the ServiceInfo. */
 	public synchronized void advanceState() {
 		state = state.advance();
 		notifyAll();
 	}
 
-	/**
-	 * Sets the state and notifies all objects that wait on the ServiceInfo.
-	 */
+	/** Sets the state and notifies all objects that wait on the ServiceInfo. */
 	synchronized void revertState() {
 		state = state.revert();
 		notifyAll();
 	}
 
-	/**
-	 * Sets the state and notifies all objects that wait on the ServiceInfo.
-	 */
+	/** Sets the state and notifies all objects that wait on the ServiceInfo. */
 	synchronized void cancel() {
 		state = DNSState.CANCELED;
 		notifyAll();
 	}
 
-	/**
-	 * Returns the current state of this info.
-	 */
+	/** Returns the current state of this info. */
 	public DNSState getState() {
 		return state;
 	}
@@ -561,9 +482,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 		out.addAnswer(new Text(getQualifiedName(), DNSConstants.TYPE_TXT,
 				DNSConstants.CLASS_IN | DNSConstants.CLASS_UNIQUE, ttl,
 				getText()), 0);
-
 		// out.addAnswer(rec, 0);
-
 		// if(localHost.getAddress() != null) {
 		// out.addAuthorativeAnswer(new DNSRecord.Address(getQualifiedName(),
 		// DNSConstants.TYPE_A, DNSConstants.CLASS_IN, ttl,

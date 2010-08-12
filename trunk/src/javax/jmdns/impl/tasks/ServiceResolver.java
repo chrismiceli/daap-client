@@ -1,7 +1,6 @@
 // Copyright 2003-2005 Arthur van Hoff, Rick Blair
 // Licensed under Apache License version 2.0
 // Original license LGPL
-
 package javax.jmdns.impl.tasks;
 
 import java.io.IOException;
@@ -17,23 +16,18 @@ import javax.jmdns.impl.DNSState;
 import javax.jmdns.impl.JmDNSImpl;
 import javax.jmdns.impl.ServiceInfoImpl;
 
-/**
- * The ServiceResolver queries three times consecutively for services of a given
+/** The ServiceResolver queries three times consecutively for services of a given
  * type, and then removes itself from the timer.
  * <p/>
  * The ServiceResolver will run only if JmDNS is in state ANNOUNCED. REMIND:
  * Prevent having multiple service resolvers for the same type in the timer
- * queue.
- */
+ * queue. */
 public class ServiceResolver extends TimerTask {
-
 	/**
      * 
      */
 	private final JmDNSImpl jmDNSImpl;
-	/**
-	 * Counts the number of queries being sent.
-	 */
+	/** Counts the number of queries being sent. */
 	int count = 0;
 	private String type;
 

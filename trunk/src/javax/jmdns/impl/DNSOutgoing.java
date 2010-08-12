@@ -1,26 +1,19 @@
 //Copyright 2003-2005 Arthur van Hoff, Rick Blair
 //Licensed under Apache License version 2.0
 //Original license LGPL
-
 package javax.jmdns.impl;
 
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-/**
- * An outgoing DNS message.
- * 
+/** An outgoing DNS message.
  * @version %I%, %G%
- * @author Arthur van Hoff, Rick Blair, Werner Randelshofer
- */
+ * @author Arthur van Hoff, Rick Blair, Werner Randelshofer */
 public final class DNSOutgoing {
-	/**
-	 * This can be used to turn off domain name compression. This was helpful
-	 * for tracking problems interacting with other mdns implementations.
-	 */
+	/** This can be used to turn off domain name compression. This was helpful
+	 * for tracking problems interacting with other mdns implementations. */
 	public static boolean USE_DOMAIN_NAME_COMPRESSION = true;
-
 	int id;
 	int flags;
 	private boolean multicast;
@@ -30,21 +23,16 @@ public final class DNSOutgoing {
 	private int numAdditionals;
 	@SuppressWarnings("rawtypes")
 	private Hashtable names;
-
 	byte data[];
 	int off;
 	int len;
 
-	/**
-	 * Create an outgoing multicast query or response.
-	 */
+	/** Create an outgoing multicast query or response. */
 	public DNSOutgoing(int flags) {
 		this(flags, true);
 	}
 
-	/**
-	 * Create an outgoing query or response.
-	 */
+	/** Create an outgoing query or response. */
 	@SuppressWarnings("rawtypes")
 	public DNSOutgoing(int flags, boolean multicast) {
 		this.flags = flags;
@@ -54,9 +42,7 @@ public final class DNSOutgoing {
 		off = 12;
 	}
 
-	/**
-	 * Add a question to the message.
-	 */
+	/** Add a question to the message. */
 	public void addQuestion(DNSQuestion rec) throws IOException {
 		if (numAnswers > 0 || numAuthorities > 0 || numAdditionals > 0) {
 			throw new IllegalStateException(
@@ -66,9 +52,7 @@ public final class DNSOutgoing {
 		writeQuestion(rec);
 	}
 
-	/**
-	 * Add an answer if it is not suppressed.
-	 */
+	/** Add an answer if it is not suppressed. */
 	void addAnswer(DNSIncoming in, DNSRecord rec) throws IOException {
 		if (numAuthorities > 0 || numAdditionals > 0) {
 			throw new IllegalStateException(
@@ -79,9 +63,7 @@ public final class DNSOutgoing {
 		}
 	}
 
-	/**
-	 * Add an additional answer to the record. Omit if there is no room.
-	 */
+	/** Add an additional answer to the record. Omit if there is no room. */
 	void addAdditionalAnswer(DNSIncoming in, DNSRecord rec) throws IOException {
 		if ((off < DNSConstants.MAX_MSG_TYPICAL - 200) && !rec.suppressedBy(in)) {
 			writeRecord(rec, 0);
@@ -89,9 +71,7 @@ public final class DNSOutgoing {
 		}
 	}
 
-	/**
-	 * Add an answer to the message.
-	 */
+	/** Add an answer to the message. */
 	public void addAnswer(DNSRecord rec, long now) throws IOException {
 		if (numAuthorities > 0 || numAdditionals > 0) {
 			throw new IllegalStateException(
@@ -108,9 +88,7 @@ public final class DNSOutgoing {
 	@SuppressWarnings("rawtypes")
 	private LinkedList authorativeAnswers = new LinkedList();
 
-	/**
-	 * Add an authorative answer to the message.
-	 */
+	/** Add an authorative answer to the message. */
 	@SuppressWarnings("unchecked")
 	public void addAuthorativeAnswer(DNSRecord rec) throws IOException {
 		if (numAdditionals > 0) {
@@ -120,9 +98,7 @@ public final class DNSOutgoing {
 		authorativeAnswers.add(rec);
 		writeRecord(rec, 0);
 		numAuthorities++;
-
 		// VERIFY:
-
 	}
 
 	void writeByte(int value) throws IOException {
@@ -214,7 +190,6 @@ public final class DNSOutgoing {
 				Integer offset = (Integer) names.get(name);
 				if (offset != null) {
 					int val = offset.intValue();
-
 					writeByte((val >> 8) | 0xC0);
 					writeByte(val & 0xFF);
 					return;
@@ -256,13 +231,10 @@ public final class DNSOutgoing {
 		}
 	}
 
-	/**
-	 * Finish the message before sending it off.
-	 */
+	/** Finish the message before sending it off. */
 	void finish() throws IOException {
 		int save = off;
 		off = 0;
-
 		writeShort(multicast ? 0 : id);
 		writeShort(flags);
 		writeShort(numQuestions);
@@ -322,9 +294,7 @@ public final class DNSOutgoing {
 		}
 		buf.append(",\nnames=" + names);
 		buf.append(",\nauthorativeAnswers=" + authorativeAnswers);
-
 		buf.append("]");
 		return buf.toString();
 	}
-
 }
