@@ -23,147 +23,138 @@
  */
 package org.mult.daap.client;
 
-/**
- * @author jbarnett
- * 
- *         To change the template for this generated type comment go to
- *         Window>Preferences>Java>Code Generation>Code and Comments
- */
+/** @author jbarnett
+ * To change the template for this generated type comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments */
 public class Song implements Comparable<Object> {
-   public String name;
-   public int id;
-   public int time;
-   public String album;
-   public String artist;
-   public short track;
+	public String name;
+	public int id;
+	public int time;
+	public String album;
+	public String artist;
+	public short track;
+	public short disc_num;
+	public String format;
+	public int size;
+	public Host host;
 
-   public String format;
-   public int size;
-   public Host host;
+	// public int status;
+	// public static int STATUS_OK = 0;
+	// public static int STATUS_NOT_FOUND = 2;
+	// public static int STATUS_ERROR = 3;
+	// public boolean compilation;
+	// public int bitrate;
+	// public String persistent_id;
+	// public short discnum;
+	// public String genre;
+	// public boolean is_available;
+	public Song() {
+		name = "";
+		id = 0;
+		album = "";
+		artist = "";
+		track = -1;
+		// genre = "";
+		format = "";
+		// compilation = false;
+		host = null;
+		// status = Song.STATUS_OK;
+	}
 
-   // public int status;
-   // public static int STATUS_OK = 0;
-   // public static int STATUS_NOT_FOUND = 2;
-   // public static int STATUS_ERROR = 3;
-   // public boolean compilation;
-   // public int bitrate;
-   // public String persistent_id;
-   // public short discnum;
-   // public String genre;
-   // public boolean is_available;
+	// public Song duplicate() throws CloneNotSupportedException {
+	// return (Song) clone();
+	// }
+	// public boolean contains(String s) {
+	// if (name.toLowerCase().indexOf(s) != -1)
+	// return true;
+	// else if (artist.toLowerCase().indexOf(s) != -1)
+	// return true;
+	// else if (album.toLowerCase().indexOf(s) != -1)
+	// return true;
+	// else if (genre.toLowerCase().indexOf(s) != -1)
+	// return true;
+	// else if (format.toLowerCase().indexOf(s) != -1)
+	// return true;
+	// else if (host.getName().toLowerCase().indexOf(s) != -1)
+	// return true;
+	// else if (s.startsWith("length:")
+	// && ("length:" + Integer.toString(time)).equals(s))
+	// return true;
+	// else if (s.startsWith("size:")
+	// && ("size:" + Integer.toString(size)).equals(s))
+	// return true;
+	// else if (s.startsWith("track:")
+	// && ("track:" + Integer.toString(track)).equals(s))
+	// return true;
+	// return false;
+	// }
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		Song s = (Song) o;
+		if (s.artist.equalsIgnoreCase(this.artist)
+				&& s.name.equalsIgnoreCase(this.name) && s.size == this.size)
+			return true;
+		else
+			return false;
+	}
 
-   public Song() {
-      name = "";
-      id = 0;
-      album = "";
-      artist = "";
-      track = -1;
-      // genre = "";
-      format = "";
-      // compilation = false;
-      host = null;
-      // status = Song.STATUS_OK;
-   }
+	public String toString() {
+		String ret = artist + (artist.length() > 0 ? " - " : "") + name;
+		return ret;
+	}
 
-   // public Song duplicate() throws CloneNotSupportedException {
-   // return (Song) clone();
-   // }
-
-   // public boolean contains(String s) {
-   // if (name.toLowerCase().indexOf(s) != -1)
-   // return true;
-   // else if (artist.toLowerCase().indexOf(s) != -1)
-   // return true;
-   // else if (album.toLowerCase().indexOf(s) != -1)
-   // return true;
-   // else if (genre.toLowerCase().indexOf(s) != -1)
-   // return true;
-   // else if (format.toLowerCase().indexOf(s) != -1)
-   // return true;
-   // else if (host.getName().toLowerCase().indexOf(s) != -1)
-   // return true;
-   // else if (s.startsWith("length:")
-   // && ("length:" + Integer.toString(time)).equals(s))
-   // return true;
-   // else if (s.startsWith("size:")
-   // && ("size:" + Integer.toString(size)).equals(s))
-   // return true;
-   // else if (s.startsWith("track:")
-   // && ("track:" + Integer.toString(track)).equals(s))
-   // return true;
-   // return false;
-   // }
-
-   public boolean equals(Object o) {
-      if (o == null)
-         return false;
-      Song s = (Song) o;
-      if (s.artist.equalsIgnoreCase(this.artist)
-            && s.name.equalsIgnoreCase(this.name) && s.size == this.size)
-         return true;
-      else
-         return false;
-   }
-
-   public String toString() {
-      String ret = artist + (artist.length() > 0 ? " - " : "") + name;
-      return ret;
-   }
-
-   // public String shortString() {
-   // return "\"" + name + "\" by " + artist;
-   // }
-   //
-   // public Host getHost() {
-   // return host;
-   // }
-   //
-   // public String getAlbum() {
-   // return album;
-   // }
-   //
-   // public String getArtist() {
-   // return artist;
-   // }
-   //
-   // public String getFormat() {
-   // return format;
-   // }
-
-   // public String getGenre() {
-   // return genre;
-   // }
-
-   // public int getId() {
-   // return id;
-   // }
-   //
-   // public String getName() {
-   // return name;
-   // }
-   //
-   // public int getTrack() {
-   // return track;
-   // }
-   //
-   // public int getTime() {
-   // return time;
-   // }
-   //
-   // public void setTime(int i) {
-   // time = i;
-   // }
-   //
-   // public int getSize() {
-   // return size;
-   // }
-
-   public int compareTo(Object another) {
-      if (another instanceof Song) {
-         return (this.id - ((Song) another).id);
-      } else if (another instanceof Integer) {
-         return (this.id - (Integer) another);
-      }
-      return 0; // all the same if can't compare
-   }
+	// public String shortString() {
+	// return "\"" + name + "\" by " + artist;
+	// }
+	//
+	// public Host getHost() {
+	// return host;
+	// }
+	//
+	// public String getAlbum() {
+	// return album;
+	// }
+	//
+	// public String getArtist() {
+	// return artist;
+	// }
+	//
+	// public String getFormat() {
+	// return format;
+	// }
+	// public String getGenre() {
+	// return genre;
+	// }
+	// public int getId() {
+	// return id;
+	// }
+	//
+	// public String getName() {
+	// return name;
+	// }
+	//
+	// public int getTrack() {
+	// return track;
+	// }
+	//
+	// public int getTime() {
+	// return time;
+	// }
+	//
+	// public void setTime(int i) {
+	// time = i;
+	// }
+	//
+	// public int getSize() {
+	// return size;
+	// }
+	public int compareTo(Object another) {
+		if (another instanceof Song) {
+			return (this.id - ((Song) another).id);
+		} else if (another instanceof Integer) {
+			return (this.id - (Integer) another);
+		}
+		return 0; // all the same if can't compare
+	}
 }

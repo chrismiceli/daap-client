@@ -145,8 +145,8 @@ public class SingleDatabaseRequest extends Request {
 				s.size = readInt(data, position, 4);
 				// } else if (name.equals("asco")) {
 				// s.compilation = (readInt(data, position, 1) == 1);
-				// } else if (name.equals("asbn")) {
-				// s.discnum = (short) readInt(data, position, 2);
+			} else if (name.equals("asdn")) {
+				s.disc_num = (short) readInt(data, position, 2);
 				// } else if (name.equals("asbr")) {
 				// s.bitrate = readInt(data, position, 2);
 			}
