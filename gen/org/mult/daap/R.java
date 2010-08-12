@@ -136,6 +136,7 @@ public final class R {
         public static final int songs=0x7f05003f;
         public static final int streaming=0x7f05003c;
         public static final int streaming_pref_detail=0x7f05003b;
+        public static final int translated_by=0x7f050043;
         public static final int unable_to_connect=0x7f05002a;
         public static final int upcoming_song=0x7f05000c;
         public static final int url_description=0x7f05000e;
