@@ -9,4 +9,8 @@
 		android:persistent="true" android:title="@string/streaming"
 		android:defaultValue="true" android:summaryOn="@string/streaming_pref_detail"
 		android:summaryOff="@string/streaming_pref_detail" />
+	<ListPreference android:key="font_pref"
+		android:persistent="true" android:title="@string/font_size"
+		android:summary="@string/font_pref_detail" android:entries="@array/fontArray"
+		android:defaultValue="16" android:entryValues="@array/fontValues" />
 </PreferenceScreen> 

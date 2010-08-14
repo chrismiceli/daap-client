@@ -91,8 +91,8 @@ public class Downloader extends Observable implements Runnable {
 			mediaLengthInBytes = mediaUrl.size;
 			byte buf[] = new byte[16384];
 			totalBytesRead = 0;
-			SharedPreferences mPrefs;
-			mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+			SharedPreferences mPrefs = PreferenceManager
+					.getDefaultSharedPreferences(context);
 			boolean sd = mPrefs.getBoolean("sd_as_cache", false);
 			if (sd == false) {
 				downloadedFile = new File(context.getCacheDir(),

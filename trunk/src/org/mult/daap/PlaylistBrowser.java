@@ -183,14 +183,10 @@ public class PlaylistBrowser extends Activity implements Observer {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			TextView tv = new TextView(vContext.getApplicationContext());
 			String id = null;
-			if (convertView == null) {
-				id = l.get(position).getName();
-				tv.setTextSize(24);
-				// tv.setTextColor(Color.rgb(0x00, 0x00, 0x00));
-				tv.setText(id);
-			} else {
-				tv = (TextView) convertView;
-			}
+			id = l.get(position).getName();
+			tv.setTextSize(24);
+			// tv.setTextColor(Color.rgb(0x00, 0x00, 0x00));
+			tv.setText(id);
 			return tv;
 		}
 	}
