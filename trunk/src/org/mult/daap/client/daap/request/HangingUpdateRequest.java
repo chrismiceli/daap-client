@@ -24,20 +24,14 @@ import java.net.URL;
 
 import org.mult.daap.client.daap.DaapHost;
 
-/**
- * @author jbarnett To change the template for this generated type comment go to
- *         Window>Preferences>Java>Code Generation>Code and Comments
- * @created July 15, 2004
- */
+/** @author jbarnett To change the template for this generated type comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
+ * @created July 15, 2004 */
 public class HangingUpdateRequest extends Request {
-
-	/**
-	 * Constructor for the HangingUpdateRequest object
-	 * 
+	/** Constructor for the HangingUpdateRequest object
 	 * @throws BadResponseCodeException
 	 * @throws PasswordFailedException
-	 * @throws IOException
-	 */
+	 * @throws IOException */
 	public HangingUpdateRequest(DaapHost h) throws BadResponseCodeException,
 			PasswordFailedException, IOException {
 		super(h);
@@ -52,8 +46,8 @@ public class HangingUpdateRequest extends Request {
 		httpc.addRequestProperty("Host", host.getAddress());
 		httpc.addRequestProperty("Client-DAAP-Version", "3.0");
 		httpc.setRequestProperty("User-Agent", "iTunes/4.6 (Windows; N)");
-		httpc.addRequestProperty("Client-DAAP-Access-Index", String
-				.valueOf(access_index));
+		httpc.addRequestProperty("Client-DAAP-Access-Index",
+				String.valueOf(access_index));
 		httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
 	}
 
@@ -91,11 +85,8 @@ public class HangingUpdateRequest extends Request {
 		httpc.disconnect();
 	}
 
-	/**
-	 * Gets the revNum attribute of the HangingUpdateRequest object
-	 * 
-	 * @return The revNum value
-	 */
+	/** Gets the revNum attribute of the HangingUpdateRequest object
+	 * @return The revNum value */
 	public int getRevNum() {
 		return -1;
 	}

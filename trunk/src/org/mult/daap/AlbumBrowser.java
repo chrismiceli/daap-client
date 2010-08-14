@@ -46,6 +46,7 @@ public class AlbumBrowser extends ListActivity {
 			finish();
 			return;
 		}
+		// if we haven't obtained the album list yet
 		if (Contents.albumNameList.size() == 0) {
 			for (Map.Entry<String, ArrayList<Integer>> entry : Contents.AlbumElements
 					.entrySet()) {
@@ -64,15 +65,6 @@ public class AlbumBrowser extends ListActivity {
 		createList();
 	}
 
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_CANCELED) {
 			setResult(Activity.RESULT_CANCELED);
@@ -87,7 +79,6 @@ public class AlbumBrowser extends ListActivity {
 				Contents.albumNameList);
 		setListAdapter(adapter);
 		albumList.setOnItemClickListener(musicGridListener);
-		albumList.setTextFilterEnabled(true);
 		albumList.setFastScrollEnabled(true);
 		albumList
 				.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {

@@ -28,65 +28,64 @@ import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.Hasher;
 
-/**
- * @author jbarnett To change the template for this generated type comment go to
- *         Window>Preferences>Java>Code Generation>Code and Comments
- * @created August 6, 2004
- */
+/** @author jbarnett To change the template for this generated type comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
+ * @created August 6, 2004 */
 public class SongRequest extends Request {
-   protected BufferedInputStream b;
-   protected long skip_bytes;
-   protected Song song;
+	protected BufferedInputStream b;
+	protected long skip_bytes;
+	protected Song song;
 
-   public SongRequest(DaapHost h, Song s, long bytes)
-         throws PasswordFailedException, BadResponseCodeException, IOException {
-      super(h);
-      host.getNextRequestNumber();
-      song = s;
-      skip_bytes = bytes;
-      query("SongRequest");
-      readResponse();
-      process();
-   }
+	public SongRequest(DaapHost h, Song s, long bytes)
+			throws PasswordFailedException, BadResponseCodeException,
+			IOException {
+		super(h);
+		host.getNextRequestNumber();
+		song = s;
+		skip_bytes = bytes;
+		query("SongRequest");
+		readResponse();
+		process();
+	}
 
-   protected void addRequestProperties() {
-      // httpc.addRequestProperty("Host", "" + host.getAddress() + ":"
-      // + host.getPort() + "/");
-      httpc.addRequestProperty("Host", "" + host.getAddress());
-      httpc.addRequestProperty("Accept", "*/*");
-      httpc.addRequestProperty("Cache-Control", "no-cache");
-      super.addRequestProperties();
-      httpc.addRequestProperty("Client-DAAP-Request-ID", ""
-            + host.getThisRequestNumber());
-      if (skip_bytes > 0)
-         httpc.addRequestProperty("Range", "bytes=" + skip_bytes + "-");
-      httpc.addRequestProperty("Connection", "close");
-   }
+	protected void addRequestProperties() {
+		// httpc.addRequestProperty("Host", "" + host.getAddress() + ":"
+		// + host.getPort() + "/");
+		httpc.addRequestProperty("Host", "" + host.getAddress());
+		httpc.addRequestProperty("Accept", "*/*");
+		httpc.addRequestProperty("Cache-Control", "no-cache");
+		super.addRequestProperties();
+		httpc.addRequestProperty("Client-DAAP-Request-ID",
+				"" + host.getThisRequestNumber());
+		if (skip_bytes > 0)
+			httpc.addRequestProperty("Range", "bytes=" + skip_bytes + "-");
+		httpc.addRequestProperty("Connection", "close");
+	}
 
-   protected String getRequestString() {
-      String ret = "databases/" + host.getDatabaseID();
-      ret += "/items/" + song.id + "." + song.format;
-      ret += "?session-id=" + host.getSessionID();
-      return ret;
-   }
+	protected String getRequestString() {
+		String ret = "databases/" + host.getDatabaseID();
+		ret += "/items/" + song.id + "." + song.format;
+		ret += "?session-id=" + host.getSessionID();
+		return ret;
+	}
 
-   public URL getSongURL() throws MalformedURLException {
-      return new URL("http://" + host.getAddress() + ":" + host.getPort() + "/"
-            + getRequestString());
-   }
+	public URL getSongURL() throws MalformedURLException {
+		return new URL("http://" + host.getAddress() + ":" + host.getPort()
+				+ "/" + getRequestString());
+	}
 
-   protected void readResponse() throws IOException {
-      b = new BufferedInputStream(httpc.getInputStream(), 8192);
-   }
+	protected void readResponse() throws IOException {
+		b = new BufferedInputStream(httpc.getInputStream(), 8192);
+	}
 
-   protected String getHashCode(Request r) {
-      return Hasher.GenerateHash("/" + r.getRequestString(), this, true);
-   }
+	protected String getHashCode(Request r) {
+		return Hasher.GenerateHash("/" + r.getRequestString(), this, true);
+	}
 
-   protected void process() {
-   }
+	protected void process() {
+	}
 
-   public InputStream getStream() {
-      return b;
-   }
+	public InputStream getStream() {
+		return b;
+	}
 }

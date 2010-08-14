@@ -60,20 +60,9 @@ public class ArtistBrowser extends ListActivity {
 			}
 			Comparator<String> snicc = new StringIgnoreCaseComparator();
 			Collections.sort(Contents.artistNameList, snicc);
-			// Contents.artistNameList = new ArrayList<String>(
-			// Contents.ArtistElements.keySet());
 		}
 		setContentView(R.xml.music_browser);
 		createList();
-	}
-
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
