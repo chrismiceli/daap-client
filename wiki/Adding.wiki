@@ -11,3 +11,5 @@ To add a server, either click the "Add Server" button or hit Menu->Add Server.
   * Type the IP address or hostname of the DAAP server
   * If a password is required, check the "Login required" check box and fill in the password field.
   * Click the "Add Server" button to add this server to the list of remembered servers.
+
+http://code.google.com/p/daap-client/source/browse/wiki/add_server.png
