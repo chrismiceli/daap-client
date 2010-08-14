@@ -71,6 +71,8 @@
 	<string name="songs">Songs</string>
 	<string name="save">Save</string>
 	<string name="save_complete">Saved file to </string>
+	<string name="font_size">Font Size</string>
+	<string name="font_pref_detail">Change the font size</string>
 	<string name="seeking_disabled">Seeking is currently disabled while downloading.
 	</string>
 </resources>

@@ -79,7 +79,6 @@ public class SongBrowser extends ListActivity {
 	}
 
 	private void createList() {
-		// musicList = (ListView) findViewById(android.R.id.list);
 		musicList = getListView();
 		musicList.setOnItemClickListener(musicGridListener);
 		musicList
@@ -151,7 +150,6 @@ public class SongBrowser extends ListActivity {
 		} else {
 			musicList.setTextFilterEnabled(true);
 			musicList.setFastScrollEnabled(true);
-			// Collections.sort(Contents.songList);
 			MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
 					getApplicationContext(), R.xml.long_list_text_view,
 					Contents.stringElements);
