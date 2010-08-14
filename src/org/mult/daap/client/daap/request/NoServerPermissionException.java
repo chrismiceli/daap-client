@@ -25,15 +25,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package org.mult.daap.client.daap.request;
 
-/**
- * @author jbarnett
- * 
- *         To change the template for this generated type comment go to
- *         Window>Preferences>Java>Code Generation>Code and Comments
- */
+/** @author jbarnett
+ * To change the template for this generated type comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments */
 @SuppressWarnings("serial")
 public class NoServerPermissionException extends Exception {
-
 	public NoServerPermissionException() {
 		super("Unknown error in contacting server.");
 	}
@@ -41,5 +37,4 @@ public class NoServerPermissionException extends Exception {
 	public NoServerPermissionException(String serverResponse) {
 		super(serverResponse);
 	}
-
 }

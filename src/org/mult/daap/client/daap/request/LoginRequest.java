@@ -24,58 +24,55 @@ import org.mult.daap.client.daap.DaapHost;
 
 import android.util.Log;
 
-/**
- * @author jbarnett @created July 15, 2004
- */
+/** @author jbarnett @created July 15, 2004 */
 public class LoginRequest extends Request {
+	private int mSessionId = 0;
 
-   private int mSessionId = 0;
+	public LoginRequest(DaapHost h) throws BadResponseCodeException,
+			PasswordFailedException, IOException {
+		super(h);
+		query("LoginRequest");
+		readResponse();
+		process();
+	}
 
-   public LoginRequest(DaapHost h) throws BadResponseCodeException,
-         PasswordFailedException, IOException {
-      super(h);
-      query("LoginRequest");
-      readResponse();
-      process();
-   }
+	protected String getRequestString() {
+		return "login";
+	}
 
-   protected String getRequestString() {
-      return "login";
-   }
+	protected void addRequestProperties() {
+		super.addRequestProperties();
+	}
 
-   protected void addRequestProperties() {
-      super.addRequestProperties();
-   }
+	protected void process() {
+		if (data.length == 0) {
+			Log.d("Request", "Zero Length");
+			return;
+		}
+		offset += 4;
+		offset += 4;
+		processLoginRequest();
+	}
 
-   protected void process() {
-      if (data.length == 0) {
-         Log.d("Request", "Zero Length");
-         return;
-      }
-      offset += 4;
-      offset += 4;
-      processLoginRequest();
-   }
+	public void processLoginRequest() {
+		String name;
+		int size;
+		while (offset < data.length) {
+			name = readString(data, offset, 4);
+			offset += 4;
+			size = readInt(data, offset);
+			offset += 4;
+			if (size > 10000000)
+				Log.d("Request", "This host probably uses gzip encoding");
+			if (name.equals("mlid")) {
+				mSessionId = readInt(data, offset); // read 4 bytes
+				break;
+			}
+			offset += size;
+		}
+	}
 
-   public void processLoginRequest() {
-      String name;
-      int size;
-      while (offset < data.length) {
-         name = readString(data, offset, 4);
-         offset += 4;
-         size = readInt(data, offset);
-         offset += 4;
-         if (size > 10000000)
-            Log.d("Request", "This host probably uses gzip encoding");
-         if (name.equals("mlid")) {
-            mSessionId = readInt(data, offset); // read 4 bytes
-            break;
-         }
-         offset += size;
-      }
-   }
-
-   public int getSessionId() {
-      return mSessionId;
-   }
+	public int getSessionId() {
+		return mSessionId;
+	}
 }

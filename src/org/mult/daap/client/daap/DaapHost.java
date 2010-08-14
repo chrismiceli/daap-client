@@ -104,7 +104,7 @@ public class DaapHost extends Host {
 			password = null;
 			throw e;
 		} catch (BadResponseCodeException e) {
-			if (e.getResponseCode() == 503) {
+			if (e.response_code == 503) {
 				Log.d("DaapHost", "tooManyUsers");
 				throw e;
 			} else {
@@ -135,7 +135,7 @@ public class DaapHost extends Host {
 			}
 			return true;
 		} catch (BadResponseCodeException e) {
-			if (e.getResponseCode() == 204) {
+			if (e.response_code == 204) {
 				session_id = 0;
 				revision_num = 1;
 				return true;
@@ -163,7 +163,7 @@ public class DaapHost extends Host {
 			if (getServerType() == DaapHost.GIT_SERVER)
 				hanging_update = new HangingUpdateRequest(this);
 		} catch (BadResponseCodeException e) {
-			if (e.getResponseCode() == 500) {
+			if (e.response_code == 500) {
 				Log.d("DaapHost", "500 Response code");
 				logout();
 				if (login())
@@ -261,7 +261,7 @@ public class DaapHost extends Host {
 			SongRequest sr = new SongRequest(this, s, bytes);
 			return sr.getStream();
 		} catch (BadResponseCodeException e) {
-			if (e.getResponseCode() == 500) {
+			if (e.response_code == 500) {
 				// FIXME: This code here can help with failed song requests, but
 				// if the iTunes internal server error
 				// really is internal, it causes an infinite loop.

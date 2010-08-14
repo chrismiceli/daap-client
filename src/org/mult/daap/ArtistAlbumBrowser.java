@@ -47,8 +47,7 @@ public class ArtistAlbumBrowser extends ListActivity {
 			finish();
 			return;
 		}
-		Bundle b = getIntent().getExtras();
-		artistName = b.getString("artistName");
+		artistName = getIntent().getExtras().getString("artistName");
 		setTitle(artistName);
 		if (Contents.artistAlbumNameList.size() == 0) {
 			for (Map.Entry<String, ArrayList<Integer>> entry : Contents.ArtistAlbumElements
@@ -68,15 +67,6 @@ public class ArtistAlbumBrowser extends ListActivity {
 		createList();
 	}
 
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_CANCELED) {
 			setResult(Activity.RESULT_CANCELED);
@@ -91,7 +81,6 @@ public class ArtistAlbumBrowser extends ListActivity {
 				Contents.artistAlbumNameList);
 		setListAdapter(adapter);
 		albumList.setOnItemClickListener(musicGridListener);
-		albumList.setTextFilterEnabled(true);
 		albumList.setFastScrollEnabled(true);
 		albumList
 				.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {

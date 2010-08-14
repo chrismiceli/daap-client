@@ -91,7 +91,6 @@ public class SongBrowser extends ListActivity {
 					}
 				});
 		if (from.equals("album")) {
-			musicList.setTextFilterEnabled(true);
 			musicList.setFastScrollEnabled(true);
 			Contents.filteredAlbumSongList.clear();
 			Bundle b = getIntent().getExtras();
@@ -130,7 +129,6 @@ public class SongBrowser extends ListActivity {
 			setListAdapter(new ArrayAdapter<Song>(this,
 					R.xml.long_list_text_view, Contents.filteredAlbumSongList));
 		} else if (from.equals("artist")) {
-			musicList.setTextFilterEnabled(true);
 			musicList.setFastScrollEnabled(true);
 			Contents.filteredArtistSongList.clear();
 			Bundle b = getIntent().getExtras();
@@ -148,7 +146,6 @@ public class SongBrowser extends ListActivity {
 			setListAdapter(new ArrayAdapter<Song>(this,
 					R.xml.long_list_text_view, Contents.filteredArtistSongList));
 		} else {
-			musicList.setTextFilterEnabled(true);
 			musicList.setFastScrollEnabled(true);
 			MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
 					getApplicationContext(), R.xml.long_list_text_view,
