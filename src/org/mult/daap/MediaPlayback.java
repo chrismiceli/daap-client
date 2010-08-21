@@ -185,6 +185,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		mProgress.setProgress(0);
 		mPauseButton.setEnabled(false);
 		startNotification();
+		setUpActivity();
 		queueNextRefresh(refreshNow());
 		new Thread(downloadThread).start();
 	}

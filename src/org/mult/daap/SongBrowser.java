@@ -1,7 +1,10 @@
 package org.mult.daap;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,7 +17,10 @@ import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -22,11 +28,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SongBrowser extends ListActivity {
@@ -126,7 +134,7 @@ public class SongBrowser extends ListActivity {
 				pos += max_num_track;
 			}
 			// Can't use myIndexAdapter because it sorts name, not by track
-			setListAdapter(new ArrayAdapter<Song>(this,
+			setListAdapter(new MyArrayAdapter<Song>(this,
 					R.xml.long_list_text_view, Contents.filteredAlbumSongList));
 		} else if (from.equals("artist")) {
 			musicList.setFastScrollEnabled(true);
@@ -143,7 +151,7 @@ public class SongBrowser extends ListActivity {
 				}
 			}
 			// Can't use myIndexAdapter because it sorts name, not by track
-			setListAdapter(new ArrayAdapter<Song>(this,
+			setListAdapter(new MyArrayAdapter<Song>(this,
 					R.xml.long_list_text_view, Contents.filteredArtistSongList));
 		} else {
 			musicList.setFastScrollEnabled(true);
@@ -273,5 +281,38 @@ public class SongBrowser extends ListActivity {
 			startActivityForResult(intent, 1);
 		}
 		return false;
+	}
+
+	class MyArrayAdapter<T> extends ArrayAdapter<T> {
+		ArrayList<Song> myElements;
+		HashMap<String, Integer> alphaIndexer;
+		ArrayList<String> letterList;
+		Context vContext;
+		int font_size;
+
+		@SuppressWarnings("unchecked")
+		public MyArrayAdapter(Context context, int textViewResourceId,
+				List<T> objects) {
+			super(context, textViewResourceId, objects);
+			SharedPreferences mPrefs = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			font_size = Integer.valueOf(mPrefs.getString("font_pref", "16"));
+			vContext = context;
+			myElements = (ArrayList<Song>) objects;
+		}
+
+		@Override
+		public int getCount() {
+			return myElements.size();
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			TextView tv = new TextView(vContext.getApplicationContext());
+			tv.setTextSize(font_size);
+			tv.setTextColor(Color.WHITE);
+			tv.setText(myElements.get(position).toString());
+			return tv;
+		}
 	}
 }
