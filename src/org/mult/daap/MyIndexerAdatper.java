@@ -30,7 +30,7 @@ class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
 		super(context, textViewResourceId, objects);
 		SharedPreferences mPrefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		font_size = Integer.valueOf(mPrefs.getString("font_pref", "16"));
+		font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
 		vContext = context;
 		myElements = (ArrayList<String>) objects;
 		alphaIndexer = new HashMap<String, Integer>();

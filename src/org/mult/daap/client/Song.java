@@ -45,7 +45,6 @@ public class Song implements Comparable<Object> {
 	// public boolean compilation;
 	// public int bitrate;
 	// public String persistent_id;
-	// public short discnum;
 	// public String genre;
 	// public boolean is_available;
 	public Song() {
@@ -61,94 +60,11 @@ public class Song implements Comparable<Object> {
 		// status = Song.STATUS_OK;
 	}
 
-	// public Song duplicate() throws CloneNotSupportedException {
-	// return (Song) clone();
-	// }
-	// public boolean contains(String s) {
-	// if (name.toLowerCase().indexOf(s) != -1)
-	// return true;
-	// else if (artist.toLowerCase().indexOf(s) != -1)
-	// return true;
-	// else if (album.toLowerCase().indexOf(s) != -1)
-	// return true;
-	// else if (genre.toLowerCase().indexOf(s) != -1)
-	// return true;
-	// else if (format.toLowerCase().indexOf(s) != -1)
-	// return true;
-	// else if (host.getName().toLowerCase().indexOf(s) != -1)
-	// return true;
-	// else if (s.startsWith("length:")
-	// && ("length:" + Integer.toString(time)).equals(s))
-	// return true;
-	// else if (s.startsWith("size:")
-	// && ("size:" + Integer.toString(size)).equals(s))
-	// return true;
-	// else if (s.startsWith("track:")
-	// && ("track:" + Integer.toString(track)).equals(s))
-	// return true;
-	// return false;
-	// }
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		Song s = (Song) o;
-		if (s.artist.equalsIgnoreCase(this.artist)
-				&& s.name.equalsIgnoreCase(this.name) && s.size == this.size)
-			return true;
-		else
-			return false;
-	}
-
 	public String toString() {
 		String ret = artist + (artist.length() > 0 ? " - " : "") + name;
 		return ret;
 	}
 
-	// public String shortString() {
-	// return "\"" + name + "\" by " + artist;
-	// }
-	//
-	// public Host getHost() {
-	// return host;
-	// }
-	//
-	// public String getAlbum() {
-	// return album;
-	// }
-	//
-	// public String getArtist() {
-	// return artist;
-	// }
-	//
-	// public String getFormat() {
-	// return format;
-	// }
-	// public String getGenre() {
-	// return genre;
-	// }
-	// public int getId() {
-	// return id;
-	// }
-	//
-	// public String getName() {
-	// return name;
-	// }
-	//
-	// public int getTrack() {
-	// return track;
-	// }
-	//
-	// public int getTime() {
-	// return time;
-	// }
-	//
-	// public void setTime(int i) {
-	// time = i;
-	// }
-	//
-	// public int getSize() {
-	// return size;
-	// }
 	public int compareTo(Object another) {
 		if (another instanceof Song) {
 			return (this.id - ((Song) another).id);

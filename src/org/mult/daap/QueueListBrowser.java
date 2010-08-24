@@ -173,7 +173,7 @@ public class QueueListBrowser extends Activity {
 			vContext = c;
 			SharedPreferences mPrefs = PreferenceManager
 					.getDefaultSharedPreferences(c);
-			font_size = Integer.valueOf(mPrefs.getString("font_pref", "16"));
+			font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
 		}
 
 		public int getCount() {

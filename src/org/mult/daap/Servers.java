@@ -157,8 +157,8 @@ public class Servers extends Activity implements Observer {
 			} else {
 				wiFi = true;
 				fLock = new WrapMulticastLock(wifiManager);
-				//				fLock = wifiManager.createMulticastLock("mylock");
-				fLock.acquire();
+				//	fLock.acquire();
+				fLock.getInstance().acquire();
 				byte[] wifiAddress = intToIp(wifiManager.getDhcpInfo().ipAddress);
 				InetAddress wifi = InetAddress.getByAddress(wifiAddress);
 				jmDNSListener = new JmDNSListener(mDNSHandler, wifi);
@@ -241,7 +241,7 @@ public class Servers extends Activity implements Observer {
 			jmDNSListener = null;
 		}
 		if (fLock != null) {
-			fLock.release();
+			fLock.getInstance().release();
 		}
 		if (pd != null) {
 			pd.dismiss();
