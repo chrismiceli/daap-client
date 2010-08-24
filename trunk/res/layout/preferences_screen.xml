@@ -12,5 +12,5 @@
 	<ListPreference android:key="font_pref"
 		android:persistent="true" android:title="@string/font_size"
 		android:summary="@string/font_pref_detail" android:entries="@array/fontArray"
-		android:defaultValue="16" android:entryValues="@array/fontValues" />
+		android:defaultValue="18" android:entryValues="@array/fontValues" />
 </PreferenceScreen> 
