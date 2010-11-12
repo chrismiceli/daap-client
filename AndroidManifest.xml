@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.mult.daap" android:versionName=".8.6" android:versionCode="27">
+	package="org.mult.daap" android:versionName=".9" android:versionCode="29"
+	android:installLocation="auto">
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -44,5 +45,5 @@
 				android:resource="@xml/searchable" />
 		</activity>
 	</application>
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
+	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 </manifest>

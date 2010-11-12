@@ -138,7 +138,13 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         mProgress.setSecondaryProgress(0);
         mProgress.setOnSeekBarChangeListener(mSeekListener);
         if (mediaPlayer == null) {
-            startSong(Contents.getSong());
+            try {
+                startSong(Contents.getSong());
+            } catch (IndexOutOfBoundsException e) {
+                Log.e(logTag, "Something went wrong with playlist/queue");
+                e.printStackTrace();
+                finish();
+            }
         }
         queueNextRefresh(refreshNow());
     }
@@ -175,10 +181,12 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 
     private void startSong(Song song) {
         clearState();
+        mProgress.setEnabled(false);
         mediaPlayer = new MediaPlayer();
         this.song = song;
         try {
             mediaPlayer.setDataSource(Contents.daapHost.getSongURL(song));
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnCompletionListener(normalOnCompletionListener);
             mediaPlayer.setOnErrorListener(mediaPlayerErrorListener);
             mediaPlayer
@@ -186,8 +194,10 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
                         @Override
                         public void onPrepared(MediaPlayer mp) {
                             mp.start();
+                            mProgress.setEnabled(true);
                             stopNotification();
                             startNotification();
+                            queueNextRefresh(refreshNow());
                         }
                     });
             mediaPlayer.prepareAsync();
@@ -683,6 +693,11 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
             try {
                 if (Contents.shuffle == true) {
                     startSong(Contents.getRandomSong());
+                }
+                else if (Contents.repeat == true) {
+                    mp.seekTo(0);
+                    mp.start();
+                    queueNextRefresh(refreshNow());
                 }
                 else {
                     startSong(Contents.getNextSong());
