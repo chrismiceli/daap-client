@@ -27,11 +27,6 @@
 	<string name="queue_is_full">Køen er fuld.</string>
 	<string name="add_server_error_message">Sørg for, at alle felter er udfyldt korrekt.
 	</string>
-	<string name="sd_card">SD Kort</string>
-	<string name="use_sd_as_cache">Brug SD Kort som Mellem Lager</string>
-	<string name="no_sdcard_error_message">Ingen SD Kort til stede.</string>
-	<string name="no_sdcard_error_message_playback">Ingen SD-kort til stede. \nÆndre program
-		præferencer.</string>
 	<string name="add_server">Tilføj server</string>
 	<string name="add_server_menu_activity">DAAP - Tilføj Server</string>
 	<string name="queue_browser_activity">DAAP - Kø Liste</string>

@@ -28,11 +28,6 @@
 	<string name="queue_is_full">Coda piena</string>
 	<string name="add_server_error_message">Verifica che tutti i campi siano corretti.
 	</string>
-	<string name="sd_card">Scheda SD</string>
-	<string name="use_sd_as_cache">Usa SD come spazio temporaneo</string>
-	<string name="no_sdcard_error_message">Nessuna SD card inserita</string>
-	<string name="no_sdcard_error_message_playback">Nessuna SD card inserita.\nCorreggere impostazioni
-		spazio temporaneo applicazione</string>
 	<string name="add_server">Aggiungi server</string>
 	<string name="add_server_menu_activity">DAAP - Aggiungi server</string>
 	<string name="queue_browser_activity">DAAP - Coda riproduzione</string>
