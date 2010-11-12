@@ -148,16 +148,13 @@ public class QueueListBrowser extends Activity {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                 long id) {
             Contents.setSongPosition(Contents.queue, position);
-            for (int x = 0; x < position; x++) {
-                Contents.queue.remove(x);
-            }
             MediaPlayback.clearState();
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancelAll();
             Intent intent = new Intent(QueueListBrowser.this,
                     MediaPlayback.class);
             startActivityForResult(intent, 1);
-            Contents.playlist_position = (short) position;
+            // Contents.playlist_position = (short) position;
         }
     };
 
