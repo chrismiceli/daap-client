@@ -27,10 +27,6 @@
 	<string name="queue_is_full">队列已满。</string>
 	<string name="add_server_error_message">请确保正确填写所有字段。
         </string>
-	<string name="sd_card">SD 卡</string>
-	<string name="use_sd_as_cache">使用 SD 卡作为缓存</string>
-	<string name="no_sdcard_error_message">当前没有 SD 卡。</string>
-	<string name="no_sdcard_error_message_playback">当前没有 SD 卡。\n请更改应用程序首选项。</string>
 	<string name="add_server">添加服务器</string>
 	<string name="add_server_menu_activity">DAAP - 添加服务器</string>
 	<string name="queue_browser_activity">DAAP - 列表</string>

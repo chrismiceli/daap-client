@@ -25,11 +25,6 @@
 	<string name="queue_is_full">대기 목록이 꽉 찼습니다.</string>
 	<string name="add_server_error_message">모든 입력란에 내용이 올바르게 기입되어 있는지 확인하세요.
 	</string>
-	<string name="sd_card">SD 카드</string>
-	<string name="use_sd_as_cache">SD카드의 저장공간을 이용하세요</string>
-	<string name="no_sdcard_error_message">현재 SD 카드가 없습니다.</string>
-	<string name="no_sdcard_error_message_playback">현재 SD 카드가 없습니다.\n어플의 환경 설정을
-		바꿔주세요.</string>
 	<string name="add_server">서버를 추가합니다</string>
 	<string name="add_server_menu_activity">DAAP - 서버를 추가합니다</string>
 	<string name="queue_browser_activity">DAAP - 대기 목록 리스트</string>

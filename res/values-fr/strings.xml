@@ -28,11 +28,6 @@
 	<string name="add_server_error_message">Veuillez vérifier que tous les champs soient
 		correctement renseignés.
     </string>
-	<string name="sd_card">Carte SD</string>
-	<string name="use_sd_as_cache">Carte SD pour cache</string>
-	<string name="no_sdcard_error_message">Pas de carte SD.</string>
-	<string name="no_sdcard_error_message_playback">Pas de carte SD.\nVeuillez changer vos préférences
-		d\'application.</string>
 	<string name="add_server">Ajouter un serveur</string>
 	<string name="add_server_menu_activity">DAAP - Ajouter un serveur</string>
 	<string name="queue_browser_activity">DAAP - File</string>

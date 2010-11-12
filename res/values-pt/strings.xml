@@ -29,11 +29,6 @@
 	<string name="queue_is_full">Fila cheia</string>
 	<string name="add_server_error_message">Verifique se todos os campos estão corretos.
 	</string>
-	<string name="sd_card">Cartão SD</string>
-	<string name="use_sd_as_cache">Usar cartão SD como Cache</string>
-	<string name="no_sdcard_error_message">Nenhum cartão SD inserido</string>
-	<string name="no_sdcard_error_message_playback">Nenhum cartão SD inserido\nCorrija as configurações
-	</string>
 	<string name="add_server">Adicionar Servidor</string>
 	<string name="add_server_menu_activity">DAAP - Adicionar Servidor</string>
 	<string name="queue_browser_activity">DAAP - Fila de Reprodução</string>

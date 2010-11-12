@@ -27,10 +27,6 @@
 	<string name="queue_is_full">隊列已滿。</string>
 	<string name="add_server_error_message">請確保正確填寫所有欄位。
         </string>
-	<string name="sd_card">SD 卡</string>
-	<string name="use_sd_as_cache">使用 SD 卡作為快取</string>
-	<string name="no_sdcard_error_message">當前沒有 SD 卡。</string>
-	<string name="no_sdcard_error_message_playback">當前沒有 SD 卡。\n請變更套用程式偏好。</string>
 	<string name="add_server">新增伺服器</string>
 	<string name="add_server_menu_activity">DAAP - 新增伺服器</string>
 	<string name="queue_browser_activity">DAAP - 清單</string>
