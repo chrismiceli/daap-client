@@ -71,6 +71,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
     private static final String logTag = MediaPlayer.class.getName();
 
     private static MediaPlayer mediaPlayer;
+    private static Song song;
     private TextView mArtistName;
     private TextView mAlbumName;
     private TextView mTrackName;
@@ -80,7 +81,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
     private ImageButton mNextButton;
     private ImageButton mPauseButton;
     private SeekBar mProgress;
-    private Song song;
     private int mTouchSlop;
     private int mInitialX = -1;
     private int mLastX = -1;
@@ -146,6 +146,10 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
                 finish();
             }
         }
+        else {
+            Log.v(logTag, "mediaplayer != null");
+        }
+        setUpActivity();
         queueNextRefresh(refreshNow());
     }
 
@@ -183,7 +187,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         clearState();
         mProgress.setEnabled(false);
         mediaPlayer = new MediaPlayer();
-        this.song = song;
+        MediaPlayback.song = song;
         try {
             mediaPlayer.setDataSource(Contents.daapHost.getSongURL(song));
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -301,7 +305,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
     @Override
     public void onStart() {
         super.onStart();
-        queueNextRefresh(refreshNow());
     }
 
     @Override
@@ -311,24 +314,13 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         handler.removeMessages(REFRESH);
+        super.onDestroy();
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // Log.v("MediaPlayback",
-        // "External Storage:" + Environment.getExternalStorageDirectory());
-        // Log.v("MediaPlayback",
-        // "External Storage State = "
-        // + Environment.getExternalStorageState());
-        // if (mediaPlayer == null) {
-        // Log.v("MediaPlayback", "mediaplayer == null!");
-        // }
-        // else {
-        // Log.v("MediaPlayback", "mediaPlayer != null");
-        // }
         if (mediaPlayer != null
                 && Environment.getExternalStorageState().equals(
                         Environment.MEDIA_MOUNTED)) {
