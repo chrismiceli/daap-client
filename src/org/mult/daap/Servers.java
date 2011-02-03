@@ -32,6 +32,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -172,20 +173,24 @@ public class Servers extends Activity implements Observer {
                 cursor.moveToFirst();
                 int nameIndex = cursor.getColumnIndexOrThrow("server_name");
                 int addressIndex = cursor.getColumnIndexOrThrow("address");
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    String name = cursor.getString(nameIndex);
-                    String address = cursor.getString(addressIndex);
-                    rememberedServers.add(createItem(name, address));
-                    cursor.moveToNext();
+                try {
+                    for (int i = 0; i < cursor.getCount(); i++) {
+                        String name = cursor.getString(nameIndex);
+                        String address = cursor.getString(addressIndex);
+                        rememberedServers.add(createItem(name, address));
+                        cursor.moveToNext();
+                    }
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } finally {
+                    cursor.close();
+                    db.close();
                 }
-                cursor.close();
             }
-            db.close();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return;
         } catch (UnknownHostException e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
         rememberedServers.add(createItem(getString(R.string.add_server),
                 getString(R.string.add_server_detail)));
@@ -224,11 +229,31 @@ public class Servers extends Activity implements Observer {
         LoginManager lm = Contents.loginManager;
         if (lm != null) {
             lm.addObserver(this);
-            // Since lm is not null, we have ot create a new pd
+            // Since lm is not null, we have to create a new pd
             Integer lastMessage = lm.getLastMessage();
             update(lm, LoginManager.INITIATED);
             if (lastMessage != LoginManager.INITIATED) {
                 update(lm, lastMessage);
+            }
+        }
+        if (Intent.ACTION_VIEW.equals(getIntent().getAction())
+                || Intent.ACTION_PICK.equals(getIntent().getAction())) {
+            try {
+                Uri uri = getIntent().getData();
+                getIntent().setData(null);
+                String password = uri.getFragment();
+                if (password == null) {
+                    lm = new LoginManager("", uri.getHost(), "", false);
+                    startLogin(lm);
+                }
+                else {
+                    Log.v("Servers", "host = (" + uri.getHost() + ")");
+                    Log.v("Servers", "password = (" + password + ")");
+                    lm = new LoginManager("", uri.getHost(), password, true);
+                    startLogin(lm);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
