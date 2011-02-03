@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 import org.mult.daap.client.Song;
+import org.mult.daap.client.SongTrackComparator;
 import org.mult.daap.client.StringIgnoreCaseComparator;
 
 import android.app.Activity;
@@ -112,6 +113,8 @@ public class ArtistAlbumBrowser extends ListActivity {
                         Contents.filteredArtistSongList.add(s);
                     }
                 }
+                Comparator<Song> stnc = new SongTrackComparator();
+                Collections.sort(Contents.filteredArtistSongList, stnc);
                 Contents.setSongPosition(Contents.filteredArtistSongList, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
