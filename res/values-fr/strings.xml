@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_dialog_title">A propos</string>
 	<string name="app_name">DAAP</string>
@@ -44,7 +44,7 @@
 	<string name="fetching_music_detail">Veuillez patienter pendant la récupération de la
 		musique.</string>
 	<string name="unable_to_connect">Impossible de se connecter!</string>
-	<string name="connecting_title">Connection en cours ..</string>
+	<string name="connecting_title">Connexion en cours ..</string>
 	<string name="connecting_detail">Soyez patient cela peut prendre du temps.
    </string>
 	<string name="empty_playlist">La liste de lecture sélectionnée est vide.</string>
