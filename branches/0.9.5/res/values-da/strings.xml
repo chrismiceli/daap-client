@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_title">Om</string>
+	<string name="app_name">DAAP</string>
+	<string name="about_info">Om</string>
+	<string name="info">Android DAAP klient.\n\nProgrammører:\nMichael
+		Miceli\nChristopher Miceli\n\nOversættelse: Morten Hundevad</string>
+	<string name="shuffle">Bland</string>
+	<string name="donate">Doner</string>
+	<string name="repeat">Gentag</string>
+	<string name="delete_entry">Slet</string>
+	<string name="play_album">Afspil Album</string>
+	<string name="play_artist">Afspil Artist</string>
+	<string name="all_songs">Alle Sange</string>
+	<string name="current_song">Nuværende Sang</string>
+	<string name="upcoming_song"></string>
+	<string name="share_name">DAAP Delings Navn</string>
+	<string name="url_description">URL og Port</string>
+	<string name="login_required">Login kræves</string>
+	<string name="menu_stop">Stop</string>
+	<string name="password">Adgangskode</string>
+	<string name="error_title">Fejl!</string>
+	<string name="add_or_remove_from_queue">Tilføj eller Fjern fra Kø</string>
+	<string name="remove_from_queue">Fjern fra Kø</string>
+	<string name="removed_from_queue">Fjernet fra Kø.</string>
+	<string name="added_to_queue">Tilføjet til Kø.</string>
+	<string name="queue_is_full">Køen er fuld.</string>
+	<string name="add_server_error_message">Sørg for, at alle felter er udfyldt korrekt.
+	</string>
+	<string name="add_server">Tilføj server</string>
+	<string name="add_server_menu_activity">DAAP - Tilføj Server</string>
+	<string name="queue_browser_activity">DAAP - Kø Liste</string>
+	<string name="playlist_browser_activity">DAAP - Afspilningslister</string>
+	<string name="song_browser_activity">DAAP - Alle Sange</string>
+	<string name="media_playback_activity">DAAP - Media Afspiller</string>
+	<string name="media_playback_error">Der opstod en fejl ved at spille sangen, prøve
+		igen.</string>
+	<string name="add_server_detail">Klik her for at tilføje en DAAP server</string>
+	<string name="local_servers">Lytte til Lokale Servere</string>
+	<string name="remembered_servers">Husket Servere</string>
+	<string name="options">Valg</string>
+	<string name="fetching_music_title">Henter Musik...</string>
+	<string name="fetching_music_detail">Vent venligst mens musik hentes.</string>
+	<string name="unable_to_connect">Kunde ikke oprette forbinde!</string>
+	<string name="connecting_title">Tilslutter...</string>
+	<string name="connecting_detail">Vær tålmodig da dette kan tage et stykke tid.
+	</string>
+	<string name="empty_playlist">Den valgte spilleliste er tom.</string>
+	<string name="search_hint">Søg efter sange</string>
+	<string name="search_label">Søg Label</string>
+	<string name="no_search_results">Ingen resultater fundet.</string>
+	<string name="searching_title">Søger...</string>
+	<string name="search_result_title">Resultater af:</string>
+	<string name="search_result_caption">Søger efter</string>
+	<string name="no_artist_name">(Indet Kunstner Navn)</string>
+	<string name="no_album_name">(Indet Album Name)</string>
+	<string name="view_queue">Vis Kø</string>
+	<string name="play_queue">Afspil Queue</string>
+	<string name="clear_queue">Ryd Kø</string>
+	<string name="search">Søg</string>
+	<string name="preferences">Præferencer</string>
+	<string name="streaming_pref_detail">Stream musik (beta)</string>
+	<string name="streaming">Streaming</string>
+	<string name="artists">Kunstnere</string>
+	<string name="albums">Albums</string>
+	<string name="songs">Sange</string>
+	<string name="save">Gæm</string>
+	<string name="save_complete">Gemte filen til </string>
+	<string name="font_size">Skriftstørrelse</string>
+	<string name="font_pref_detail">Ændre skriftstørrelse</string>
+	<string name="seeking_disabled">Søger er i øjeblikket deaktiveret, mens du henter.
+	</string>
+</resources>

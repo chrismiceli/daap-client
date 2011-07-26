@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_dialog_title">소개</string>
+	<string name="app_name">DAAP</string>
+	<string name="all_songs">모든 노래</string>
+	<string name="about_info">소개</string>
+	<string name="info">안드로이드 DAAP 클라이언트.\n\n프로그래머:\nMichael
+		Miceli\nChristopher Miceli</string>
+	<string name="shuffle">셔플</string>
+	<string name="donate">기부</string>
+	<string name="repeat">반복</string>
+	<string name="delete_entry">엔트리 삭제</string>
+	<string name="current_song">현재 재생되고 있는 노래</string>
+	<string name="upcoming_song"></string>
+	<string name="share_name">DAAP 공유 이름</string>
+	<string name="url_description">URL와 포트</string>
+	<string name="login_required">로그인이 필요합니다</string>
+	<string name="menu_stop">멈춤</string>
+	<string name="password">패스워드</string>
+	<string name="error_title">오류!</string>
+	<string name="add_or_remove_from_queue">추가하거나 대기 목록으로부터 옮깁니다</string>
+	<string name="remove_from_queue">대기 목록으로부터 옮깁니다</string>
+	<string name="removed_from_queue">대기열로부터 옮겨졌습니다.</string>
+	<string name="added_to_queue">대기 목록에 추가되었습니다.</string>
+	<string name="queue_is_full">대기 목록이 꽉 찼습니다.</string>
+	<string name="add_server_error_message">모든 입력란에 내용이 올바르게 기입되어 있는지 확인하세요.
+	</string>
+	<string name="add_server">서버를 추가합니다</string>
+	<string name="add_server_menu_activity">DAAP - 서버를 추가합니다</string>
+	<string name="queue_browser_activity">DAAP - 대기 목록 리스트</string>
+	<string name="playlist_browser_activity">DAAP - 재생 목록</string>
+	<string name="song_browser_activity">DAAP - 모든 노래</string>
+	<string name="media_playback_activity">DAAP - 미디어 플레이어</string>
+	<string name="media_playback_error">노래를 재생하는 중 오류가 발생하였습니다, 다시
+		시도해주세요.</string>
+	<string name="add_server_detail">여기를 클릭하면DAAP 서버가 추가됩니다</string>
+	<string name="local_servers">로컬 서비스로 듣기</string>
+	<string name="remembered_servers">서버를 기억하세요</string>
+	<string name="options">옵션</string>
+	<string name="fetching_music_title">매혹적인 음악...</string>
+	<string name="fetching_music_detail">매혹적인 음악이 나오는 동안 기다려주세요.</string>
+	<string name="unable_to_connect">연결이 안됩니다!</string>
+	<string name="connecting_title">연결중...</string>
+	<string name="connecting_detail">다소 시간이 걸릴 수 있으니 기다려 주세요.
+	</string>
+	<string name="empty_playlist">재생 목록 선택이 비어있습니다.</string>
+	<string name="search_hint">노래를 찾습니다</string>
+	<string name="search_label">라벨을 찾습니다</string>
+	<string name="no_search_results">결과가 없습니다.</string>
+	<string name="searching_title">찾고 있는 중...</string>
+	<string name="search_result_title">결과:</string>
+	<string name="search_result_caption">찾고 있는 결과</string>
+	<string name="no_artist_name">(아티스트 이름이 없습니다)</string>
+	<string name="no_album_name">(앨범 이름이 없습니다)</string>
+	<string name="view_queue">대기 목록을 봅니다</string>
+	<string name="play_queue">대기 목록을 재생합니다</string>
+	<string name="clear_queue">대기 목록을 지웁니다</string>
+	<string name="search">찾기</string>
+	<string name="preferences">환경 설정</string>
+	<string name="streaming_pref_detail">스트림 음악 (beta)</string>
+	<string name="streaming">스트리밍</string>
+	<string name="artists">아티스트</string>
+	<string name="albums">앨범</string>
+	<string name="songs">노래</string>
+	<string name="save">저장</string>
+	<string name="save_complete">파일을 저장했습니다 </string>
+	<string name="seeking_disabled">다운로드 중에는 쉽게 찾을 수 없습니다.</string>
+	<string name="translated_by">번역 - 유비누리</string>
+</resources>

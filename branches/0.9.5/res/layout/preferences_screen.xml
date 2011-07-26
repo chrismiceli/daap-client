@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	android:key="preferences">
+	<ListPreference android:key="font_pref"
+		android:persistent="true" android:title="@string/font_size"
+		android:summary="@string/font_pref_detail" android:entries="@array/fontArray"
+		android:defaultValue="18" android:entryValues="@array/fontValues" />
+</PreferenceScreen> 
