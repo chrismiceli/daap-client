@@ -61,9 +61,8 @@ import android.widget.Toast;
 public class MediaPlayback extends Activity implements View.OnTouchListener,
         View.OnLongClickListener {
     private static final int MENU_STOP = 0;
-    private static final int MENU_DOWNLOAD = 1;
-    private static final int MENU_REPEAT = 2;
-    private static final int MENU_SHUFFLE = 3;
+    private static final int MENU_LIBRARY = 1;
+    private static final int MENU_DOWNLOAD = 2;
     private static final int REFRESH = 0;
     private static final int COPYING_DIALOG = 1;
     private static final int SUCCESS_COPYING_DIALOG = 2;
@@ -77,6 +76,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
     private TextView mTrackName;
     private TextView mCurrentTime;
     private TextView mTotalTime;
+    private ImageButton mShuffleButton;
+    private ImageButton mRepeatButton;
     private ImageButton mPrevButton;
     private ImageButton mNextButton;
     private ImageButton mPauseButton;
@@ -108,6 +109,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         setContentView(R.layout.audio_player);
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
         mProgress = (SeekBar) findViewById(android.R.id.progress);
+        mShuffleButton = (ImageButton) findViewById(R.id.shuffleButton);
+        mRepeatButton = (ImageButton) findViewById(R.id.repeatButton);
         mPauseButton = (ImageButton) findViewById(R.id.pause);
         mPrevButton = (ImageButton) findViewById(R.id.prev);
         mNextButton = (ImageButton) findViewById(R.id.next);
@@ -130,6 +133,20 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         v = (View) mTrackName.getParent();
         v.setOnTouchListener(this);
         v.setOnLongClickListener(this);
+        if (Contents.shuffle) {
+            mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle_on);
+        }
+        else {
+            mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle);
+        }
+        if (Contents.repeat) {
+            mRepeatButton.setImageResource(R.drawable.ic_menu_repeat_on);
+        }
+        else {
+            mRepeatButton.setImageResource(R.drawable.ic_menu_repeat);
+        }
+        mShuffleButton.setOnClickListener(mShuffleListener);
+        mRepeatButton.setOnClickListener(mRepeatListener);
         mPauseButton.setOnClickListener(mPauseListener);
         mPrevButton.setOnClickListener(mPrevListener);
         mNextButton.setOnClickListener(mNextListener);
@@ -255,6 +272,37 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
             // intentionally left blank
         }
     };
+
+    private View.OnClickListener mShuffleListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if (Contents.shuffle) {
+                Contents.shuffle = false;
+                mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle);
+            }
+            else {
+                Contents.shuffle = true;
+                mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle_on);
+            }
+        }
+    };
+
+    private View.OnClickListener mRepeatListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if (Contents.repeat) {
+                Contents.repeat = false;
+                mRepeatButton.setImageResource(R.drawable.ic_menu_repeat);
+            }
+            else {
+                Contents.repeat = true;
+                mRepeatButton.setImageResource(R.drawable.ic_menu_repeat_on);
+            }
+        }
+    };
+
     private View.OnClickListener mPauseListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (mediaPlayer != null) {
@@ -329,18 +377,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         else {
             menu.findItem(MENU_DOWNLOAD).setEnabled(false);
         }
-        if (Contents.shuffle) {
-            menu.findItem(MENU_SHUFFLE).setIcon(R.drawable.ic_menu_shuffle_on);
-        }
-        else {
-            menu.findItem(MENU_SHUFFLE).setIcon(R.drawable.ic_menu_shuffle);
-        }
-        if (Contents.repeat) {
-            menu.findItem(MENU_REPEAT).setIcon(R.drawable.ic_menu_repeat_on);
-        }
-        else {
-            menu.findItem(MENU_REPEAT).setIcon(R.drawable.ic_menu_repeat);
-        }
         return true;
     }
 
@@ -349,26 +385,25 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_STOP, 0, R.string.menu_stop).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);
+        menu.add(0, MENU_LIBRARY, 0, R.string.menu_library).setIcon(
+                R.drawable.ic_menu_list);
         menu.add(0, MENU_DOWNLOAD, 1, R.string.save).setIcon(
                 android.R.drawable.ic_menu_save);
-        menu.add(0, MENU_REPEAT, 2, R.string.repeat);
-        menu.add(0, MENU_SHUFFLE, 3, R.string.shuffle);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_SHUFFLE:
-                Contents.shuffle = !Contents.shuffle;
-                break;
-            case MENU_REPEAT:
-                Contents.repeat = !Contents.repeat;
-                break;
             case MENU_STOP:
                 clearState();
                 stopNotification();
                 finish();
+                break;
+            case MENU_LIBRARY:
+                Intent intent = new Intent(MediaPlayback.this,
+                        PlaylistBrowser.class);
+                startActivity(intent);
                 break;
             case MENU_DOWNLOAD:
                 showDialog(COPYING_DIALOG);
