@@ -26,9 +26,12 @@ package org.mult.daap.client.daap;
 
 import org.mult.daap.client.Song;
 
-/** @author jbarnett
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments */
+/**
+ * @author jbarnett
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
+ */
 public class DaapSong extends Song {
 	public String persistent_id;
 
@@ -52,4 +55,5 @@ public class DaapSong extends Song {
 	public String getPersistentId() {
 		return persistent_id;
 	}
+
 }

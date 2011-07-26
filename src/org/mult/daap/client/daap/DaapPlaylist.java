@@ -16,68 +16,65 @@ import org.mult.daap.client.daap.request.SinglePlaylistRequest;
 
 import android.util.Log;
 
-/** @author Greg
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates */
+/**
+ * @author Greg
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Style - Code Templates
+ */
 public class DaapPlaylist extends Playlist {
-	public int id;
-	public String persistent_id;
-	public boolean smart_playlist;
-	public int song_count = 0;
-	protected ArrayList<Song> songs;
-	protected DaapHost host;
 
-	public DaapPlaylist(DaapHost h) {
-		host = h;
-		setStatus(Playlist.STATUS_NOT_INITIALIZED);
-		this.all_songs = false;
-	}
+   public int id;
+   public String persistent_id;
+   public boolean smart_playlist;
+   public int song_count = 0;
 
-	public DaapPlaylist(DaapHost h, String n, boolean as) {
-		host = h;
-		name = n;
-		this.all_songs = as;
-		setStatus(Playlist.STATUS_NOT_INITIALIZED);
-	}
+   protected ArrayList<Song> songs;
+   protected DaapHost host;
 
-	public void initialize() throws Exception {
-		setStatus(Playlist.STATUS_INITIALIZING);
-		try {
-			SinglePlaylistRequest p = new SinglePlaylistRequest(this);
-			// should be like singledatabaserequest
-			songs = p.getSongs();
-			p = null;
-			setStatus(Playlist.STATUS_INITIALIZED);
-		} catch (BadResponseCodeException e) {
-			Log.v("DaapPlaylist", "BadResponse " + e.getMessage());
-			if (host.login()) {
-				initialize();
-				return;
-			}
-			setStatus(Playlist.STATUS_NOT_INITIALIZED);
-			e.printStackTrace();
-			Log.d("DaapPlaylist", "Error code " + e.response_code
-					+ " on playlist");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+   public DaapPlaylist(DaapHost h) {
+      host = h;
+      setStatus(Playlist.STATUS_NOT_INITIALIZED);
+   }
 
-	public DaapHost getHost() {
-		return host;
-	}
+   public void initialize() throws Exception {
+      setStatus(Playlist.STATUS_INITIALIZING);
+      try {
+         SinglePlaylistRequest p = new SinglePlaylistRequest(this);
+         // should be like singledatabaserequest
+         songs = p.getSongs();
+         p = null;
+         setStatus(Playlist.STATUS_INITIALIZED);
+      } catch (BadResponseCodeException e) {
+         if (host.login()) {
+            initialize();
+            return;
+         }
+         setStatus(Playlist.STATUS_NOT_INITIALIZED);
+         e.printStackTrace();
+         Log
+               .d("DaapPlaylist", "Error code " + e.response_code
+                     + " on playlist");
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+   }
 
-	public String getPersistentId() {
-		return persistent_id;
-	}
+   public DaapHost getHost() {
+      return host;
+   }
 
-	public int getId() {
-		return id;
-	}
+   public String getPersistentId() {
+      return persistent_id;
+   }
 
-	public Collection<Song> getSongs() {
-		if (songs == null)
-			return new ArrayList<Song>();
-		return songs;
-	}
+   public int getId() {
+      return id;
+   }
+
+   public Collection<Song> getSongs() {
+      if (songs == null)
+         return new ArrayList<Song>();
+      return songs;
+   }
 }
