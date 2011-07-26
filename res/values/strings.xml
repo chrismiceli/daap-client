@@ -9,9 +9,6 @@
 	<string name="donate">Donate</string>
 	<string name="repeat">Repeat</string>
 	<string name="delete_entry">Delete Entry</string>
-	<string name="play_album">Play Album</string>
-	<string name="play_artist">Play Artist</string>
-	<string name="all_songs">All Songs</string>
 	<string name="current_song">Current Song</string>
 	<string name="upcoming_song"></string>
 	<string name="share_name">DAAP Share Name</string>
@@ -27,6 +24,11 @@
 	<string name="queue_is_full">Queue is full.</string>
 	<string name="add_server_error_message">Please ensure that all fields are filled correctly.
 	</string>
+	<string name="sd_card">SD Card</string>
+	<string name="use_sd_as_cache">Use SD Card as Cache</string>
+	<string name="no_sdcard_error_message">No SD Card present.</string>
+	<string name="no_sdcard_error_message_playback">No SD card present.\nPlease change application
+		preferences.</string>
 	<string name="add_server">Add Server</string>
 	<string name="add_server_menu_activity">DAAP - Add Server</string>
 	<string name="queue_browser_activity">DAAP - Queue List</string>
@@ -59,14 +61,12 @@
 	<string name="clear_queue">Clear Queue</string>
 	<string name="search">Search</string>
 	<string name="preferences">Preferences</string>
+	<string name="streaming_pref_detail">Stream music (beta)</string>
+	<string name="streaming">Streaming</string>
 	<string name="artists">Artists</string>
 	<string name="albums">Albums</string>
 	<string name="songs">Songs</string>
 	<string name="save">Save</string>
-	<string name="downloading_file">Saving song...</string>
-	<string name="save_complete">Saved song!</string>
-	<string name="save_error">Error saving song</string>
-	<string name="font_size">Font Size</string>
-	<string name="font_pref_detail">Change the font size</string>
-	<string name="menu_library">Library</string>
+	<string name="save_complete">Saved file to </string>
+	<string name="seeking_disabled">Seeking is currently disabled while downloading.</string>
 </resources>

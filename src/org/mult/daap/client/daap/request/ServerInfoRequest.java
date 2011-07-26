@@ -24,58 +24,61 @@ import org.mult.daap.client.daap.DaapHost;
 
 import android.util.Log;
 
-/** @author jbarnett To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * @created August 6, 2004 */
+/**
+ * @author jbarnett To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
+ * @created August 6, 2004
+ */
 public class ServerInfoRequest extends Request {
-	private double mServerVersion = 0.0;
 
-	public ServerInfoRequest(DaapHost host) throws BadResponseCodeException,
-			PasswordFailedException, IOException {
-		super(host);
-		query("ServerInfoRequest");
-		readResponse();
-		process();
-	}
+   private double mServerVersion = 0.0;
 
-	public String getRequestString() {
-		return "server-info";
-	}
+   public ServerInfoRequest(DaapHost host) throws BadResponseCodeException,
+         PasswordFailedException, IOException {
+      super(host);
+      query("ServerInfoRequest");
+      readResponse();
+      process();
+   }
 
-	public String getServerProgram() {
-		return httpc.getHeaderField("Daap-Server");
-	}
+   public String getRequestString() {
+      return "server-info";
+   }
 
-	public void process() {
-		if (data.length == 0) {
-			Log.d("Request", "Zero Length");
-			return;
-		}
-		offset += 8;
-		processServerInfoRequest();
-	}
+   public String getServerProgram() {
+      return httpc.getHeaderField("Daap-Server");
+   }
 
-	public void processServerInfoRequest() {
-		String name;
-		int size;
-		while (offset < data.length) {
-			name = readString(data, offset, 4);
-			offset += 4;
-			size = readInt(data, offset);
-			offset += 4;
-			if (size > 10000000)
-				Log.d("Request", "This host probably uses gzip encoding");
-			if (name.equals("apro")) {
-				// readInt(fp.value, 0, 2) + (0.01 * readInt(fp.value, 2, 2)
-				mServerVersion = readInt(data, offset, 2)
-						+ (0.01 * readInt(data, offset + 2, 2));
-				break;
-			}
-			offset += size;
-		}
-	}
+   public void process() {
+      if (data.length == 0) {
+         Log.d("Request", "Zero Length");
+         return;
+      }
+      offset += 8;
+      processServerInfoRequest();
+   }
 
-	public double getServerVersion() {
-		return mServerVersion;
-	}
+   public void processServerInfoRequest() {
+      String name;
+      int size;
+      while (offset < data.length) {
+         name = readString(data, offset, 4);
+         offset += 4;
+         size = readInt(data, offset);
+         offset += 4;
+         if (size > 10000000)
+            Log.d("Request", "This host probably uses gzip encoding");
+         if (name.equals("apro")) {
+            // readInt(fp.value, 0, 2) + (0.01 * readInt(fp.value, 2, 2)
+            mServerVersion = readInt(data, offset, 2)
+                  + (0.01 * readInt(data, offset + 2, 2));
+            break;
+         }
+         offset += size;
+      }
+   }
+
+   public double getServerVersion() {
+      return mServerVersion;
+   }
 }

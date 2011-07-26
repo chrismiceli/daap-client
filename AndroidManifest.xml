@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.mult.daap" android:versionName=".9.5" android:versionCode="32"
-	android:installLocation="auto">
+	package="org.mult.daap" android:versionCode="14" android:versionName=".7">
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".Servers" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.PICK" />
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:scheme="daap" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".MediaPlayback" android:label="@string/media_playback_activity"
@@ -36,17 +27,8 @@
 			<meta-data android:name="android.app.default_searchable"
 				android:value=".SearchActivity" />
 		</activity>
-		<activity android:name=".ArtistAlbumBrowser">
-			<meta-data android:name="android.app.default_searchable"
-				android:value=".SearchActivity" />
-		</activity>
 		<activity android:name=".QueueListBrowser" android:label="@string/queue_browser_activity" />
-		<activity android:name=".AddServerMenu" android:label="@string/add_server_menu_activity">
-			<intent-filter>
-				<action android:name="android.intent.action.CREATE_SHORTCUT" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
+		<activity android:name=".AddServerMenu" android:label="@string/add_server_menu_activity" />
 		<activity android:name=".Preferences" android:label="Preferences" />
 		<activity android:name=".SearchActivity" android:label="Search">
 			<intent-filter>
@@ -56,5 +38,5 @@
 				android:resource="@xml/searchable" />
 		</activity>
 	</application>
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
+	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 </manifest>

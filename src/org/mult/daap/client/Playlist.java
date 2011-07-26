@@ -13,11 +13,10 @@ import java.util.Collection;
  * @author Greg, for GIT
  */
 public abstract class Playlist {
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	protected ArrayList status_listeners = new ArrayList();
 
 	public String name;
-	public boolean all_songs;
 	protected int status;
 
 	public static final int STATUS_NOT_INITIALIZED = 0;
@@ -27,7 +26,7 @@ public abstract class Playlist {
 	public void initialize() throws Exception {
 	};
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	public abstract Collection getSongs();
 
 	public int getStatus() {

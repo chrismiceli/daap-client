@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="preferences">
-	<ListPreference android:key="font_pref"
-		android:persistent="true" android:title="@string/font_size"
-		android:summary="@string/font_pref_detail" android:entries="@array/fontArray"
-		android:defaultValue="18" android:entryValues="@array/fontValues" />
+	<CheckBoxPreference android:key="sd_as_cache"
+		android:persistent="true" android:title="@string/sd_card"
+		android:defaultValue="false" android:summaryOn="@string/use_sd_as_cache"
+		android:summaryOff="@string/use_sd_as_cache" />
+	<CheckBoxPreference android:key="streaming_pref"
+		android:persistent="true" android:title="@string/streaming"
+		android:defaultValue="true" android:summaryOn="@string/streaming_pref_detail"
+		android:summaryOff="@string/streaming_pref_detail" />
 </PreferenceScreen> 

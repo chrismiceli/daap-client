@@ -36,137 +36,136 @@ import java.net.URL;
 import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.Hasher;
 
-import android.util.Log;
-
-/** @author jbarnett
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments */
+/**
+ * @author jbarnett
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
+ */
 public abstract class Request {
-	protected DaapHost host;
-	protected int response_code;
-	protected String response_message;
-	public byte[] data;
-	protected int offset;
-	protected HttpURLConnection httpc;
-	protected int access_index;
+   protected DaapHost host;
+   protected int response_code;
+   protected String response_message;
+   public byte[] data;
+   protected int offset;
+   protected HttpURLConnection httpc;
+   protected int access_index;
 
-	// start of song request.
-	public Request(DaapHost h) throws BadResponseCodeException,
-			PasswordFailedException, IOException {
-		host = h;
-		response_code = -1;
-		offset = 0;
-		access_index = 2;
-	}
+   // start of song request.
+   public Request(DaapHost h) throws BadResponseCodeException,
+         PasswordFailedException, IOException {
+      host = h;
+      response_code = -1;
+      offset = 0;
+      access_index = 2;
+   }
 
-	protected String getRequestString() {
-		return "";
-	}
+   protected String getRequestString() {
+      return "";
+   }
 
-	protected void query(String caller) throws BadResponseCodeException,
-			PasswordFailedException, IOException {
-		URL url = new URL("http://" + host.getAddress() + ":" + host.getPort()
-				+ "/" + getRequestString());
-		Log.v("Request", url.toString());
-		httpc = (HttpURLConnection) url.openConnection();
-		httpc.setConnectTimeout(45000);
-		addRequestProperties();
-		httpc.connect();
-		response_code = httpc.getResponseCode();
-		if (!(response_code == HttpURLConnection.HTTP_OK)
-				&& !(response_code == HttpURLConnection.HTTP_PARTIAL)) {
-			response_message = httpc.getResponseMessage();
-			if (response_code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-				throw new PasswordFailedException("" + response_code + ": "
-						+ response_message);
-			}
-			throw new BadResponseCodeException(response_code, response_message
-					+ " by " + host.getName());
-		}
-	}
+   protected void query(String caller) throws BadResponseCodeException,
+         PasswordFailedException, IOException {
+      URL url = new URL("http://" + host.getAddress() + ":" + host.getPort()
+            + "/" + getRequestString());
+      httpc = (HttpURLConnection) url.openConnection();
+      httpc.setConnectTimeout(45000);
+      addRequestProperties();
+      httpc.connect();
+      response_code = httpc.getResponseCode();
+      if (!(response_code == HttpURLConnection.HTTP_OK)
+            && !(response_code == HttpURLConnection.HTTP_PARTIAL)) {
+         response_message = httpc.getResponseMessage();
+         if (response_code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            throw new PasswordFailedException("" + response_code + ": "
+                  + response_message);
+         }
+         throw new BadResponseCodeException(response_code, response_message
+               + " by " + host.getName());
+      }
+   }
 
-	protected void readResponse() throws IOException {
-		DataInputStream in = new DataInputStream(httpc.getInputStream());
-		int len = httpc.getContentLength();
-		if (httpc.getContentLength() == -1) {
-			return;
-		}
-		data = new byte[len];
-		in.readFully(data);
-	}
+   protected void readResponse() throws IOException {
+      DataInputStream in = new DataInputStream(httpc.getInputStream());
+      int len = httpc.getContentLength();
+      if (httpc.getContentLength() == -1) {
+         return;
+      }
+      data = new byte[len];
+      in.readFully(data);
+   }
 
-	protected void addRequestProperties() {
-		httpc.setRequestProperty("User-Agent", "iTunes/4.6 (Windows; N)");
-		httpc.addRequestProperty("Accept-Language", "en-us, en;q=5.0");
-		httpc.addRequestProperty("Client-DAAP-Access-Index",
-				String.valueOf(access_index));
-		httpc.addRequestProperty("Client-DAAP-Version", "3.0");
-		httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
-		// httpc.addRequestProperty("Accept-Encoding", "");
-		if (host.isPasswordProtected()) {
-			httpc.addRequestProperty("Authorization",
-					"Basic " + host.getPassword());
-		}
-		// httpc.addRequestProperty("Connection", "Close");
-	}
+   protected void addRequestProperties() {
+      httpc.setRequestProperty("User-Agent", "iTunes/4.6 (Windows; N)");
+      httpc.addRequestProperty("Accept-Language", "en-us, en;q=5.0");
+      httpc.addRequestProperty("Client-DAAP-Access-Index", String
+            .valueOf(access_index));
+      httpc.addRequestProperty("Client-DAAP-Version", "3.0");
+      httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
+      // httpc.addRequestProperty("Accept-Encoding", "");
+      if (host.isPasswordProtected()) {
+         httpc.addRequestProperty("Authorization", "Basic "
+               + host.getPassword());
+      }
+      // httpc.addRequestProperty("Connection", "Close");
+   }
 
-	public int getResponseCode() {
-		return response_code;
-	}
+   public int getResponseCode() {
+      return response_code;
+   }
 
-	protected String getHashCode(Request r) {
-		return Hasher.GenerateHash("/" + r.getRequestString(), this, false);
-	}
+   protected String getHashCode(Request r) {
+      return Hasher.GenerateHash("/" + r.getRequestString(), this, false);
+   }
 
-	public static String readString(byte[] data, int offset, int length) {
-		try {
-			return new String(data, offset, length, "UTF-8");
-			// data,start,length, encoding
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+   public static String readString(byte[] data, int offset, int length) {
+      try {
+         return new String(data, offset, length, "UTF-8");
+         // data,start,length, encoding
+      } catch (UnsupportedEncodingException e) {
+         e.printStackTrace();
+      }
+      return "";
+   }
 
-	protected int dataInt() {
-		return readInt(data, offset, 4);
-	}
+   protected int dataInt() {
+      return readInt(data, offset, 4);
+   }
 
-	protected static int readInt(byte[] data, int offset) {
-		int i = 0;
-		i = (((data[0 + offset] & 0xff) << 24)
-				| ((data[1 + offset] & 0xff) << 16)
-				| ((data[2 + offset] & 0xff) << 8) | (data[3 + offset] & 0xff));
-		return i;
-	}
+   protected static int readInt(byte[] data, int offset) {
+      int i = 0;
+      i = (((data[0 + offset] & 0xff) << 24)
+            | ((data[1 + offset] & 0xff) << 16)
+            | ((data[2 + offset] & 0xff) << 8) | (data[3 + offset] & 0xff));
+      return i;
+   }
 
-	public DaapHost getHost() {
-		return host;
-	}
+   public DaapHost getHost() {
+      return host;
+   }
 
-	public int getAccessIndex() {
-		return access_index;
-	}
+   public int getAccessIndex() {
+      return access_index;
+   }
 
-	/* convert from hex in binary to decimal */
-	public static int readInt(byte[] data, int offset, int size) {
-		int i = 0;
-		try {
-			ByteArrayInputStream b = new ByteArrayInputStream(data, offset,
-					size);
-			DataInputStream d = new DataInputStream(b);
-			int pow = size * 2 - 1;
-			for (int j = 0; j < size; j++) {
-				int num = (0xFF & d.readByte());
-				int up = ((int) Math.pow(16, pow)) * (num / 16);
-				pow--;
-				int down = ((int) Math.pow(16, pow)) * (num % 16);
-				i += up + down;
-				pow--;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return i;
-	}
+   /* convert from hex in binary to decimal */
+   public static int readInt(byte[] data, int offset, int size) {
+      int i = 0;
+      try {
+         ByteArrayInputStream b = new ByteArrayInputStream(data, offset, size);
+         DataInputStream d = new DataInputStream(b);
+         int pow = size * 2 - 1;
+         for (int j = 0; j < size; j++) {
+            int num = (0xFF & d.readByte());
+            int up = ((int) Math.pow(16, pow)) * (num / 16);
+            pow--;
+            int down = ((int) Math.pow(16, pow)) * (num % 16);
+            i += up + down;
+            pow--;
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      return i;
+   }
 }

@@ -47,22 +47,12 @@
 			android:layout_gravity="center_vertical" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" />
 	</LinearLayout>
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_marginLeft="5sp"
-		android:layout_marginRight="5sp" android:layout_marginTop="10sp">
-		<ImageView android:id="@+id/album" android:background="@drawable/albumart_mp_unknown"
-			android:layout_width="180dip" android:layout_height="180dip" />
-		<LinearLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:gravity="right"
-			android:layout_gravity="center_vertical" android:orientation="vertical">
-			<ImageButton android:id="@+id/shuffleButton"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:src="@drawable/ic_menu_shuffle" />
-			<ImageButton android:id="@+id/repeatButton"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:src="@drawable/ic_menu_repeat" />
-		</LinearLayout>
-	</LinearLayout>
+	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/upcoming_songs_header" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:paddingTop="2dip"
+		android:layout_gravity="center_vertical" android:paddingBottom="2dip"
+		android:paddingLeft="5dip" android:text="@string/upcoming_song"
+		style="?android:attr/listSeparatorTextViewStyle" />
 	<ListView android:id="@+id/list_upcoming_songs"
 		android:layout_width="fill_parent" android:layout_weight="1"
 		android:layout_height="wrap_content" />

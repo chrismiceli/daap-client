@@ -24,9 +24,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package org.mult.daap.client.daap;
 
-/** @author jbarnett
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments */
+/**
+ * @author jbarnett
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
+ */
 public class Database {
 	public String name;
 	public int id;

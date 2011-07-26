@@ -25,138 +25,141 @@ import org.mult.daap.client.daap.DaapPlaylist;
 
 import android.util.Log;
 
-/** @author jbarnett To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * @created August 6, 2004 */
+/**
+ * @author jbarnett To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
+ * @created August 6, 2004
+ */
 public class PlaylistsRequest extends Request {
-	private class FieldPair {
-		public FieldPair(int s, int p) {
-			size = s;
-			position = p;
-		}
+   private class FieldPair {
+      public FieldPair(int s, int p) {
+         size = s;
+         position = p;
+      }
 
-		public int position;
-		public int size;
-	}
+      public int position;
+      public int size;
+   }
 
-	private ArrayList<DaapPlaylist> mPlaylist;
-	private ArrayList<FieldPair> mlclList;
-	private ArrayList<FieldPair> mlitList;
+   private ArrayList<DaapPlaylist> mPlaylist;
+   private ArrayList<FieldPair> mlclList;
+   private ArrayList<FieldPair> mlitList;
 
-	public PlaylistsRequest(DaapHost h) throws NoServerPermissionException,
-			BadResponseCodeException, PasswordFailedException, IOException {
-		super(h);
-		mlclList = new ArrayList<FieldPair>();
-		mlitList = new ArrayList<FieldPair>();
-		mPlaylist = new ArrayList<DaapPlaylist>();
-		query("PlaylistRequest");
-		readResponse();
-		process();
-	}
+   public PlaylistsRequest(DaapHost h) throws NoServerPermissionException,
+         BadResponseCodeException, PasswordFailedException, IOException {
+      super(h);
+      mlclList = new ArrayList<FieldPair>();
+      mlitList = new ArrayList<FieldPair>();
+      mPlaylist = new ArrayList<DaapPlaylist>();
 
-	protected String getRequestString() {
-		String ret = "databases/";
-		ret += host.getDatabaseID() + "/";
-		ret += "containers?";
-		ret += "&session-id=" + host.getSessionID();
-		ret += "&revision-number=" + host.getRevisionNumber();
-		return ret;
-	}
+      query("PlaylistRequest");
+      readResponse();
+      process();
+   }
 
-	protected void addRequestProperties() {
-		super.addRequestProperties();
-	}
+   protected String getRequestString() {
+      String ret = "databases/";
+      ret += host.getDatabaseID() + "/";
+      ret += "containers?";
+      ret += "&session-id=" + host.getSessionID();
+      ret += "&revision-number=" + host.getRevisionNumber();
+      return ret;
+   }
 
-	protected void process() {
-		if (data.length == 0) {
-			Log.d("Request", "Zero Length");
-			return;
-		}
-		offset += 4;
-		offset += 4;
-		processSingleDatabaseRequest();
-		parseMLCL();
-	}
+   protected void addRequestProperties() {
+      super.addRequestProperties();
+   }
 
-	public void processSingleDatabaseRequest() {
-		String name;
-		int size;
-		while (offset < data.length) {
-			name = readString(data, offset, 4);
-			offset += 4;
-			size = readInt(data, offset);
-			offset += 4;
-			if (size > 10000000)
-				Log.d("Request", "This host probably uses gzip encoding");
-			if (name.equals("mlcl")) {
-				mlclList.add(new FieldPair(size, offset));
-			}
-			offset += size;
-		}
-	}
+   protected void process() {
+      if (data.length == 0) {
+         Log.d("Request", "Zero Length");
+         return;
+      }
+      offset += 4;
+      offset += 4;
+      processSingleDatabaseRequest();
+      parseMLCL();
+   }
 
-	/* Creates a list of byte arrays for use in mLIT */
-	protected void parseMLCL() {
-		for (int i = 0; i < mlclList.size(); i++) {
-			processContainerList(mlclList.get(i).position, mlclList.get(i).size);
-		}
-		parseMLIT();
-	}
+   public void processSingleDatabaseRequest() {
+      String name;
+      int size;
+      while (offset < data.length) {
+         name = readString(data, offset, 4);
+         offset += 4;
+         size = readInt(data, offset);
+         offset += 4;
+         if (size > 10000000)
+            Log.d("Request", "This host probably uses gzip encoding");
+         if (name.equals("mlcl")) {
+            mlclList.add(new FieldPair(size, offset));
+         }
+         offset += size;
+      }
+   }
 
-	protected void parseMLIT() {
-		for (int i = 0; i < mlitList.size(); i++) {
-			processmlitItem(mlitList.get(i).position, mlitList.get(i).size);
-		}
-		mlitList = null;
-		mlclList = null;
-	}
+   /* Creates a list of byte arrays for use in mLIT */
+   protected void parseMLCL() {
+      for (int i = 0; i < mlclList.size(); i++) {
+         processContainerList(mlclList.get(i).position, mlclList.get(i).size);
+      }
+      parseMLIT();
+   }
 
-	public void processmlitItem(int position, int argSize) {
-		String name = "";
-		int size;
-		int startPos = position;
-		DaapPlaylist p = new DaapPlaylist(host);
-		while (position < argSize + startPos) {
-			name = readString(data, position, 4);
-			position += 4;
-			size = readInt(data, position);
-			position += 4;
-			if (name.equals("minm"))
-				p.name = readString(data, position, size);
-			else if (name.equals("miid"))
-				p.id = readInt(data, position);
-			else if (name.equals("mper"))
-				p.persistent_id = readString(data, position, size);
-			else if (name.equals("mimc"))
-				p.song_count = readInt(data, position);
-			else if (name.equals("aeSP")) {
-				p.smart_playlist = true;
-			}
-			position += size;
-		}
-		if (!p.name.equals(host.getName())) {
-			mPlaylist.add(p);
-		}
-	}
+   protected void parseMLIT() {
+      for (int i = 0; i < mlitList.size(); i++) {
+         processmlitItem(mlitList.get(i).position, mlitList.get(i).size);
+      }
+      mlitList = null;
+      mlclList = null;
+   }
 
-	/* get all mlit in mlclList */
-	public void processContainerList(int position, int argSize) {
-		String name;
-		int size;
-		int startPos = position;
-		while (position < argSize + startPos) {
-			name = readString(data, position, 4);
-			position += 4;
-			size = readInt(data, position);
-			position += 4;
-			if (name.equals("mlit")) {
-				mlitList.add(new FieldPair(size, position));
-			}
-			position += size;
-		}
-	}
+   public void processmlitItem(int position, int argSize) {
+      String name = "";
+      int size;
+      int startPos = position;
+      DaapPlaylist p = new DaapPlaylist(host);
+      while (position < argSize + startPos) {
+         name = readString(data, position, 4);
+         position += 4;
+         size = readInt(data, position);
+         position += 4;
+         if (name.equals("minm"))
+            p.name = readString(data, position, size);
+         else if (name.equals("miid"))
+            p.id = readInt(data, position);
+         else if (name.equals("mper"))
+            p.persistent_id = readString(data, position, size);
+         else if (name.equals("mimc"))
+            p.song_count = readInt(data, position);
+         else if (name.equals("aeSP")) {
+            p.smart_playlist = true;
+         }
+         position += size;
+      }
+      if (!p.name.equals(host.getName())) {
+         mPlaylist.add(p);
+      }
+   }
 
-	public ArrayList<DaapPlaylist> getPlaylists() {
-		return mPlaylist;
-	}
+   /* get all mlit in mlclList */
+   public void processContainerList(int position, int argSize) {
+      String name;
+      int size;
+      int startPos = position;
+      while (position < argSize + startPos) {
+         name = readString(data, position, 4);
+         position += 4;
+         size = readInt(data, position);
+         position += 4;
+         if (name.equals("mlit")) {
+            mlitList.add(new FieldPair(size, position));
+         }
+         position += size;
+      }
+   }
+
+   public ArrayList<DaapPlaylist> getPlaylists() {
+      return mPlaylist;
+   }
 }

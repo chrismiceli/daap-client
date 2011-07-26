@@ -6,71 +6,64 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.preference.PreferenceManager;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filterable;
 import android.widget.SectionIndexer;
-import android.widget.TextView;
 
 class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
-		Filterable {
-	ArrayList<String> myElements;
-	HashMap<String, Integer> alphaIndexer;
-	ArrayList<String> letterList;
-	Context vContext;
-	int font_size;
+      Filterable {
+   ArrayList<String> myElements;
+   HashMap<String, Integer> alphaIndexer;
+   ArrayList<String> letterList;
 
-	@SuppressWarnings("unchecked")
-	public MyIndexerAdapter(Context context, int textViewResourceId,
-			List<T> objects) {
-		super(context, textViewResourceId, objects);
-		SharedPreferences mPrefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
-		vContext = context;
-		myElements = (ArrayList<String>) objects;
-		alphaIndexer = new HashMap<String, Integer>();
-		int size = myElements.size();
-		for (int i = size - 1; i >= 0; i--) {
-			String element = myElements.get(i);
-			if (element.length() != 0) { // no album/artist
-				alphaIndexer.put(element.substring(0, 1).toUpperCase(), i);
-			} else {
-				alphaIndexer.put(" ", i);
-			}
-		}
-		letterList = new ArrayList<String>(alphaIndexer.keySet()); // list can be
-		// sorted
-		Collections.sort(letterList);
-	}
+   // String[] sections;
 
-	@Override
-	public int getCount() {
-		return myElements.size();
-	}
+   @SuppressWarnings("unchecked")
+   public MyIndexerAdapter(Context context, int textViewResourceId,
+         List<T> objects) {
+      super(context, textViewResourceId, objects);
+      myElements = (ArrayList<String>) objects;
+      // Collections.sort(myElements);
+      alphaIndexer = new HashMap<String, Integer>();
+      // int size = Contents.getSongList().size();
+      int size = myElements.size();
+      for (int i = size - 1; i >= 0; i--) {
+         // String element = Contents.getStringList().get(i);
+         String element = myElements.get(i);
+         if (element.length() != 0) { // no album/artist
+            alphaIndexer.put(element.substring(0, 1).toUpperCase(), i);
+         } else {
+            alphaIndexer.put(" ", i);
+         }
+      }
+      // Set<String> letters = alphaIndexer.keySet(); // set of letters ...sets
+      // (all letters)
+      // Iterator<String> it = letters.iterator();
+      letterList = new ArrayList<String>(alphaIndexer.keySet()); // list can be
+      // sorted
+      // while (it.hasNext()) {
+      // String key = it.next();
+      // letterList.add(key);
+      // }
+      Collections.sort(letterList);
+      // sections = new String[letterList.size()]; // simple conversion to an
+      // array of object
+      // letterList.toArray(sections);
+   }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView tv = new TextView(vContext.getApplicationContext());
-		tv.setTextSize(font_size);
-		tv.setTextColor(Color.WHITE);
-		tv.setText(myElements.get(position));
-		return tv;
-	}
+   public int getPositionForSection(int section) {
+      // String letter = sections[section];
+      // String letter = letterList.get(section);
+      return alphaIndexer.get(letterList.get(section));
+   }
 
-	public int getPositionForSection(int section) {
-		return alphaIndexer.get(letterList.get(section));
-	}
+   public int getSectionForPosition(int position) {
+      return 0;
+   }
 
-	public int getSectionForPosition(int position) {
-		return 0;
-	}
-
-	public Object[] getSections() {
-		return letterList.toArray();
-	}
+   public Object[] getSections() {
+      return letterList.toArray();
+      // return sections; // to string will be called each object, to display
+      // the letter
+   }
 }

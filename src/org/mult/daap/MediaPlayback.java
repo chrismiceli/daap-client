@@ -13,40 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.mult.daap;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Formatter;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 
-import org.mult.daap.client.Song;
+import org.mult.daap.background.DownloadListener;
+import org.mult.daap.background.Downloader;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -54,34 +52,26 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class MediaPlayback extends Activity implements View.OnTouchListener,
-        View.OnLongClickListener {
-    private static final int MENU_STOP = 0;
-    private static final int MENU_LIBRARY = 1;
-    private static final int MENU_DOWNLOAD = 2;
-    private static final int REFRESH = 0;
-    private static final int COPYING_DIALOG = 1;
-    private static final int SUCCESS_COPYING_DIALOG = 2;
-    private static final int ERROR_COPYING_DIALOG = 3;
-    private static final String logTag = MediaPlayer.class.getName();
-
-    private static MediaPlayer mediaPlayer;
-    private static Song song;
+        View.OnLongClickListener, Observer
+{
+    public static final int REFRESH = 1;
     private TextView mArtistName;
     private TextView mAlbumName;
     private TextView mTrackName;
     private TextView mCurrentTime;
     private TextView mTotalTime;
-    private ImageButton mShuffleButton;
-    private ImageButton mRepeatButton;
     private ImageButton mPrevButton;
     private ImageButton mNextButton;
     private ImageButton mPauseButton;
     private SeekBar mProgress;
+
+    private static final int MENU_STOP = 0;
+    private static final int MENU_DOWNLOAD = 1;
     private int mTouchSlop;
     private int mInitialX = -1;
     private int mLastX = -1;
@@ -89,16 +79,33 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
     private int mViewWidth = 0;
     private boolean mDraggingLabel = false;
 
-    public MediaPlayback() {}
+    public MediaPlayback()
+    {}
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle bundle) {
+    public void onCreate(Bundle bundle)
+    {
         super.onCreate(bundle);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
+        if (Contents.address == null)
+        {
             // We got kicked out of memory probably
-            clearState();
+            SharedPreferences mPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(this);
+            if (mPrefs.getBoolean("sd_as_cache", false) == true)
+            {
+                deleteDirectory(new File("/sdcard/daap-cache/"));
+            }
+            else
+            {
+                File dm = new File(getCacheDir(), "downloadingMedia.dat");
+                if (dm.exists())
+                {
+                    dm.delete();
+                }
+            }
+            Contents.clearState();
             Contents.clearLists();
             stopNotification();
             setResult(Activity.RESULT_CANCELED);
@@ -108,9 +115,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         setContentView(R.layout.audio_player);
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
+
         mProgress = (SeekBar) findViewById(android.R.id.progress);
-        mShuffleButton = (ImageButton) findViewById(R.id.shuffleButton);
-        mRepeatButton = (ImageButton) findViewById(R.id.repeatButton);
         mPauseButton = (ImageButton) findViewById(R.id.pause);
         mPrevButton = (ImageButton) findViewById(R.id.prev);
         mNextButton = (ImageButton) findViewById(R.id.next);
@@ -122,196 +128,260 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         View v = (View) mArtistName.getParent();
         v.setOnTouchListener(this);
         v.setOnLongClickListener(this);
+
         v = (View) mAlbumName.getParent();
         v.setOnTouchListener(this);
         v.setOnLongClickListener(this);
+
         v = (View) mTrackName.getParent();
         v.setOnTouchListener(this);
         v.setOnLongClickListener(this);
-        if (Contents.shuffle) {
-            mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle_on);
-        }
-        else {
-            mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle);
-        }
-        if (Contents.repeat) {
-            mRepeatButton.setImageResource(R.drawable.ic_menu_repeat_on);
-        }
-        else {
-            mRepeatButton.setImageResource(R.drawable.ic_menu_repeat);
-        }
-        mShuffleButton.setOnClickListener(mShuffleListener);
-        mRepeatButton.setOnClickListener(mRepeatListener);
         mPauseButton.setOnClickListener(mPauseListener);
         mPrevButton.setOnClickListener(mPrevListener);
         mNextButton.setOnClickListener(mNextListener);
         mProgress.setMax(100);
-        mProgress.setProgress(0);
-        mProgress.setSecondaryProgress(0);
         mProgress.setOnSeekBarChangeListener(mSeekListener);
-        if (mediaPlayer == null) {
-            try {
-                startSong(Contents.getSong());
-            } catch (IndexOutOfBoundsException e) {
-                Log.e(logTag, "Something went wrong with playlist/queue");
-                e.printStackTrace();
-                finish();
-            }
-        }
-        else {
-            Log.v(logTag, "mediaplayer != null");
-        }
         setUpActivity();
+
+        Downloader downloadThread = Contents.downloadThread;
+        MediaPlayer mediaPlayer = Contents.mediaPlayer;
+        if (downloadThread == null && mediaPlayer == null)
+        {
+            // We're not getting nor playing anything
+            Log.v("MediaPlayback", "Got handle downloading");
+            handleDownloading();
+        }
+        else if (downloadThread == null && mediaPlayer != null)
+        {
+            // We're done getting the file but we do have a media player
+            // do nothing as queueNextRefresh is called below
+        }
+        else if (downloadThread != null && mediaPlayer == null)
+        {
+            // we are getting the file
+            DownloadListener downloadListener = downloadThread
+                    .getDownloadListener();
+            downloadListener.addObserver(this);
+            this.update(downloadListener, downloadListener.getLastMessage());
+        }
+        else
+        // if (downloadThread != null && mediaPlayer != null)
+        {
+            // we're streaming
+            DownloadListener downloadListener = downloadThread
+                    .getDownloadListener();
+            downloadListener.addObserver(this);
+            this.update(downloadListener, downloadListener.getLastMessage());
+        }
         queueNextRefresh(refreshNow());
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        Dialog dialog = null;
-        if (id == COPYING_DIALOG) {
-            ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage(getString(R.string.downloading_file));
-            progressDialog.setCancelable(false);
-            dialog = progressDialog;
+    protected void handleDownloading()
+    {
+        // Fire off a thread away from the UI thread
+        Downloader downloadThread = Contents.downloadThread;
+        if (downloadThread != null)
+        {
+            downloadThread.interrupt();
+            downloadThread.deleteObservers();
         }
-        else if (id == ERROR_COPYING_DIALOG || id == SUCCESS_COPYING_DIALOG) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            if (id == ERROR_COPYING_DIALOG) {
-                builder.setMessage(R.string.save_error);
-            }
-            else {
-                builder.setMessage(R.string.save_complete);
-            }
-            builder.setPositiveButton(android.R.string.ok,
-                    new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            dialog = builder.create();
+        Contents.clearState();
+        try
+        {
+            downloadThread = new Downloader(this, Contents.getSong());
+        } catch (IndexOutOfBoundsException e)
+        {
+            handler.removeMessages(REFRESH);
+            stopNotification();
+            finish();
+            return;
         }
-        return dialog;
+        Contents.downloadThread = downloadThread;
+        mCurrentTime.setText("");
+        mTotalTime.setText("");
+        mProgress.setSecondaryProgress(0);
+        mProgress.setProgress(0);
+        mPauseButton.setEnabled(false);
+        startNotification();
+        queueNextRefresh(refreshNow());
+        new Thread(downloadThread).start();
     }
 
-    private void startSong(Song song) {
-        clearState();
-        mProgress.setEnabled(false);
-        mediaPlayer = new MediaPlayer();
-        MediaPlayback.song = song;
-        try {
-            mediaPlayer.setDataSource(Contents.daapHost.getSongURL(song));
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setOnCompletionListener(normalOnCompletionListener);
-            mediaPlayer.setOnErrorListener(mediaPlayerErrorListener);
-            mediaPlayer
-                    .setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mp.start();
-                            mProgress.setEnabled(true);
-                            stopNotification();
-                            startNotification();
-                            queueNextRefresh(refreshNow());
-                        }
-                    });
-            mediaPlayer.prepareAsync();
+    private void setUpActivity()
+    {
+        try
+        {
+            mArtistName.setText(Contents.getSong().artist);
+            mAlbumName.setText(Contents.getSong().album);
+            mTrackName.setText(Contents.getSong().name);
+            mProgress.setProgress(0);
+            mProgress.setSecondaryProgress(0);
+        } catch (IndexOutOfBoundsException e)
+        {
+            handler.removeMessages(REFRESH);
+            stopNotification();
+            Contents.clearState();
+            finish();
+            return;
+        }
+    }
+
+    public void update(Observable observable, Object data)
+    {
+        int message = ((Integer) data).intValue();
+        if (message == Downloader.FINISHED_DOWNLOAD.intValue())
+        {
+            // prevent mediaplayback issues
+            handler.removeMessages(REFRESH);
+        }
+        else if (message == Downloader.STARTED_PLAYBACK.intValue())
+        {
             TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
             tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-            setUpActivity();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, R.string.media_playback_error,
-                    Toast.LENGTH_LONG).show();
-            finish();
         }
+        else if (message == Downloader.TRANSFERRING_SONG.intValue())
+        {
+            // mPauseButton.setEnabled(false);
+            queueNextRefresh(refreshNow());
+        }
+        else if (message == Downloader.START_NEXT_SONG.intValue())
+        {
+            stopNotification();
+            handleDownloading();
+        }
+        else if (message == Downloader.SDERROR.intValue())
+        {
+            Toast tst1 = Toast.makeText(MediaPlayback.this,
+                    getString(R.string.no_sdcard_error_message_playback),
+                    Toast.LENGTH_LONG);
+            tst1.setGravity(Gravity.CENTER, tst1.getXOffset() / 2, tst1
+                    .getYOffset() / 2);
+            tst1.show();
+            stopNotification();
+            Contents.clearState();
+            observable.deleteObservers();
+            finish();
+            return;
+        }
+        else if (message == Downloader.MEDIA_PLAYBACK_ERROR.intValue())
+        {
+            Toast tst = Toast
+                    .makeText(MediaPlayback.this,
+                            getString(R.string.media_playback_error),
+                            Toast.LENGTH_LONG);
+            tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2, tst
+                    .getYOffset() / 2);
+            tst.show();
+            stopNotification();
+            Contents.clearState();
+            observable.deleteObservers();
+            finish();
+            return;
+        }
+        else if (message == Downloader.STOP_NOTIFICATION.intValue())
+        {
+            stopNotification();
+        }
+        handler.sendEmptyMessage(REFRESH);
     }
 
-    private void setUpActivity() {
-        mArtistName.setText(song.artist);
-        mAlbumName.setText(song.album);
-        mTrackName.setText(song.name);
-        mProgress.setProgress(0);
-        mProgress.setSecondaryProgress(0);
+    private final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)
+            {
+                case REFRESH:
+                    queueNextRefresh(refreshNow());
+                    break;
+            }
+        }
+    };
+
+    public void startNotification()
+    {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new Notification(
+                R.drawable.stat_notify_musicplayer, Contents.getSong().name,
+                System.currentTimeMillis());
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                getApplicationContext(), 0, getIntent(), 0);
+        notification.setLatestEventInfo(getApplicationContext(), Contents
+                .getSong().name, Contents.getSong().artist, contentIntent);
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        notificationManager.notify(0, notification);
+    }
+
+    public void stopNotification()
+    {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
     }
 
     private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
-        public void onStartTrackingTouch(SeekBar bar) {
-            // intentionally left blank
+        public void onStartTrackingTouch(SeekBar bar)
+        {
+        // intentionally left blank
         }
 
         public void onProgressChanged(SeekBar bar, int progress,
-                boolean fromuser) {
-            if (!fromuser) {
+                boolean fromuser)
+        {
+            MediaPlayer mediaPlayer = Contents.mediaPlayer;
+            if (!fromuser)
+            {
                 return;
             }
-            if (mediaPlayer == null) {
+            if (mediaPlayer == null)
+            {
                 bar.setProgress(0);
                 return;
             }
-            else {
+            else
+            {
                 double doubleProgress = (double) progress;
                 double doubleDuration;
                 // get correct length of the song we are going to seek in
-                doubleDuration = mediaPlayer.getDuration();
+                if (Contents.downloadThread != null)
+                    doubleDuration = Contents.downloadThread.getMediaLength();
+                else
+                    doubleDuration = mediaPlayer.getDuration();
                 int desiredSeek = (int) ((doubleProgress / 100.0) * doubleDuration);
-                mediaPlayer.seekTo(desiredSeek);
-                bar.setProgress(progress);
+                if (Contents.downloadThread == null)
+                {
+                    mediaPlayer.seekTo(desiredSeek);
+                }
                 handler.removeMessages(REFRESH);
                 queueNextRefresh(refreshNow());
             }
         }
 
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            // intentionally left blank
-        }
-    };
-
-    private View.OnClickListener mShuffleListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            if (Contents.shuffle) {
-                Contents.shuffle = false;
-                mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle);
-            }
-            else {
-                Contents.shuffle = true;
-                mShuffleButton.setImageResource(R.drawable.ic_menu_shuffle_on);
-            }
-        }
-    };
-
-    private View.OnClickListener mRepeatListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            if (Contents.repeat) {
-                Contents.repeat = false;
-                mRepeatButton.setImageResource(R.drawable.ic_menu_repeat);
-            }
-            else {
-                Contents.repeat = true;
-                mRepeatButton.setImageResource(R.drawable.ic_menu_repeat_on);
-            }
+        public void onStopTrackingTouch(SeekBar seekBar)
+        {
+        // intentionally left blank
         }
     };
 
     private View.OnClickListener mPauseListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            if (mediaPlayer != null) {
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
+        public void onClick(View v)
+        {
+            if (Contents.mediaPlayer != null)
+            {
+                if (Contents.mediaPlayer.isPlaying())
+                {
+                    Contents.mediaPlayer.pause();
                     stopNotification();
                 }
-                else {
-                    mediaPlayer.start();
+                else
+                {
+                    Contents.mediaPlayer.start();
                     startNotification();
                 }
                 setPauseButton();
@@ -319,206 +389,246 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
             }
         }
     };
+
     private View.OnClickListener mPrevListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            try {
-                startSong(Contents.getPreviousSong());
-            } catch (IndexOutOfBoundsException e) {
+        public void onClick(View v)
+        {
+            try
+            {
+                Contents.setPreviousSong();
+            } catch (IndexOutOfBoundsException e)
+            {
                 handler.removeMessages(REFRESH);
                 stopNotification();
-                clearState();
+                Contents.clearState();
                 finish();
                 return;
             }
+            stopNotification();
+            setUpActivity();
+            handleDownloading();
         }
     };
+
     private View.OnClickListener mNextListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            normalOnCompletionListener.onCompletion(mediaPlayer);
+        public void onClick(View v)
+        {
+            try
+            {
+                Contents.setNextSong();
+            } catch (IndexOutOfBoundsException e)
+            {
+                handler.removeMessages(REFRESH);
+                stopNotification();
+                Contents.clearState();
+                finish();
+                return;
+            }
+            stopNotification();
+            setUpActivity();
+            handleDownloading();
         }
     };
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         handler.removeMessages(REFRESH);
         super.onPause();
     }
 
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         handler.removeMessages(REFRESH);
         super.onStop();
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
+        queueNextRefresh(refreshNow());
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
+    public void onNewIntent(Intent intent)
+    {
         setIntent(intent);
     }
 
     @Override
-    public void onDestroy() {
-        handler.removeMessages(REFRESH);
+    public void onDestroy()
+    {
         super.onDestroy();
+        handler.removeMessages(REFRESH);
+        if (Contents.downloadThread != null)
+        {
+            Contents.downloadThread.getDownloadListener().deleteObservers();
+        }
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
         super.onPrepareOptionsMenu(menu);
-        if (mediaPlayer != null
-                && Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)) {
+        if (Downloader.isSDPresent() && Contents.downloadThread == null
+                && Contents.mediaPlayer != null)
+        {
             menu.findItem(MENU_DOWNLOAD).setEnabled(true);
         }
-        else {
+        else
+        {
             menu.findItem(MENU_DOWNLOAD).setEnabled(false);
         }
         return true;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_STOP, 0, R.string.menu_stop).setIcon(
                 android.R.drawable.ic_menu_close_clear_cancel);
-        menu.add(0, MENU_LIBRARY, 0, R.string.menu_library).setIcon(
-                R.drawable.ic_menu_list);
         menu.add(0, MENU_DOWNLOAD, 1, R.string.save).setIcon(
                 android.R.drawable.ic_menu_save);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case MENU_STOP:
-                clearState();
+                Downloader downloadThread = Contents.downloadThread;
+                if (downloadThread != null)
+                {
+                    downloadThread.interrupt();
+                    downloadThread.deleteObservers();
+                }
+                Contents.clearState();
                 stopNotification();
+                Contents.downloadThread = null;
                 finish();
                 break;
-            case MENU_LIBRARY:
-                Intent intent = new Intent(MediaPlayback.this,
-                        PlaylistBrowser.class);
-                startActivity(intent);
-                break;
             case MENU_DOWNLOAD:
-                showDialog(COPYING_DIALOG);
-                new Thread(new FileCopier()).start();
-                break;
+                if (Downloader.isSDPresent() && Contents.mediaPlayer != null
+                        && Contents.downloadThread == null)
+                {
+                    boolean isPlaying = Contents.mediaPlayer.isPlaying();
+                    try
+                    {
+                        String directory = "/sdcard/media/audio/DAAP/";
+                        String destination = directory + Contents.getSong().id
+                                + "." + Contents.getSong().format;
+                        File directoryFile = new File(directory);
+                        if (directoryFile.exists() == false)
+                        {
+                            if (directoryFile.mkdirs() == false)
+                            {
+                                throw new IOException(
+                                        "Could not create directories");
+                            }
+                        }
+                        handler.removeMessages(REFRESH);
+                        Contents.mediaPlayer.pause();
+                        DownloadListener.copyFile(
+                                Contents.currentlyPlayingFile, destination);
+                        if (isPlaying)
+                            Contents.mediaPlayer.start();
+                        queueNextRefresh(refreshNow());
+                        Toast tst = Toast
+                                .makeText(MediaPlayback.this,
+                                        getString(R.string.save_complete)
+                                                + destination,
+                                        Toast.LENGTH_LONG);
+                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                                tst.getYOffset() / 2);
+                        tst.show();
+                    } catch (Exception e)
+                    {
+                        if (isPlaying)
+                            Contents.mediaPlayer.start();
+                        queueNextRefresh(refreshNow());
+                        Toast tst = Toast.makeText(MediaPlayback.this,
+                                getString(R.string.error_title),
+                                Toast.LENGTH_LONG);
+                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                                tst.getYOffset() / 2);
+                        tst.show();
+                        e.printStackTrace();
+                    }
+                }
         }
         return true;
     }
 
-    private class FileCopier implements Runnable {
-        @Override
-        public void run() {
-            if (Environment.getExternalStorageState().equals(
-                    Environment.MEDIA_MOUNTED)
-                    && mediaPlayer != null) {
-                boolean wasPlaying = mediaPlayer.isPlaying();
-                try {
-                    File directory = new File(
-                            Environment.getExternalStorageDirectory(), "DAAP");
-                    directory.mkdirs();
-                    File destination = new File(directory, "DAAP-" + song.id
-                            + "." + song.format);
-                    mediaPlayer.pause();
-                    InputStream songStream = Contents.daapHost
-                            .getSongStream(song);
-                    FileOutputStream destinationStream = new FileOutputStream(
-                            destination);
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = songStream.read(buffer)) > 0) {
-                        destinationStream.write(buffer, 0, len);
-                    }
-                    if (songStream != null)
-                        songStream.close();
-                    if (destinationStream != null)
-                        destinationStream.close();
-                    destination.deleteOnExit();
-                    handler.sendEmptyMessage(COPYING_DIALOG);
-
-                    if (wasPlaying)
-                        mediaPlayer.start();
-                    handler.sendEmptyMessage(SUCCESS_COPYING_DIALOG);
-                } catch (Exception e) {
-                    if (wasPlaying)
-                        mediaPlayer.start();
-                    handler.sendEmptyMessage(COPYING_DIALOG);
-                    handler.sendEmptyMessage(ERROR_COPYING_DIALOG);
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void setPauseButton() throws IllegalStateException {
-        try {
-            if (mediaPlayer != null) {
+    private void setPauseButton() throws IllegalStateException
+    {
+        try
+        {
+            if (Contents.mediaPlayer != null)
+            {
                 mPauseButton.setEnabled(true);
-                if (mediaPlayer.isPlaying()) {
+                if (Contents.mediaPlayer.isPlaying())
+                {
                     mPauseButton
                             .setImageResource(android.R.drawable.ic_media_pause);
                 }
-                else {
+                else
+                {
                     mPauseButton
                             .setImageResource(android.R.drawable.ic_media_play);
                 }
             }
-            else {
+            else
+            {
                 mPauseButton.setEnabled(false);
             }
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException e)
+        {
             throw e;
         }
     }
 
-    private final Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            switch (message.what) {
-                case REFRESH:
-                    queueNextRefresh(refreshNow());
-                    break;
-                case COPYING_DIALOG:
-                    dismissDialog(COPYING_DIALOG);
-                    break;
-                case SUCCESS_COPYING_DIALOG:
-                    showDialog(SUCCESS_COPYING_DIALOG);
-                    break;
-                case ERROR_COPYING_DIALOG:
-                    showDialog(ERROR_COPYING_DIALOG);
-                    break;
-            }
-        }
-    };
-
-    private void queueNextRefresh(long delay) {
+    private void queueNextRefresh(long delay)
+    {
         handler.removeMessages(REFRESH);
         handler.sendEmptyMessageDelayed(REFRESH, delay);
     }
 
-    private long refreshNow() {
-        try {
-            if (mediaPlayer == null) {
+    private long refreshNow()
+    {
+        try
+        {
+            if (Contents.downloadThread != null)
+            {
+                mProgress.setSecondaryProgress((int) Contents.downloadThread
+                        .getDownloadProgress());
+            }
+            else
+            {
+                mProgress.setSecondaryProgress(100);
+            }
+            if (Contents.mediaPlayer == null)
+            {
                 return 500;
             }
-            mTotalTime.setText(makeTimeString(song.time / 1000));
-            int mDuration = song.time;
+            mTotalTime.setText(makeTimeString(Contents.getSong().time / 1000));
+            int mDuration = Contents.getSong().time;
             setPauseButton();
-            long pos = mediaPlayer.getCurrentPosition();
+            long pos = Contents.mediaPlayer.getCurrentPosition();
             long remaining = 1000 - (pos % 1000);
-            if ((pos >= 0) && (mDuration > 0)) {
+            if ((pos >= 0) && (mDuration > 0))
+            {
                 mCurrentTime.setText(makeTimeString(pos / 1000));
-                if (mediaPlayer.isPlaying()) {
+                if (Contents.mediaPlayer.isPlaying())
+                {
                     mCurrentTime.setVisibility(View.VISIBLE);
                 }
-                else {
+                else
+                {
                     // blink the counter
                     int vis = mCurrentTime.getVisibility();
                     mCurrentTime
@@ -531,71 +641,59 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
             // return the number of milliseconds until the next full second, so
             // the counter can be updated at just the right time
             return remaining;
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException e)
+        {
             return 500;
         }
     }
 
-    private static String makeTimeString(long secs) {
+    private static String makeTimeString(long secs)
+    {
         String durationformat = (secs < 3600 ? "%2$d:%5$02d"
                 : "%1$d:%3$02d:%5$02d");
         StringBuilder sFormatBuilder = new StringBuilder();
-        Formatter sFormatter = new Formatter(sFormatBuilder,
-                Locale.getDefault());
+        Formatter sFormatter = new Formatter(sFormatBuilder, Locale
+                .getDefault());
+
         sFormatBuilder.setLength(0);
+
         final Object[] timeArgs = new Object[5];
         timeArgs[0] = secs / 3600;
         timeArgs[1] = secs / 60;
         timeArgs[2] = (secs / 60) % 60;
         timeArgs[3] = secs;
         timeArgs[4] = secs % 60;
+
         return sFormatter.format(durationformat, timeArgs).toString();
     }
 
-    public boolean onLongClick(View arg0) {
+    public boolean onLongClick(View arg0)
+    {
         return false;
     }
 
-    public void startNotification() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(
-                R.drawable.stat_notify_musicplayer, song.name,
-                System.currentTimeMillis());
-        PendingIntent contentIntent = PendingIntent.getActivity(
-                getApplicationContext(), 0, getIntent(), 0);
-        notification.setLatestEventInfo(getApplicationContext(), song.name,
-                song.artist, contentIntent);
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-        notificationManager.notify(0, notification);
-    }
-
-    public void stopNotification() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
-    }
-
-    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
-        public void onCallStateChanged(int state, String incomingNumsber) {
-            switch (state) {
-                // change to idle
-                case TelephonyManager.CALL_STATE_IDLE:
-                    break;
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    if (mediaPlayer != null) {
-                        mediaPlayer.pause();
-                    }
-                    break;
-                case TelephonyManager.CALL_STATE_RINGING:
-                    if (mediaPlayer != null) {
-                        mediaPlayer.pause();
-                    }
-                    break;
+    static public boolean deleteDirectory(File path)
+    {
+        if (path.exists())
+        {
+            File[] files = path.listFiles();
+            for (int i = 0; i < files.length; i++)
+            {
+                if (files[i].isDirectory())
+                {
+                    deleteDirectory(files[i]);
+                }
+                else
+                {
+                    files[i].delete();
+                }
             }
         }
-    };
+        return (path.delete());
+    }
 
-    TextView textViewForContainer(View v) {
+    TextView textViewForContainer(View v)
+    {
         View vv = v.findViewById(R.id.artistname);
         if (vv != null)
             return (TextView) vv;
@@ -608,39 +706,49 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
         return null;
     }
 
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View v, MotionEvent event)
+    {
         int action = event.getAction();
         TextView tv = textViewForContainer(v);
-        if (tv == null) {
+        if (tv == null)
+        {
             return false;
         }
-        if (action == MotionEvent.ACTION_DOWN) {
+        if (action == MotionEvent.ACTION_DOWN)
+        {
             v.setBackgroundColor(0xff606060);
             mInitialX = mLastX = (int) event.getX();
             mDraggingLabel = false;
         }
         else if (action == MotionEvent.ACTION_UP
-                || action == MotionEvent.ACTION_CANCEL) {
+                || action == MotionEvent.ACTION_CANCEL)
+        {
             v.setBackgroundColor(0);
-            if (mDraggingLabel) {
+            if (mDraggingLabel)
+            {
                 Message msg = mLabelScroller.obtainMessage(0, tv);
                 mLabelScroller.sendMessageDelayed(msg, 1000);
             }
         }
-        else if (action == MotionEvent.ACTION_MOVE) {
-            if (mDraggingLabel) {
+        else if (action == MotionEvent.ACTION_MOVE)
+        {
+            if (mDraggingLabel)
+            {
                 int scrollx = tv.getScrollX();
                 int x = (int) event.getX();
                 int delta = mLastX - x;
-                if (delta != 0) {
+                if (delta != 0)
+                {
                     mLastX = x;
                     scrollx += delta;
-                    if (scrollx > mTextWidth) {
+                    if (scrollx > mTextWidth)
+                    {
                         // scrolled the text completely off the view to the left
                         scrollx -= mTextWidth;
                         scrollx -= mViewWidth;
                     }
-                    if (scrollx < -mViewWidth) {
+                    if (scrollx < -mViewWidth)
+                    {
                         // scrolled the text completely off the view to the
                         // right
                         scrollx += mViewWidth;
@@ -651,18 +759,22 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
                 return true;
             }
             int delta = mInitialX - (int) event.getX();
-            if (Math.abs(delta) > mTouchSlop) {
+            if (Math.abs(delta) > mTouchSlop)
+            {
                 mLabelScroller.removeMessages(0, tv);
-                if (tv.getEllipsize() != null) {
+                if (tv.getEllipsize() != null)
+                {
                     tv.setEllipsize(null);
                 }
                 Layout ll = tv.getLayout();
-                if (ll == null) {
+                if (ll == null)
+                {
                     return false;
                 }
                 mTextWidth = (int) tv.getLayout().getLineWidth(0);
                 mViewWidth = tv.getWidth();
-                if (mViewWidth > mTextWidth) {
+                if (mViewWidth > mTextWidth)
+                {
                     tv.setEllipsize(TruncateAt.END);
                     v.cancelLongPress();
                     return false;
@@ -678,63 +790,44 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 
     Handler mLabelScroller = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg)
+        {
             TextView tv = (TextView) msg.obj;
             int x = tv.getScrollX();
             x = x * 3 / 4;
             tv.scrollTo(x, 0);
-            if (x == 0) {
+            if (x == 0)
+            {
                 tv.setEllipsize(TruncateAt.END);
             }
-            else {
+            else
+            {
                 Message newmsg = obtainMessage(0, tv);
                 mLabelScroller.sendMessageDelayed(newmsg, 15);
             }
         }
     };
 
-    public static void clearState() {
-        if (mediaPlayer != null) {
-            try {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-                Log.v(logTag, "Usually this is not a problem.");
-            }
-        }
-        mediaPlayer = null;
-    }
-
-    private OnErrorListener mediaPlayerErrorListener = new MediaPlayer.OnErrorListener() {
-        public boolean onError(MediaPlayer mp, int what, int extra) {
-            Log.e(logTag, "Error in MediaPlayer: (" + what + ") with extra ("
-                    + extra + ")");
-            clearState();
-            return false;
-        }
-    };
-
-    private OnCompletionListener normalOnCompletionListener = new OnCompletionListener() {
-        public void onCompletion(MediaPlayer mp) {
-            try {
-                if (Contents.shuffle == true) {
-                    startSong(Contents.getRandomSong());
-                }
-                else if (Contents.repeat == true) {
-                    mp.seekTo(0);
-                    mp.start();
-                    queueNextRefresh(refreshNow());
-                }
-                else {
-                    startSong(Contents.getNextSong());
-                }
-            } catch (IndexOutOfBoundsException e) {
-                handler.removeMessages(REFRESH);
-                stopNotification();
-                clearState();
-                finish();
-                return;
+    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        public void onCallStateChanged(int state, String incomingNumsber)
+        {
+            switch (state)
+            {
+                // change to idle
+                case TelephonyManager.CALL_STATE_IDLE:
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    if (Contents.mediaPlayer != null)
+                    {
+                        Contents.mediaPlayer.pause();
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_RINGING:
+                    if (Contents.mediaPlayer != null)
+                    {
+                        Contents.mediaPlayer.pause();
+                    }
+                    break;
             }
         }
     };

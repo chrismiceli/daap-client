@@ -3,7 +3,7 @@
 //Original license LGPL
 
 
-package javax.jmdns.impl;
+package javax.jmdns;
 
 // REMIND: Listener should follow Java idiom for listener or have a different
 //         name.
@@ -20,5 +20,5 @@ interface DNSListener
     /**
      * Update a DNS record.
      */
-    void updateRecord(JmDNSImpl jmdns, long now, DNSRecord record);
+    void updateRecord(JmDNS jmdns, long now, DNSRecord record);
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_dialog_title">A propos</string>
 	<string name="app_name">DAAP</string>
@@ -9,9 +9,6 @@
 	<string name="donate">Donnation</string>
 	<string name="repeat">Répeter</string>
 	<string name="delete_entry">Supprimer l\'entrée</string>
-	<string name="play_album">Jouer l\'Album</string>
-	<string name="play_artist">Jouer l\'Artist</string>
-	<string name="all_songs">Toutes Les Chansons</string>
 	<string name="current_song">Chanson en cours</string>
 	<string name="upcoming_song"></string>
 	<string name="share_name">Nom de partage DAAP</string>
@@ -28,6 +25,11 @@
 	<string name="add_server_error_message">Veuillez vérifier que tous les champs soient
 		correctement renseignés.
     </string>
+	<string name="sd_card">Carte SD</string>
+	<string name="use_sd_as_cache">Carte SD pour cache</string>
+	<string name="no_sdcard_error_message">Pas de carte SD.</string>
+	<string name="no_sdcard_error_message_playback">Pas de carte SD.\nVeuillez changer vos préférences
+		d\'application.</string>
 	<string name="add_server">Ajouter un serveur</string>
 	<string name="add_server_menu_activity">DAAP - Ajouter un serveur</string>
 	<string name="queue_browser_activity">DAAP - File</string>
@@ -42,9 +44,9 @@
 	<string name="options">Options</string>
 	<string name="fetching_music_title">Recupération de la musique...</string>
 	<string name="fetching_music_detail">Veuillez patienter pendant la récupération de la
-		musique.</string>
+		musique .</string>
 	<string name="unable_to_connect">Impossible de se connecter!</string>
-	<string name="connecting_title">Connexion en cours ..</string>
+	<string name="connecting_title">Connection en cours ..</string>
 	<string name="connecting_detail">Soyez patient cela peut prendre du temps.
    </string>
 	<string name="empty_playlist">La liste de lecture sélectionnée est vide.</string>

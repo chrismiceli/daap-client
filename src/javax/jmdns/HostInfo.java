@@ -4,16 +4,11 @@
 
 
 
-package javax.jmdns.impl;
+package javax.jmdns;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-
-import android.util.Log;
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * HostInfo information on the local host to be able to cope with change of addresses.
@@ -21,10 +16,9 @@ import android.util.Log;
  * @version %I%, %G%
  * @author	Pierre Frisch, Werner Randelshofer
  */
-public class HostInfo
+class HostInfo
 {
-	public final static String TAG = HostInfo.class.toString();
-	
+    private static Logger logger = Logger.getLogger(HostInfo.class.toString());
     protected String name;
     protected InetAddress address;
     protected NetworkInterface interfaze;
@@ -40,16 +34,14 @@ public class HostInfo
         this.name = name;
         if (address != null)
         {
-            Log.d(TAG, String.format("looking for network interface owned by addr=%s", address.toString()));
             try
             {
                 interfaze = NetworkInterface.getByInetAddress(address);
-                Log.d(TAG, String.format("yay found interface=%s", interfaze.toString()));
             }
             catch (Exception exception)
             {
                 // FIXME Shouldn't we take an action here?
-                Log.d(TAG, "LocalHostInfo() exception: " + exception.getMessage());
+                logger.log(Level.WARNING, "LocalHostInfo() exception ", exception);
             }
         }
     }
@@ -110,7 +102,7 @@ public class HostInfo
         return (DNSConstants.TYPE_AAAA == address.type ? getDNS6AddressRecord() : getDNS4AddressRecord());
     }
 
-    public DNSRecord.Address getDNS4AddressRecord()
+    DNSRecord.Address getDNS4AddressRecord()
     {
         if ((getAddress() != null) &&
             ((getAddress() instanceof Inet4Address) ||
@@ -121,7 +113,7 @@ public class HostInfo
         return null;
     }
 
-    public DNSRecord.Address getDNS6AddressRecord()
+    DNSRecord.Address getDNS6AddressRecord()
     {
         if ((getAddress() != null) && (getAddress() instanceof Inet6Address))
         {
@@ -141,35 +133,6 @@ public class HostInfo
         buf.append(getAddress() != null ? getAddress().getHostAddress() : "no address");
         buf.append("]");
         return buf.toString();
-    }
-
-    public void addAddressRecords(DNSOutgoing out, boolean authoritative) throws IOException
-    {
-        DNSRecord answer = getDNS4AddressRecord();
-        if (answer != null)
-        {
-            if (authoritative)
-            {
-                out.addAuthorativeAnswer(answer);
-            }
-            else
-            {
-                out.addAnswer(answer, 0);
-            }
-        }
-        
-        answer = getDNS6AddressRecord();
-        if (answer != null)
-        {
-            if (authoritative)
-            {
-                out.addAuthorativeAnswer(answer);
-            }
-            else
-            {
-                out.addAnswer(answer, 0);
-            }
-        }
     }
 
 }
