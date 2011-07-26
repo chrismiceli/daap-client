@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.mult.daap" android:versionName=".9.1" android:versionCode="30"
+	package="org.mult.daap" android:versionName=".9.5" android:versionCode="32"
 	android:installLocation="auto">
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,6 +12,12 @@
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.PICK" />
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="daap" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".MediaPlayback" android:label="@string/media_playback_activity"
@@ -35,7 +41,12 @@
 				android:value=".SearchActivity" />
 		</activity>
 		<activity android:name=".QueueListBrowser" android:label="@string/queue_browser_activity" />
-		<activity android:name=".AddServerMenu" android:label="@string/add_server_menu_activity" />
+		<activity android:name=".AddServerMenu" android:label="@string/add_server_menu_activity">
+			<intent-filter>
+				<action android:name="android.intent.action.CREATE_SHORTCUT" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
 		<activity android:name=".Preferences" android:label="Preferences" />
 		<activity android:name=".SearchActivity" android:label="Search">
 			<intent-filter>
