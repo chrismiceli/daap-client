@@ -2,7 +2,7 @@
 
 = Sections =
 
-  * [http://code.google.com/p/daap-client/wiki/PageName Main]
+  * [http://code.google.com/p/daap-client/wiki/Home Home]
   * [http://code.google.com/p/daap-client/wiki/Adding Adding a Server]
   * [http://code.google.com/p/daap-client/wiki/Queing How to Queue]
   * [http://code.google.com/p/daap-client/wiki/PreferencesExplained Preferences Explained]
