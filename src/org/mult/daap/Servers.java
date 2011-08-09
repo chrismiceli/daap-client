@@ -108,7 +108,6 @@ public class Servers extends Activity implements Observer {
                         .findViewById(R.id.PasswordEditText);
                 buttonConfrim
                         .setOnClickListener(new android.view.View.OnClickListener() {
-                            @Override
                             public void onClick(View arg0) {
                                 Contents.loginManager.interrupt();
                                 Contents.loginManager.deleteObservers();
@@ -123,7 +122,6 @@ public class Servers extends Activity implements Observer {
                         });
                 buttonCancel
                         .setOnClickListener(new android.view.View.OnClickListener() {
-                            @Override
                             public void onClick(View v) {
                                 Contents.loginManager = null;
                                 password.setText("");

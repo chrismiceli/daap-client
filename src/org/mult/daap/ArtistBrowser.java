@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.Map;
 
 import org.mult.daap.client.Song;
-import org.mult.daap.client.SongTrackComparator;
 import org.mult.daap.client.StringIgnoreCaseComparator;
 
 import android.app.Activity;
