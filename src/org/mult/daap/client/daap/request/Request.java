@@ -70,6 +70,7 @@ public abstract class Request {
 		Log.v("Request", url.toString());
 		httpc = (HttpURLConnection) url.openConnection();
 		httpc.setConnectTimeout(45000);
+		httpc.setRequestProperty("Accept-Encoding", "identity");
 		addRequestProperties();
 		httpc.connect();
 		response_code = httpc.getResponseCode();
