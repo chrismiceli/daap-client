@@ -42,15 +42,12 @@ public class JmDNSListener {
 			jmdns = JmDNS.create(wifi);
 			jmdns.addServiceListener("_daap._tcp.local.",
 					new ServiceListener() {
-						@Override
 						public void serviceResolved(ServiceEvent arg0) {
 						}
 
-						@Override
 						public void serviceRemoved(ServiceEvent arg0) {
 						}
 
-						@Override
 						public void serviceAdded(ServiceEvent e) {
 							Lookup l = new Lookup(e);
 							l.start();

@@ -58,7 +58,7 @@ public class PlaylistsRequest extends Request {
 		String ret = "databases/";
 		ret += host.getDatabaseID() + "/";
 		ret += "containers?";
-		ret += "&session-id=" + host.getSessionID();
+		ret += "session-id=" + host.getSessionID();
 		ret += "&revision-number=" + host.getRevisionNumber();
 		return ret;
 	}
