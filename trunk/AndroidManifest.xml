@@ -21,7 +21,8 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".MediaPlayback" android:label="@string/media_playback_activity"
-			android:launchMode="singleTop" />
+			android:launchMode="singleTop">
+		</activity>
 		<activity android:name=".SongBrowser" android:label="@string/song_browser_activity">
 			<meta-data android:name="android.app.default_searchable"
 				android:value=".SearchActivity" />
@@ -55,6 +56,16 @@
 			<meta-data android:name="android.app.searchable"
 				android:resource="@xml/searchable" />
 		</activity>
+		<service android:name=".MediaPlaybackService"
+			android:configChanges="keyboardHidden|orientation"
+			android:description="@string/media_playback_service_desc" />
+		<receiver android:name=".client.widget.DAAPClientAppWidgetOneProvider">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider"
+				android:resource="@xml/appwidget_one" />
+		</receiver>
 	</application>
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
 </manifest>

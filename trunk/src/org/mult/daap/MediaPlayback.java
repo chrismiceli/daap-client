@@ -22,6 +22,7 @@ import java.util.Formatter;
 import java.util.Locale;
 
 import org.mult.daap.client.Song;
+import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,10 +31,15 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -42,6 +48,7 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
@@ -62,6 +69,7 @@ import android.widget.Toast;
 
 public class MediaPlayback extends Activity implements View.OnTouchListener,
 		View.OnLongClickListener {
+
 	private static final int MENU_STOP = 0;
 	private static final int MENU_LIBRARY = 1;
 	private static final int MENU_DOWNLOAD = 2;
@@ -72,6 +80,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 	private static final String logTag = MediaPlayer.class.getName();
 
 	private static MediaPlayer mediaPlayer;
+	private MediaPlaybackService mMediaPlaybackService = null;
 	private static Song song;
 	private TextView mArtistName;
 	private TextView mAlbumName;
@@ -91,6 +100,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 	private int mViewWidth = 0;
 	private boolean mDraggingLabel = false;
 	boolean scrobbler_support = false;
+
+	private DAAPClientAppWidgetOneProvider mAppWidgetProvider = DAAPClientAppWidgetOneProvider
+			.getInstance();
 
 	public MediaPlayback() {
 	}
@@ -219,6 +231,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 							stopNotification();
 							startNotification();
 							queueNextRefresh(refreshNow());
+							mAppWidgetProvider.notifyChange(
+									mMediaPlaybackService, MediaPlayback.this,
+									MediaPlaybackService.PLAYSTATE_CHANGED);
 						}
 					});
 			mediaPlayer.prepareAsync();
@@ -242,6 +257,24 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		mTrackName.setText(song.name);
 		mProgress.setProgress(0);
 		mProgress.setSecondaryProgress(0);
+		// Share this notification directly with our widgets
+		mAppWidgetProvider.notifyChange(mMediaPlaybackService, this,
+				MediaPlaybackService.META_CHANGED);
+	}
+
+	public String getTrackName() {
+		return song.name;
+	}
+
+	public String getArtistName() {
+		return song.artist;
+	}
+
+	public boolean isPlaying() {
+		if (mediaPlayer != null)
+			return mediaPlayer.isPlaying();
+
+		return false;
 	}
 
 	private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
@@ -319,6 +352,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 				}
 				setPauseButton();
 				queueNextRefresh(refreshNow());
+				mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+						MediaPlayback.this,
+						MediaPlaybackService.PLAYSTATE_CHANGED);
 			}
 		}
 	};
@@ -326,6 +362,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		public void onClick(View v) {
 			try {
 				startSong(Contents.getPreviousSong());
+				mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+						MediaPlayback.this,
+						MediaPlaybackService.PLAYSTATE_CHANGED);
 			} catch (IndexOutOfBoundsException e) {
 				handler.removeMessages(REFRESH);
 				stopNotification();
@@ -338,6 +377,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 	private View.OnClickListener mNextListener = new View.OnClickListener() {
 		public void onClick(View v) {
 			normalOnCompletionListener.onCompletion(mediaPlayer);
+			mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+					MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
 		}
 	};
 
@@ -356,6 +397,18 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 	@Override
 	public void onStart() {
 		super.onStart();
+
+		IntentFilter f = new IntentFilter();
+		f.addAction(MediaPlaybackService.NEXT);
+		f.addAction(MediaPlaybackService.TOGGLEPAUSE);
+		f.addAction(MediaPlaybackService.PAUSE);
+		f.addAction(MediaPlaybackService.ADDED);
+		registerReceiver(mStatusListener, new IntentFilter(f));
+
+		if (mMediaPlaybackService == null) {
+			bindService(new Intent(this, MediaPlaybackService.class),
+					connection, Context.BIND_AUTO_CREATE);
+		}
 	}
 
 	@Override
@@ -370,6 +423,18 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 			scrobble(3); // COMPLETE
 		}
 		super.onDestroy();
+
+		if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+			// Share this notification directly with our widgets
+			mAppWidgetProvider.notifyChange(mMediaPlaybackService, this,
+					MediaPlaybackService.PLAYER_CLOSED);
+
+			unregisterReceiver(mStatusListener);
+
+			// Detach our existing connection.
+			unbindService(connection);
+			mMediaPlaybackService = null;
+		}
 	}
 
 	@Override
@@ -763,4 +828,84 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		i.putExtra("secs", song.time / 1000);
 		sendBroadcast(i);
 	}
+
+	private ServiceConnection connection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName classname, IBinder service) {
+			// This is called when the connection with the service has been
+			// established, giving us the service object we can use to
+			// interact with the service. Because we have bound to a explicit
+			// service that we know is running in our own process, we can
+			// cast its IBinder to a concrete class and directly access it.
+			mMediaPlaybackService = ((MediaPlaybackService.LocalBinder) service)
+					.getService();
+		}
+
+		public void onServiceDisconnected(ComponentName classname) {
+			// This is called when the connection with the service has been
+			// unexpectedly disconnected -- that is, its process crashed.
+			// Because it is running in our same process, we should never
+			// see this happen.
+			mMediaPlaybackService = null;
+		}
+	};
+
+	private BroadcastReceiver mStatusListener = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (MediaPlaybackService.NEXT.equals(action)) {
+				normalOnCompletionListener.onCompletion(mediaPlayer);
+				mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+						MediaPlayback.this,
+						MediaPlaybackService.PLAYSTATE_CHANGED);
+			} else if (MediaPlaybackService.TOGGLEPAUSE.equals(action)) {
+				if (mediaPlayer != null) {
+					if (mediaPlayer.isPlaying()) {
+						if (scrobbler_support) {
+							scrobble(2); // PAUSE
+						}
+						mediaPlayer.pause();
+						stopNotification();
+					} else {
+						if (scrobbler_support) {
+							scrobble(1); // RESUME
+						}
+						mediaPlayer.start();
+						startNotification();
+					}
+					setPauseButton();
+					queueNextRefresh(refreshNow());
+					mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+							MediaPlayback.this,
+							MediaPlaybackService.PLAYSTATE_CHANGED);
+				}
+			} else if (MediaPlaybackService.PAUSE.equals(action)) {
+				if (mediaPlayer != null) {
+					if (mediaPlayer.isPlaying()) {
+						if (scrobbler_support) {
+							scrobble(2); // PAUSE
+						}
+						mediaPlayer.pause();
+						stopNotification();
+					} else {
+						if (scrobbler_support) {
+							scrobble(1); // RESUME
+						}
+						mediaPlayer.start();
+						startNotification();
+					}
+					setPauseButton();
+					queueNextRefresh(refreshNow());
+					mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+							MediaPlayback.this,
+							MediaPlaybackService.PLAYSTATE_CHANGED);
+				}
+			} else if (MediaPlaybackService.ADDED.equals(action)) {
+				int[] appWidgetIds = intent
+						.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+				mAppWidgetProvider.performUpdate(mMediaPlaybackService,
+						MediaPlayback.this, appWidgetIds, "");
+			}
+		}
+	};
 };
