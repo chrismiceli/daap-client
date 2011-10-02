@@ -431,6 +431,12 @@ public class Servers extends Activity implements Observer {
 		public void handleMessage(Message msg) {
 			if (msg.what == LoginManager.CONNECTION_FINISHED.intValue()) {
 				pd.dismiss();
+				// save the server
+				boolean loginRequired = (Contents.loginManager.password
+						.length() == 0) ? false : true;
+				saveServer(Contents.loginManager.name,
+						Contents.loginManager.address,
+						Contents.loginManager.password, loginRequired);
 				Contents.loginManager = null;
 				final Intent intent = new Intent(Servers.this,
 						PlaylistBrowser.class);
@@ -583,4 +589,13 @@ public class Servers extends Activity implements Observer {
 			adapter.notifyDataSetChanged();
 		}
 	};
+
+	private void saveServer(String serverName, String serverAddress,
+			String password, boolean loginCheckBox) {
+		db.open();
+		if (!db.serverExists(serverName, serverAddress, password, loginCheckBox)) {
+			db.insertServer(serverName, serverAddress, password, loginCheckBox);
+		}
+		db.close();
+	}
 }

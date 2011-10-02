@@ -18,6 +18,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 
 public class ServerEditorActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
@@ -45,6 +46,7 @@ public class ServerEditorActivity extends PreferenceActivity implements
 				for (int i = 0; i < cursor.getColumnCount(); i++) {
 					String key = cursor.getColumnName(i);
 					String value = cursor.getString(i);
+					Log.v("ServerEditor", "Key = " + key + "; value = " + value);
 					values.put(key, value);
 				}
 			}
@@ -104,16 +106,11 @@ public class ServerEditorActivity extends PreferenceActivity implements
 
 			public android.content.SharedPreferences.Editor putString(
 					String key, String value) {
-				// Log.d(this.getClass().toString(),
-				// String.format("Editor.putString(key=%s, value=%s)", key,
-				// value));
 				update.put(key, value);
 				return this;
 			}
 
 			public android.content.SharedPreferences.Editor remove(String key) {
-				// Log.d(this.getClass().toString(),
-				// String.format("Editor.remove(key=%s)", key));
 				update.remove(key);
 				return this;
 			}
@@ -141,8 +138,11 @@ public class ServerEditorActivity extends PreferenceActivity implements
 		}
 
 		public boolean getBoolean(String key, boolean defValue) {
-			return Boolean.valueOf(this.getString(key,
-					Boolean.toString(defValue)));
+			if (this.getString(key, Boolean.toString(defValue)).equals("1")) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public float getFloat(String key, float defValue) {
@@ -161,7 +161,6 @@ public class ServerEditorActivity extends PreferenceActivity implements
 		public String getString(String key, String defValue) {
 			// Log.d(this.getClass().toString(),
 			// String.format("getString(key=%s, defValue=%s)", key, defValue));
-
 			if (!values.containsKey(key))
 				return defValue;
 			return values.get(key);
@@ -183,35 +182,25 @@ public class ServerEditorActivity extends PreferenceActivity implements
 			// TODO Auto-generated method stub
 			return null;
 		}
-
 	}
 
 	@Override
 	public SharedPreferences getSharedPreferences(String name, int mode) {
-		// Log.d(this.getClass().toString(),
-		// String.format("getSharedPreferences(name=%s)", name));
 		return this.pref;
 	}
 
 	protected static final String TAG = ServerEditorActivity.class.getName();
-
 	protected DBAdapter db = null;
-
 	private CursorPreferenceHack pref;
 
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
 		long rowId = this.getIntent().getIntExtra(Intent.EXTRA_TITLE, -1);
-
 		this.db = new DBAdapter(this);
-
 		this.pref = new CursorPreferenceHack(DBAdapter.DATABASE_TABLE, rowId);
 		this.pref.registerOnSharedPreferenceChangeListener(this);
-
 		this.addPreferencesFromResource(R.xml.server_prefs);
-
 		this.updateSummaries();
 	}
 
@@ -249,7 +238,6 @@ public class ServerEditorActivity extends PreferenceActivity implements
 				if (entryIndex >= 0)
 					value = listPref.getEntries()[entryIndex];
 			}
-
 			pref.setSummary(value);
 		}
 

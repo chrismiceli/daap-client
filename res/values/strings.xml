@@ -29,6 +29,7 @@
 	<string name="queue_is_full">Queue is full.</string>
 	<string name="add_server_error_message">Please ensure that all fields are filled correctly.
 	</string>
+	<string name="duplicate_server_error_title">Server already exists!</string>
 	<string name="add_server">Add Server</string>
 	<string name="add_server_menu_activity">DAAP - Add Server</string>
 	<string name="queue_browser_activity">DAAP - Queue List</string>
