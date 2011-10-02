@@ -1,5 +1,7 @@
 package org.mult.daap.background;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -105,6 +107,48 @@ public class DBAdapter {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
+	}
+
+	// ---checks if a server already exists in the database---
+	public boolean serverExists(String name, String address, String password,
+			boolean login_required) {
+		StringBuilder selectionBuilder = new StringBuilder();
+		ArrayList<String> selectionValuesList = new ArrayList<String>();
+		boolean exists = false;
+
+		selectionBuilder.append(KEY_SERVER_NAME).append(" = ?");
+		selectionBuilder.append(" AND ");
+		selectionBuilder.append(KEY_SERVER_ADDRESS).append(" = ?");
+		selectionBuilder.append(" AND ");
+		selectionBuilder.append(KEY_PASSWORD).append(" = ?");
+		selectionBuilder.append(" AND ");
+		selectionBuilder.append(KEY_LOGIN_REQUIRED).append(" = ?");
+
+		selectionValuesList.add(name);
+		selectionValuesList.add(address);
+		selectionValuesList.add(password);
+
+		if (login_required)
+			selectionValuesList.add("1");
+		else
+			selectionValuesList.add("0");
+
+		String selectionValues[] = new String[selectionValuesList.size()];
+		selectionValuesList.toArray(selectionValues);
+		selectionValuesList = null;
+
+		synchronized (db) {
+			Cursor c = db.query(DATABASE_TABLE, null,
+					selectionBuilder.toString(), selectionValues, null, null,
+					null);
+
+			if (c.moveToNext())
+				exists = true;
+
+			c.close();
+		}
+
+		return exists;
 	}
 
 	// ---updates a title---
