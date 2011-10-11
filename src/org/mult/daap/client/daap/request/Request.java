@@ -54,6 +54,9 @@ public abstract class Request {
     // start of song request.
     public Request(DaapHost h) throws BadResponseCodeException,
             PasswordFailedException, IOException {
+		// needed for bug in android:
+		// http://code.google.com/p/android/issues/detail?id=7786
+		System.setProperty("http.keepAlive", "false");
         host = h;
         response_code = -1;
         offset = 0;
