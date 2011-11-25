@@ -1,12 +1,17 @@
 package org.mult.daap;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
+import android.media.AudioManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -20,17 +25,31 @@ public class MediaPlaybackService extends Service {
 	
     public static final String SERVICECMD = "org.mult.daap.mediaservicecommand";
     public static final String CMDNAME = "command";
+    public static final String CMDTOGGLEPAUSE = "togglepause";
+    public static final String CMDSTOP = "stop";
+    public static final String CMDPAUSE = "pause";
+    public static final String CMDPREVIOUS = "previous";
+    public static final String CMDNEXT = "next";
 	
     public static final String TOGGLEPAUSE_ACTION = "org.mult.daap.mediaservicecommand.togglepause";
     public static final String PAUSE_ACTION = "org.mult.daap.mediaservicecommand.pause";
     public static final String NEXT_ACTION = "org.mult.daap.mediaservicecommand.next";
 
     public static final String TOGGLEPAUSE = "togglepause";
+    public static final String STOP = "stop";
     public static final String PAUSE = "pause";
+    public static final String PREVIOUS = "previous";
     public static final String NEXT = "next";
     public static final String ADDED = "added";
     
     private int mServiceStartId = -1;
+    private AudioManager mAudioManager;
+    
+    private static Method mRegisterMediaButtonEventReceiver;
+    
+    static {
+        initializeRemoteControlRegistrationMethods();
+    }
     
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -69,6 +88,9 @@ public class MediaPlaybackService extends Service {
         super.onCreate();
 
         Log.v(TAG, "onCreate called");
+        
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        registerRemoteControl();
         
         IntentFilter commandFilter = new IntentFilter();
         commandFilter.addAction(SERVICECMD);
@@ -115,12 +137,16 @@ public class MediaPlaybackService extends Service {
             String cmd = intent.getStringExtra("command");
             Log.v(TAG, "onStartCommand " + action + " / " + cmd);
             
-            if (NEXT_ACTION.equals(action)) {
+            if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {
                 notifyChange(NEXT);
-            } else if (TOGGLEPAUSE_ACTION.equals(action)) {
+            } else if (CMDPREVIOUS.equals(cmd)) {
+                notifyChange(PREVIOUS);
+            } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
                 notifyChange(TOGGLEPAUSE);
-            } else if (PAUSE_ACTION.equals(action)) {
+            } else if (CMDPAUSE.equals(cmd) || PAUSE_ACTION.equals(action)) {
                 notifyChange(PAUSE);
+            } else if (CMDSTOP.equals(cmd)) {
+            	notifyChange(STOP);
             }
         }
         
@@ -140,4 +166,45 @@ public class MediaPlaybackService extends Service {
         Intent i = new Intent(what);
         sendBroadcast(i);
     }
+    
+    private static void initializeRemoteControlRegistrationMethods() {
+    	Log.v(TAG, "Attempting to load mRegisterMediaButtonEventReceiver method");
+    	try {
+    		if (mRegisterMediaButtonEventReceiver == null) {
+    	         mRegisterMediaButtonEventReceiver = AudioManager.class.getMethod(
+    	               "registerMediaButtonEventReceiver",
+    	               new Class[] { ComponentName.class } );
+    	    }
+    		/* success, this device will take advantage of better remote */
+    		/* control event handling                                    */
+    	} catch (NoSuchMethodException nsme) {
+    		/* failure, still using the legacy behavior, but this app    */
+    		/* is future-proof!                                          */
+    		nsme.printStackTrace();
+    	}
+    }
+    
+    private void registerRemoteControl() {
+        try {
+            if (mRegisterMediaButtonEventReceiver == null) {
+                return;
+            }
+            mRegisterMediaButtonEventReceiver.invoke(mAudioManager,
+            		new ComponentName(this.getPackageName(), MediaButtonIntentReceiver.class.getName()));
+        } catch (InvocationTargetException ite) {
+            /* unpack original exception when possible */
+            Throwable cause = ite.getCause();
+            if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            } else if (cause instanceof Error) {
+                throw (Error) cause;
+            } else {
+                /* unexpected checked exception; wrap and re-throw */
+                throw new RuntimeException(ite);
+            }
+        } catch (IllegalAccessException ie) {
+            Log.e(TAG, "unexpected " + ie);
+        }
+    }
+
 }
