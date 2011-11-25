@@ -399,9 +399,11 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		super.onStart();
 
 		IntentFilter f = new IntentFilter();
+		f.addAction(MediaPlaybackService.PREVIOUS);
 		f.addAction(MediaPlaybackService.NEXT);
 		f.addAction(MediaPlaybackService.TOGGLEPAUSE);
 		f.addAction(MediaPlaybackService.PAUSE);
+		f.addAction(MediaPlaybackService.STOP);
 		f.addAction(MediaPlaybackService.ADDED);
 		registerReceiver(mStatusListener, new IntentFilter(f));
 
@@ -853,7 +855,12 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (MediaPlaybackService.NEXT.equals(action)) {
+			if (MediaPlaybackService.PREVIOUS.equals(action)) {
+				startSong(Contents.getPreviousSong());
+				mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+						MediaPlayback.this,
+						MediaPlaybackService.PLAYSTATE_CHANGED);
+			} else if (MediaPlaybackService.NEXT.equals(action)) {
 				normalOnCompletionListener.onCompletion(mediaPlayer);
 				mAppWidgetProvider.notifyChange(mMediaPlaybackService,
 						MediaPlayback.this,
@@ -893,6 +900,22 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 						}
 						mediaPlayer.start();
 						startNotification();
+					}
+					setPauseButton();
+					queueNextRefresh(refreshNow());
+					mAppWidgetProvider.notifyChange(mMediaPlaybackService,
+							MediaPlayback.this,
+							MediaPlaybackService.PLAYSTATE_CHANGED);
+				}
+			} else if (MediaPlaybackService.STOP.equals(action)) {
+				if (mediaPlayer != null) {
+					if (mediaPlayer.isPlaying()) {
+						if (scrobbler_support) {
+							scrobble(2); // PAUSE
+						}
+						mediaPlayer.pause();
+						mediaPlayer.seekTo(0);
+						stopNotification();
 					}
 					setPauseButton();
 					queueNextRefresh(refreshNow());
