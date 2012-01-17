@@ -38,17 +38,17 @@
 	<string name="local_servers">收听本地服务器</string>
 	<string name="remembered_servers">记住服务器</string>
 	<string name="options">选项</string>
-	<string name="fetching_music_title">获取音乐中...</string>
+	<string name="fetching_music_title">获取音乐中…</string>
 	<string name="fetching_music_detail">请稍候获取音乐。</string>
 	<string name="unable_to_connect">无法连接!</string>
-	<string name="connecting_title">连接中...</string>
+	<string name="connecting_title">连接中…</string>
 	<string name="connecting_detail">请耐心等待，因为这可能需要一些时间。
         </string>
 	<string name="empty_playlist">选定的播放列表是空的。</string>
 	<string name="search_hint">搜索歌曲</string>
 	<string name="search_label">搜索标签</string>
 	<string name="no_search_results">没有找到结果。</string>
-	<string name="searching_title">搜索...</string>
+	<string name="searching_title">搜索…</string>
 	<string name="search_result_title">结果:</string>
 	<string name="search_result_caption">搜索</string>
 	<string name="no_artist_name">(没有艺术家姓名)</string>

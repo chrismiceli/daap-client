@@ -26,8 +26,6 @@ import org.mult.daap.client.daap.Database;
 
 import android.util.Log;
 
-/** @author jbarnett
- * @created */
 public class DatabasesRequest extends Request {
 	private class FieldPair {
 		public FieldPair(int s, int p) {

@@ -176,13 +176,15 @@ public class Servers extends Activity implements Observer {
 						String name = cursor.getString(nameIndex);
 						String address = cursor.getString(addressIndex);
 						rememberedServers.add(createItem(name, address));
+						Log.d("Servers", "Got server (" + name + ", " + address
+								+ ").");
 						cursor.moveToNext();
 					}
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} finally {
 					cursor.close();
-					db.close();
+					// db.close();
 				}
 			}
 		} catch (UnknownHostException e) {
@@ -244,8 +246,8 @@ public class Servers extends Activity implements Observer {
 					lm = new LoginManager("", uri.getHost(), "", false);
 					startLogin(lm);
 				} else {
-					Log.v("Servers", "host = (" + uri.getHost() + ")");
-					Log.v("Servers", "password = (" + password + ")");
+					Log.d("Servers", "host = (" + uri.getHost() + ")");
+					Log.d("Servers", "password = (" + password + ")");
 					lm = new LoginManager("", uri.getHost(), password, true);
 					startLogin(lm);
 				}

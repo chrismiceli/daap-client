@@ -38,17 +38,17 @@
 	<string name="local_servers">收聽本機伺服器</string>
 	<string name="remembered_servers">記住伺服器</string>
 	<string name="options">選項</string>
-	<string name="fetching_music_title">獲取音樂中...</string>
+	<string name="fetching_music_title">獲取音樂中…</string>
 	<string name="fetching_music_detail">請稍候獲取音樂。</string>
 	<string name="unable_to_connect">無法連線!</string>
-	<string name="connecting_title">連線中...</string>
+	<string name="connecting_title">連線中…</string>
 	<string name="connecting_detail">請耐心等待，因為這可能需要一些時間。
         </string>
 	<string name="empty_playlist">選定的播放清單是空的。</string>
 	<string name="search_hint">搜尋歌曲</string>
 	<string name="search_label">搜尋標籤</string>
 	<string name="no_search_results">沒有找到結果。</string>
-	<string name="searching_title">搜尋...</string>
+	<string name="searching_title">搜尋…</string>
 	<string name="search_result_title">結果:</string>
 	<string name="search_result_caption">搜尋</string>
 	<string name="no_artist_name">(沒有藝術家姓名)</string>
