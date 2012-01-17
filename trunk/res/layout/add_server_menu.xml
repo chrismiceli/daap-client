@@ -2,15 +2,17 @@
 
 <ScrollView android:layout_height="fill_parent"
 	android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:orientation="vertical">
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
 		<TextView android:id="@+id/serverNameLabel"
 			android:layout_height="wrap_content" android:layout_width="wrap_content"
 			android:layout_marginLeft="16dip" android:text="@string/share_name" />
 		<EditText android:id="@+id/serverNameText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:singleLine="true" android:layout_marginRight="20dip"
-			android:layout_marginLeft="10dip" />
+			android:layout_marginLeft="10dip" android:inputType="text"/>
 		<LinearLayout android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:orientation="horizontal">
 			<TextView android:id="@+id/serverUrlLabel"
@@ -21,7 +23,7 @@
 			android:layout_height="fill_parent" android:orientation="horizontal">
 			<EditText android:id="@+id/serverUrlText"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_weight="1" android:singleLine="true"
+				android:layout_weight="1" android:singleLine="true" android:inputType="textUri"
 				android:layout_marginLeft="10dip" />
 			<EditText android:id="@+id/serverPortText"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"

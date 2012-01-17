@@ -56,7 +56,6 @@ public class MediaPlaybackService extends Service {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             String cmd = intent.getStringExtra("command");
-            Log.v(TAG, "mIntentReceiver.onReceive " + action + " / " + cmd);
             if (NEXT_ACTION.equals(action)) {
                 notifyChange(NEXT);
             } else if (TOGGLEPAUSE_ACTION.equals(action)) {
@@ -86,9 +85,6 @@ public class MediaPlaybackService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Log.v(TAG, "onCreate called");
-        
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         registerRemoteControl();
         
@@ -102,11 +98,7 @@ public class MediaPlaybackService extends Service {
 
     @Override
     public void onDestroy() {
-    	
-    	Log.v(TAG, "onDestroy called");
-        
         unregisterReceiver(mIntentReceiver);
-		
         super.onDestroy();
     }
     
@@ -114,12 +106,8 @@ public class MediaPlaybackService extends Service {
     
     @Override
     public IBinder onBind(Intent intent) {
-    	
-		Log.v(TAG, "onBind called");
-    	
 		// Make sure we stay running
-		startService(new Intent(this, MediaPlaybackService.class));
-    	
+		startService(new Intent(this, MediaPlaybackService.class));	
         return mBinder;
     }
 
@@ -135,7 +123,6 @@ public class MediaPlaybackService extends Service {
         if (intent != null) {
             String action = intent.getAction();
             String cmd = intent.getStringExtra("command");
-            Log.v(TAG, "onStartCommand " + action + " / " + cmd);
             
             if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {
                 notifyChange(NEXT);
@@ -156,8 +143,6 @@ public class MediaPlaybackService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {        
 		stopSelf(mServiceStartId);
-    	
-		Log.v(TAG, "onUnbind succedded");
         return true;
     }
     
@@ -168,7 +153,6 @@ public class MediaPlaybackService extends Service {
     }
     
     private static void initializeRemoteControlRegistrationMethods() {
-    	Log.v(TAG, "Attempting to load mRegisterMediaButtonEventReceiver method");
     	try {
     		if (mRegisterMediaButtonEventReceiver == null) {
     	         mRegisterMediaButtonEventReceiver = AudioManager.class.getMethod(

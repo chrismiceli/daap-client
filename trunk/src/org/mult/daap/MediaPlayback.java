@@ -1,28 +1,22 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.mult.daap;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Formatter;
 import java.util.Locale;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.mult.daap.client.Song;
 import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,6 +39,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -53,8 +48,10 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.Html;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,6 +84,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 	private TextView mTrackName;
 	private TextView mCurrentTime;
 	private TextView mTotalTime;
+	private TextView mSongSummary;
 	private ImageButton mShuffleButton;
 	private ImageButton mRepeatButton;
 	private ImageButton mPrevButton;
@@ -135,6 +133,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		mArtistName = (TextView) findViewById(R.id.artistname);
 		mAlbumName = (TextView) findViewById(R.id.albumname);
 		mTrackName = (TextView) findViewById(R.id.trackname);
+		mSongSummary = (TextView) findViewById(R.id.song_summary);
 		SharedPreferences mPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 		scrobbler_support = mPrefs.getBoolean("scrobbler_pref", false);
@@ -179,8 +178,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 				e.printStackTrace();
 				finish();
 			}
-		} else {
-			Log.v(logTag, "mediaplayer != null");
 		}
 		setUpActivity();
 		queueNextRefresh(refreshNow());
@@ -260,6 +257,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 		// Share this notification directly with our widgets
 		mAppWidgetProvider.notifyChange(mMediaPlaybackService, this,
 				MediaPlaybackService.META_CHANGED);
+		new LastFMGetSongInfo().execute(song);
 	}
 
 	public String getTrackName() {
@@ -765,7 +763,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 				mediaPlayer.release();
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
-				Log.v(logTag, "Usually this is not a problem.");
+				Log.i(logTag, "Usually this is not a problem.");
 			}
 		}
 		mediaPlayer = null;
@@ -804,6 +802,44 @@ public class MediaPlayback extends Activity implements View.OnTouchListener,
 			}
 		}
 	};
+
+	private class LastFMGetSongInfo extends AsyncTask<Song, Void, String> {
+		protected String doInBackground(Song... song) {
+			String key = "47c0f71763c30293aa52f0ac166e410f";
+			String retval = "";
+			try {
+				URL lastFM = new URL(
+						"http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="
+								+ URLEncoder.encode(song[0].artist, "UTF-8")
+								+ "&api_key=" + key);
+				Log.d("MediaPlayback", "Songurl = " + lastFM);
+				URLConnection lfmConnection = lastFM.openConnection();
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.parse(lfmConnection.getInputStream());
+				NodeList nList = doc.getElementsByTagName("summary");
+				for (int temp = 0; temp < nList.getLength(); temp++) {
+					Node nNode = nList.item(temp);
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+						retval = nNode.getFirstChild().getNodeValue();
+						retval = retval.replace("&quot;", "\"")
+								.replace("&apos;", "\'").replace("&lt;", "<")
+								.replace("&gt;", ">").replace("&amp;", "&");
+						break;
+					}
+				}
+			} catch (Exception e) {
+				// Do nothing
+			}
+			return retval;
+		}
+
+		protected void onPostExecute(String result) {
+			mSongSummary.setText(Html.fromHtml(result));
+			mSongSummary.setMovementMethod(LinkMovementMethod.getInstance());
+		}
+	}
 
 	private void scrobble(int code) {
 		boolean playing = false;

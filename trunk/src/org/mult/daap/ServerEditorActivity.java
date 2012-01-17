@@ -38,7 +38,6 @@ public class ServerEditorActivity extends PreferenceActivity implements
 		protected final void cacheValues() {
 			// fill a cursor and cache the values locally
 			// this makes sure we dont have any floating cursor to dispose later
-
 			db.open();
 			Cursor cursor = db.getServer((int) id);
 
@@ -46,7 +45,6 @@ public class ServerEditorActivity extends PreferenceActivity implements
 				for (int i = 0; i < cursor.getColumnCount(); i++) {
 					String key = cursor.getColumnName(i);
 					String value = cursor.getString(i);
-					Log.v("ServerEditor", "Key = " + key + "; value = " + value);
 					values.put(key, value);
 				}
 			}

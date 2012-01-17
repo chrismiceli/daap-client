@@ -79,7 +79,7 @@ public abstract class Request {
             IOException {
         URL url = new URL("http://" + host.getAddress() + ":" + host.getPort()
                 + "/" + getRequestString());
-        Log.v("Request", url.toString());
+        Log.d("Request", url.toString());
         httpc = (HttpURLConnection) url.openConnection();
         httpc.setConnectTimeout(45000);
         if (!retry) {

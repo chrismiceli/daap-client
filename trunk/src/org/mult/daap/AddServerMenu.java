@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -87,7 +86,14 @@ public class AddServerMenu extends Activity {
 		}
 	};
 
+	/**
+	 * Function that is called when the Add Server button is pressed
+	 */
 	private class AddServerButtonListener implements OnClickListener {
+		/**
+		 * @param v
+		 *            The view that will be updated
+		 */
 		public void onClick(View v) {
 			String serverName = serverNameEditText.getText().toString();
 			String serverAddress = serverAddressEditText.getText().toString();
@@ -132,7 +138,7 @@ public class AddServerMenu extends Activity {
 				if (loginCheckBox.isChecked() == true) {
 					builder.fragment(password);
 				}
-				Log.v("AddServerMenu", "uri = (" + builder.build() + ")");
+				// Log.d("AddServerMenu", "uri = (" + builder.build() + ")");
 				Intent launchingIntent = new Intent(Intent.ACTION_VIEW,
 						builder.build());
 				Intent intent = new Intent();

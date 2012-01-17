@@ -49,7 +49,7 @@ public class DaapPlaylist extends Playlist {
 			p = null;
 			setStatus(Playlist.STATUS_INITIALIZED);
 		} catch (BadResponseCodeException e) {
-			Log.v("DaapPlaylist", "BadResponse " + e.getMessage());
+			Log.d("DaapPlaylist", "BadResponse " + e.getMessage());
 			if (host.login()) {
 				initialize();
 				return;

@@ -39,17 +39,17 @@
 	<string name="local_servers">Lytte til Lokale Servere</string>
 	<string name="remembered_servers">Husket Servere</string>
 	<string name="options">Valg</string>
-	<string name="fetching_music_title">Henter Musik...</string>
+	<string name="fetching_music_title">Henter Musik…</string>
 	<string name="fetching_music_detail">Vent venligst mens musik hentes.</string>
 	<string name="unable_to_connect">Kunde ikke oprette forbinde!</string>
-	<string name="connecting_title">Tilslutter...</string>
+	<string name="connecting_title">Tilslutter…</string>
 	<string name="connecting_detail">Vær tålmodig da dette kan tage et stykke tid.
 	</string>
 	<string name="empty_playlist">Den valgte spilleliste er tom.</string>
 	<string name="search_hint">Søg efter sange</string>
 	<string name="search_label">Søg Label</string>
 	<string name="no_search_results">Ingen resultater fundet.</string>
-	<string name="searching_title">Søger...</string>
+	<string name="searching_title">Søger…</string>
 	<string name="search_result_title">Resultater af:</string>
 	<string name="search_result_caption">Søger efter</string>
 	<string name="no_artist_name">(Indet Kunstner Navn)</string>

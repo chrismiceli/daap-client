@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.view.KeyEvent;
 
-/**
- * 
- */
 public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
     private static long mLastClickTime = 0;
