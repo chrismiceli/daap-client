@@ -55,10 +55,14 @@ public class JmDNSListener {
 					});
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NoSuchMethodError e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void interrupt() {
-		jmdns.close();
+		if (jmdns != null) {
+			jmdns.close();
+		}
 	}
 }

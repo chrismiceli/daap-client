@@ -150,11 +150,11 @@ public class Servers extends Activity implements Observer {
 	public void onResume() {
 		super.onResume();
 		List<Map<String, ?>> rememberedServers = new LinkedList<Map<String, ?>>();
-		try {
-			WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-			if (!wifiManager.isWifiEnabled()) {
-				wiFi = false;
-			} else {
+		WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+		if (!wifiManager.isWifiEnabled()) {
+			wiFi = false;
+		} else {
+			try {
 				wiFi = true;
 				fLock = new WrapMulticastLock(wifiManager);
 				// fLock.acquire();
@@ -163,34 +163,33 @@ public class Servers extends Activity implements Observer {
 				InetAddress wifi = InetAddress.getByAddress(wifiAddress);
 				jmDNSListener = new JmDNSListener(mDNSHandler, wifi);
 				labelChanger.sendEmptyMessageDelayed(0, 1000);
+			} catch (UnknownHostException e) {
+				wiFi = false;
+				e.printStackTrace();
 			}
-			db = new DBAdapter(this);
-			db.open();
-			Cursor cursor = db.getAllServers();
-			if (cursor.getCount() != 0) {
-				cursor.moveToFirst();
-				int nameIndex = cursor.getColumnIndexOrThrow("server_name");
-				int addressIndex = cursor.getColumnIndexOrThrow("address");
-				try {
-					for (int i = 0; i < cursor.getCount(); i++) {
-						String name = cursor.getString(nameIndex);
-						String address = cursor.getString(addressIndex);
-						rememberedServers.add(createItem(name, address));
-						Log.d("Servers", "Got server (" + name + ", " + address
-								+ ").");
-						cursor.moveToNext();
-					}
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} finally {
-					cursor.close();
-					// db.close();
+		}
+		db = new DBAdapter(this);
+		db.open();
+		Cursor cursor = db.getAllServers();
+		if (cursor.getCount() != 0) {
+			cursor.moveToFirst();
+			int nameIndex = cursor.getColumnIndexOrThrow("server_name");
+			int addressIndex = cursor.getColumnIndexOrThrow("address");
+			try {
+				for (int i = 0; i < cursor.getCount(); i++) {
+					String name = cursor.getString(nameIndex);
+					String address = cursor.getString(addressIndex);
+					rememberedServers.add(createItem(name, address));
+					Log.d("Servers", "Got server (" + name + ", " + address
+							+ ").");
+					cursor.moveToNext();
 				}
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} finally {
+				cursor.close();
+				db.close();
 			}
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} finally {
-			db.close();
 		}
 		rememberedServers.add(createItem(getString(R.string.add_server),
 				getString(R.string.add_server_detail)));
