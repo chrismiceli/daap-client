@@ -185,7 +185,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
         }
         
-        intent = new Intent(MediaPlaybackService.TOGGLEPAUSE_ACTION);
+		intent = new Intent(MediaPlaybackService.TOGGLEPAUSE_ACTION);
         intent.setComponent(serviceName);
         pendingIntent = PendingIntent.getService(context,
                 0 /* no requestCode */, intent, 0 /* no flags */);

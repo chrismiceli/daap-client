@@ -19,7 +19,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
         if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intentAction)) {
             Intent i = new Intent(context, MediaPlaybackService.class);
             i.setAction(MediaPlaybackService.SERVICECMD);
-            i.putExtra(MediaPlaybackService.CMDNAME, MediaPlaybackService.CMDPAUSE);
+            i.putExtra(MediaPlaybackService.CMDNAME, MediaPlaybackService.HEADSET_CHANGE);
             context.startService(i);
         } else if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
             KeyEvent event = (KeyEvent)
