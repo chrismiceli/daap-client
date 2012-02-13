@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="about_dialog_title">About</string>
     <string name="app_name">DAAP</string>
     <string name="about_info">About</string>
@@ -28,7 +27,7 @@
     <string name="removed_from_queue">Removed from Queue.</string>
     <string name="added_to_queue">Added to Queue.</string>
     <string name="queue_is_full">Queue is full.</string>
-    <string name="add_server_error_message">lease ensure that all fields are filled correctly.</string>
+    <string name="add_server_error_message">Please ensure that all fields are filled correctly.</string>
     <string name="duplicate_server_error_title">Server already exists!</string>
     <string name="add_server">Add Server</string>
     <string name="add_server_menu_activity">DAAP - Add Server</string>
