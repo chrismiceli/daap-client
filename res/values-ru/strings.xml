@@ -41,9 +41,9 @@
     <string name="options">Параметры</string>
     <string name="fetching_music_title">Получение музыки…</string>
     <string name="fetching_music_detail">Пожалуйста, дождитесь получения музыки.</string>
-    <string name="unable_to_connect">Не получается подключиться!</string>
+    <string name="unable_to_connect">Подключение не удалось!</string>
     <string name="connecting_title">Подключение…</string>
-    <string name="connecting_detail">Проявите терпение, это может занять какое-то время.</string>
+    <string name="connecting_detail">Проявите терпение, может понадобиться время.</string>
     <string name="empty_playlist">Выбранный плейлист пуст.</string>
     <string name="search_hint">Искать песни</string>
     <string name="search_label">Search Label</string>
@@ -66,11 +66,11 @@
     <string name="save_complete">Песня сохранена!</string>
     <string name="save_error">Ошибка сохранения песни</string>
     <string name="font_size">Размер шрифта</string>
-    <string name="scrobblerTitle">Скробблинг</string>
-    <string name="scrobblerSummary">Отправлять статистику прослушиваний на Last.fm. \"scrobbler\" должен быть установлен.</string>
+    <string name="scrobblerTitle">Статистика прослушиваний</string>
+    <string name="scrobblerSummary">Отправлять статистику. Скробблер должен быть установлен отдельно.</string>
     <string name="font_pref_detail">Изменить размер шрифта</string>
     <string name="menu_library">Библиотека</string>
     <string name="media_playback_service_desc">Сервис поддержки виджета</string>
-    <string name="widget_one_initial_text">Выберите источник.</string>
+    <string name="widget_one_initial_text">Нажмите, чтобы выбрать источник.</string>
     <string name="widget_one_track_info_unavailable">Информация недоступна</string>
 </resources>
