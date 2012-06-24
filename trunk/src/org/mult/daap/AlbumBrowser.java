@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.mult.daap.client.Song;
+import org.mult.daap.client.SongDiscNumComparator;
+import org.mult.daap.client.SongTrackComparator;
 import org.mult.daap.client.StringIgnoreCaseComparator;
 
 import android.app.Activity;
@@ -109,6 +112,28 @@ public class AlbumBrowser extends ListActivity {
                     if (s.album.equals(albName)) {
                         Contents.filteredAlbumSongList.add(s);
                     }
+                }
+                TreeMap<Short, Short> track_num = new TreeMap<Short, Short>();
+                for (Song s : Contents.filteredAlbumSongList) {
+                    if (track_num.keySet().contains(s.disc_num) == false) {
+                        track_num.put(s.disc_num, (short) 1);
+                    }
+                    else {
+                        track_num.put(s.disc_num,
+                                (short) (track_num.get(s.disc_num) + 1));
+                    }
+                }
+                Comparator<Song> sdnc = new SongDiscNumComparator();
+                Comparator<Song> stnc = new SongTrackComparator();
+                Collections.sort(Contents.filteredAlbumSongList, sdnc);
+                // sorted by disc number now, but not within the disc
+                int pos = 0;
+                Short max_num_track;
+                for (Map.Entry<Short, Short> entry : track_num.entrySet()) {
+                    max_num_track = entry.getValue();
+                    Collections.sort(Contents.filteredAlbumSongList.subList(pos,
+                            (int) max_num_track + pos), stnc);
+                    pos += max_num_track;
                 }
                 Contents.setSongPosition(Contents.filteredAlbumSongList, 0);
                 MediaPlayback.clearState();
