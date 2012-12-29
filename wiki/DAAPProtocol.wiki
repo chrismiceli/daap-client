@@ -1,6 +1,6 @@
 =Digital Audio Access Protocol (DAAP)=
-*Protocol documentation v0.2*
-*daap@tapjam.net*
+  * Protocol documentation v0.2
+  * daap@tapjam.net
 
 ==Introduction==
 Apple introduced the Digital Audio Access Protocol (DAAP^1^) with iTunes4, to allow iTunes to share its library with other machines also running iTunes. iTunes uses the Rendezvous protocol^2^, specifically the multi-cast DNS and service discovery bits, to find other local machines that happen to be running iTunes and also sharing their libraries.
