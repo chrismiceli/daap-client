@@ -6,3 +6,4 @@
   * [http://code.google.com/p/daap-client/wiki/Adding Adding a Server]
   * [http://code.google.com/p/daap-client/wiki/Queing How to Queue]
   * [http://code.google.com/p/daap-client/wiki/PreferencesExplained Preferences Explained]
+  * [http://code.google.com/p/daap-client/wiki/DAAPProtocol DAAP Protocol]
