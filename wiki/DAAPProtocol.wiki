@@ -366,8 +366,7 @@ aeNV	int	com.apple.itunes.norm-volume
 aeSP	byte	com.apple.itunes.smart-playlist
 
 	
-Appendix B - iTunes4 content types
-
+==Appendix B - iTunes4 content types==
 (Note: the ones in parenthesis are assumed based on the arrangement of types, however they have not yet been confirmed)
 
 id	type
@@ -381,13 +380,10 @@ id	type
 8	(unsigned long)
 9	string
 10	date (represented as a 4 byte integer)
-11	version (represented as either 4 single bytes, e.g. 0.1.0.0 or
-		as two shorts, e.g. 1.0)
+11	version (represented as either 4 single bytes, e.g. 0.1.0.0 or as two shorts, e.g. 1.0)
 12	list
 
-
-Footnotes
-
+==Footnotes==
   # It is my assumption, at least, that this is what DAAP stands for
   # Apples implementation of the zeroconf standards
   # HyperText Transport Protocol - although, these days it's shunting
