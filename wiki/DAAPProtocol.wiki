@@ -190,57 +190,58 @@ Response:
         * minm - item name (e.g. the trackname)
         * ...  - the remaining fields for the track
 
-7. Playlist list
+====7. Playlist list====
 
 Request: daap://server/databases/{{{<dbid>}}}/containers?meta={{{<containermeta>}}}&session-id={{{<sid>}}}&revision-id={{{<rid>}}}
 Response: aply
 Description: provides a list of the playlists stored on the server, as well as some basic information about them, depending on the metadata that the client asks for.  So far, iTunes seems to ask for:
-		dmap.itemid,dmap.itemname,dma.persistentid,
-		com.apple.itunes.smart-playlist
+  * dmap.itemid
+  * dmap.itemname
+  * dma.persistentid
+  * com.apple.itunes.smart-playlist
 
 Content:
-	aply
-	  mstt - status
-	  muty - update type(0)
-	  mtco - matched items
-	  mrco - items in response
-	  mlcl
-	    mlit - playlist entry (one per playlist)
-	      miid - the playlist's itemid (plid below)
-	      mper - the playlist's persistent id
-	      minm - the playlist's name
-	      mimc - the number of items in the playlist 
-	      aeSP (optional) - is it a smart playlist
+  * aply
+    * mstt - status
+    * muty - update type(0)
+    * mtco - matched items
+    * mrco - items in response
+    * mlcl
+      * mlit - playlist entry (one per playlist)
+        * miid - the playlist's itemid (plid below)
+        * mper - the playlist's persistent id
+        * minm - the playlist's name
+        * mimc - the number of items in the playlist 
+        * aeSP (optional) - is it a smart playlist
 
-
-8. Playlist 
+====8. Playlist====
 
 Request: daap://server/databases/{{{<dbid>}}}/containers/{{{<plid>}}}/items?type=music&meta={{{<playlistmeta>}}}&session-id={{{<sid>}}}&revision-id={{{<rid>}}}
 Response: apso
 Description: provides a list of items in the given playlist, providing the requested meta information for each item.  The most commonly requested items seem to be:
-
-	  dmap.itemkind,dmap.itemid,dmap.containeritemid
+  * dmap.itemkind
+  * dmap.itemid
+  * dmap.containeritemid
 
 Content:
-	apso
-	  mstt - status
-	  muty - update type(0)
-	  mtco = matched items
-	  mrco - returned items
-	  mlcl - list of playlist entries
-	    mlit - single playlist entry (one per song)
-	      mikd - item kind (2 for music)
-	      miid - itemid of the song
-	      containeritemid - id in the container
+  * apso
+    * mstt - status
+    * muty - update type(0)
+    * mtco = matched items
+    * mrco - returned items
+    * mlcl - list of playlist entries
+      * mlit - single playlist entry (one per song)
+        * mikd - item kind (2 for music)
+        * miid - itemid of the song
+        * containeritemid - id in the container
 
-9. Stream song
+====9. Stream song====
 
 Request: daap://server/databases/{{{<dbid>}}}/items/{{{<songid>}}}.mp3?session-id=session
 Response: streamed mp3
 Description: Request a song from the server.  Note that it is possible to use the 'range' http header to specify the range of a song, e.g. the start and end bytes for the track.  It's important for a server to support this, in case itunes users decide to jump around.
 
 Content: the raw mp3 stream
-	
 
 ==Appendix A - iTunes4 content codes==
 
@@ -339,25 +340,25 @@ This is a list of the content codes used by iTunes4.  Note, the conversion from 
 || || || || ||
 || aeNV || int || com.apple.itunes.norm-volume ||  ||
 || aeSP || byte || com.apple.itunes.smart-playlist ||  ||
-	
+
 ==Appendix B - iTunes4 content types==
 (Note: the ones in parenthesis are assumed based on the arrangement of types, however they have not yet been confirmed)
 
-|| id|| type ||
-|| 1|| byte ||
-|| 2|| (unsigned byte) ||
-|| 3|| short ||
-|| 4|| (unsigned short) ||
-|| 5|| int ||
-|| 6|| (unsigned int) ||
-|| 7|| long ||
-|| 8|| (unsigned long) ||
-|| 9|| string ||
-|| 10|| date (represented as a 4 byte integer) ||
-|| 11|| version (represented as either 4 single bytes, e.g. 0.1.0.0 or as two shorts, e.g. 1.0) ||
-|| 12|| list ||
+|| id || type ||
+|| 1 || byte ||
+|| 2 || (unsigned byte) ||
+|| 3 || short ||
+|| 4 || (unsigned short) ||
+|| 5 || int ||
+|| 6 || (unsigned int) ||
+|| 7 || long ||
+|| 8 || (unsigned long) ||
+|| 9 || string ||
+|| 10 || date (represented as a 4 byte integer) ||
+|| 11 || version (represented as either 4 single bytes, e.g. 0.1.0.0 or as two shorts, e.g. 1.0) ||
+|| 12 || list ||
 
 ==Footnotes==
   # It is my assumption, at least, that this is what DAAP stands for
   # Apples implementation of the zeroconf standards
-  # HyperText Transport Protocol - although, these days it's shunting around a lot more than hypertext, no?
+  # Hyper Text Transport Protocol - although, these days it's shunting around a lot more than hypertext, no?
