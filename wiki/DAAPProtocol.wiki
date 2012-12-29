@@ -386,5 +386,4 @@ id	type
 ==Footnotes==
   # It is my assumption, at least, that this is what DAAP stands for
   # Apples implementation of the zeroconf standards
-  # HyperText Transport Protocol - although, these days it's shunting
-around a lot more than hypertext, no?
+  # HyperText Transport Protocol - although, these days it's shunting around a lot more than hypertext, no?
