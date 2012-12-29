@@ -3,7 +3,7 @@
 *daap@tapjam.net*
 
 ==Introduction==
-Apple introduced the Digital Audio Access Protocol (DAAP^1) with iTunes4, to allow iTunes to share its library with other machines also running iTunes. iTunes uses the Rendezvous protocol^2, specifically the multi-cast DNS and service discovery bits, to find other local machines that happen to be running iTunes and also sharing their libraries.
+Apple introduced the Digital Audio Access Protocol (DAAP^1^) with iTunes4, to allow iTunes to share its library with other machines also running iTunes. iTunes uses the Rendezvous protocol^2^, specifically the multi-cast DNS and service discovery bits, to find other local machines that happen to be running iTunes and also sharing their libraries.
 
 Rendezvous is well documented in a number of places, and so it will not be discussed here.  DAAP, on the other hand, in spite of having an IANA defined port number, has yet to be documented. This will hopefully rectify that situation.
 
@@ -21,7 +21,7 @@ Interestingly enough, the iTunes implementation of DAAP does not restrict access
 
 
 III. Under the Hood - the DAAP packet format
-At it's heart, DAAP is the latest in a long line of protocols that uses HTTP^3 as it's underlying transport mechanism.  It appears to prefer using the connection-oriented HTTP/1.1 - though there is also some support, it seems, for HTTP/1.0.  This document will focus on the HTTP/1.1 implementation, and assume that the HTTP/1.0 implementation is around for some strange legacy reason.
+At it's heart, DAAP is the latest in a long line of protocols that uses HTTP^3^ as it's underlying transport mechanism.  It appears to prefer using the connection-oriented HTTP/1.1 - though there is also some support, it seems, for HTTP/1.0.  This document will focus on the HTTP/1.1 implementation, and assume that the HTTP/1.0 implementation is around for some strange legacy reason.
 
 (Note: the specifics of writing HTTP clients and servers are beyond the scope of this document.  There are a number of excellent libraries and resources out there for providing this functionality, however).
 
