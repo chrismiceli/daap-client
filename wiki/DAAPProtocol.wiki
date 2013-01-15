@@ -144,8 +144,9 @@ Response: mupd
 Description: There seem to be two forms update requests.  The first is the update when logging in, to get the initial data.  The second (not yet documented) is to catch updates/changes to the server database.  Note the addition of the session-id from the login.
 Content:
   * mupd
+    * mstt
     * musr the server revision ({{{<rid>}}} below)
-      * mstt
+
 
 ====5. Database list====
 
