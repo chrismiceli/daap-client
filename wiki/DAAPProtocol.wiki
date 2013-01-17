@@ -187,9 +187,9 @@ Response:
     * mlcl - list of items
       * mlit - single item (one per song)
       * mikd - item kind (2 for music)
-        * miid - item id
-        * minm - item name (e.g. the trackname)
-        * ...  - the remaining fields for the track
+      * miid - item id
+      * minm - item name (e.g. the trackname)
+      * ...  - the remaining fields for the track
 
 ====7. Playlist list====
 
