@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="fontArray">
+		<item>Extra-Grande</item>
+		<item>Grande</item>
+		<item>Media</item>
+		<item>Pequeña</item>
+	</string-array>
+	<string-array name="fontValues">
+		<item>24</item>
+		<item>18</item>
+		<item>16</item>
+		<item>14</item>
+	</string-array>
+</resources>
