@@ -50,15 +50,12 @@ public class DaapPlaylist extends Playlist {
 			setStatus(Playlist.STATUS_INITIALIZED);
 		} catch (BadResponseCodeException e) {
 			Log.d("DaapPlaylist", "BadResponse " + e.getMessage());
-			if (host.login()) {
-				initialize();
-				return;
-			}
+			host.login();
+			initialize();
+		} catch (Exception e) {
 			setStatus(Playlist.STATUS_NOT_INITIALIZED);
 			e.printStackTrace();
-			Log.d("DaapPlaylist", "Error code " + e.response_code
-					+ " on playlist");
-		} catch (Exception e) {
+			Log.d("DaapPlaylist", "Error on playlist");
 			e.printStackTrace();
 		}
 	}

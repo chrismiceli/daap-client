@@ -12,33 +12,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-public class JmDNSListener {
-	private JmDNS jmdns = null;
-	private Handler handler = null;
-
-	private class Lookup extends Thread {
-		private final ServiceEvent e;
-
-		public Lookup(final ServiceEvent e) {
-			this.e = e;
-		}
-
-		public void run() {
-			ServiceInfo si = jmdns.getServiceInfo(e.getType(), e.getName());
-			Bundle bundle = new Bundle();
-			bundle.putString("name", si.getName());
-			bundle.putString("address",
-					si.getHostAddress() + ":" + si.getPort());
-			Message msg = Message.obtain();
-			msg.setTarget(handler);
-			msg.setData(bundle);
-			handler.sendMessage(msg);
-		}
-	}
+public class JmDNSListener extends Thread {
+	private final Handler handler;
+	private final InetAddress wifi;
+	private JmDNS jmdns;
 
 	public JmDNSListener(Handler handler, InetAddress wifi) {
+	    this.handler = handler;
+	    this.wifi = wifi;
+    }
+
+    public void Run() {
 		try {
-			this.handler = handler;
 			jmdns = JmDNS.create(wifi);
 			jmdns.addServiceListener("_daap._tcp.local.",
 					new ServiceListener() {
@@ -48,9 +33,8 @@ public class JmDNSListener {
 						public void serviceRemoved(ServiceEvent arg0) {
 						}
 
-						public void serviceAdded(ServiceEvent e) {
-							Lookup l = new Lookup(e);
-							l.start();
+						public void serviceAdded(ServiceEvent serviceEvent) {
+							addServer(serviceEvent);
 						}
 					});
 		} catch (IOException e) {
@@ -64,5 +48,17 @@ public class JmDNSListener {
 		if (jmdns != null) {
 			jmdns.close();
 		}
+	}
+
+	private void addServer(ServiceEvent serviceEvent) {
+		ServiceInfo si = jmdns.getServiceInfo(serviceEvent.getType(), serviceEvent.getName());
+		Bundle bundle = new Bundle();
+		bundle.putString("name", si.getName());
+		bundle.putString("address",
+				si.getHostAddress() + ":" + si.getPort());
+		Message msg = Message.obtain();
+		msg.setTarget(handler);
+		msg.setData(bundle);
+		handler.sendMessage(msg);
 	}
 }
