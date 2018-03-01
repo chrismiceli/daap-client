@@ -27,44 +27,44 @@ public class Base64 {
 	 * Description of the Parameter
 	 * @return Description of the Return Value */
 	public String encode(String input) {
-		String output = new String();
+		StringBuilder output = new StringBuilder();
 		int pos = 0;
-		byte[] outbyte = new byte[4];
+		byte[] outByte = new byte[4];
 		int buffer;
 		while (pos + 3 <= input.length()) {
 			buffer = (input.charAt(pos++) & 0xff);
 			buffer = (buffer << 8) | (input.charAt(pos++) & 0xff);
 			buffer = (buffer << 8) | (input.charAt(pos++) & 0xff);
-			outbyte[3] = BASE64CHARS[buffer & 0x3F];
+			outByte[3] = BASE64CHARS[buffer & 0x3F];
 			buffer >>= 6;
-			outbyte[2] = BASE64CHARS[buffer & 0x3F];
+			outByte[2] = BASE64CHARS[buffer & 0x3F];
 			buffer >>= 6;
-			outbyte[1] = BASE64CHARS[buffer & 0x3F];
+			outByte[1] = BASE64CHARS[buffer & 0x3F];
 			buffer >>= 6;
-			outbyte[0] = BASE64CHARS[buffer & 0x3F];
-			output += new String(outbyte);
+			outByte[0] = BASE64CHARS[buffer & 0x3F];
+			output.append(new String(outByte));
 		}
 		int remaining = input.length() - pos;
 		if (remaining > 0) {
-			outbyte[3] = '=';
+			outByte[3] = '=';
 			buffer = (input.charAt(pos) & 0xff);
 			if (remaining == 1) {
-				outbyte[2] = '=';
+				outByte[2] = '=';
 				buffer <<= 4;
-				outbyte[1] = BASE64CHARS[buffer & 0x3F];
+				outByte[1] = BASE64CHARS[buffer & 0x3F];
 				buffer >>= 6;
-				outbyte[0] = BASE64CHARS[buffer & 0x3F];
+				outByte[0] = BASE64CHARS[buffer & 0x3F];
 			} else {
 				buffer = (buffer << 8) | (input.charAt(pos + 1) & 0xff);
 				buffer <<= 2;
-				outbyte[2] = BASE64CHARS[buffer & 0x3F];
+				outByte[2] = BASE64CHARS[buffer & 0x3F];
 				buffer >>= 6;
-				outbyte[1] = BASE64CHARS[buffer & 0x3F];
+				outByte[1] = BASE64CHARS[buffer & 0x3F];
 				buffer >>= 6;
-				outbyte[0] = BASE64CHARS[buffer & 0x3F];
+				outByte[0] = BASE64CHARS[buffer & 0x3F];
 			}
-			output += new String(outbyte);
+			output.append(new String(outByte));
 		}
-		return (output);
+		return (output.toString());
 	}
 }

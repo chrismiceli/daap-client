@@ -162,6 +162,7 @@ public class Servers extends Activity implements Observer {
 				byte[] wifiAddress = intToIp(wifiManager.getDhcpInfo().ipAddress);
 				InetAddress wifi = InetAddress.getByAddress(wifiAddress);
 				jmDNSListener = new JmDNSListener(mDNSHandler, wifi);
+				jmDNSListener.start();
 				labelChanger.sendEmptyMessageDelayed(0, 1000);
 			} catch (UnknownHostException e) {
 				wiFi = false;
