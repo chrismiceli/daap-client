@@ -14,8 +14,6 @@ package org.mult.daap.client.daap;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.mult.daap.client.daap.request.Request;
-
 /** @author jbarnett */
 public class Hasher {
 	private static final String hexchars = "0123456789ABCDEF";
@@ -37,8 +35,7 @@ public class Hasher {
 		}
 		return string.toString();
 	}
-	public static String GenerateHash(String url, Request request,
-			boolean getRequest) {
+	public static String GenerateHash(String url) {
 		md.update(url.getBytes());
 		return DigestToString(md.digest());
 	}

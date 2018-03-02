@@ -31,11 +31,6 @@ public class Database {
 	public String name;
 	public int id;
 
-	public Database() {
-		name = "";
-		id = 0;
-	}
-
 	public String toString() {
 		return name;
 	}

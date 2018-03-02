@@ -121,20 +121,13 @@ public class PlaylistsRequest extends Request {
 			position += 4;
 			size = readInt(data, position);
 			position += 4;
-			if (name.equals("minm"))
-				p.name = readString(data, position, size);
-			else if (name.equals("miid"))
-				p.id = readInt(data, position);
-			else if (name.equals("mper"))
-				p.persistent_id = readString(data, position, size);
-			else if (name.equals("mimc"))
-				p.song_count = readInt(data, position);
-			else if (name.equals("aeSP")) {
-				p.smart_playlist = true;
-			}
+            if (name.equals("minm")) {
+                p.setName(readString(data, position, size));
+            }
+
 			position += size;
 		}
-		if (!p.name.equals(host.getName())) {
+		if (!p.getName().equals(host.getName())) {
 			mPlaylist.add(p);
 		}
 	}

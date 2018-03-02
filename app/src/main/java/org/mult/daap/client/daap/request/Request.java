@@ -135,7 +135,7 @@ public abstract class Request {
     }
 
     protected String getHashCode(Request r) {
-        return Hasher.GenerateHash("/" + r.getRequestString(), this, false);
+        return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
     public static String readString(byte[] data, int offset, int length) {

@@ -37,16 +37,15 @@ public class DatabasesRequest extends Request {
 		public int size;
 	}
 
-	private ArrayList<Database> mDatabases;
+	private Database database;
 	private ArrayList<FieldPair> mlclList;
 	private ArrayList<FieldPair> mlitList;
 
 	public DatabasesRequest(DaapHost h) throws BadResponseCodeException,
 			PasswordFailedException, IOException {
 		super(h);
-		mlclList = new ArrayList<FieldPair>();
-		mlitList = new ArrayList<FieldPair>();
-		mDatabases = new ArrayList<Database>();
+		mlclList = new ArrayList<>();
+		mlitList = new ArrayList<>();
 		query("DabasesRequest");
 		readResponse();
 		process();
@@ -102,11 +101,7 @@ public class DatabasesRequest extends Request {
 	}
 
 	protected void parseMLIT() {
-		for (int i = 0; i < mlitList.size(); i++) {
-			processmLitList(mlitList.get(i).position, mlitList.get(i).size);
-		}
-		mlitList = null;
-		mlclList = null;
+        processmLitList(mlitList.get(0).position, mlitList.get(0).size);
 	}
 
 	/* get all mlit in mlclList */
@@ -130,7 +125,7 @@ public class DatabasesRequest extends Request {
 		String name = "";
 		int size;
 		int startPos = position;
-		Database d = new Database();
+		database = new Database();
 		boolean bMiid = false;
 		boolean bMinm = false;
 		while (position < argSize + startPos) {
@@ -140,13 +135,12 @@ public class DatabasesRequest extends Request {
 			position += 4;
 			if (name.equals("miid")) {
 				bMiid = true;
-				d.id = readInt(data, position);
+				database.id = readInt(data, position);
 			} else if (name.equals("minm")) {
 				bMinm = true;
-				d.name = readString(data, position, size);
+				database.name = readString(data, position, size);
 			}
 			if (bMiid == true && bMinm == true) {
-				mDatabases.add(d);
 				bMiid = false;
 				bMinm = false;
 				break;
@@ -155,7 +149,7 @@ public class DatabasesRequest extends Request {
 		}
 	}
 
-	public ArrayList<Database> getDbs() {
-		return mDatabases;
+	public Database getDatabase() {
+		return database;
 	}
 }

@@ -81,7 +81,7 @@ public class SongRequest extends Request {
     }
 
     protected String getHashCode(Request r) {
-        return Hasher.GenerateHash("/" + r.getRequestString(), this, true);
+        return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
     protected void process() {}
