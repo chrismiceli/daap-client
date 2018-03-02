@@ -32,7 +32,7 @@ public class GetSongsForPlaylist extends Observable implements Runnable {
         MediaPlayback.clearState();
         Contents.clearLists();
         try {
-            if (playList.all_songs == true) {
+            if (playList.getAllSongs()) {
                 if (Contents.daapHost.getSongs().size() == 0) {
                     notifyAndSet(PlaylistBrowser.EMPTY);
                     return;

@@ -17,7 +17,6 @@ import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
 import org.mult.daap.client.SongIDComparator;
 import org.mult.daap.client.daap.request.BadResponseCodeException;
-import org.mult.daap.client.daap.request.Base64;
 import org.mult.daap.client.daap.request.DatabasesRequest;
 import org.mult.daap.client.daap.request.HangingUpdateRequest;
 import org.mult.daap.client.daap.request.LoginRequest;
@@ -29,34 +28,31 @@ import org.mult.daap.client.daap.request.SingleDatabaseRequest;
 import org.mult.daap.client.daap.request.SongRequest;
 import org.mult.daap.client.daap.request.UpdateRequest;
 
+import android.util.Base64;
 import android.util.Log;
 
 /** @author Greg */
 public class DaapHost extends Host {
 	private final String address;
 	private final int port;
-	private int revision_num;
-	private int database_id;
-	private int session_id;
-	private int request_num;
+	private int revisionNum;
+	private int databaseId;
+	private int sessionId;
+	private int requestNum;
 	private String password;
-	private HangingUpdateRequest hanging_update;
+	private HangingUpdateRequest updateRequest;
 	private int hostProgram;
     private ArrayList<Song> songs = new ArrayList<>();
 	private static final int UNKNOWN_SERVER = 0;
 	private static final int ITUNES = 1;
 	private static final int GIT_SERVER = 2;
 	private static final int MT_DAAPD = 3;
-	// don't change these... the authorization hashing is based on these
-	// numbers.
 
-	// dummy constructor, used by GetNewHost
-	public DaapHost(String name, String pwd, InetAddress addy, int porty) {
+	public DaapHost(String name, String password, InetAddress inetAddress, int port) {
 		super(name);
-		Base64 base64 = new Base64();
-		password = base64.encode("Android_DAAP:" + pwd);
-		address = addy.getHostAddress();
-		port = porty;
+        this.password = Base64.encodeToString(("Android_DAAP:" + password).getBytes(), Base64.DEFAULT);
+		this.address = inetAddress.getHostAddress();
+		this.port = port;
 	}
 
 	public void connect() throws Exception {
@@ -66,18 +62,18 @@ public class DaapHost extends Host {
 
 	public void login() throws Exception {
 		try {
-			revision_num = 1;
-			session_id = 0;
+			revisionNum = 1;
+			sessionId = 0;
 			ServerInfoRequest s = new ServerInfoRequest(this);
 			Log.d("DAAPHost",
 					"ServerInfo:  " + s.getServerProgram() + " " + s.getHost());
 			if (s.getServerProgram() != null) {
                 hostProgram = parseServerTypeString(s.getServerProgram());
             }
-			LoginRequest l = new LoginRequest(this);
-			session_id = l.getSessionId();
-			UpdateRequest u = new UpdateRequest(this);
-			revision_num = u.getRevNum();
+			LoginRequest loginRequest = new LoginRequest(this);
+			sessionId = loginRequest.getSessionId();
+			UpdateRequest updateRequest = new UpdateRequest(this);
+			revisionNum = updateRequest.getRevNum();
 		} catch (PasswordFailedException e) {
 			e.printStackTrace();
 			Log.d("DaapHost", "Password failed");
@@ -108,14 +104,14 @@ public class DaapHost extends Host {
 		// don't logout when connected to a de.kapsi server:
 		try {
 			@SuppressWarnings("unused")
-			LogoutRequest lo = new LogoutRequest(this);
-			if (hanging_update != null) {
-				hanging_update.disconnect();
+			LogoutRequest logoutRequest = new LogoutRequest(this);
+			if (updateRequest != null) {
+				updateRequest.disconnect();
 			}
 		} catch (BadResponseCodeException e) {
 			if (e.response_code == 204) {
-				session_id = 0;
-				revision_num = 1;
+				sessionId = 0;
+				revisionNum = 1;
 			} else {
 				throw e;
 			}
@@ -124,19 +120,19 @@ public class DaapHost extends Host {
 
 	private void grabSongs() throws Exception {
 		try {
-			DatabasesRequest d = new DatabasesRequest(this);
-			database_id = d.getDbs().get(0).id;
-			SingleDatabaseRequest g = new SingleDatabaseRequest(this);
-			songs = g.getSongs();
+			DatabasesRequest databasesRequest = new DatabasesRequest(this);
+			databaseId = databasesRequest.getDatabase().id;
+			SingleDatabaseRequest singleDatabaseRequest = new SingleDatabaseRequest(this);
+			songs = singleDatabaseRequest.getSongs();
 			Log.d("DaapHost", "# of songs = " + songs.size());
 			Comparator<Song> sic = new SongIDComparator();
 			Collections.sort(songs, sic); // for efficiency in getSongById in
 											// Host
-			PlaylistsRequest p = new PlaylistsRequest(this);
-			playlists = p.getPlaylists();
+			PlaylistsRequest playlistsRequest = new PlaylistsRequest(this);
+			playlists = playlistsRequest.getPlaylists();
 			Log.d("DaapHost", "playlist count = " + playlists.size());
 			if (hostProgram == DaapHost.GIT_SERVER)
-				hanging_update = new HangingUpdateRequest(this);
+				updateRequest = new HangingUpdateRequest(this);
 		} catch (BadResponseCodeException e) {
 			if (e.response_code == 500) {
 				Log.d("DaapHost", "500 Response code");
@@ -158,10 +154,10 @@ public class DaapHost extends Host {
 	private void nullify() {
 		songs.clear();
 		playlists = null;
-		revision_num = 0;
-		database_id = 0;
-		session_id = 0;
-		request_num = 0;
+		revisionNum = 0;
+		databaseId = 0;
+		sessionId = 0;
+		requestNum = 0;
 	}
 
 	public boolean isPasswordProtected() {
@@ -177,24 +173,24 @@ public class DaapHost extends Host {
 	}
 
 	public int getRevisionNumber() {
-		return revision_num;
+		return revisionNum;
 	}
 
 	public int getDatabaseID() {
-		return database_id;
+		return databaseId;
 	}
 
 	public int getSessionID() {
-		return session_id;
+		return sessionId;
 	}
 
 	public int getNextRequestNumber() {
-		request_num++;
-		return request_num;
+		requestNum++;
+		return requestNum;
 	}
 
 	public int getThisRequestNumber() {
-		return request_num;
+		return requestNum;
 	}
 
 	public String getPassword() {
@@ -221,7 +217,7 @@ public class DaapHost extends Host {
 	public InputStream getSongStream(Song s) throws Exception {
 		try {
 			// re-login if we're logged out, or this daaphost is a GIT server:
-			if (session_id == 0 || hostProgram == GIT_SERVER) {
+			if (sessionId == 0 || hostProgram == GIT_SERVER) {
 				login();
 			}
 			// DaapSong song = (DaapSong)s;
