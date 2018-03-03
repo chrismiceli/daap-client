@@ -1,7 +1,5 @@
 package org.mult.daap;
 
-import org.mult.daap.background.DBAdapter;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -19,6 +17,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.mult.daap.background.DBAdapter;
 
 public class AddServerMenu extends Activity {
     private EditText serverNameEditText;
@@ -73,7 +73,7 @@ public class AddServerMenu extends Activity {
         public void onTextChanged(CharSequence s, int start, int before,
                 int count) {
         }
-    };
+    }
 
     private class loginRequiredListener implements OnCheckedChangeListener {
         public void onCheckedChanged(CompoundButton buttonView,
@@ -84,7 +84,7 @@ public class AddServerMenu extends Activity {
                 passwordEditText.setEnabled(false);
             }
         }
-    };
+    }
 
     /**
      * Function that is called when the Add Server button is pressed

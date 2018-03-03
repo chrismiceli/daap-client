@@ -6,14 +6,14 @@
 
 package javax.jmdns.impl;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-
-import android.util.Log;
 
 /**
  * HostInfo information on the local host to be able to cope with change of addresses.

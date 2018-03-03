@@ -1,12 +1,12 @@
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import android.util.Log;
 
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.DaapPlaylist;
 
-import android.util.Log;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class SinglePlaylistRequest extends Request {
     private final ArrayList<Song> mSongList = new ArrayList<>();

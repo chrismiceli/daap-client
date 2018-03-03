@@ -1,9 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-
-import org.mult.daap.client.Song;
-
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -26,6 +22,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.client.Song;
+
+import java.util.ArrayList;
 
 public class QueueListBrowser extends Activity {
     private ListView queuelistList;

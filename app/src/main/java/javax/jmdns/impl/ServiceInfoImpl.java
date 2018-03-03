@@ -330,7 +330,6 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
                 // look for the '='
                 int i = 0;
                 for (; (i < len) && (getText()[off + i] != '='); i++) {
-                    ;
                 }
                 // get the property name
                 String name = readUTF(getText(), off, i);

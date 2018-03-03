@@ -1,10 +1,10 @@
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
+import android.util.Log;
 
 import org.mult.daap.client.daap.DaapHost;
 
-import android.util.Log;
+import java.io.IOException;
 
 public class UpdateRequest extends Request {
     private int mRevisionNumber = 0;

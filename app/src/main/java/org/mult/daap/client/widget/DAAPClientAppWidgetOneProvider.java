@@ -16,11 +16,6 @@
 
 package org.mult.daap.client.widget;
 
-import org.mult.daap.MediaPlayback;
-import org.mult.daap.MediaPlaybackService;
-import org.mult.daap.R;
-import org.mult.daap.Servers;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -30,6 +25,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.RemoteViews;
+
+import org.mult.daap.MediaPlayback;
+import org.mult.daap.MediaPlaybackService;
+import org.mult.daap.R;
+import org.mult.daap.Servers;
 
 /**
  * Simple widget to show currently playing album art along

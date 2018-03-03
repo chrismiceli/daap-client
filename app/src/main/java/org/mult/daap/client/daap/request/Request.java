@@ -1,16 +1,16 @@
 package org.mult.daap.client.daap.request;
 
+import android.util.Log;
+
+import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.daap.Hasher;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import org.mult.daap.client.daap.DaapHost;
-import org.mult.daap.client.daap.Hasher;
-
-import android.util.Log;
 
 public abstract class Request {
     protected final DaapHost host;

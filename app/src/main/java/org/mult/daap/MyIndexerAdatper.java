@@ -1,10 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,6 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Filterable;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
         Filterable {

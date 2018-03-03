@@ -1,23 +1,5 @@
 package org.mult.daap;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.Formatter;
-import java.util.Locale;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.mult.daap.client.Song;
-import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -65,6 +47,24 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.client.Song;
+import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.Formatter;
+import java.util.Locale;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MediaPlayback extends Activity implements View.OnTouchListener, View.OnLongClickListener {
 
@@ -931,4 +931,4 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             }
         }
     };
-};
+}

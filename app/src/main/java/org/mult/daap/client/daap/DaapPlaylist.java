@@ -6,15 +6,15 @@
  */
 package org.mult.daap.client.daap;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import android.util.Log;
 
 import org.mult.daap.client.Playlist;
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.request.BadResponseCodeException;
 import org.mult.daap.client.daap.request.SinglePlaylistRequest;
 
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /** @author Greg
  * TODO To change the template for this generated type comment go to

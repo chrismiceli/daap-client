@@ -3,6 +3,8 @@
 // Original license LGPL
 package javax.jmdns.impl.tasks;
 
+import android.util.Log;
+
 import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,8 +19,6 @@ import javax.jmdns.impl.DNSRecord;
 import javax.jmdns.impl.DNSState;
 import javax.jmdns.impl.JmDNSImpl;
 import javax.jmdns.impl.ServiceInfoImpl;
-
-import android.util.Log;
 
 /** The Responder sends a single answer for the specified service infos and for
  * the host name. */

@@ -1,10 +1,10 @@
 package org.mult.daap.client.daap.request;
 
+import org.mult.daap.client.daap.DaapHost;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import org.mult.daap.client.daap.DaapHost;
 
 public class HangingUpdateRequest extends Request {
     /** Constructor for the HangingUpdateRequest object

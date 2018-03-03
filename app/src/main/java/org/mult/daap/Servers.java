@@ -1,21 +1,5 @@
 package org.mult.daap;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-
-import org.mult.daap.background.DBAdapter;
-import org.mult.daap.background.JmDNSListener;
-import org.mult.daap.background.LoginManager;
-import org.mult.daap.background.SeparatedListAdapter;
-import org.mult.daap.background.WrapMulticastLock;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -52,6 +36,22 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.background.DBAdapter;
+import org.mult.daap.background.JmDNSListener;
+import org.mult.daap.background.LoginManager;
+import org.mult.daap.background.SeparatedListAdapter;
+import org.mult.daap.background.WrapMulticastLock;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 public class Servers extends Activity implements Observer {
     public final static String TITLE = "title";
@@ -150,7 +150,7 @@ public class Servers extends Activity implements Observer {
     public void onResume() {
         super.onResume();
         List<Map<String, ?>> rememberedServers = new LinkedList<Map<String, ?>>();
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         if (!wifiManager.isWifiEnabled()) {
             wiFi = false;
         } else {

@@ -3,6 +3,8 @@
 // Original license LGPL
 package javax.jmdns.impl;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -34,8 +36,6 @@ import javax.jmdns.impl.tasks.Responder;
 import javax.jmdns.impl.tasks.ServiceInfoResolver;
 import javax.jmdns.impl.tasks.ServiceResolver;
 import javax.jmdns.impl.tasks.TypeResolver;
-
-import android.util.Log;
 
 // REMIND: multiple IP addresses
 /** mDNS implementation in Java.
@@ -1043,7 +1043,7 @@ public class JmDNSImpl extends JmDNS {
             }
             return aLog.toString();
         }
-    };
+    }
 
     private static String toUnqualifiedName(String type, String qualifiedName) {
         if (qualifiedName.endsWith(type)) {

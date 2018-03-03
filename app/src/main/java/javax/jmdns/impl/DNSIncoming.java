@@ -3,6 +3,8 @@
 // Original license LGPL
 package javax.jmdns.impl;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -10,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import android.util.Log;
 
 /** Parse an incoming DNS message into its components.
  * @version %I%, %G%

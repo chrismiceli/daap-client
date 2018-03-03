@@ -5,13 +5,8 @@
  */
 package org.mult.daap.client.daap;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+import android.util.Base64;
+import android.util.Log;
 
 import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
@@ -28,8 +23,13 @@ import org.mult.daap.client.daap.request.SingleDatabaseRequest;
 import org.mult.daap.client.daap.request.SongRequest;
 import org.mult.daap.client.daap.request.UpdateRequest;
 
-import android.util.Base64;
-import android.util.Log;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 /** @author Greg */
 public class DaapHost extends Host {

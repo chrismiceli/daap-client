@@ -1,12 +1,12 @@
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import android.util.Log;
 
 import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.Database;
 
-import android.util.Log;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class DatabasesRequest extends Request {
     private Database database;

@@ -3,6 +3,8 @@
 // Original license LGPL
 package javax.jmdns.impl;
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,8 +12,6 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Iterator;
-
-import android.util.Log;
 
 /** DNS record
  * @version %I%, %G%

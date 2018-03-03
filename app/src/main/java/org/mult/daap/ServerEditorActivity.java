@@ -1,13 +1,5 @@
 package org.mult.daap;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.mult.daap.background.DBAdapter;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +10,14 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+
+import org.mult.daap.background.DBAdapter;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ServerEditorActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
