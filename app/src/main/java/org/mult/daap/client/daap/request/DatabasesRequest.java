@@ -1,21 +1,3 @@
-/*
- * Created on May 6, 2003
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * Copyright 2003 Joseph Barnett
- * This File is part of "one 2 oh my god"
- * "one 2 oh my god" is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * Free Software Foundation; either version 2 of the License, or
- * your option) any later version.
- * "one 2 oh my god" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with "one 2 oh my god"; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- */
 package org.mult.daap.client.daap.request;
 
 import java.io.IOException;
@@ -27,44 +9,25 @@ import org.mult.daap.client.daap.Database;
 import android.util.Log;
 
 public class DatabasesRequest extends Request {
-	private class FieldPair {
-		public FieldPair(int s, int p) {
-			size = s;
-			position = p;
-		}
-
-		public int position;
-		public int size;
-	}
-
 	private Database database;
-	private ArrayList<FieldPair> mlclList;
-	private ArrayList<FieldPair> mlitList;
+	private ArrayList<FieldPair> mlclList = new ArrayList<>();
+	private ArrayList<FieldPair> mlitList = new ArrayList<>();
 
-	public DatabasesRequest(DaapHost h) throws BadResponseCodeException,
+	public DatabasesRequest(DaapHost daapHost) throws BadResponseCodeException,
 			PasswordFailedException, IOException {
-		super(h);
-		mlclList = new ArrayList<>();
-		mlitList = new ArrayList<>();
+		super(daapHost);
 		query("DabasesRequest");
 		readResponse();
 		process();
 	}
 
 	protected String getRequestString() {
-		String ret = "databases?";
-		ret += "session-id=" + host.getSessionID();
-		ret += "&revision-number=" + host.getRevisionNumber();
-		return ret;
+		return "databases?session-id=" + host.getSessionID() + "&revision-number=" + host.getRevisionNumber();
 	}
 
-	protected void addRequestProperties() {
-		super.addRequestProperties();
-	}
-
-	protected void process() {
-		mlclList = new ArrayList<FieldPair>();
-		mlitList = new ArrayList<FieldPair>();
+	private void process() {
+		mlclList = new ArrayList<>();
+		mlitList = new ArrayList<>();
 		if (data.length == 0) {
 			Log.d("Request", "Zero Length");
 			return;
@@ -75,7 +38,7 @@ public class DatabasesRequest extends Request {
 		parseMLCL();
 	}
 
-	public void processDatabaseRequest() {
+	private void processDatabaseRequest() {
 		String name;
 		int size;
 		while (offset < data.length) {
@@ -93,19 +56,19 @@ public class DatabasesRequest extends Request {
 	}
 
 	/* Creates a list of byte arrays for use in mLIT */
-	protected void parseMLCL() {
+    private void parseMLCL() {
 		for (int i = 0; i < mlclList.size(); i++) {
 			processContainerList(mlclList.get(i).position, mlclList.get(i).size);
 		}
 		parseMLIT();
 	}
 
-	protected void parseMLIT() {
+	private void parseMLIT() {
         processmLitList(mlitList.get(0).position, mlitList.get(0).size);
 	}
 
 	/* get all mlit in mlclList */
-	public void processContainerList(int position, int argSize) {
+    private void processContainerList(int position, int argSize) {
 		String name;
 		int size;
 		int startPos = position;
@@ -121,8 +84,8 @@ public class DatabasesRequest extends Request {
 		}
 	}
 
-	public void processmLitList(int position, int argSize) {
-		String name = "";
+	private void processmLitList(int position, int argSize) {
+		String name;
 		int size;
 		int startPos = position;
 		database = new Database();
@@ -140,9 +103,7 @@ public class DatabasesRequest extends Request {
 				bMinm = true;
 				database.name = readString(data, position, size);
 			}
-			if (bMiid == true && bMinm == true) {
-				bMiid = false;
-				bMinm = false;
+			if (bMiid && bMinm) {
 				break;
 			}
 			position += size;

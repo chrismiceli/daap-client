@@ -14,7 +14,6 @@ package org.mult.daap.client.daap;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/** @author jbarnett */
 public class Hasher {
 	private static final String hexchars = "0123456789ABCDEF";
 	private static MessageDigest md;

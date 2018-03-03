@@ -8,65 +8,42 @@ import org.mult.daap.client.daap.DaapPlaylist;
 
 import android.util.Log;
 
-/*
- * @author Greg
- */
 public class SinglePlaylistRequest extends Request {
-	private class FieldPair {
-		public FieldPair(int s, int p) {
-			size = s;
-			position = p;
-		}
+	private final ArrayList<Song> mSongList = new ArrayList<>();
+	private final DaapPlaylist playlist;
+	private ArrayList<FieldPair> mlclList = new ArrayList<>();
+	private ArrayList<FieldPair> mlitList = new ArrayList<>();
 
-		public int position;
-		public int size;
-	}
-
-	private ArrayList<Song> mSongList;
-	protected DaapPlaylist playlist;
-	private ArrayList<FieldPair> mlclList;
-	private ArrayList<FieldPair> mlitList;
-
-	public SinglePlaylistRequest(DaapPlaylist p)
+	public SinglePlaylistRequest(DaapPlaylist daapPlaylist)
 			throws BadResponseCodeException, PasswordFailedException,
 			IOException {
-		super(p.getHost());
-		mlclList = new ArrayList<FieldPair>();
-		mlitList = new ArrayList<FieldPair>();
-		mSongList = new ArrayList<Song>();
-		playlist = p;
+		super(daapPlaylist.getHost());
+		playlist = daapPlaylist;
 		query("SinglePlaylistRequest");
 		readResponse();
 		process();
 	}
 
 	protected String getRequestString() {
-		String ret = "databases/" + host.getDatabaseID() + "/";
-		ret += "containers/" + playlist.getId() + "/";
-		ret += "items?type=music&";
-		ret += "meta=dmap.itemid";
-		//			ret += "meta=dmap.itemid,dmap.containeritemid";
-		ret += "&session-id=" + host.getSessionID();
-		ret += "&revision-number=" + host.getRevisionNumber();
-		return ret;
+		return "databases/" + host.getDatabaseID() +
+                "/containers/" + playlist.getId() +
+				"/items?type=music&meta=dmap.itemid&session-id=" +
+                host.getSessionID() +
+                "&revision-number=" +
+                host.getRevisionNumber();
 	}
 
-	protected void addRequestProperties() {
-		super.addRequestProperties();
-	}
-
-	protected void process() {
+	private void process() {
 		if (data.length == 0) {
 			Log.d("Request", "Zero Length");
 			return;
 		}
-		offset += 4;
-		offset += 4;
+		offset += 8;
 		processSinglePlaylistRequest();
 		parseMLCL();
 	}
 
-	public void processSinglePlaylistRequest() {
+	private void processSinglePlaylistRequest() {
 		String name;
 		int size;
 		while (offset < data.length) {
@@ -74,8 +51,9 @@ public class SinglePlaylistRequest extends Request {
 			offset += 4;
 			size = readInt(data, offset);
 			offset += 4;
-			if (size > 10000000)
-				Log.d("Request", "This host probably uses gzip encoding");
+			if (size > 10000000) {
+                Log.d("Request", "This host probably uses gzip encoding");
+            }
 			if (name.equals("mlcl")) {
 				mlclList.add(new FieldPair(size, offset));
 			}
@@ -84,23 +62,21 @@ public class SinglePlaylistRequest extends Request {
 	}
 
 	/* Creates a list of byte arrays for use in mLIT */
-	protected void parseMLCL() {
-		for (int i = 0; i < mlclList.size(); i++) {
-			processContainerList(mlclList.get(i).position, mlclList.get(i).size);
+	private void parseMLCL() {
+	    for (FieldPair mlcl : mlclList) {
+			processContainerList(mlcl.position, mlcl.size);
 		}
 		parseMLIT();
 	}
 
-	protected void parseMLIT() {
-		for (int i = 0; i < mlitList.size(); i++) {
-			processmlitItem(mlitList.get(i).position, mlitList.get(i).size);
+	private void parseMLIT() {
+	    for (FieldPair mlit : mlitList) {
+			processmlitItem(mlit.position, mlit.size);
 		}
-		mlitList = null;
-		mlclList = null;
 	}
 
-	public void processmlitItem(int position, int argSize) {
-		String name = "";
+	private void processmlitItem(int position, int argSize) {
+		String name;
 		int size;
 		int startPos = position;
 		int song_id = 0;
@@ -117,8 +93,7 @@ public class SinglePlaylistRequest extends Request {
 		mSongList.add(host.getSongById(song_id));
 	}
 
-	/* get all mlit in mlclList */
-	public void processContainerList(int position, int argSize) {
+	private void processContainerList(int position, int argSize) {
 		String name;
 		int size;
 		int startPos = position;
