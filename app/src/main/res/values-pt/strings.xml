@@ -4,8 +4,8 @@
     <string name="app_name">DAAP</string>
     <string name="about_info">Informação</string>
     <string name="info">Cliente DAAP para Android.\n\nProgramado
-		por:\nMichael
-		Miceli\nChristopher Miceli\n\nTradução: Rodrigo Farnham</string>
+        por:\nMichael
+        Miceli\nChristopher Miceli\n\nTradução: Rodrigo Farnham</string>
     <string name="shuffle">Aleatório</string>
     <string name="donate">Doe</string>
     <string name="repeat">Repetir Faixa</string>
@@ -34,7 +34,7 @@
     <string name="song_browser_activity">DAAP - Todas as Faixas</string>
     <string name="media_playback_activity">DAAP - Media Player</string>
     <string name="media_playback_error">Um erro ocorreu durante a reprodução. Tente
-		novamente.</string>
+        novamente.</string>
     <string name="add_server_detail">Clique aqui para adicionar um servidor DAAP</string>
     <string name="local_servers">Escutando para servidores locais</string>
     <string name="remembered_servers">Servidores salvo</string>

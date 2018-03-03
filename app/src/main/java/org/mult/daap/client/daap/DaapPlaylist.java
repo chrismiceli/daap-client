@@ -20,53 +20,53 @@ import android.util.Log;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates */
 public class DaapPlaylist extends Playlist {
-	private int id;
-	private ArrayList<Song> songs;
-	protected final DaapHost host;
+    private int id;
+    private ArrayList<Song> songs;
+    protected final DaapHost host;
 
-	public DaapPlaylist(DaapHost daapHost) {
-		host = daapHost;
-	}
-
-	public DaapPlaylist(DaapHost daapHost, String name, boolean allSongs) {
-		host = daapHost;
-		this.name = name;
-		setAllSongs(allSongs);
-	}
-
-	public void initialize() throws Exception {
-		try {
-			SinglePlaylistRequest p = new SinglePlaylistRequest(this);
-			// should be like singledatabaserequest
-			songs = p.getSongs();
-		} catch (BadResponseCodeException e) {
-			Log.d("DaapPlaylist", "BadResponse " + e.getMessage());
-			host.login();
-			initialize();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.d("DaapPlaylist", "Error on playlist");
-			e.printStackTrace();
-		}
-	}
-
-	public DaapHost getHost() {
-		return host;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-	    this.id = id;
+    public DaapPlaylist(DaapHost daapHost) {
+        host = daapHost;
     }
 
-	public Collection<Song> getSongs() {
-		if (songs == null) {
+    public DaapPlaylist(DaapHost daapHost, String name, boolean allSongs) {
+        host = daapHost;
+        this.name = name;
+        setAllSongs(allSongs);
+    }
+
+    public void initialize() throws Exception {
+        try {
+            SinglePlaylistRequest p = new SinglePlaylistRequest(this);
+            // should be like singledatabaserequest
+            songs = p.getSongs();
+        } catch (BadResponseCodeException e) {
+            Log.d("DaapPlaylist", "BadResponse " + e.getMessage());
+            host.login();
+            initialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("DaapPlaylist", "Error on playlist");
+            e.printStackTrace();
+        }
+    }
+
+    public DaapHost getHost() {
+        return host;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Collection<Song> getSongs() {
+        if (songs == null) {
             return new ArrayList<>();
         }
 
-		return songs;
-	}
+        return songs;
+    }
 }

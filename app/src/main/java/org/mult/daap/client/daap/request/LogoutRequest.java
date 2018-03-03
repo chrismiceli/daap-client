@@ -7,16 +7,16 @@ import org.mult.daap.client.daap.DaapHost;
 import android.util.Log;
 
 public class LogoutRequest extends Request {
-	private int mSessionId;
+    private int mSessionId;
 
-	public LogoutRequest(DaapHost daapHost) throws BadResponseCodeException,
-			PasswordFailedException, IOException {
-		super(daapHost);
-		query("LogoutRequest");
-		readResponse();
-	}
+    public LogoutRequest(DaapHost daapHost) throws BadResponseCodeException,
+            PasswordFailedException, IOException {
+        super(daapHost);
+        query("LogoutRequest");
+        readResponse();
+    }
 
-	protected String getRequestString() {
-		return "logout?session-id=" + host.getSessionID();
-	}
+    protected String getRequestString() {
+        return "logout?session-id=" + host.getSessionID();
+    }
 }

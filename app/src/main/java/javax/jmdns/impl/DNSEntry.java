@@ -11,7 +11,7 @@ package javax.jmdns.impl;
  * class for questions and records.
  *
  * @version %I%, %G%
- * @author	Arthur van Hoff, Pierre Frisch, Rick Blair
+ * @author    Arthur van Hoff, Pierre Frisch, Rick Blair
  */
 public class DNSEntry
 {

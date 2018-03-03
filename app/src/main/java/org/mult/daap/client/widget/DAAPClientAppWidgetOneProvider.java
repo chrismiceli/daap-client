@@ -103,12 +103,12 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
      */
     public void notifyChange(MediaPlaybackService service, MediaPlayback activity, String what) {
         if (service == null)
-        	return;
+            return;
         
-    	if (hasInstances(service)) {
+        if (hasInstances(service)) {
             if (MediaPlaybackService.META_CHANGED.equals(what) ||
-            		MediaPlaybackService.PLAYSTATE_CHANGED.equals(what) ||
-            		MediaPlaybackService.PLAYER_CLOSED.equals(what)) {
+                    MediaPlaybackService.PLAYSTATE_CHANGED.equals(what) ||
+                    MediaPlaybackService.PLAYER_CLOSED.equals(what)) {
                 performUpdate(service, activity, null, what);
             }
         }
@@ -118,32 +118,32 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
      * Update all active widget instances by pushing changes 
      */
     public void performUpdate(MediaPlaybackService service, MediaPlayback activity, int[] appWidgetIds, String what) {
-    	final Resources res = service.getResources();
+        final Resources res = service.getResources();
         final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.appwidget_one);
         
         if (what.equals(MediaPlaybackService.PLAYER_CLOSED)) {
-        	views.setViewVisibility(R.id.title, View.GONE);
+            views.setViewVisibility(R.id.title, View.GONE);
             views.setTextViewText(R.id.artist, res.getText(R.string.widget_one_initial_text));
             
             linkButtons(service, views, false /* not playing */);
         } else {
-        	CharSequence trackName = activity.getTrackName();
-        	CharSequence artistName = activity.getArtistName();
-        	//CharSequence errorState = null;
+            CharSequence trackName = activity.getTrackName();
+            CharSequence artistName = activity.getArtistName();
+            //CharSequence errorState = null;
         
-        	if (trackName == null) {
-        		if (trackName == null)
-        			trackName = res.getText(R.string.widget_one_track_info_unavailable);
-        	}
-        		
-        	if (artistName == null)
-        		artistName = res.getText(R.string.widget_one_track_info_unavailable);
-        	
-        	// Show media info
-        	views.setViewVisibility(R.id.title, View.VISIBLE);
-        	views.setTextViewText(R.id.title, trackName);
-        	views.setTextViewText(R.id.artist, artistName);
-        	
+            if (trackName == null) {
+                if (trackName == null)
+                    trackName = res.getText(R.string.widget_one_track_info_unavailable);
+            }
+
+            if (artistName == null)
+                artistName = res.getText(R.string.widget_one_track_info_unavailable);
+
+            // Show media info
+            views.setViewVisibility(R.id.title, View.VISIBLE);
+            views.setTextViewText(R.id.title, trackName);
+            views.setTextViewText(R.id.artist, artistName);
+
             // Set correct drawable for pause state
             final boolean playing = activity.isPlaying();
             if (playing) {
@@ -185,7 +185,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
         }
         
-		intent = new Intent(MediaPlaybackService.TOGGLEPAUSE_ACTION);
+        intent = new Intent(MediaPlaybackService.TOGGLEPAUSE_ACTION);
         intent.setComponent(serviceName);
         pendingIntent = PendingIntent.getService(context,
                 0 /* no requestCode */, intent, 0 /* no flags */);

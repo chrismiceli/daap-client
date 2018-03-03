@@ -7,14 +7,14 @@
 package org.mult.daap.client.daap.request;
 
 public class BadResponseCodeException extends Exception {
-	private int responseCode;
+    private int responseCode;
 
-	public BadResponseCodeException(int responseCode) {
-		super(Integer.toString(responseCode));
-		this.responseCode = responseCode;
-	}
+    public BadResponseCodeException(int responseCode) {
+        super(Integer.toString(responseCode));
+        this.responseCode = responseCode;
+    }
 
-	public int getResponseCode() {
-	    return responseCode;
+    public int getResponseCode() {
+        return responseCode;
     }
 }

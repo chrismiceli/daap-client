@@ -5,7 +5,7 @@
     <string name="app_name">DAAP</string>
     <string name="about_info">Om</string>
     <string name="info">Android DAAP klient.\n\Utviklere:\nMichael
-		Miceli\nChristopher Miceli\n\nOversetter:Joachim Giæver</string>
+        Miceli\nChristopher Miceli\n\nOversetter:Joachim Giæver</string>
     <string name="shuffle">Shuffle</string>
     <string name="donate">Doner</string>
     <string name="repeat">Gjenta</string>
@@ -37,7 +37,7 @@
     <string name="song_browser_activity">DAAP - Alle Sanger</string>
     <string name="media_playback_activity">DAAP - Avspiller</string>
     <string name="media_playback_error">En feil har oppstått og sangen kan ikke avspilles, vennlist prøv
-		igjen.</string>
+        igjen.</string>
     <string name="add_server_detail">Klikk her for å legge til DAAP server</string>
     <string name="local_servers">Søker etter Lokale Servere</string>
     <string name="remembered_servers">Kjente Serverer</string>
@@ -71,7 +71,7 @@
     <string name="font_size">Tekststørrelse</string>
     <string name="scrobblerTitle">Scrobbler Støtte</string>
     <string name="scrobblerSummary">Aktiver støtte for Last.fm\'s Scrobbler støtte.
-		Må ha en \"scrobbler\" installert.</string>
+        Må ha en \"scrobbler\" installert.</string>
     <string name="font_pref_detail">Endre tekststørrelse</string>
     <string name="menu_library">Bibliotek</string>
     <string name="media_playback_service_desc">"Tjenesten brukes til å håndtere wigets-handlinger"</string>

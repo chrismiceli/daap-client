@@ -4,7 +4,7 @@
     <string name="app_name">DAAP</string>
     <string name="about_info">Acerca de</string>
     <string name="info">Cliente DAAP para Android.\n\nDesarrolladores:\nMichael
-		Miceli\nChristopher Miceli</string>
+        Miceli\nChristopher Miceli</string>
     <string name="shuffle">Reproducción Aleatoria</string>
     <string name="donate">Donar</string>
     <string name="repeat">Repetir</string>
@@ -69,7 +69,7 @@
     <string name="font_size">Tamaño de Fuente</string>
     <string name="scrobblerTitle">Soporte para Scrobbler</string>
     <string name="scrobblerSummary">Activar el soporte para el servicio de Scrobbler de Last.fm\'s.
-		Tienes que tener un \"scrobbler\" instalado.</string>
+        Tienes que tener un \"scrobbler\" instalado.</string>
     <string name="font_pref_detail">Ajustes Tamaño Fuente</string>
     <string name="menu_library">Librería</string>
     <string name="media_playback_service_desc">"Servicio utilizado para gestionar las acciones de los widgets"</string>

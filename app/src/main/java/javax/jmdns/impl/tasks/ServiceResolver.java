@@ -23,60 +23,60 @@ import javax.jmdns.impl.ServiceInfoImpl;
  * Prevent having multiple service resolvers for the same type in the timer
  * queue. */
 public class ServiceResolver extends TimerTask {
-	/**
+    /**
      * 
      */
-	private final JmDNSImpl jmDNSImpl;
-	/** Counts the number of queries being sent. */
-	int count = 0;
-	private String type;
+    private final JmDNSImpl jmDNSImpl;
+    /** Counts the number of queries being sent. */
+    int count = 0;
+    private String type;
 
-	public ServiceResolver(JmDNSImpl jmDNSImpl, String type) {
-		this.jmDNSImpl = jmDNSImpl;
-		this.type = type;
-	}
+    public ServiceResolver(JmDNSImpl jmDNSImpl, String type) {
+        this.jmDNSImpl = jmDNSImpl;
+        this.type = type;
+    }
 
-	public void start(Timer timer) {
-		timer.schedule(this, DNSConstants.QUERY_WAIT_INTERVAL,
-				DNSConstants.QUERY_WAIT_INTERVAL);
-	}
+    public void start(Timer timer) {
+        timer.schedule(this, DNSConstants.QUERY_WAIT_INTERVAL,
+                DNSConstants.QUERY_WAIT_INTERVAL);
+    }
 
-	@SuppressWarnings("rawtypes")
-	public void run() {
-		try {
-			if (this.jmDNSImpl.getState() == DNSState.ANNOUNCED) {
-				if (count++ < 3) {
-					long now = System.currentTimeMillis();
-					DNSOutgoing out = new DNSOutgoing(
-							DNSConstants.FLAGS_QR_QUERY);
-					out.addQuestion(new DNSQuestion(type,
-							DNSConstants.TYPE_PTR, DNSConstants.CLASS_IN));
-					for (Iterator s = this.jmDNSImpl.getServices().values()
-							.iterator(); s.hasNext();) {
-						final ServiceInfoImpl info = (ServiceInfoImpl) s.next();
-						try {
-							out.addAnswer(
-									new DNSRecord.Pointer(info.getType(),
-											DNSConstants.TYPE_PTR,
-											DNSConstants.CLASS_IN,
-											DNSConstants.DNS_TTL, info
-													.getQualifiedName()), now);
-						} catch (IOException ee) {
-							break;
-						}
-					}
-					this.jmDNSImpl.send(out);
-				} else {
-					// After three queries, we can quit.
-					this.cancel();
-				}
-			} else {
-				if (this.jmDNSImpl.getState() == DNSState.CANCELED) {
-					this.cancel();
-				}
-			}
-		} catch (Throwable e) {
-			this.jmDNSImpl.recover();
-		}
-	}
+    @SuppressWarnings("rawtypes")
+    public void run() {
+        try {
+            if (this.jmDNSImpl.getState() == DNSState.ANNOUNCED) {
+                if (count++ < 3) {
+                    long now = System.currentTimeMillis();
+                    DNSOutgoing out = new DNSOutgoing(
+                            DNSConstants.FLAGS_QR_QUERY);
+                    out.addQuestion(new DNSQuestion(type,
+                            DNSConstants.TYPE_PTR, DNSConstants.CLASS_IN));
+                    for (Iterator s = this.jmDNSImpl.getServices().values()
+                            .iterator(); s.hasNext();) {
+                        final ServiceInfoImpl info = (ServiceInfoImpl) s.next();
+                        try {
+                            out.addAnswer(
+                                    new DNSRecord.Pointer(info.getType(),
+                                            DNSConstants.TYPE_PTR,
+                                            DNSConstants.CLASS_IN,
+                                            DNSConstants.DNS_TTL, info
+                                                    .getQualifiedName()), now);
+                        } catch (IOException ee) {
+                            break;
+                        }
+                    }
+                    this.jmDNSImpl.send(out);
+                } else {
+                    // After three queries, we can quit.
+                    this.cancel();
+                }
+            } else {
+                if (this.jmDNSImpl.getState() == DNSState.CANCELED) {
+                    this.cancel();
+                }
+            }
+        } catch (Throwable e) {
+            this.jmDNSImpl.recover();
+        }
+    }
 }

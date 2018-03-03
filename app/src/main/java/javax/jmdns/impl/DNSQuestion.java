@@ -10,7 +10,7 @@ package javax.jmdns.impl;
  * A DNS question.
  *
  * @version %I%, %G%
- * @author	Arthur van Hoff
+ * @author    Arthur van Hoff
  */
 public final class DNSQuestion extends DNSEntry
 {

@@ -10,7 +10,7 @@ import java.util.EventListener;
  * Listener for service updates.
  *
  * @version %I%, %G%
- * @author	Arthur van Hoff, Werner Randelshofer
+ * @author    Arthur van Hoff, Werner Randelshofer
  */
 public interface ServiceListener extends EventListener
 {

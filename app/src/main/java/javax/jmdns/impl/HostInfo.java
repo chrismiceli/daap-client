@@ -19,12 +19,12 @@ import android.util.Log;
  * HostInfo information on the local host to be able to cope with change of addresses.
  *
  * @version %I%, %G%
- * @author	Pierre Frisch, Werner Randelshofer
+ * @author    Pierre Frisch, Werner Randelshofer
  */
 public class HostInfo
 {
-	public final static String TAG = HostInfo.class.toString();
-	
+    public final static String TAG = HostInfo.class.toString();
+
     protected String name;
     protected InetAddress address;
     protected NetworkInterface interfaze;

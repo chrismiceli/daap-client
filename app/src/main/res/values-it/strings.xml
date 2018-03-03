@@ -4,8 +4,8 @@
     <string name="app_name">DAAP</string>
     <string name="about_info">Informazioni</string>
     <string name="info">Client DAAP per Android.\n\nProgrammato
-		da:\nMichael Miceli\nChristopher Miceli\n\nTraduzione: Marco Antonio
-		Mauro</string>
+        da:\nMichael Miceli\nChristopher Miceli\n\nTraduzione: Marco Antonio
+        Mauro</string>
     <string name="shuffle">Riprod. casuale</string>
     <string name="donate">Dona</string>
     <string name="repeat">Ripetiz. brano</string>
@@ -65,5 +65,5 @@
     <string name="save">Salva</string>
     <string name="save_complete">File salvato in </string>
     <string name="seeking_disabled">Impossibile cercare nel brano con lo streaming
-		attivato.</string>
+        attivato.</string>
 </resources>

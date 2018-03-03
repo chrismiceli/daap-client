@@ -4,7 +4,7 @@
     <string name="app_name">DAAP</string>
     <string name="about_info">A propos</string>
     <string name="info">Android DAAP client.\n\nProgrammeurs:\nMichael
-		Miceli\nChristopher Miceli</string>
+        Miceli\nChristopher Miceli</string>
     <string name="shuffle">Lecture aléatoire</string>
     <string name="donate">Donnation</string>
     <string name="repeat">Répeter</string>
@@ -26,7 +26,7 @@
     <string name="added_to_queue">Ajouté à la file</string>
     <string name="queue_is_full">La file est pleine.</string>
     <string name="add_server_error_message">euillez vérifier que tous les champs soient
-		correctement renseignés.</string>
+        correctement renseignés.</string>
     <string name="add_server">Ajouter un serveur</string>
     <string name="add_server_menu_activity">DAAP - Ajouter un serveur</string>
     <string name="queue_browser_activity">DAAP - File</string>
@@ -34,14 +34,14 @@
     <string name="song_browser_activity">DAAP - Toutes les chansons</string>
     <string name="media_playback_activity">DAAP - Lecteur Media</string>
     <string name="media_playback_error">Un erreur est survenue pendant la lecture, veuillez
-		réessayer.</string>
+        réessayer.</string>
     <string name="add_server_detail">Cliquer ici pour ajouter un serveur DAAP</string>
     <string name="local_servers">A l\'écoute des serveurs locaux</string>
     <string name="remembered_servers">Serveurs connus</string>
     <string name="options">Options</string>
     <string name="fetching_music_title">Recupération de la musique…</string>
     <string name="fetching_music_detail">Veuillez patienter pendant la récupération de la
-		musique.</string>
+        musique.</string>
     <string name="unable_to_connect">Impossible de se connecter!</string>
     <string name="connecting_title">Connexion en cours…</string>
     <string name="connecting_detail">Soyez patient cela peut prendre du temps.</string>
@@ -67,5 +67,5 @@
     <string name="save">Télécharger</string>
     <string name="save_complete">Sauvegarde musique à </string>
     <string name="seeking_disabled">Cherche est actuellement désactivé pendant le
-		téléchargement.</string>
+        téléchargement.</string>
 </resources>

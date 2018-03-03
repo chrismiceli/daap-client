@@ -21,9 +21,9 @@ public abstract class Request {
 
     // start of song request.
     public Request(DaapHost daapHost) {
-		// needed for bug in android:
-		// http://code.google.com/p/android/issues/detail?id=7786
-		System.setProperty("http.keepAlive", "false");
+        // needed for bug in android:
+        // http://code.google.com/p/android/issues/detail?id=7786
+        System.setProperty("http.keepAlive", "false");
         host = daapHost;
         offset = 0;
     }
