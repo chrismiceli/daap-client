@@ -80,7 +80,7 @@ public class DaapHost extends Host {
 			password = null;
 			throw e;
 		} catch (BadResponseCodeException e) {
-			if (e.response_code == 503) {
+			if (e.getResponseCode() == 503) {
 				Log.d("DaapHost", "tooManyUsers");
 				throw e;
 			} else {
@@ -109,7 +109,7 @@ public class DaapHost extends Host {
 				updateRequest.disconnect();
 			}
 		} catch (BadResponseCodeException e) {
-			if (e.response_code == 204) {
+			if (e.getResponseCode() == 204) {
 				sessionId = 0;
 				revisionNum = 1;
 			} else {
@@ -131,10 +131,11 @@ public class DaapHost extends Host {
 			PlaylistsRequest playlistsRequest = new PlaylistsRequest(this);
 			playlists = playlistsRequest.getPlaylists();
 			Log.d("DaapHost", "playlist count = " + playlists.size());
-			if (hostProgram == DaapHost.GIT_SERVER)
-				updateRequest = new HangingUpdateRequest(this);
+			if (hostProgram == DaapHost.GIT_SERVER) {
+                updateRequest = new HangingUpdateRequest(this);
+            }
 		} catch (BadResponseCodeException e) {
-			if (e.response_code == 500) {
+			if (e.getResponseCode() == 500) {
 				Log.d("DaapHost", "500 Response code");
 				logout();
 				login();
@@ -210,7 +211,7 @@ public class DaapHost extends Host {
 
 	public String getSongURL(Song s) throws PasswordFailedException,
 			BadResponseCodeException, IOException {
-		SongRequest sr = new SongRequest(this, s, 0);
+		SongRequest sr = new SongRequest(this, s);
 		return sr.getSongURL().toString();
 	}
 
@@ -220,11 +221,10 @@ public class DaapHost extends Host {
 			if (sessionId == 0 || hostProgram == GIT_SERVER) {
 				login();
 			}
-			// DaapSong song = (DaapSong)s;
-			SongRequest sr = new SongRequest(this, s, 0);
+			SongRequest sr = new SongRequest(this, s);
 			return sr.getStream();
 		} catch (BadResponseCodeException e) {
-			if (e.response_code == 500) {
+			if (e.getResponseCode() == 500) {
 				// FIXME: This code here can help with failed song requests, but
 				// if the iTunes internal server error
 				// really is internal, it causes an infinite loop.
