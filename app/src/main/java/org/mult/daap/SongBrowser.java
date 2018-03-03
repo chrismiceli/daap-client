@@ -1,17 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.mult.daap.client.Song;
-import org.mult.daap.client.SongDiscNumComparator;
-import org.mult.daap.client.SongTrackComparator;
-
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.NotificationManager;
@@ -36,6 +24,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.client.Song;
+import org.mult.daap.client.SongDiscNumComparator;
+import org.mult.daap.client.SongTrackComparator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SongBrowser extends ListActivity {
     private ListView musicList;

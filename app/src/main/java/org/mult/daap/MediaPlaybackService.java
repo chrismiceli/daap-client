@@ -1,20 +1,20 @@
 package org.mult.daap;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
-
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.BroadcastReceiver;
 import android.media.AudioManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+
+import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class MediaPlaybackService extends Service {
     private static final String TAG = MediaPlaybackService.class.getName();

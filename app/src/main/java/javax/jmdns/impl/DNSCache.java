@@ -126,7 +126,6 @@ public class DNSCache {
                 previous = node;
                 node = node.next;
             }
-            ;
         }
         return false;
     }

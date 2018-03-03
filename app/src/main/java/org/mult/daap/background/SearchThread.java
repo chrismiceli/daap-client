@@ -1,15 +1,15 @@
 package org.mult.daap.background;
 
-import java.util.ArrayList;
-import java.util.Observable;
-
 import org.mult.daap.Contents;
 import org.mult.daap.client.Song;
 
+import java.util.ArrayList;
+import java.util.Observable;
+
 public class SearchThread extends Observable implements Runnable {
-   public final static Integer INITIATED = new Integer(-1);
-   public final static Integer CONNECTION_FINISHED = new Integer(1);
-   public final static Integer ERROR = new Integer(2);
+   public final static Integer INITIATED = Integer.valueOf(-1);
+   public final static Integer CONNECTION_FINISHED = Integer.valueOf(1);
+   public final static Integer ERROR = Integer.valueOf(2);
    private String searchQuery;
    private ArrayList<Song> lastMessage;
    public ArrayList<Song> srList = null;

@@ -3,11 +3,6 @@
 
 package org.mult.daap.background;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.mult.daap.R;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +10,11 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import org.mult.daap.R;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SeparatedListAdapter extends BaseAdapter {
 

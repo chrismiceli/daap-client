@@ -1,12 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
-import org.mult.daap.background.GetSongsForPlaylist;
-import org.mult.daap.client.daap.DaapPlaylist;
-
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -24,6 +17,13 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.background.GetSongsForPlaylist;
+import org.mult.daap.client.daap.DaapPlaylist;
+
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 public class PlaylistBrowser extends Activity implements Observer {
     private ListView playlistList;

@@ -1,10 +1,8 @@
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
-
 import org.mult.daap.client.daap.DaapHost;
 
-import android.util.Log;
+import java.io.IOException;
 
 public class ServerInfoRequest extends Request {
     public ServerInfoRequest(DaapHost host) throws BadResponseCodeException,

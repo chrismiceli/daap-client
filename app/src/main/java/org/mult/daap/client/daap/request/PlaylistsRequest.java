@@ -1,12 +1,12 @@
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import android.util.Log;
 
 import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.DaapPlaylist;
 
-import android.util.Log;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class PlaylistsRequest extends Request {
     private ArrayList<DaapPlaylist> mPlaylist;
@@ -30,10 +30,6 @@ public class PlaylistsRequest extends Request {
         ret += "session-id=" + host.getSessionID();
         ret += "&revision-number=" + host.getRevisionNumber();
         return ret;
-    }
-
-    protected void addRequestProperties() {
-        super.addRequestProperties();
     }
 
     protected void process() {

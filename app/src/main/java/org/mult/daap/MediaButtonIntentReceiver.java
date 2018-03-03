@@ -1,7 +1,5 @@
 package org.mult.daap;
 
-import org.mult.daap.MediaPlaybackService;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

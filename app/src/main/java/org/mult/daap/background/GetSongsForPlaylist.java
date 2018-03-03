@@ -1,13 +1,13 @@
 package org.mult.daap.background;
 
-import java.util.ArrayList;
-import java.util.Observable;
-
 import org.mult.daap.Contents;
 import org.mult.daap.MediaPlayback;
 import org.mult.daap.PlaylistBrowser;
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.DaapPlaylist;
+
+import java.util.ArrayList;
+import java.util.Observable;
 
 public class GetSongsForPlaylist extends Observable implements Runnable {
     private DaapPlaylist playList;

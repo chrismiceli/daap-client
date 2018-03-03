@@ -1,10 +1,10 @@
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
+import android.util.Log;
 
 import org.mult.daap.client.daap.DaapHost;
 
-import android.util.Log;
+import java.io.IOException;
 
 public class LoginRequest extends Request {
     private int mSessionId;
@@ -19,10 +19,6 @@ public class LoginRequest extends Request {
 
     protected String getRequestString() {
         return "login";
-    }
-
-    protected void addRequestProperties() {
-        super.addRequestProperties();
     }
 
     protected void process() {

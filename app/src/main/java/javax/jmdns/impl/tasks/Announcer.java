@@ -3,6 +3,8 @@
 // Original license LGPL
 package javax.jmdns.impl.tasks;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,8 +16,6 @@ import javax.jmdns.impl.DNSOutgoing;
 import javax.jmdns.impl.DNSState;
 import javax.jmdns.impl.JmDNSImpl;
 import javax.jmdns.impl.ServiceInfoImpl;
-
-import android.util.Log;
 
 /** The Announcer sends an accumulated query of all announces, and advances the
  * state of all serviceInfos, for which it has sent an announce. The Announcer

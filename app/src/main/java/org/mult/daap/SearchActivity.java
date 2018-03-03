@@ -1,14 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-
-import org.mult.daap.background.SearchThread;
-import org.mult.daap.client.Song;
-
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.NotificationManager;
@@ -37,6 +28,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.background.SearchThread;
+import org.mult.daap.client.Song;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class SearchActivity extends ListActivity implements Observer {
     private ArrayList<Song> srList = null;

@@ -1,13 +1,10 @@
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
-
 import org.mult.daap.client.daap.DaapHost;
 
-import android.util.Log;
+import java.io.IOException;
 
 public class LogoutRequest extends Request {
-    private int mSessionId;
 
     public LogoutRequest(DaapHost daapHost) throws BadResponseCodeException,
             PasswordFailedException, IOException {

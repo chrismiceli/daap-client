@@ -1,5 +1,9 @@
 package org.mult.daap.background;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -7,10 +11,6 @@ import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
-
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 public class JmDNSListener extends Thread {
     private final Handler handler;

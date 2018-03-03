@@ -1,14 +1,14 @@
 package org.mult.daap.client.daap.request;
 
+import org.mult.daap.client.Song;
+import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.daap.Hasher;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import org.mult.daap.client.Song;
-import org.mult.daap.client.daap.DaapHost;
-import org.mult.daap.client.daap.Hasher;
 
 public class SongRequest extends Request {
     private BufferedInputStream b;
