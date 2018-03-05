@@ -77,8 +77,8 @@ public class AlbumBrowser extends ListActivity {
     }
 
     private void createList() {
-        albumList = (ListView) findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+        albumList = findViewById(android.R.id.list);
+        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.albumNameList);
         setListAdapter(adapter);
@@ -113,9 +113,9 @@ public class AlbumBrowser extends ListActivity {
                         Contents.filteredAlbumSongList.add(s);
                     }
                 }
-                TreeMap<Short, Short> track_num = new TreeMap<Short, Short>();
+                TreeMap<Short, Short> track_num = new TreeMap<>();
                 for (Song s : Contents.filteredAlbumSongList) {
-                    if (track_num.keySet().contains(s.disc_num) == false) {
+                    if (!track_num.keySet().contains(s.disc_num)) {
                         track_num.put(s.disc_num, (short) 1);
                     }
                     else {

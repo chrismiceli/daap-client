@@ -66,21 +66,18 @@ public class Servers extends Activity implements Observer {
     private static final int PASSWORD_DIALOG = 0;
     private static final String donateLink = new String(
             "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=chrismiceli%40gmail%2ecom&lc=US&item_name=DAAP%20%2d%20Android%20Application&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted");
-    private ListView list = null;
     private static List<Map<String, ?>> localServers = null;
     private SeparatedListAdapter adapter = null;
     private DBAdapter db;
     private JmDNSListener jmDNSListener = null;
     private String localLabel = null;
-    private List<Map<String, String>> serversList = new ArrayList<Map<String, String>>();
-    private ArrayList<Bundle> discoveredServers = new ArrayList<Bundle>();
+    private List<Map<String, String>> serversList = new ArrayList<>();
+    private ArrayList<Bundle> discoveredServers = new ArrayList<>();
     private ProgressDialog pd = null;
-    // private MulticastLock fLock;
-    private boolean wiFi = false;
     private WrapMulticastLock fLock;
 
     public Map<String, ?> createItem(String title, String caption) {
-        Map<String, String> item = new HashMap<String, String>();
+        Map<String, String> item = new HashMap<>();
         item.put(TITLE, title);
         item.put(CAPTION, caption);
         return item;
@@ -101,11 +98,11 @@ public class Servers extends Activity implements Observer {
             dialog.setTitle(getString(R.string.password));
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(true);
-            Button buttonConfrim = (Button) dialog
+            Button buttonConfrim = dialog
                     .findViewById(R.id.PasswordOkButton);
-            Button buttonCancel = (Button) dialog
+            Button buttonCancel = dialog
                     .findViewById(R.id.PasswordCancelButton);
-            final EditText password = (EditText) dialog
+            final EditText password = dialog
                     .findViewById(R.id.PasswordEditText);
             buttonConfrim
                     .setOnClickListener(new android.view.View.OnClickListener() {
@@ -149,8 +146,9 @@ public class Servers extends Activity implements Observer {
     @Override
     public void onResume() {
         super.onResume();
-        List<Map<String, ?>> rememberedServers = new LinkedList<Map<String, ?>>();
+        List<Map<String, ?>> rememberedServers = new LinkedList<>();
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        boolean wiFi = false;
         if (!wifiManager.isWifiEnabled()) {
             wiFi = false;
         } else {
@@ -194,14 +192,14 @@ public class Servers extends Activity implements Observer {
         }
         rememberedServers.add(createItem(getString(R.string.add_server),
                 getString(R.string.add_server_detail)));
-        localServers = new LinkedList<Map<String, ?>>();
+        localServers = new LinkedList<>();
         adapter = new SeparatedListAdapter(this);
         adapter.addSection(getString(R.string.remembered_servers),
                 new ServerAdapter(this, rememberedServers,
                         R.layout.list_complex, new String[] { TITLE, CAPTION },
                         new int[] { R.id.list_complex_title,
                                 R.id.list_complex_caption }));
-        if (wiFi == true) {
+        if (wiFi) {
             adapter.addSection(localLabel, new ServerAdapter(this,
                     localServers, R.layout.list_complex, new String[] { TITLE,
                             CAPTION }, new int[] { R.id.list_complex_title,
@@ -214,7 +212,7 @@ public class Servers extends Activity implements Observer {
                                     R.id.list_complex_title,
                                     R.id.list_complex_caption }));
         }
-        list = new ListView(this);
+        ListView list = new ListView(this);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
         list.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
@@ -413,29 +411,24 @@ public class Servers extends Activity implements Observer {
             };
             pd.setOnCancelListener(onCancelListener);
         } else if (((Integer) data).compareTo(LoginManager.CONNECTION_FINISHED) == 0) {
-            loginHandler.sendEmptyMessage(LoginManager.CONNECTION_FINISHED
-                    .intValue());
-            return;
+            loginHandler.sendEmptyMessage(LoginManager.CONNECTION_FINISHED);
         } else if (((Integer) data).compareTo(LoginManager.PASSWORD_FAILED) == 0) {
-            loginHandler.sendEmptyMessage(LoginManager.PASSWORD_FAILED
-                    .intValue());
-            return;
+            loginHandler.sendEmptyMessage(LoginManager.PASSWORD_FAILED);
         } else {
             // ERROR
             Contents.loginManager.deleteObserver(this);
-            loginHandler.sendEmptyMessage(LoginManager.ERROR.intValue());
-            return;
+            loginHandler.sendEmptyMessage(LoginManager.ERROR);
         }
     }
 
     private Handler loginHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == LoginManager.CONNECTION_FINISHED.intValue()) {
+            if (msg.what == LoginManager.CONNECTION_FINISHED) {
                 pd.dismiss();
                 // save the server
-                boolean loginRequired = (Contents.loginManager.password
-                        .length() == 0) ? false : true;
+                boolean loginRequired = Contents.loginManager.password
+                        .length() != 0;
                 saveServer(Contents.loginManager.name,
                         Contents.loginManager.address,
                         Contents.loginManager.password, loginRequired);
@@ -443,7 +436,7 @@ public class Servers extends Activity implements Observer {
                 final Intent intent = new Intent(Servers.this,
                         PlaylistBrowser.class);
                 startActivityForResult(intent, 1);
-            } else if (msg.what == LoginManager.PASSWORD_FAILED.intValue()) {
+            } else if (msg.what == LoginManager.PASSWORD_FAILED) {
                 pd.dismiss();
                 // Contents.loginManager = null;
                 showDialog(PASSWORD_DIALOG);
@@ -504,7 +497,7 @@ public class Servers extends Activity implements Observer {
 
             TextView getlcT() { // list_complex Title
                 if (vwlcT == null) {
-                    vwlcT = (TextView) base
+                    vwlcT = base
                             .findViewById(R.id.list_complex_title);
                 }
                 return vwlcT;
@@ -512,7 +505,7 @@ public class Servers extends Activity implements Observer {
 
             TextView getlcC() { // list_complex Caption
                 if (vwlcC == null) {
-                    vwlcC = (TextView) base
+                    vwlcC = base
                             .findViewById(R.id.list_complex_caption);
                 }
                 return vwlcC;
@@ -525,14 +518,14 @@ public class Servers extends Activity implements Observer {
                 int resource, String[] from, int[] to) {
             super(context, data, resource, from, to);
             mList = data;
-            Map<String, String> header = new HashMap<String, String>();
+            Map<String, String> header = new HashMap<>();
             header.put(TITLE, "Section Header");
             header.put(CAPTION, "header");
             header.put(KEY, "header_key");
             serversList.add(header);
             header.clear();
             for (int x = 0; x < data.size(); x++) {
-                Map<String, String> item = new HashMap<String, String>();
+                Map<String, String> item = new HashMap<>();
                 item.put(TITLE, (String) data.get(x).get(TITLE));
                 item.put(CAPTION, (String) data.get(x).get(CAPTION));
                 item.put(KEY, (String) data.get(x).get(KEY));
@@ -583,7 +576,7 @@ public class Servers extends Activity implements Observer {
     private Handler mDNSHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Bundle bundle = (Bundle) msg.getData();
+            Bundle bundle = msg.getData();
             String name = bundle.getString("name");
             String address = bundle.getString("address");
             localServers.add(createItem(name, address));

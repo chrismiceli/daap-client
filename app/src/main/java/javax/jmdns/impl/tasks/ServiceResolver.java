@@ -51,16 +51,15 @@ public class ServiceResolver extends TimerTask {
                             DNSConstants.FLAGS_QR_QUERY);
                     out.addQuestion(new DNSQuestion(type,
                             DNSConstants.TYPE_PTR, DNSConstants.CLASS_IN));
-                    for (Iterator s = this.jmDNSImpl.getServices().values()
-                            .iterator(); s.hasNext();) {
-                        final ServiceInfoImpl info = (ServiceInfoImpl) s.next();
+                    for (Object o : this.jmDNSImpl.getServices().values()) {
+                        final ServiceInfoImpl info = (ServiceInfoImpl) o;
                         try {
                             out.addAnswer(
                                     new DNSRecord.Pointer(info.getType(),
                                             DNSConstants.TYPE_PTR,
                                             DNSConstants.CLASS_IN,
                                             DNSConstants.DNS_TTL, info
-                                                    .getQualifiedName()), now);
+                                            .getQualifiedName()), now);
                         } catch (IOException ee) {
                             break;
                         }

@@ -289,10 +289,10 @@ public final class DNSIncoming {
     /** Debugging. */
     @SuppressWarnings("rawtypes")
     String print(boolean dump) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(toString() + "\n");
-        for (Iterator iterator = questions.iterator(); iterator.hasNext();) {
-            buf.append("    ques:" + iterator.next() + "\n");
+        for (Object question : questions) {
+            buf.append("    ques:" + question + "\n");
         }
         int count = 0;
         for (Iterator iterator = answers.iterator(); iterator.hasNext(); count++) {
@@ -323,7 +323,7 @@ public final class DNSIncoming {
                         buf.append(' ');
                     }
                     buf.append(Integer.toHexString((data[off + i] & 0xF0) >> 4));
-                    buf.append(Integer.toHexString((data[off + i] & 0x0F) >> 0));
+                    buf.append(Integer.toHexString((data[off + i] & 0x0F)));
                 }
                 buf.append("\n");
                 buf.append("    ");
@@ -347,7 +347,7 @@ public final class DNSIncoming {
     }
 
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(isQuery() ? "dns[query," : "dns[response,");
         if (packet.getAddress() != null) {
             buf.append(packet.getAddress().getHostAddress());

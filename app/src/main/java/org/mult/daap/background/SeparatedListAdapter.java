@@ -18,12 +18,12 @@ import java.util.Map;
 
 public class SeparatedListAdapter extends BaseAdapter {
 
-   public final Map<String, Adapter> sections = new LinkedHashMap<String, Adapter>();
+   public final Map<String, Adapter> sections = new LinkedHashMap<>();
    public final ArrayAdapter<String> headers;
    public final static int TYPE_SECTION_HEADER = 0;
 
    public SeparatedListAdapter(Context context) {
-      headers = new ArrayAdapter<String>(context, R.layout.list_header);
+      headers = new ArrayAdapter<>(context, R.layout.list_header);
    }
 
    public void addSection(String section, Adapter adapter) {
@@ -97,7 +97,7 @@ public class SeparatedListAdapter extends BaseAdapter {
          int size = adapter.getCount() + 1;
          // check if position inside this section
          if (position == 0) {
-            TextView label = (TextView) headers.getView(sectionnum,
+            TextView label = headers.getView(sectionnum,
                   convertView, parent).findViewById(R.id.list_complex_title);
             if (label != null)
                label.setText("HEY");

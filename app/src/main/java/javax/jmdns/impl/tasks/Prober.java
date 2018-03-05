@@ -42,9 +42,8 @@ public class Prober extends TimerTask {
         }
         // Associate services to this, if they need probing
         synchronized (this.jmDNSImpl) {
-            for (Iterator iterator = this.jmDNSImpl.getServices().values()
-                    .iterator(); iterator.hasNext();) {
-                ServiceInfoImpl info = (ServiceInfoImpl) iterator.next();
+            for (Object o : this.jmDNSImpl.getServices().values()) {
+                ServiceInfoImpl info = (ServiceInfoImpl) o;
                 if (info.getState() == DNSState.PROBING_1) {
                     info.setTask(this);
                 }
@@ -81,9 +80,8 @@ public class Prober extends TimerTask {
         }
         // Remove associations from services to this
         synchronized (this.jmDNSImpl) {
-            for (Iterator i = this.jmDNSImpl.getServices().values().iterator(); i
-                    .hasNext();) {
-                ServiceInfoImpl info = (ServiceInfoImpl) i.next();
+            for (Object o : this.jmDNSImpl.getServices().values()) {
+                ServiceInfoImpl info = (ServiceInfoImpl) o;
                 if (info.getTask() == this) {
                     info.setTask(null);
                 }
@@ -117,8 +115,8 @@ public class Prober extends TimerTask {
                 synchronized (this.jmDNSImpl) {
                     list = new LinkedList(this.jmDNSImpl.getServices().values());
                 }
-                for (Iterator i = list.iterator(); i.hasNext();) {
-                    ServiceInfoImpl info = (ServiceInfoImpl) i.next();
+                for (Object aList : list) {
+                    ServiceInfoImpl info = (ServiceInfoImpl) aList;
                     synchronized (info) {
                         if (info.getState() == taskState
                                 && info.getTask() == this) {

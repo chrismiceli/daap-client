@@ -69,8 +69,7 @@ public class Canceler extends TimerTask {
                 // long now = System.currentTimeMillis();
                 DNSOutgoing out = new DNSOutgoing(
                         DNSConstants.FLAGS_QR_RESPONSE | DNSConstants.FLAGS_AA);
-                for (int i = 0; i < infos.length; i++) {
-                    ServiceInfoImpl info = infos[i];
+                for (ServiceInfoImpl info : infos) {
                     info.addAnswers(out, ttl, this.jmDNSImpl.getLocalHost());
                     this.jmDNSImpl.getLocalHost().addAddressRecords(out, false);
                 }

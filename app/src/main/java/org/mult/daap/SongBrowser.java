@@ -112,9 +112,9 @@ public class SongBrowser extends ListActivity {
                     Contents.filteredAlbumSongList.add(s);
                 }
             }
-            TreeMap<Short, Short> track_num = new TreeMap<Short, Short>();
+            TreeMap<Short, Short> track_num = new TreeMap<>();
             for (Song s : Contents.filteredAlbumSongList) {
-                if (track_num.keySet().contains(s.disc_num) == false) {
+                if (!track_num.keySet().contains(s.disc_num)) {
                     track_num.put(s.disc_num, (short) 1);
                 }
                 else {
@@ -135,7 +135,7 @@ public class SongBrowser extends ListActivity {
                 pos += max_num_track;
             }
             // Can't use myIndexAdapter because it sorts name, not by track
-            setListAdapter(new MyArrayAdapter<Song>(this,
+            setListAdapter(new MyArrayAdapter<>(this,
                     R.xml.long_list_text_view, Contents.filteredAlbumSongList));
         }
         else if (from.equals("artist")) {
@@ -153,12 +153,12 @@ public class SongBrowser extends ListActivity {
                 }
             }
             // Can't use myIndexAdapter because it sorts name, not by track
-            setListAdapter(new MyArrayAdapter<Song>(this,
+            setListAdapter(new MyArrayAdapter<>(this,
                     R.xml.long_list_text_view, Contents.filteredArtistSongList));
         }
         else {
             musicList.setFastScrollEnabled(true);
-            MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+            MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                     getApplicationContext(), R.xml.long_list_text_view,
                     Contents.stringElements);
             setListAdapter(adapter);

@@ -51,8 +51,8 @@ public class RecordReaper extends TimerTask {
             }
             // Now, we remove them.
             long now = System.currentTimeMillis();
-            for (Iterator i = list.iterator(); i.hasNext();) {
-                DNSRecord c = (DNSRecord) i.next();
+            for (Object aList : list) {
+                DNSRecord c = (DNSRecord) aList;
                 if (c.isExpired(now)) {
                     this.jmDNSImpl.updateRecord(now, c);
                     this.jmDNSImpl.getCache().remove(c);

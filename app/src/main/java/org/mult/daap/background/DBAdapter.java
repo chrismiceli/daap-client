@@ -23,13 +23,11 @@ public class DBAdapter {
     private static final String DATABASE_CREATE = "create table servers (_id integer primary key autoincrement, "
             + "server_name text not null, address text not null, "
             + "password text not null, " + "login_required integer not null);";
-    private final Context context;
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
 
     public DBAdapter(Context ctx) {
-        this.context = ctx;
-        DBHelper = new DatabaseHelper(context);
+        DBHelper = new DatabaseHelper(ctx);
     }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -113,7 +111,7 @@ public class DBAdapter {
     public boolean serverExists(String name, String address, String password,
             boolean login_required) {
         StringBuilder selectionBuilder = new StringBuilder();
-        ArrayList<String> selectionValuesList = new ArrayList<String>();
+        ArrayList<String> selectionValuesList = new ArrayList<>();
         boolean exists = false;
 
         selectionBuilder.append(KEY_SERVER_NAME).append(" = ?");

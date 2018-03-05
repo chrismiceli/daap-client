@@ -38,7 +38,7 @@ public abstract class DNSRecord extends DNSEntry {
 
     /** True if this record is the same as some other record. */
     boolean sameAs(DNSRecord other) {
-        return super.equals(other) && sameValue((DNSRecord) other);
+        return super.equals(other) && sameValue(other);
     }
 
     /** True if this record has the same value as some other record. */
@@ -82,10 +82,7 @@ public abstract class DNSRecord extends DNSEntry {
     /** True if this record would be supressed by an answer. This is the case if
      * this record would not have a significantly longer TTL. */
     boolean suppressedBy(DNSRecord other) {
-        if (sameAs(other) && (other.ttl > ttl / 2)) {
-            return true;
-        }
-        return false;
+        return sameAs(other) && (other.ttl > ttl / 2);
     }
 
     /** Get the expiration time of this record. */
@@ -200,8 +197,8 @@ public abstract class DNSRecord extends DNSEntry {
                 dout.writeShort(clazz);
                 // dout.writeInt(len);
                 byte[] buffer = addr.getAddress();
-                for (int i = 0; i < buffer.length; i++) {
-                    dout.writeByte(buffer[i]);
+                for (byte aBuffer : buffer) {
+                    dout.writeByte(aBuffer);
                 }
                 dout.close();
                 return bout.toByteArray();
@@ -247,9 +244,8 @@ public abstract class DNSRecord extends DNSEntry {
                         // name.
                         dns.getLocalHost().incrementHostName();
                         dns.getCache().clear();
-                        for (Iterator i = dns.getServices().values().iterator(); i
-                                .hasNext();) {
-                            ServiceInfoImpl info = (ServiceInfoImpl) i.next();
+                        for (Object o : dns.getServices().values()) {
+                            ServiceInfoImpl info = (ServiceInfoImpl) o;
                             info.revertState();
                         }
                     }
@@ -272,9 +268,8 @@ public abstract class DNSRecord extends DNSEntry {
                     if (dns.getState().isProbing()) {
                         dns.getLocalHost().incrementHostName();
                         dns.getCache().clear();
-                        for (Iterator i = dns.getServices().values().iterator(); i
-                                .hasNext();) {
-                            ServiceInfoImpl info = (ServiceInfoImpl) i.next();
+                        for (Object o : dns.getServices().values()) {
+                            ServiceInfoImpl info = (ServiceInfoImpl) o;
                             info.revertState();
                         }
                     }

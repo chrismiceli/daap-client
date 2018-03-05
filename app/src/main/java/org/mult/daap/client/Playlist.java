@@ -10,7 +10,6 @@ import java.util.Collection;
 
 public abstract class Playlist {
     protected String name;
-    private boolean allSongs;
 
     public abstract void initialize() throws Exception;
 
@@ -22,14 +21,6 @@ public abstract class Playlist {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean getAllSongs() {
-        return allSongs;
-    }
-    
-    public void setAllSongs(boolean allSongs) {
-        this.allSongs = allSongs;
     }
 
     public String toString() {

@@ -49,15 +49,14 @@ public class TypeResolver extends TimerTask {
                     out.addQuestion(new DNSQuestion(
                             "_services._mdns._udp.local.",
                             DNSConstants.TYPE_PTR, DNSConstants.CLASS_IN));
-                    for (Iterator iterator = this.jmDNSImpl.getServiceTypes()
-                            .values().iterator(); iterator.hasNext();) {
+                    for (Object o : this.jmDNSImpl.getServiceTypes()
+                            .values()) {
                         out.addAnswer(
                                 new DNSRecord.Pointer(
                                         "_services._mdns._udp.local.",
                                         DNSConstants.TYPE_PTR,
                                         DNSConstants.CLASS_IN,
-                                        DNSConstants.DNS_TTL, (String) iterator
-                                                .next()), 0);
+                                        DNSConstants.DNS_TTL, (String) o), 0);
                     }
                     this.jmDNSImpl.send(out);
                 } else {
