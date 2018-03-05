@@ -56,7 +56,7 @@ public class ServiceEventImpl extends ServiceEvent {
 
     /** @see javax.jmdns.ServiceEvent#toString() */
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<" + getClass().getName() + "> ");
         buf.append(super.toString());
         buf.append(" name ");

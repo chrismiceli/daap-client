@@ -28,10 +28,9 @@ public class DaapPlaylist extends Playlist {
         host = daapHost;
     }
 
-    public DaapPlaylist(DaapHost daapHost, String name, boolean allSongs) {
+    public DaapPlaylist(DaapHost daapHost, String name) {
         host = daapHost;
         this.name = name;
-        setAllSongs(allSongs);
     }
 
     public void initialize() throws Exception {

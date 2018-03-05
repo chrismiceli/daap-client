@@ -40,9 +40,8 @@ public class Announcer extends TimerTask {
         }
         // Associate services to this, if they need announcing
         synchronized (this.jmDNSImpl) {
-            for (Iterator s = this.jmDNSImpl.getServices().values().iterator(); s
-                    .hasNext();) {
-                ServiceInfoImpl info = (ServiceInfoImpl) s.next();
+            for (Object o : this.jmDNSImpl.getServices().values()) {
+                ServiceInfoImpl info = (ServiceInfoImpl) o;
                 if (info.getState() == DNSState.ANNOUNCING_1) {
                     info.setTask(this);
                 }
@@ -63,9 +62,8 @@ public class Announcer extends TimerTask {
         }
         // Remove associations from services to this
         synchronized (this.jmDNSImpl) {
-            for (Iterator i = this.jmDNSImpl.getServices().values().iterator(); i
-                    .hasNext();) {
-                ServiceInfoImpl info = (ServiceInfoImpl) i.next();
+            for (Object o : this.jmDNSImpl.getServices().values()) {
+                ServiceInfoImpl info = (ServiceInfoImpl) o;
                 if (info.getTask() == this) {
                     info.setTask(null);
                 }
@@ -95,8 +93,8 @@ public class Announcer extends TimerTask {
             synchronized (this.jmDNSImpl) {
                 list = new ArrayList(this.jmDNSImpl.getServices().values());
             }
-            for (Iterator i = list.iterator(); i.hasNext();) {
-                ServiceInfoImpl info = (ServiceInfoImpl) i.next();
+            for (Object aList : list) {
+                ServiceInfoImpl info = (ServiceInfoImpl) aList;
                 synchronized (info) {
                     if (info.getState() == taskState && info.getTask() == this) {
                         info.advanceState();

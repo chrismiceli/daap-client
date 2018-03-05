@@ -74,8 +74,8 @@ public class ArtistBrowser extends ListActivity {
     }
 
     private void createList() {
-        artistList = (ListView) findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+        artistList = findViewById(android.R.id.list);
+        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.artistNameList);
         setListAdapter(adapter);
@@ -133,7 +133,7 @@ public class ArtistBrowser extends ListActivity {
                                 song.id);
                     }
                     else {
-                        ArrayList<Integer> t = new ArrayList<Integer>();
+                        ArrayList<Integer> t = new ArrayList<>();
                         t.add(song.id);
                         Contents.ArtistAlbumElements.put(song.album, t);
                         Contents.artistAlbumNameList.add(song.album);

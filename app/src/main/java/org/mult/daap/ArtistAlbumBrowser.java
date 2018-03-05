@@ -77,8 +77,8 @@ public class ArtistAlbumBrowser extends ListActivity {
     }
 
     private void createList() {
-        albumList = (ListView) findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+        albumList = findViewById(android.R.id.list);
+        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.artistAlbumNameList);
         setListAdapter(adapter);

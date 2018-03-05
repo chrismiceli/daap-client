@@ -122,18 +122,18 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         setContentView(R.layout.audio_player);
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
-        mProgress = (SeekBar) findViewById(android.R.id.progress);
-        mShuffleButton = (ImageButton) findViewById(R.id.shuffleButton);
-        mRepeatButton = (ImageButton) findViewById(R.id.repeatButton);
-        mPauseButton = (ImageButton) findViewById(R.id.pause);
-        mPrevButton = (ImageButton) findViewById(R.id.prev);
-        mNextButton = (ImageButton) findViewById(R.id.next);
-        mCurrentTime = (TextView) findViewById(R.id.currenttime);
-        mTotalTime = (TextView) findViewById(R.id.totaltime);
-        mArtistName = (TextView) findViewById(R.id.artistname);
-        mAlbumName = (TextView) findViewById(R.id.albumname);
-        mTrackName = (TextView) findViewById(R.id.trackname);
-        mSongSummary = (TextView) findViewById(R.id.song_summary);
+        mProgress = findViewById(android.R.id.progress);
+        mShuffleButton = findViewById(R.id.shuffleButton);
+        mRepeatButton = findViewById(R.id.repeatButton);
+        mPauseButton = findViewById(R.id.pause);
+        mPrevButton = findViewById(R.id.prev);
+        mNextButton = findViewById(R.id.next);
+        mCurrentTime = findViewById(R.id.currenttime);
+        mTotalTime = findViewById(R.id.totaltime);
+        mArtistName = findViewById(R.id.artistname);
+        mAlbumName = findViewById(R.id.albumname);
+        mTrackName = findViewById(R.id.trackname);
+        mSongSummary = findViewById(R.id.song_summary);
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         scrobbler_support = mPrefs.getBoolean("scrobbler_pref", false);
     }
@@ -262,10 +262,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     public boolean isPlaying() {
-        if (mediaPlayer != null)
-            return mediaPlayer.isPlaying();
+        return mediaPlayer != null && mediaPlayer.isPlaying();
 
-        return false;
     }
 
     private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
@@ -279,7 +277,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             }
             if (mediaPlayer == null) {
                 bar.setProgress(0);
-                return;
             } else {
                 double doubleProgress = (double) progress;
                 double doubleDuration;
@@ -356,7 +353,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 stopNotification();
                 clearState();
                 finish();
-                return;
             }
         }
     };
@@ -755,9 +751,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 if (scrobbler_support) {
                     scrobble(3); // COMPLETE
                 }
-                if (Contents.shuffle == true) {
+                if (Contents.shuffle) {
                     startSong(Contents.getRandomSong());
-                } else if (Contents.repeat == true) {
+                } else if (Contents.repeat) {
                     mp.seekTo(0);
                     mp.start();
                     queueNextRefresh(refreshNow());
@@ -769,7 +765,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 stopNotification();
                 clearState();
                 finish();
-                return;
             }
         }
     };
@@ -807,12 +802,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     private void scrobble(int code) {
-        boolean playing = false;
-        if (code == 0 || code == 1) {
-            playing = true;
-        } else { // 2, 3
-            playing = false;
-        }
+        boolean playing = code == 0 || code == 1;
         Intent bCast = new Intent("com.adam.aslfms.notify.playstatechanged");
         bCast.putExtra("state", code);
         bCast.putExtra("app-name", "Daap-client");

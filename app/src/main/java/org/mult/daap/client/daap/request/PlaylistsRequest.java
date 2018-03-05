@@ -15,9 +15,9 @@ public class PlaylistsRequest extends Request {
 
     public PlaylistsRequest(DaapHost h) throws BadResponseCodeException, PasswordFailedException, IOException {
         super(h);
-        mlclList = new ArrayList<FieldPair>();
-        mlitList = new ArrayList<FieldPair>();
-        mPlaylist = new ArrayList<DaapPlaylist>();
+        mlclList = new ArrayList<>();
+        mlitList = new ArrayList<>();
+        mPlaylist = new ArrayList<>();
         query("PlaylistRequest");
         readResponse();
         process();

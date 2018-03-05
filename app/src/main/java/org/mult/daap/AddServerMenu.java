@@ -38,14 +38,14 @@ public class AddServerMenu extends Activity {
         setContentView(R.layout.add_server_menu);
         builder = new AlertDialog.Builder(this);
         db = new DBAdapter(this);
-        okButton = (Button) findViewById(R.id.serverOkButton);
+        okButton = findViewById(R.id.serverOkButton);
         okButton.setEnabled(false);
-        cancelButton = (Button) findViewById(R.id.serverCancelButton);
-        serverNameEditText = (EditText) findViewById(R.id.serverNameText);
-        serverAddressEditText = (EditText) findViewById(R.id.serverUrlText);
-        serverPortEditText = (EditText) findViewById(R.id.serverPortText);
-        loginCheckBox = (CheckBox) findViewById(R.id.loginCheckBox);
-        passwordEditText = (EditText) findViewById(R.id.serverPasswordText);
+        cancelButton = findViewById(R.id.serverCancelButton);
+        serverNameEditText = findViewById(R.id.serverNameText);
+        serverAddressEditText = findViewById(R.id.serverUrlText);
+        serverPortEditText = findViewById(R.id.serverPortText);
+        loginCheckBox = findViewById(R.id.loginCheckBox);
+        passwordEditText = findViewById(R.id.serverPasswordText);
         serverAddressEditText.addTextChangedListener(new tw());
         loginCheckBox.setOnCheckedChangeListener(new loginRequiredListener());
         okButton.setEnabled(false);
@@ -78,7 +78,7 @@ public class AddServerMenu extends Activity {
     private class loginRequiredListener implements OnCheckedChangeListener {
         public void onCheckedChanged(CompoundButton buttonView,
                 boolean isChecked) {
-            if (isChecked == true) {
+            if (isChecked) {
                 passwordEditText.setEnabled(true);
             } else {
                 passwordEditText.setEnabled(false);
@@ -110,7 +110,7 @@ public class AddServerMenu extends Activity {
                 builder.show();
                 return;
             }
-            if (loginCheckBox.isChecked() == true && password.equals("")) {
+            if (loginCheckBox.isChecked() && password.equals("")) {
                 builder.setTitle(R.string.error_title);
                 builder.setMessage(R.string.add_server_error_message);
                 builder.setPositiveButton(android.R.string.ok, null);
@@ -135,7 +135,7 @@ public class AddServerMenu extends Activity {
                 Uri.Builder builder = new Uri.Builder();
                 builder.scheme("daap");
                 builder.authority(serverAddress);
-                if (loginCheckBox.isChecked() == true) {
+                if (loginCheckBox.isChecked()) {
                     builder.fragment(password);
                 }
                 // Log.d("AddServerMenu", "uri = (" + builder.build() + ")");

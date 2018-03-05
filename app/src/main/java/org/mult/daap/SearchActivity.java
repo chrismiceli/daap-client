@@ -152,8 +152,8 @@ public class SearchActivity extends ListActivity implements Observer {
     }
 
     private void createList() {
-        ListView searchResultsList = (ListView) findViewById(android.R.id.list);
-        setListAdapter(new MyArrayAdapter<Song>(this,
+        ListView searchResultsList = findViewById(android.R.id.list);
+        setListAdapter(new MyArrayAdapter<>(this,
                 R.xml.long_list_text_view, srList));
         searchResultsList.setOnItemClickListener(songListListener);
         searchResultsList

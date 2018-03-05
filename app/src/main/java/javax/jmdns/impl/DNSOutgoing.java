@@ -162,10 +162,10 @@ public final class DNSOutgoing {
                 if (ch > 0x07FF) {
                     writeByte(0xE0 | ((ch >> 12) & 0x0F));
                     writeByte(0x80 | ((ch >> 6) & 0x3F));
-                    writeByte(0x80 | ((ch >> 0) & 0x3F));
+                    writeByte(0x80 | ((ch) & 0x3F));
                 } else {
                     writeByte(0xC0 | ((ch >> 6) & 0x1F));
-                    writeByte(0x80 | ((ch >> 0) & 0x3F));
+                    writeByte(0x80 | ((ch) & 0x3F));
                 }
             }
         }
@@ -189,12 +189,12 @@ public final class DNSOutgoing {
             if (useCompression && USE_DOMAIN_NAME_COMPRESSION) {
                 Integer offset = (Integer) names.get(name);
                 if (offset != null) {
-                    int val = offset.intValue();
+                    int val = offset;
                     writeByte((val >> 8) | 0xC0);
                     writeByte(val & 0xFF);
                     return;
                 }
-                names.put(name, Integer.valueOf(off));
+                names.put(name, off);
             }
             writeUTF(name, 0, n);
             name = name.substring(n);
@@ -254,7 +254,7 @@ public final class DNSOutgoing {
     }
 
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(isQuery() ? "dns[query," : "dns[response,");
         // buf.append(packet.getAddress().getHostAddress());
         buf.append(':');

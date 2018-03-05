@@ -218,7 +218,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
         String url = protocol + "://" + getHostAddress() + ":" + getPort();
         String path = getPropertyString("path");
         if (path != null) {
-            if (path.indexOf("://") >= 0) {
+            if (path.contains("://")) {
                 url = path;
             } else {
                 url += path.startsWith("/") ? path : "/" + path;
@@ -261,10 +261,10 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
                 if (c > 0x07FF) {
                     out.write(0xE0 | ((c >> 12) & 0x0F));
                     out.write(0x80 | ((c >> 6) & 0x3F));
-                    out.write(0x80 | ((c >> 0) & 0x3F));
+                    out.write(0x80 | ((c) & 0x3F));
                 } else {
                     out.write(0xC0 | ((c >> 6) & 0x1F));
-                    out.write(0x80 | ((c >> 0) & 0x3F));
+                    out.write(0x80 | ((c) & 0x3F));
                 }
             }
         }
@@ -272,7 +272,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
 
     /** Read data bytes as a UTF stream. */
     String readUTF(byte data[], int off, int len) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int end = off + len; off < end;) {
             int ch = data[off++] & 0xFF;
             switch (ch >> 4) {
@@ -440,7 +440,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
     }
 
     public String getNiceTextString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0, len = getText().length; i < len; i++) {
             if (i >= 20) {
                 buf.append("...");
@@ -458,7 +458,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener {
     }
 
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("service[");
         buf.append(getQualifiedName());
         buf.append(',');

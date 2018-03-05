@@ -132,7 +132,7 @@ public class HostInfo
 
     public String toString()
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("local host info[");
         buf.append(getName() != null ? getName() : "no name");
         buf.append(", ");

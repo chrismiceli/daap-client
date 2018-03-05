@@ -47,7 +47,6 @@ public class QueueListBrowser extends Activity {
             notificationManager.cancelAll();
             setResult(Activity.RESULT_CANCELED);
             finish();
-            return;
         }
     }
 
@@ -55,14 +54,14 @@ public class QueueListBrowser extends Activity {
     public void onResume() {
         super.onResume(); // this.position = position;
         this.setContentView(R.xml.music_browser);
-        s = new ArrayList<Song>();
+        s = new ArrayList<>();
         if (Contents.queue.size() == 0) {
             finish();
         }
         for (int x = 0; x < Contents.queue.size(); x++) {
             s.add(Contents.queue.get(x));
         }
-        queuelistList = (ListView) findViewById(android.R.id.list);
+        queuelistList = findViewById(android.R.id.list);
         count = s.size();
         queuelistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
         queuelistList

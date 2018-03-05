@@ -189,11 +189,11 @@ public class JmDNSImpl extends JmDNS {
         incomingListener.start();
         new Prober(this).start(timer);
         // Log.d(TAG, "start2");
-        for (Iterator iterator = serviceInfos.iterator(); iterator.hasNext();) {
+        for (Object serviceInfo : serviceInfos) {
             try {
                 // Log.d(TAG, "start3");
                 registerService(new ServiceInfoImpl(
-                        (ServiceInfoImpl) iterator.next()));
+                        (ServiceInfoImpl) serviceInfo));
                 // Log.d(TAG, "start4");
             } catch (Exception exception) {
                 Log.d(TAG,
@@ -346,8 +346,8 @@ public class JmDNSImpl extends JmDNS {
                     info.getName(), info);
             // Iterate on a copy in case listeners will modify it
             final ArrayList listCopy = new ArrayList(list);
-            for (Iterator iterator = listCopy.iterator(); iterator.hasNext();) {
-                ((ServiceListener) iterator.next()).serviceResolved(event);
+            for (Object aListCopy : listCopy) {
+                ((ServiceListener) aListCopy).serviceResolved(event);
             }
         }
     }
@@ -361,10 +361,9 @@ public class JmDNSImpl extends JmDNS {
             typeListeners.add(listener);
         }
         // report cached service types
-        for (Iterator iterator = serviceTypes.values().iterator(); iterator
-                .hasNext();) {
+        for (Object o : serviceTypes.values()) {
             listener.serviceTypeAdded(new ServiceEventImpl(this,
-                    (String) iterator.next(), null, null));
+                    (String) o, null, null));
         }
         new TypeResolver(this).start(timer);
     }
@@ -486,8 +485,8 @@ public class JmDNSImpl extends JmDNS {
             list = new LinkedList(services.values());
             services.clear();
         }
-        for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-            ((ServiceInfoImpl) iterator.next()).cancel();
+        for (Object aList : list) {
+            ((ServiceInfoImpl) aList).cancel();
         }
         Object lock = new Object();
         new Canceler(this, list, lock).start(timer);
@@ -508,15 +507,15 @@ public class JmDNSImpl extends JmDNS {
     public void registerServiceType(String type) {
         String name = type.toLowerCase();
         if (serviceTypes.get(name) == null) {
-            if ((type.indexOf("._mdns._udp.") < 0)
+            if ((!type.contains("._mdns._udp."))
                     && !type.endsWith(".in-addr.arpa.")) {
                 Collection list;
                 synchronized (this) {
                     serviceTypes.put(name, type);
                     list = new LinkedList(typeListeners);
                 }
-                for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-                    ((ServiceTypeListener) iterator.next())
+                for (Object aList : list) {
+                    ((ServiceTypeListener) aList)
                             .serviceTypeAdded(new ServiceEventImpl(this, type,
                                     null, null));
                 }
@@ -625,8 +624,8 @@ public class JmDNSImpl extends JmDNS {
         synchronized (this) {
             listenerList = new ArrayList(listeners);
         }
-        for (Iterator iterator = listenerList.iterator(); iterator.hasNext();) {
-            DNSListener listener = (DNSListener) iterator.next();
+        for (Object aListenerList : listenerList) {
+            DNSListener listener = (DNSListener) aListenerList;
             listener.updateRecord(this, now, rec);
         }
         if (rec.type == DNSConstants.TYPE_PTR
@@ -649,17 +648,15 @@ public class JmDNSImpl extends JmDNS {
                     // new record
                     ServiceEvent event = new ServiceEventImpl(this, type,
                             toUnqualifiedName(type, name), null);
-                    for (Iterator iterator = serviceListenerList.iterator(); iterator
-                            .hasNext();) {
-                        ((ServiceListener) iterator.next()).serviceAdded(event);
+                    for (Object aServiceListenerList : serviceListenerList) {
+                        ((ServiceListener) aServiceListenerList).serviceAdded(event);
                     }
                 } else {
                     // expire record
                     ServiceEvent event = new ServiceEventImpl(this, type,
                             toUnqualifiedName(type, name), null);
-                    for (Iterator iterator = serviceListenerList.iterator(); iterator
-                            .hasNext();) {
-                        ((ServiceListener) iterator.next())
+                    for (Object aServiceListenerList : serviceListenerList) {
+                        ((ServiceListener) aServiceListenerList)
                                 .serviceRemoved(event);
                     }
                 }
@@ -674,9 +671,9 @@ public class JmDNSImpl extends JmDNS {
         long now = System.currentTimeMillis();
         boolean hostConflictDetected = false;
         boolean serviceConflictDetected = false;
-        for (Iterator i = msg.answers.iterator(); i.hasNext();) {
+        for (Object answer : msg.answers) {
             boolean isInformative = false;
-            DNSRecord rec = (DNSRecord) i.next();
+            DNSRecord rec = (DNSRecord) answer;
             // Log.d(TAG, String.format("handleResponse rec=%s",
             // rec.toString()));
             boolean expired = rec.isExpired(now);
@@ -697,18 +694,18 @@ public class JmDNSImpl extends JmDNS {
                 }
             }
             switch (rec.type) {
-            case DNSConstants.TYPE_PTR:
-                // handle _mdns._udp records
-                if (rec.getName().indexOf("._mdns._udp.") >= 0) {
-                    if (!expired
-                            && rec.name.startsWith("_services._mdns._udp.")) {
-                        isInformative = true;
-                        registerServiceType(((DNSRecord.Pointer) rec).alias);
+                case DNSConstants.TYPE_PTR:
+                    // handle _mdns._udp records
+                    if (rec.getName().contains("._mdns._udp.")) {
+                        if (!expired
+                                && rec.name.startsWith("_services._mdns._udp.")) {
+                            isInformative = true;
+                            registerServiceType(((DNSRecord.Pointer) rec).alias);
+                        }
+                        continue;
                     }
-                    continue;
-                }
-                registerServiceType(rec.name);
-                break;
+                    registerServiceType(rec.name);
+                    break;
             }
             if ((rec.getType() == DNSConstants.TYPE_A)
                     || (rec.getType() == DNSConstants.TYPE_AAAA)) {
@@ -736,8 +733,8 @@ public class JmDNSImpl extends JmDNS {
         boolean serviceConflictDetected = false;
         long expirationTime = System.currentTimeMillis()
                 + DNSConstants.KNOWN_ANSWER_TTL;
-        for (Iterator i = in.answers.iterator(); i.hasNext();) {
-            DNSRecord answer = (DNSRecord) i.next();
+        for (Object answer1 : in.answers) {
+            DNSRecord answer = (DNSRecord) answer1;
             if ((answer.getType() == DNSConstants.TYPE_A)
                     || (answer.getType() == DNSConstants.TYPE_AAAA)) {
                 Log.d(TAG, String.format("someone asked for A or AAAA host=%s",
@@ -899,19 +896,17 @@ public class JmDNSImpl extends JmDNS {
 
     @SuppressWarnings("rawtypes")
     public String toString() {
-        StringBuffer aLog = new StringBuffer();
+        StringBuilder aLog = new StringBuilder();
         aLog.append("\t---- Services -----");
         if (services != null) {
-            for (Iterator k = services.keySet().iterator(); k.hasNext();) {
-                Object key = k.next();
+            for (Object key : services.keySet()) {
                 aLog.append("\n\t\tService: " + key + ": " + services.get(key));
             }
         }
         aLog.append("\n");
         aLog.append("\t---- Types ----");
         if (serviceTypes != null) {
-            for (Iterator k = serviceTypes.keySet().iterator(); k.hasNext();) {
-                Object key = k.next();
+            for (Object key : serviceTypes.keySet()) {
                 aLog.append("\n\t\tType: " + key + ": " + serviceTypes.get(key));
             }
         }
@@ -921,9 +916,7 @@ public class JmDNSImpl extends JmDNS {
         aLog.append("\t---- Service Collectors ----");
         if (serviceCollectors != null) {
             synchronized (serviceCollectors) {
-                for (Iterator k = serviceCollectors.keySet().iterator(); k
-                        .hasNext();) {
-                    Object key = k.next();
+                for (Object key : serviceCollectors.keySet()) {
                     aLog.append("\n\t\tService Collector: " + key + ": "
                             + serviceCollectors.get(key));
                 }
@@ -976,9 +969,8 @@ public class JmDNSImpl extends JmDNS {
     private void disposeServiceCollectors() {
         Log.d(TAG, "disposeServiceCollectors()");
         synchronized (serviceCollectors) {
-            for (Iterator i = serviceCollectors.values().iterator(); i
-                    .hasNext();) {
-                ServiceCollector collector = (ServiceCollector) i.next();
+            for (Object o : serviceCollectors.values()) {
+                ServiceCollector collector = (ServiceCollector) o;
                 removeServiceListener(collector.type, collector);
             }
             serviceCollectors.clear();
@@ -1034,10 +1026,9 @@ public class JmDNSImpl extends JmDNS {
 
         @SuppressWarnings("rawtypes")
         public String toString() {
-            StringBuffer aLog = new StringBuffer();
+            StringBuilder aLog = new StringBuilder();
             synchronized (infos) {
-                for (Iterator k = infos.keySet().iterator(); k.hasNext();) {
-                    Object key = k.next();
+                for (Object key : infos.keySet()) {
                     aLog.append("\n\t\tService: " + key + ": " + infos.get(key));
                 }
             }
