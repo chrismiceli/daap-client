@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_dialog_title">Informazioni</string>
+    <string name="app_name">DAAP</string>
+    <string name="about_info">Informazioni</string>
+    <string name="info">Client DAAP per Android.\n\nProgrammato
+        da:\nMichael Miceli\nChristopher Miceli\n\nTraduzione: Marco Antonio
+        Mauro</string>
+    <string name="shuffle">Riprod. casuale</string>
+    <string name="donate">Dona</string>
+    <string name="repeat">Ripetiz. brano</string>
+    <string name="delete_entry">Cancella elemento</string>
+    <string name="play_album">Riproduci album</string>
+    <string name="play_artist">Riproduci Artista</string>
+    <string name="all_songs">Tutti i brani</string>
+    <string name="current_song">Brano corrente</string>
+    <string name="upcoming_song">Brano successivo</string>
+    <string name="share_name">Nome server DAAP</string>
+    <string name="url_description">URL e porta</string>
+    <string name="login_required">Login necessario</string>
+    <string name="menu_stop">Stop</string>
+    <string name="password">Password</string>
+    <string name="error_title">Errore!</string>
+    <string name="add_or_remove_from_queue">Aggiungi o rimuovi dalla coda</string>
+    <string name="remove_from_queue">Rimuovi dalla coda</string>
+    <string name="removed_from_queue">Rimosso</string>
+    <string name="added_to_queue">Aggiunto alla coda</string>
+    <string name="queue_is_full">Coda piena</string>
+    <string name="add_server_error_message">Verifica che tutti i campi siano corretti.</string>
+    <string name="add_server">Aggiungi server</string>
+    <string name="add_server_menu_activity">DAAP - Aggiungi server</string>
+    <string name="queue_browser_activity">DAAP - Coda riproduzione</string>
+    <string name="playlist_browser_activity">DAAP - Playlist</string>
+    <string name="song_browser_activity">DAAP - Tutti i brani</string>
+    <string name="media_playback_activity">DAAP - Media Player</string>
+    <string name="media_playback_error">Errore durante la riproduzione, ritentare.</string>
+    <string name="add_server_detail">Clicca per aggiungere un server DAAP</string>
+    <string name="local_servers">Ricerca server locali</string>
+    <string name="remembered_servers">Server utilizzati</string>
+    <string name="options">Opzioni</string>
+    <string name="fetching_music_title">Scaricamento musica…</string>
+    <string name="fetching_music_detail">Attendere prego…</string>
+    <string name="unable_to_connect">Impossibile connettersi</string>
+    <string name="connecting_title">Connessione in corso…</string>
+    <string name="connecting_detail">Attendere prego…</string>
+    <string name="empty_playlist">La playlist è vuota</string>
+    <string name="search_hint">Cerca brani</string>
+    <string name="search_label">Cerca etichette</string>
+    <string name="no_search_results">Nessun risultato.</string>
+    <string name="searching_title">Ricerca in corso…</string>
+    <string name="search_result_title">Risultati per:</string>
+    <string name="search_result_caption">Cercando</string>
+    <string name="no_artist_name">(Nessun artista)</string>
+    <string name="no_album_name">(Nessun album)</string>
+    <string name="view_queue">Visualizza coda</string>
+    <string name="play_queue">Riproduci coda</string>
+    <string name="clear_queue">Svuota coda</string>
+    <string name="search">Cerca</string>
+    <string name="preferences">Preferenze</string>
+    <string name="streaming_pref_detail">Streaming brani (beta)</string>
+    <string name="streaming">Streaming</string>
+    <string name="artists">Artisti</string>
+    <string name="albums">Album</string>
+    <string name="songs">Brani</string>
+    <string name="save">Salva</string>
+    <string name="save_complete">File salvato in </string>
+    <string name="seeking_disabled">Impossibile cercare nel brano con lo streaming
+        attivato.</string>
+</resources>
