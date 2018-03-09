@@ -1,14 +1,11 @@
 package org.mult.daap;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +13,8 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -53,7 +52,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Servers extends Activity implements Observer {
+public class Servers extends AppCompatActivity implements Observer {
     public final static String TITLE = "title";
     public final static String CAPTION = "caption";
     public final static String KEY = "key";
@@ -83,53 +82,47 @@ public class Servers extends Activity implements Observer {
         return item;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        localLabel = getString(R.string.local_servers);
-    }
-
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
         switch (id) {
-        case PASSWORD_DIALOG:
-            dialog = new Dialog(this);
-            dialog.setContentView(R.layout.password_prompt);
-            dialog.setTitle(getString(R.string.password));
-            dialog.setCancelable(true);
-            dialog.setCanceledOnTouchOutside(true);
-            Button buttonConfrim = dialog
-                    .findViewById(R.id.PasswordOkButton);
-            Button buttonCancel = dialog
-                    .findViewById(R.id.PasswordCancelButton);
-            final EditText password = dialog
-                    .findViewById(R.id.PasswordEditText);
-            buttonConfrim
-                    .setOnClickListener(new android.view.View.OnClickListener() {
-                        public void onClick(View arg0) {
-                            Contents.loginManager.interrupt();
-                            Contents.loginManager.deleteObservers();
-                            LoginManager lm = new LoginManager(
-                                    Contents.loginManager.name,
-                                    Contents.loginManager.address, password
-                                            .getText().toString(), true);
-                            password.setText("");
-                            startLogin(lm);
-                            dismissDialog(PASSWORD_DIALOG);
-                        }
-                    });
-            buttonCancel
-                    .setOnClickListener(new android.view.View.OnClickListener() {
-                        public void onClick(View v) {
-                            Contents.loginManager = null;
-                            password.setText("");
-                            dismissDialog(PASSWORD_DIALOG);
-                        }
-                    });
-            break;
-        default:
-            dialog = null;
-            break;
+            case PASSWORD_DIALOG:
+                dialog = new Dialog(this);
+                dialog.setContentView(R.layout.password_prompt);
+                dialog.setTitle(getString(R.string.password));
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(true);
+                Button buttonConfrim = dialog
+                        .findViewById(R.id.PasswordOkButton);
+                Button buttonCancel = dialog
+                        .findViewById(R.id.PasswordCancelButton);
+                final EditText password = dialog
+                        .findViewById(R.id.PasswordEditText);
+                buttonConfrim
+                        .setOnClickListener(new android.view.View.OnClickListener() {
+                            public void onClick(View arg0) {
+                                Contents.loginManager.interrupt();
+                                Contents.loginManager.deleteObservers();
+                                LoginManager lm = new LoginManager(
+                                        Contents.loginManager.name,
+                                        Contents.loginManager.address, password
+                                        .getText().toString(), true);
+                                password.setText("");
+                                startLogin(lm);
+                                dismissDialog(PASSWORD_DIALOG);
+                            }
+                        });
+                buttonCancel
+                        .setOnClickListener(new android.view.View.OnClickListener() {
+                            public void onClick(View v) {
+                                Contents.loginManager = null;
+                                password.setText("");
+                                dismissDialog(PASSWORD_DIALOG);
+                            }
+                        });
+                break;
+            default:
+                dialog = null;
+                break;
         }
         return dialog;
     }
@@ -144,8 +137,16 @@ public class Servers extends Activity implements Observer {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_servers);
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+
+        db = new DBAdapter(this);
+
+        localLabel = getString(R.string.local_servers);
+
         List<Map<String, ?>> rememberedServers = new LinkedList<>();
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         boolean wiFi = false;
@@ -167,6 +168,7 @@ public class Servers extends Activity implements Observer {
                 e.printStackTrace();
             }
         }
+
         db = new DBAdapter(this);
         db.open();
         Cursor cursor = db.getAllServers();
@@ -190,40 +192,41 @@ public class Servers extends Activity implements Observer {
                 db.close();
             }
         }
-        rememberedServers.add(createItem(getString(R.string.add_server),
-                getString(R.string.add_server_detail)));
+
+        rememberedServers.add(createItem(getString(R.string.add_server), getString(R.string.add_server_detail)));
+
         localServers = new LinkedList<>();
         adapter = new SeparatedListAdapter(this);
         adapter.addSection(getString(R.string.remembered_servers),
-                new ServerAdapter(this, rememberedServers,
-                        R.layout.list_complex, new String[] { TITLE, CAPTION },
-                        new int[] { R.id.list_complex_title,
-                                R.id.list_complex_caption }));
+                new Servers.ServerAdapter(this, rememberedServers,
+                        R.layout.list_complex, new String[]{TITLE, CAPTION},
+                        new int[]{R.id.list_complex_title,
+                                R.id.list_complex_caption}));
         if (wiFi) {
-            adapter.addSection(localLabel, new ServerAdapter(this,
-                    localServers, R.layout.list_complex, new String[] { TITLE,
-                            CAPTION }, new int[] { R.id.list_complex_title,
-                            R.id.list_complex_caption }));
+            adapter.addSection(localLabel, new Servers.ServerAdapter(this,
+                    localServers, R.layout.list_complex, new String[]{TITLE,
+                    CAPTION}, new int[]{R.id.list_complex_title,
+                    R.id.list_complex_caption}));
         } else {
             adapter.addSection("Enable WiFi to search for local servers",
-                    new ServerAdapter(this, localServers,
-                            R.layout.list_complex, new String[] { TITLE,
-                                    CAPTION }, new int[] {
-                                    R.id.list_complex_title,
-                                    R.id.list_complex_caption }));
+                    new Servers.ServerAdapter(this, localServers,
+                            R.layout.list_complex, new String[]{TITLE,
+                            CAPTION}, new int[]{
+                            R.id.list_complex_title,
+                            R.id.list_complex_caption}));
         }
-        ListView list = new ListView(this);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(clickListener);
-        list.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-            public void onCreateContextMenu(ContextMenu menu, View v,
-                    ContextMenuInfo menuInfo) {
+
+        ListView listView = this.findViewById(R.id.serverList);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(clickListener);
+        listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
                 menu.setHeaderTitle(getString(R.string.options));
                 menu.add(0, CONTEXT_DELETE, 0, R.string.delete_entry);
                 menu.add(0, CONTEXT_EDIT, 0, R.string.edit_entry);
             }
         });
-        this.setContentView(list);
+
         LoginManager lm = Contents.loginManager;
         if (lm != null) {
             lm.addObserver(this);
@@ -234,6 +237,7 @@ public class Servers extends Activity implements Observer {
                 update(lm, lastMessage);
             }
         }
+
         if (Intent.ACTION_VIEW.equals(getIntent().getAction())
                 || Intent.ACTION_PICK.equals(getIntent().getAction())) {
             try {
@@ -253,6 +257,16 @@ public class Servers extends Activity implements Observer {
                 e.printStackTrace();
             }
         }
+
+        // can be used to add the "Add Server" button
+        // FloatingActionButton fab = this.findViewById(R.id.fab);
+        // fab.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        //                 .setAction("Action", null).show();
+        //     }
+        // });
     }
 
     public void onDestroy() {
@@ -296,27 +310,27 @@ public class Servers extends Activity implements Observer {
             c.close();
             db.close();
             switch (aItem.getItemId()) {
-            case CONTEXT_DELETE:
-                db.open();
-                db.deleteServer(rowId);
-                Cursor profilesCursor = db.getAllServers();
-                int count = profilesCursor.getCount();
-                profilesCursor.close();
-                db.close();
-                if (count == 0) {
+                case CONTEXT_DELETE:
                     db.open();
-                    db.reCreate();
+                    db.deleteServer(rowId);
+                    Cursor profilesCursor = db.getAllServers();
+                    int count = profilesCursor.getCount();
+                    profilesCursor.close();
                     db.close();
-                }
-                intent = new Intent(Servers.this, Servers.class);
-                startActivityForResult(intent, 1);
-                finish();
-                return true;
-            case CONTEXT_EDIT:
-                intent = new Intent(Servers.this, ServerEditorActivity.class);
-                intent.putExtra(Intent.EXTRA_TITLE, rowId);
-                startActivityForResult(intent, 1);
-                return true;
+                    if (count == 0) {
+                        db.open();
+                        db.reCreate();
+                        db.close();
+                    }
+                    intent = new Intent(Servers.this, Servers.class);
+                    startActivityForResult(intent, 1);
+                    finish();
+                    return true;
+                case CONTEXT_EDIT:
+                    intent = new Intent(Servers.this, ServerEditorActivity.class);
+                    intent.putExtra(Intent.EXTRA_TITLE, rowId);
+                    startActivityForResult(intent, 1);
+                    return true;
             }
         }
         return false;
@@ -324,7 +338,7 @@ public class Servers extends Activity implements Observer {
 
     private OnItemClickListener clickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View view, int position,
-                long id) {
+                                long id) {
             db.open();
             Cursor c = db.getAllServers();
             if (position - 1 >= c.getCount()) {
@@ -400,7 +414,7 @@ public class Servers extends Activity implements Observer {
             pd = ProgressDialog.show(this,
                     getString(R.string.connecting_title),
                     getString(R.string.connecting_detail), true, true);
-            OnCancelListener onCancelListener = new OnCancelListener() {
+            DialogInterface.OnCancelListener onCancelListener = new DialogInterface.OnCancelListener() {
                 public void onCancel(DialogInterface dialog) {
                     if (Contents.loginManager != null) {
                         Contents.loginManager.interrupt();
@@ -458,28 +472,28 @@ public class Servers extends Activity implements Observer {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         Intent intent;
         switch (item.getItemId()) {
-        case MENU_ABOUT:
-            builder.setTitle(getString(R.string.about_dialog_title));
-            builder.setMessage(getString(R.string.info));
-            builder.setPositiveButton(getString(android.R.string.ok), null);
-            builder.show();
-            return true;
-        case MENU_PREFS:
-            intent = new Intent(Servers.this, Preferences.class);
-            startActivityForResult(intent, 1);
-            return true;
-        case MENU_ADD:
-            intent = new Intent(Servers.this, AddServerMenu.class);
-            startActivityForResult(intent, 1);
-            return true;
-        case MENU_DONATE:
-            intent = new Intent(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            intent.setData(Uri.parse(donateLink));
-            startActivityForResult(intent, 1);
+            case MENU_ABOUT:
+                builder.setTitle(getString(R.string.about_dialog_title));
+                builder.setMessage(getString(R.string.info));
+                builder.setPositiveButton(getString(android.R.string.ok), null);
+                builder.show();
+                return true;
+            case MENU_PREFS:
+                intent = new Intent(Servers.this, Preferences.class);
+                startActivityForResult(intent, 1);
+                return true;
+            case MENU_ADD:
+                intent = new Intent(Servers.this, AddServerMenu.class);
+                startActivityForResult(intent, 1);
+                return true;
+            case MENU_DONATE:
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse(donateLink));
+                startActivityForResult(intent, 1);
         }
         return false;
     }
@@ -515,7 +529,7 @@ public class Servers extends Activity implements Observer {
         List<Map<String, ?>> mList;
 
         public ServerAdapter(Context context, List<Map<String, ?>> data,
-                int resource, String[] from, int[] to) {
+                             int resource, String[] from, int[] to) {
             super(context, data, resource, from, to);
             mList = data;
             Map<String, String> header = new HashMap<>();
@@ -542,16 +556,16 @@ public class Servers extends Activity implements Observer {
         }
 
         public View getView(final int position, View convertView,
-                ViewGroup parent) {
+                            ViewGroup parent) {
             View row = convertView;
-            ViewWrapper wrapper = null;
+            Servers.ServerAdapter.ViewWrapper wrapper = null;
             if (row == null) {
                 LayoutInflater inflater = getLayoutInflater();
                 row = inflater.inflate(R.layout.list_complex, null);
-                wrapper = new ViewWrapper(row);
+                wrapper = new Servers.ServerAdapter.ViewWrapper(row);
                 row.setTag(wrapper);
             } else {
-                wrapper = (ViewWrapper) row.getTag();
+                wrapper = (Servers.ServerAdapter.ViewWrapper) row.getTag();
             }
             wrapper.getlcT().setText((String) mList.get(position).get(TITLE));
             wrapper.getlcC().setText((String) mList.get(position).get(CAPTION));
@@ -586,7 +600,7 @@ public class Servers extends Activity implements Observer {
     };
 
     private void saveServer(String serverName, String serverAddress,
-            String password, boolean loginCheckBox) {
+                            String password, boolean loginCheckBox) {
         db.open();
         if (!db.serverExists(serverName, serverAddress, password, loginCheckBox)) {
             db.insertServer(serverName, serverAddress, password, loginCheckBox);
