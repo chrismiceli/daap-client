@@ -8,20 +8,17 @@ import java.net.InetAddress;
 import java.util.Observable;
 
 public class LoginManager extends Observable implements Runnable {
-    public final static Integer INITIATED = -1;
-    public final static Integer CONNECTION_FINISHED = 1;
-    public final static Integer ERROR = 2;
-    public final static Integer PASSWORD_FAILED = 3;
-    public final String name;
+    public final static int INITIATED = -1;
+    public final static int CONNECTION_FINISHED = 1;
+    public final static int ERROR = 2;
+    public final static int PASSWORD_FAILED = 3;
     public final String address;
     public final String password;
     private final boolean login_required;
-    private Integer lastMessage;
+    private int lastMessage;
     private boolean interrupted;
 
-    public LoginManager(String serverName, String add, String password,
-            boolean loginRequired) {
-        this.name = serverName;
+    public LoginManager(String add, String password, boolean loginRequired) {
         this.address = add;
         this.password = password;
         this.login_required = loginRequired;
@@ -29,7 +26,7 @@ public class LoginManager extends Observable implements Runnable {
         lastMessage = LoginManager.INITIATED;
     }
 
-    public Integer getLastMessage() {
+    public int getLastMessage() {
         return lastMessage;
     }
 
@@ -37,7 +34,7 @@ public class LoginManager extends Observable implements Runnable {
         interrupted = true;
     }
 
-    private void notifyAndSet(Integer value) {
+    private void notifyAndSet(int value) {
         lastMessage = value;
         setChanged();
         notifyObservers(value);
@@ -68,12 +65,10 @@ public class LoginManager extends Observable implements Runnable {
                 return;
             }
             if (login_required) {
-                Contents.daapHost = new DaapHost(name, password,
-                        Contents.address, port);
+                Contents.daapHost = new DaapHost(password, Contents.address, port);
             }
             else {
-                Contents.daapHost = new DaapHost(name, null, Contents.address,
-                        port);
+                Contents.daapHost = new DaapHost(null, Contents.address, port);
             }
             if (interrupted) {
                 return;

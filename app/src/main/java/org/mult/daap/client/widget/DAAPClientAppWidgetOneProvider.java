@@ -26,10 +26,10 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import org.mult.daap.AddServerMenu;
 import org.mult.daap.MediaPlayback;
 import org.mult.daap.MediaPlaybackService;
 import org.mult.daap.R;
-import org.mult.daap.Servers;
 
 /**
  * Simple widget to show currently playing album art along
@@ -179,7 +179,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
                     0 /* no requestCode */, intent, 0 /* no flags */);
             views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
         } else {
-            intent = new Intent(context, Servers.class);
+            intent = new Intent(context, AddServerMenu.class);
             pendingIntent = PendingIntent.getActivity(context,
                     0 /* no requestCode */, intent, 0 /* no flags */);
             views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);

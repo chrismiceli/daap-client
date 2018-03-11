@@ -92,9 +92,7 @@ public class PlaylistsRequest extends Request {
 
             position += size;
         }
-        if (!p.getName().equals(host.getName())) {
-            mPlaylist.add(p);
-        }
+        mPlaylist.add(p);
     }
 
     /* get all mlit in mlclList */

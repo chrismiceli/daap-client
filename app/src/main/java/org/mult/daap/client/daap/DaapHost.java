@@ -48,8 +48,8 @@ public class DaapHost extends Host {
     private static final int GIT_SERVER = 2;
     private static final int MT_DAAPD = 3;
 
-    public DaapHost(String name, String password, InetAddress inetAddress, int port) {
-        super(name);
+    public DaapHost(String password, InetAddress inetAddress, int port) {
+        super();
         this.password = Base64.encodeToString(("Android_DAAP:" + password).getBytes(), Base64.DEFAULT);
         this.address = inetAddress.getHostAddress();
         this.port = port;
