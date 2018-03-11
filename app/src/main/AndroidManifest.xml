@@ -10,7 +10,7 @@
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".Servers" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".AddServerMenu" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,9 +21,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="daap" />
             </intent-filter>
-        </activity>
-        <activity android:name=".ServerEditorActivity"
-            android:configChanges="keyboardHidden|orientation">
         </activity>
         <activity android:name=".MediaPlayback" android:label="@string/media_playback_activity"
             android:launchMode="singleTop">
@@ -47,12 +44,6 @@
                 android:value=".SearchActivity" />
         </activity>
         <activity android:name=".QueueListBrowser" android:label="@string/queue_browser_activity" />
-        <activity android:name=".AddServerMenu" android:label="@string/add_server_menu_activity">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity android:name=".Preferences" android:label="Preferences" />
         <activity android:name=".SearchActivity" android:label="Search">
             <intent-filter>

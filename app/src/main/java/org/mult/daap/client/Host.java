@@ -16,13 +16,7 @@ import java.util.Collections;
  * @author Greg
  */
 public abstract class Host {
-    private final String name;
     protected ArrayList playlists = new ArrayList();
-
-    /** Creates a new instance of Host */
-    public Host(String name) {
-        this.name = name;
-    }
 
     /**
      * Causes this Host to connect to the song source and load the songs into
@@ -42,7 +36,7 @@ public abstract class Host {
         int index = Collections.binarySearch(songs, id);
         if (index < 0) {
             throw new IllegalStateException("Song ID: " + id
-                    + " not found in host:" + name);
+                    + " not found in host");
         } else {
             return songs.get(index);
         }
@@ -52,18 +46,4 @@ public abstract class Host {
     public abstract Collection getPlaylists();
 
     public abstract InputStream getSongStream(Song s) throws Exception;
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean equals(Object o) {
-        return o.getClass() == Host.class && name.equals(((Host) o).getName());
-
-    }
-
-    public String toString() {
-        return name;
-    }
-
 }
