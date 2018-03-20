@@ -2,14 +2,16 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
+import org.mult.daap.client.Playlist;
 import org.mult.daap.client.daap.DaapHost;
-import org.mult.daap.client.daap.DaapPlaylist;
+import org.mult.daap.client.daap.exception.BadResponseCodeException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class PlaylistsRequest extends Request {
-    private ArrayList<DaapPlaylist> mPlaylist;
+    private ArrayList<Playlist> mPlaylist;
     private ArrayList<FieldPair> mlclList;
     private ArrayList<FieldPair> mlitList;
 
@@ -24,12 +26,12 @@ public class PlaylistsRequest extends Request {
     }
 
     protected String getRequestString() {
-        String ret = "databases/";
-        ret += host.getDatabaseID() + "/";
-        ret += "containers?";
-        ret += "session-id=" + host.getSessionID();
-        ret += "&revision-number=" + host.getRevisionNumber();
-        return ret;
+        return "databases/" +
+               host.getDatabaseID() +
+               "/containers?session-id=" +
+               host.getSessionID() +
+               "&revision-number=" +
+               host.getRevisionNumber();
     }
 
     protected void process() {
@@ -80,7 +82,7 @@ public class PlaylistsRequest extends Request {
         String name = "";
         int size;
         int startPos = position;
-        DaapPlaylist p = new DaapPlaylist(host);
+        Playlist p = new Playlist(host);
         while (position < argSize + startPos) {
             name = readString(data, position, 4);
             position += 4;
@@ -112,7 +114,7 @@ public class PlaylistsRequest extends Request {
         }
     }
 
-    public ArrayList<DaapPlaylist> getPlaylists() {
+    public ArrayList<Playlist> getPlaylists() {
         return mPlaylist;
     }
 }

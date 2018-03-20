@@ -2,7 +2,7 @@ package org.mult.daap.background;
 
 import org.mult.daap.Contents;
 import org.mult.daap.client.daap.DaapHost;
-import org.mult.daap.client.daap.request.PasswordFailedException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.net.InetAddress;
 import java.util.Observable;

@@ -6,14 +6,29 @@
  */
 package org.mult.daap.client;
 
+import org.mult.daap.client.daap.DaapHost;
+
+import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class Playlist {
-    protected String name;
+public class Playlist {
+    private int id;
+    private final ArrayList<Song> songs = new ArrayList<>();
+    private final DaapHost host;
+    private String name;
 
-    public abstract void initialize() throws Exception;
+    public Playlist(DaapHost daapHost) {
+        host = daapHost;
+    }
 
-    public abstract Collection getSongs();
+    public Playlist(DaapHost daapHost, String name) {
+        this.host = daapHost;
+        this.name = name;
+    }
+
+    public DaapHost getHost() {
+        return host;
+    }
 
     public String getName() {
         return name;
@@ -25,5 +40,17 @@ public abstract class Playlist {
 
     public String toString() {
         return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Collection<Song> getSongs() {
+        return songs;
     }
 }

@@ -4,8 +4,8 @@ import org.mult.daap.background.GetSongsForPlaylist;
 import org.mult.daap.background.LoginManager;
 import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Song;
-import org.mult.daap.client.SongNameComparator;
-import org.mult.daap.client.StringIgnoreCaseComparator;
+import org.mult.daap.comparator.SongNameComparator;
+import org.mult.daap.comparator.StringIgnoreCaseComparator;
 import org.mult.daap.client.daap.DaapHost;
 
 import java.net.InetAddress;

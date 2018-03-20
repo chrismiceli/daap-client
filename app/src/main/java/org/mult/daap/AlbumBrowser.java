@@ -18,9 +18,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import org.mult.daap.client.Song;
-import org.mult.daap.client.SongDiscNumComparator;
-import org.mult.daap.client.SongTrackComparator;
-import org.mult.daap.client.StringIgnoreCaseComparator;
+import org.mult.daap.comparator.SongDiscNumComparator;
+import org.mult.daap.comparator.SongTrackComparator;
+import org.mult.daap.comparator.StringIgnoreCaseComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;

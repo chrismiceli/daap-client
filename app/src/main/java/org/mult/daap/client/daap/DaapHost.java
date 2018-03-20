@@ -9,14 +9,15 @@ import android.util.Base64;
 import android.util.Log;
 
 import org.mult.daap.client.Host;
+import org.mult.daap.client.Playlist;
 import org.mult.daap.client.Song;
-import org.mult.daap.client.SongIDComparator;
-import org.mult.daap.client.daap.request.BadResponseCodeException;
+import org.mult.daap.comparator.SongIDComparator;
+import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.request.DatabasesRequest;
 import org.mult.daap.client.daap.request.HangingUpdateRequest;
 import org.mult.daap.client.daap.request.LoginRequest;
 import org.mult.daap.client.daap.request.LogoutRequest;
-import org.mult.daap.client.daap.request.PasswordFailedException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 import org.mult.daap.client.daap.request.PlaylistsRequest;
 import org.mult.daap.client.daap.request.ServerInfoRequest;
 import org.mult.daap.client.daap.request.SingleDatabaseRequest;
@@ -27,11 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-/** @author Greg */
 public class DaapHost extends Host {
     private final String address;
     private final int port;
@@ -65,8 +64,6 @@ public class DaapHost extends Host {
             revisionNum = 1;
             sessionId = 0;
             ServerInfoRequest s = new ServerInfoRequest(this);
-            Log.d("DAAPHost",
-                    "ServerInfo:  " + s.getServerProgram() + " " + s.getHost());
             if (s.getServerProgram() != null) {
                 hostProgram = parseServerTypeString(s.getServerProgram());
             }
@@ -121,7 +118,7 @@ public class DaapHost extends Host {
     private void grabSongs() throws Exception {
         try {
             DatabasesRequest databasesRequest = new DatabasesRequest(this);
-            databaseId = databasesRequest.getDatabase().id;
+            databaseId = databasesRequest.getDatabaseId();
             SingleDatabaseRequest singleDatabaseRequest = new SingleDatabaseRequest(this);
             songs = singleDatabaseRequest.getSongs();
             Log.d("DaapHost", "# of songs = " + songs.size());
@@ -142,14 +139,6 @@ public class DaapHost extends Host {
                 grabSongs(); // try again.
             }
         }
-    }
-
-    public void loadPlaylists() throws Exception {
-        login();
-        for (Object playlist : playlists) {
-            ((DaapPlaylist) playlist).initialize();
-        }
-        // logout();
     }
 
     private void nullify() {
@@ -198,10 +187,7 @@ public class DaapHost extends Host {
         return password;
     }
 
-    @SuppressWarnings("rawtypes")
-    public Collection getPlaylists() {
-        if (playlists == null)
-            playlists = new ArrayList();
+    public ArrayList<Playlist> getPlaylists() {
         return playlists;
     }
 

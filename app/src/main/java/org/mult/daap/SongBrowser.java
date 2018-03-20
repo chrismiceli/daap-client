@@ -26,8 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.client.Song;
-import org.mult.daap.client.SongDiscNumComparator;
-import org.mult.daap.client.SongTrackComparator;
+import org.mult.daap.comparator.SongDiscNumComparator;
+import org.mult.daap.comparator.SongTrackComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;

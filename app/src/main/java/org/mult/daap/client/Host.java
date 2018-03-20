@@ -16,7 +16,7 @@ import java.util.Collections;
  * @author Greg
  */
 public abstract class Host {
-    protected ArrayList playlists = new ArrayList();
+    protected ArrayList<Playlist> playlists = new ArrayList<>();
 
     /**
      * Causes this Host to connect to the song source and load the songs into
@@ -25,8 +25,6 @@ public abstract class Host {
      * @throws Exception
      */
     public abstract void connect() throws Exception;
-
-    public abstract void loadPlaylists() throws Exception;
 
     public abstract ArrayList<Song> getSongs();
 

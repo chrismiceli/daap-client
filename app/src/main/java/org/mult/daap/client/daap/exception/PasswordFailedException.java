@@ -1,4 +1,4 @@
-package org.mult.daap.client.daap.request;
+package org.mult.daap.client.daap.exception;
 
 public class PasswordFailedException extends Exception {
 

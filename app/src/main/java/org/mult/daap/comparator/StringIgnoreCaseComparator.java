@@ -1,4 +1,4 @@
-package org.mult.daap.client;
+package org.mult.daap.comparator;
 
 import java.util.Comparator;
 
