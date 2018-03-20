@@ -2,14 +2,16 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.Host;
+import org.mult.daap.client.daap.exception.BadResponseCodeException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
 
 public class LoginRequest extends Request {
     private int mSessionId;
 
-    public LoginRequest(DaapHost daapHost) throws BadResponseCodeException,
+    public LoginRequest(Host daapHost) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(daapHost);
         query("LoginRequest");

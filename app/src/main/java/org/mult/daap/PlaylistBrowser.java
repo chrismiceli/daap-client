@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.background.GetSongsForPlaylist;
-import org.mult.daap.client.daap.DaapPlaylist;
+import org.mult.daap.client.Playlist;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -33,7 +33,7 @@ public class PlaylistBrowser extends Activity implements Observer {
     public final static int EMPTY = 2;
     public final static int INITIALIZED = 3;
     public final static int MENU_STOP = 4;
-    private ArrayList<DaapPlaylist> l;
+    private ArrayList<Playlist> l;
     private ProgressDialog pd = null;
 
     @SuppressWarnings("unchecked")
@@ -52,8 +52,8 @@ public class PlaylistBrowser extends Activity implements Observer {
             return;
         }
         this.setContentView(R.xml.playlist_browser);
-        l = new ArrayList<DaapPlaylist>(Contents.daapHost.getPlaylists());
-        l.add(0, new DaapPlaylist(Contents.daapHost,
+        l = new ArrayList<Playlist>(Contents.daapHost.getPlaylists());
+        l.add(0, new Playlist(Contents.daapHost,
                 getString(R.string.all_songs)));
         count = l.size();
         playlistList = findViewById(R.id.playlistList);

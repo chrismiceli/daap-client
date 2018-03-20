@@ -3,10 +3,10 @@ package org.mult.daap;
 import org.mult.daap.background.GetSongsForPlaylist;
 import org.mult.daap.background.LoginManager;
 import org.mult.daap.background.SearchThread;
+import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
-import org.mult.daap.client.SongNameComparator;
-import org.mult.daap.client.StringIgnoreCaseComparator;
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.comparator.SongNameComparator;
+import org.mult.daap.comparator.StringIgnoreCaseComparator;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class Contents {
     public static TreeMap<String, ArrayList<Integer>> ArtistElements = new TreeMap<>();
     public static TreeMap<String, ArrayList<Integer>> AlbumElements = new TreeMap<>();
     public static TreeMap<String, ArrayList<Integer>> ArtistAlbumElements = new TreeMap<>();
-    public static DaapHost daapHost;
+    public static Host daapHost;
     public static GetSongsForPlaylist getSongsForPlaylist = null;
     public static InetAddress address;
     public static LoginManager loginManager;

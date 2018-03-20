@@ -1,4 +1,6 @@
-package org.mult.daap.client;
+package org.mult.daap.comparator;
+
+import org.mult.daap.client.Song;
 
 import java.util.Comparator;
 

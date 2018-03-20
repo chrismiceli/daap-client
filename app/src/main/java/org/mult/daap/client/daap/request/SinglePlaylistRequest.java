@@ -2,23 +2,25 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
+import org.mult.daap.client.Playlist;
 import org.mult.daap.client.Song;
-import org.mult.daap.client.daap.DaapPlaylist;
+import org.mult.daap.client.daap.exception.BadResponseCodeException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class SinglePlaylistRequest extends Request {
     private final ArrayList<Song> mSongList = new ArrayList<>();
-    private final DaapPlaylist playlist;
+    private final Playlist playlist;
     private ArrayList<FieldPair> mlclList = new ArrayList<>();
     private ArrayList<FieldPair> mlitList = new ArrayList<>();
 
-    public SinglePlaylistRequest(DaapPlaylist daapPlaylist)
+    public SinglePlaylistRequest(Playlist playlist)
             throws BadResponseCodeException, PasswordFailedException,
             IOException {
-        super(daapPlaylist.getHost());
-        playlist = daapPlaylist;
+        super(playlist.getHost());
+        this.playlist = playlist;
         query("SinglePlaylistRequest");
         readResponse();
         process();

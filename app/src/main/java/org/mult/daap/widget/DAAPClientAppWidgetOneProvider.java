@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mult.daap.client.widget;
+package org.mult.daap.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;

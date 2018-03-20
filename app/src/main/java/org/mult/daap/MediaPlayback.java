@@ -49,7 +49,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.client.Song;
-import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
+import org.mult.daap.widget.DAAPClientAppWidgetOneProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

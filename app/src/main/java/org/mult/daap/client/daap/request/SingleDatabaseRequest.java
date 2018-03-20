@@ -2,8 +2,10 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
+import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.daap.exception.BadResponseCodeException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ public class SingleDatabaseRequest extends Request {
     private final ArrayList<FieldPair> mlclList = new ArrayList<>();
     private final ArrayList<FieldPair> mlitList = new ArrayList<>();
 
-    public SingleDatabaseRequest(DaapHost daapHost) throws BadResponseCodeException,
+    public SingleDatabaseRequest(Host daapHost) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(daapHost);
         query("SingleDatabaseRequest");

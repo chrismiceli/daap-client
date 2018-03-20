@@ -11,7 +11,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
+import org.mult.daap.widget.DAAPClientAppWidgetOneProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -2,8 +2,10 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.Hasher;
+import org.mult.daap.client.daap.exception.BadResponseCodeException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -13,14 +15,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public abstract class Request {
-    protected final DaapHost host;
+    protected final Host host;
     public byte[] data;
     protected int offset;
     protected HttpURLConnection httpc;
     protected final int access_index = 2;
 
     // start of song request.
-    public Request(DaapHost daapHost) {
+    public Request(Host daapHost) {
         // needed for bug in android:
         // http://code.google.com/p/android/issues/detail?id=7786
         System.setProperty("http.keepAlive", "false");
@@ -51,8 +53,8 @@ public abstract class Request {
         addRequestProperties();
         httpc.connect();
         int responseCode = httpc.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK
-                && responseCode != HttpURLConnection.HTTP_PARTIAL) {
+        if (responseCode != HttpURLConnection.HTTP_OK &&
+            responseCode != HttpURLConnection.HTTP_PARTIAL) {
             String response_message = httpc.getResponseMessage();
             if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 throw new PasswordFailedException("" + responseCode + ": "
@@ -94,7 +96,7 @@ public abstract class Request {
         return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
-    public static String readString(byte[] data, int offset, int length) {
+    protected static String readString(byte[] data, int offset, int length) {
         try {
             return new String(data, offset, length, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -110,12 +112,8 @@ public abstract class Request {
                 | (data[3 + offset] & 0xff));
     }
 
-    public DaapHost getHost() {
-        return host;
-    }
-
     /* convert from hex in binary to decimal */
-    public static int readInt(byte[] data, int offset, int size) {
+    protected static int readInt(byte[] data, int offset, int size) {
         int i = 0;
         try {
             ByteArrayInputStream b = new ByteArrayInputStream(data, offset, size);

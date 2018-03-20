@@ -2,23 +2,29 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
-import org.mult.daap.client.daap.DaapHost;
-import org.mult.daap.client.daap.Database;
+import org.mult.daap.client.Host;
+import org.mult.daap.client.daap.exception.BadResponseCodeException;
+import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class DatabasesRequest extends Request {
-    private Database database;
+    private int databaseId;
+    private String databaseName;
     private ArrayList<FieldPair> mlclList = new ArrayList<>();
     private ArrayList<FieldPair> mlitList = new ArrayList<>();
 
-    public DatabasesRequest(DaapHost daapHost) throws BadResponseCodeException,
+    public DatabasesRequest(Host daapHost) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(daapHost);
         query("DabasesRequest");
         readResponse();
         process();
+    }
+
+    public int getDatabaseId() {
+        return databaseId;
     }
 
     protected String getRequestString() {
@@ -88,7 +94,6 @@ public class DatabasesRequest extends Request {
         String name;
         int size;
         int startPos = position;
-        database = new Database();
         boolean bMiid = false;
         boolean bMinm = false;
         while (position < argSize + startPos) {
@@ -98,19 +103,15 @@ public class DatabasesRequest extends Request {
             position += 4;
             if (name.equals("miid")) {
                 bMiid = true;
-                database.id = readInt(data, position);
+                databaseId = readInt(data, position);
             } else if (name.equals("minm")) {
                 bMinm = true;
-                database.name = readString(data, position, size);
+                databaseName = readString(data, position, size);
             }
             if (bMiid && bMinm) {
                 break;
             }
             position += size;
         }
-    }
-
-    public Database getDatabase() {
-        return database;
     }
 }
