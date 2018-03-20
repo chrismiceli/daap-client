@@ -2,7 +2,7 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 public class UpdateRequest extends Request {
     private int mRevisionNumber = 0;
 
-    public UpdateRequest(DaapHost h) throws BadResponseCodeException,
+    public UpdateRequest(Host h) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(h);
         query("UpdateRequest");

@@ -1,7 +1,7 @@
 package org.mult.daap.background;
 
 import org.mult.daap.Contents;
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.net.InetAddress;
@@ -65,10 +65,10 @@ public class LoginManager extends Observable implements Runnable {
                 return;
             }
             if (login_required) {
-                Contents.daapHost = new DaapHost(password, Contents.address, port);
+                Contents.daapHost = new Host(password, Contents.address, port);
             }
             else {
-                Contents.daapHost = new DaapHost(null, Contents.address, port);
+                Contents.daapHost = new Host(null, Contents.address, port);
             }
             if (interrupted) {
                 return;

@@ -2,7 +2,7 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
@@ -15,7 +15,7 @@ public class DatabasesRequest extends Request {
     private ArrayList<FieldPair> mlclList = new ArrayList<>();
     private ArrayList<FieldPair> mlitList = new ArrayList<>();
 
-    public DatabasesRequest(DaapHost daapHost) throws BadResponseCodeException,
+    public DatabasesRequest(Host daapHost) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(daapHost);
         query("DabasesRequest");

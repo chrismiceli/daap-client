@@ -1,6 +1,6 @@
 package org.mult.daap.client.daap.request;
 
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
@@ -13,7 +13,7 @@ public class HangingUpdateRequest extends Request {
      * @throws BadResponseCodeException
      * @throws PasswordFailedException
      * @throws IOException */
-    public HangingUpdateRequest(DaapHost h) throws BadResponseCodeException,
+    public HangingUpdateRequest(Host h) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(h);
         query();

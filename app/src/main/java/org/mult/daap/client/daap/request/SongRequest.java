@@ -1,7 +1,7 @@
 package org.mult.daap.client.daap.request;
 
+import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
-import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.Hasher;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
@@ -16,7 +16,7 @@ public class SongRequest extends Request {
     private BufferedInputStream b;
     private final Song song;
 
-    public SongRequest(DaapHost daapHost, Song song)
+    public SongRequest(Host daapHost, Song song)
             throws PasswordFailedException, BadResponseCodeException,
             IOException {
         super(daapHost);

@@ -6,27 +6,25 @@
  */
 package org.mult.daap.client;
 
-import org.mult.daap.client.daap.DaapHost;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Playlist {
     private int id;
     private final ArrayList<Song> songs = new ArrayList<>();
-    private final DaapHost host;
+    private final Host host;
     private String name;
 
-    public Playlist(DaapHost daapHost) {
+    public Playlist(Host daapHost) {
         host = daapHost;
     }
 
-    public Playlist(DaapHost daapHost, String name) {
+    public Playlist(Host daapHost, String name) {
         this.host = daapHost;
         this.name = name;
     }
 
-    public DaapHost getHost() {
+    public Host getHost() {
         return host;
     }
 

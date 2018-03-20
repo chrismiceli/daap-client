@@ -2,7 +2,7 @@ package org.mult.daap.client.daap.request;
 
 import android.util.Log;
 
-import org.mult.daap.client.daap.DaapHost;
+import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.Hasher;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
@@ -15,14 +15,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public abstract class Request {
-    protected final DaapHost host;
+    protected final Host host;
     public byte[] data;
     protected int offset;
     protected HttpURLConnection httpc;
     protected final int access_index = 2;
 
     // start of song request.
-    public Request(DaapHost daapHost) {
+    public Request(Host daapHost) {
         // needed for bug in android:
         // http://code.google.com/p/android/issues/detail?id=7786
         System.setProperty("http.keepAlive", "false");
