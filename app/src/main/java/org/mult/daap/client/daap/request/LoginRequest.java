@@ -15,24 +15,25 @@ public class LoginRequest extends Request {
             PasswordFailedException, IOException {
         super(daapHost);
         query("LoginRequest");
-        readResponse();
-        process();
+        byte[] data = readResponse();
+        process(data);
     }
 
+    @Override
     protected String getRequestString() {
         return "login";
     }
 
-    protected void process() {
+    private void process(byte[] data) {
         if (data.length == 0) {
             Log.d("Request", "Zero Length");
             return;
         }
         offset += 8;
-        processLoginRequest();
+        processLoginRequest(data);
     }
 
-    public void processLoginRequest() {
+    private void processLoginRequest(byte[] data) {
         String name;
         int size;
         while (offset < data.length) {

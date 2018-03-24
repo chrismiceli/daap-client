@@ -12,34 +12,34 @@ import java.util.ArrayList;
 
 public class SingleDatabaseRequest extends Request {
     private final ArrayList<Song> mSongList = new ArrayList<>();
-    private final ArrayList<FieldPair> mlclList = new ArrayList<>();
-    private final ArrayList<FieldPair> mlitList = new ArrayList<>();
 
     public SingleDatabaseRequest(Host daapHost) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(daapHost);
         query("SingleDatabaseRequest");
-        readResponse();
-        process();
+        byte[] data = readResponse();
+        process(data);
     }
 
+    @Override
     protected String getRequestString() {
         return "databases/" + host.getDatabaseID() + "/items?type=" +
                 "music&meta=dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songtime,daap.songsize,daap.songtracknumber,daap.songdiscnumber,daap.songformat" +
                 "&session-id=" + host.getSessionID() + "&revision-number=" + host.getRevisionNumber();
     }
 
-    private void process() {
+    private void process(byte[] data) {
         if (data.length == 0) {
             Log.d("Request", "Zero Length");
             return;
         }
         offset += 8;
-        processSingleDatabaseRequest();
-        parseMLCL();
+        ArrayList<FieldPair> mlclList = processSingleDatabaseRequest(data);
+        parseMLCL(data, mlclList);
     }
 
-    private void processSingleDatabaseRequest() {
+    private ArrayList<FieldPair> processSingleDatabaseRequest(byte[] data) {
+        ArrayList<FieldPair> mlclList = new ArrayList<>();
         String name;
         int size;
         while (offset < data.length) {
@@ -55,22 +55,25 @@ public class SingleDatabaseRequest extends Request {
             }
             offset += size;
         }
+
+        return mlclList;
     }
 
-    private void parseMLCL() {
+    private void parseMLCL(byte[] data, ArrayList<FieldPair> mlclList) {
+        ArrayList<FieldPair> mlitList = new ArrayList<>();
         for (FieldPair mlcl : mlclList) {
-            processContainerList(mlcl.position, mlcl.size);
+            mlitList.addAll(processContainerList(data, mlcl.position, mlcl.size));
         }
-        parseMLIT();
+        parseMLIT(data, mlitList);
     }
 
-    private void parseMLIT() {
+    private void parseMLIT(byte[] data, ArrayList<FieldPair> mlitList) {
         for (FieldPair mlit : mlitList) {
-            processmlitItem(mlit.position, mlit.size);
+            processmlitItem(data, mlit.position, mlit.size);
         }
     }
 
-    private void processmlitItem(int position, int argSize) {
+    private void processmlitItem(byte[] data, int position, int argSize) {
         String name;
         int size;
         int startPos = position;
@@ -116,8 +119,9 @@ public class SingleDatabaseRequest extends Request {
         mSongList.add(song);
     }
 
-    private void processContainerList(int position, int argSize) {
+    private ArrayList<FieldPair> processContainerList(byte[] data, int position, int argSize) {
         String name;
+        ArrayList<FieldPair> mlitList = new ArrayList<>();
         int size;
         int startPos = position;
         while (position < argSize + startPos) {
@@ -130,6 +134,8 @@ public class SingleDatabaseRequest extends Request {
             }
             position += size;
         }
+
+        return mlitList;
     }
 
     public ArrayList<Song> getSongs() {

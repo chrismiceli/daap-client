@@ -8,23 +8,20 @@ import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlaylistsRequest extends Request {
-    private ArrayList<Playlist> mPlaylist;
-    private ArrayList<FieldPair> mlclList;
-    private ArrayList<FieldPair> mlitList;
+    private ArrayList<Playlist> mPlaylist = new ArrayList<>();
 
     public PlaylistsRequest(Host h) throws BadResponseCodeException, PasswordFailedException, IOException {
         super(h);
-        mlclList = new ArrayList<>();
-        mlitList = new ArrayList<>();
-        mPlaylist = new ArrayList<>();
         query("PlaylistRequest");
-        readResponse();
-        process();
+        byte[] data = readResponse();
+        process(data);
     }
 
+    @Override
     protected String getRequestString() {
         return "databases/" +
                host.getDatabaseID() +
@@ -34,20 +31,21 @@ public class PlaylistsRequest extends Request {
                host.getRevisionNumber();
     }
 
-    protected void process() {
+    private void process(byte[] data) {
         if (data.length == 0) {
             Log.d("Request", "Zero Length");
             return;
         }
         offset += 4;
         offset += 4;
-        processSingleDatabaseRequest();
-        parseMLCL();
+        ArrayList<FieldPair> mlclList = processSingleDatabaseRequest(data);
+        parseMLCL(data, mlclList);
     }
 
-    public void processSingleDatabaseRequest() {
+    private ArrayList<FieldPair> processSingleDatabaseRequest(byte[] data) {
         String name;
         int size;
+        ArrayList<FieldPair> mlclList = new ArrayList<>();
         while (offset < data.length) {
             name = readString(data, offset, 4);
             offset += 4;
@@ -60,25 +58,26 @@ public class PlaylistsRequest extends Request {
             }
             offset += size;
         }
+
+        return mlclList;
     }
 
     /* Creates a list of byte arrays for use in mLIT */
-    protected void parseMLCL() {
-        for (int i = 0; i < mlclList.size(); i++) {
-            processContainerList(mlclList.get(i).position, mlclList.get(i).size);
+    private void parseMLCL(byte[] data, ArrayList<FieldPair> mlclList) {
+        ArrayList<FieldPair> mlitList = new ArrayList();
+        for(FieldPair mlcl : mlclList) {
+            mlitList.addAll(processContainerList(data, mlcl.position, mlcl.size));
         }
-        parseMLIT();
+        parseMLIT(data, mlitList);
     }
 
-    protected void parseMLIT() {
-        for (int i = 0; i < mlitList.size(); i++) {
-            processmlitItem(mlitList.get(i).position, mlitList.get(i).size);
+    private void parseMLIT(byte[] data, ArrayList<FieldPair> mlitList) {
+        for (FieldPair mlit : mlitList) {
+            processmlitItem(data, mlit.position, mlit.size);
         }
-        mlitList = null;
-        mlclList = null;
     }
 
-    public void processmlitItem(int position, int argSize) {
+    private void processmlitItem(byte[] data, int position, int argSize) {
         String name = "";
         int size;
         int startPos = position;
@@ -98,10 +97,11 @@ public class PlaylistsRequest extends Request {
     }
 
     /* get all mlit in mlclList */
-    public void processContainerList(int position, int argSize) {
+    private ArrayList<FieldPair> processContainerList(byte[] data, int position, int argSize) {
         String name;
         int size;
         int startPos = position;
+        ArrayList<FieldPair> mlitList = new ArrayList<>();
         while (position < argSize + startPos) {
             name = readString(data, position, 4);
             position += 4;
@@ -112,6 +112,8 @@ public class PlaylistsRequest extends Request {
             }
             position += size;
         }
+
+        return mlitList;
     }
 
     public ArrayList<Playlist> getPlaylists() {
