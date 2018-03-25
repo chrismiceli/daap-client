@@ -15,30 +15,32 @@ public class UpdateRequest extends Request {
             PasswordFailedException, IOException {
         super(h);
         query("UpdateRequest");
-        readResponse();
-        process();
+        byte[] data = readResponse();
+        process(data);
     }
 
+    @Override
     protected String getRequestString() {
         return "update?session-id=" + host.getSessionID() +
                 "&revision-number=" + host.getRevisionNumber();
     }
 
+    @Override
     protected void addRequestProperties() {
         super.addRequestProperties();
         httpc.addRequestProperty("Host", host.getAddress());
     }
 
-    protected void process() {
+    private void process(byte[] data) {
         if (data.length == 0) {
             Log.d("Request", "Zero Length");
             return;
         }
         offset += 8;
-        processUpdateRequest();
+        processUpdateRequest(data);
     }
 
-    public void processUpdateRequest() {
+    private void processUpdateRequest(byte[] data) {
         String name;
         int size;
         while (offset < data.length) {

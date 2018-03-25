@@ -13,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class SongRequest extends Request {
-    private BufferedInputStream b;
+    private BufferedInputStream bufferedInputStream;
     private final Song song;
 
     public SongRequest(Host daapHost, Song song)
@@ -23,9 +23,9 @@ public class SongRequest extends Request {
         host.getNextRequestNumber();
         this.song = song;
         query("SongRequest");
-        readResponse();
     }
 
+    @Override
     protected void addRequestProperties() {
         httpc.addRequestProperty("Host", "" + host.getAddress());
         httpc.addRequestProperty("Accept", "*/*");
@@ -36,6 +36,7 @@ public class SongRequest extends Request {
         httpc.addRequestProperty("Connection", "close");
     }
 
+    @Override
     protected String getRequestString() {
         return "databases/" + host.getDatabaseID() +
                 "/items/" + song.id + "." + song.format +
@@ -47,8 +48,10 @@ public class SongRequest extends Request {
                 + "/" + getRequestString());
     }
 
-    protected void readResponse() throws IOException {
-        b = new BufferedInputStream(httpc.getInputStream(), 8192);
+    @Override
+    protected byte[] readResponse() throws IOException {
+        bufferedInputStream = new BufferedInputStream(httpc.getInputStream(), 8192);
+        return null;
     }
 
     protected String getHashCode(Request r) {
@@ -56,6 +59,6 @@ public class SongRequest extends Request {
     }
 
     public InputStream getStream() {
-        return b;
+        return bufferedInputStream;
     }
 }

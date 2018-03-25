@@ -10,16 +10,14 @@ import java.net.URL;
 
 public class HangingUpdateRequest extends Request {
     /** Constructor for the HangingUpdateRequest object
-     * @throws BadResponseCodeException
-     * @throws PasswordFailedException
      * @throws IOException */
-    public HangingUpdateRequest(Host h) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public HangingUpdateRequest(Host h) throws IOException {
         super(h);
         query();
         readResponse();
     }
 
+    @Override
     protected void addRequestProperties() {
         // super.addRequestProperties();
         // httpc.addRequestProperty("Connection", "Close");
@@ -31,6 +29,7 @@ public class HangingUpdateRequest extends Request {
         httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
     }
 
+    @Override
     protected String getRequestString() {
         String ret = "update?";
         ret += "session-id=" + host.getSessionID();
@@ -45,7 +44,6 @@ public class HangingUpdateRequest extends Request {
                     + "/" + getRequestString());
             httpc = (HttpURLConnection) url.openConnection();
             addRequestProperties();
-            data = new byte[0];
             httpc.connect();
         } catch (Exception e) {
             e.printStackTrace();

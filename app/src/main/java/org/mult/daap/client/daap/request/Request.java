@@ -16,18 +16,15 @@ import java.net.URL;
 
 public abstract class Request {
     protected final Host host;
-    public byte[] data;
-    protected int offset;
+    protected int offset = 0;
     protected HttpURLConnection httpc;
     protected final int access_index = 2;
 
-    // start of song request.
     public Request(Host daapHost) {
         // needed for bug in android:
         // http://code.google.com/p/android/issues/detail?id=7786
         System.setProperty("http.keepAlive", "false");
         host = daapHost;
-        offset = 0;
     }
 
     abstract protected String getRequestString();
@@ -69,14 +66,15 @@ public abstract class Request {
         }
     }
 
-    protected void readResponse() throws IOException {
+    protected byte[] readResponse() throws IOException {
         DataInputStream in = new DataInputStream(httpc.getInputStream());
         int len = httpc.getContentLength();
         if (httpc.getContentLength() == -1) {
-            return;
+            return null;
         }
-        data = new byte[len];
+        byte[] data = new byte[len];
         in.readFully(data);
+        return data;
     }
 
     protected void addRequestProperties() {

@@ -11,42 +11,40 @@ import java.util.ArrayList;
 
 public class DatabasesRequest extends Request {
     private int databaseId;
-    private String databaseName;
-    private ArrayList<FieldPair> mlclList = new ArrayList<>();
-    private ArrayList<FieldPair> mlitList = new ArrayList<>();
+
 
     public DatabasesRequest(Host daapHost) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(daapHost);
         query("DabasesRequest");
-        readResponse();
-        process();
+        byte[] data = readResponse();
+        process(data);
     }
 
     public int getDatabaseId() {
         return databaseId;
     }
 
+    @Override
     protected String getRequestString() {
         return "databases?session-id=" + host.getSessionID() + "&revision-number=" + host.getRevisionNumber();
     }
 
-    private void process() {
-        mlclList = new ArrayList<>();
-        mlitList = new ArrayList<>();
+    private void process(byte[] data) {
         if (data.length == 0) {
             Log.d("Request", "Zero Length");
             return;
         }
         offset += 4;
         offset += 4;
-        processDatabaseRequest();
-        parseMLCL();
+        ArrayList<FieldPair> mlclList = processDatabaseRequest(data);
+        parseMLCL(data, mlclList);
     }
 
-    private void processDatabaseRequest() {
+    private ArrayList<FieldPair> processDatabaseRequest(byte[] data) {
         String name;
         int size;
+        ArrayList<FieldPair> mlclList = new ArrayList<>();
         while (offset < data.length) {
             name = readString(data, offset, 4);
             offset += 4;
@@ -59,25 +57,29 @@ public class DatabasesRequest extends Request {
             }
             offset += size;
         }
+
+        return mlclList;
     }
 
     /* Creates a list of byte arrays for use in mLIT */
-    private void parseMLCL() {
-        for (int i = 0; i < mlclList.size(); i++) {
-            processContainerList(mlclList.get(i).position, mlclList.get(i).size);
+    private void parseMLCL(byte[] data, ArrayList<FieldPair> mlclList) {
+        ArrayList<FieldPair> mlitList = new ArrayList<>();
+        for(FieldPair mlcl : mlclList) {
+            mlitList.addAll(processContainerList(data, mlcl.position, mlcl.size));
         }
-        parseMLIT();
+        parseMLIT(data, mlitList);
     }
 
-    private void parseMLIT() {
-        processmLitList(mlitList.get(0).position, mlitList.get(0).size);
+    private void parseMLIT(byte[] data, ArrayList<FieldPair> mlitList) {
+        processmLitList(data, mlitList.get(0).position, mlitList.get(0).size);
     }
 
     /* get all mlit in mlclList */
-    private void processContainerList(int position, int argSize) {
+    private ArrayList<FieldPair> processContainerList(byte[] data, int position, int argSize) {
         String name;
         int size;
         int startPos = position;
+        ArrayList<FieldPair> mlitList = new ArrayList<>();
         while (position < argSize + startPos) {
             name = readString(data, position, 4);
             position += 4;
@@ -88,27 +90,21 @@ public class DatabasesRequest extends Request {
             }
             position += size;
         }
+
+        return mlitList;
     }
 
-    private void processmLitList(int position, int argSize) {
+    private void processmLitList(byte[] data, int position, int argSize) {
         String name;
         int size;
         int startPos = position;
-        boolean bMiid = false;
-        boolean bMinm = false;
         while (position < argSize + startPos) {
             name = readString(data, position, 4);
             position += 4;
             size = readInt(data, position);
             position += 4;
             if (name.equals("miid")) {
-                bMiid = true;
                 databaseId = readInt(data, position);
-            } else if (name.equals("minm")) {
-                bMinm = true;
-                databaseName = readString(data, position, size);
-            }
-            if (bMiid && bMinm) {
                 break;
             }
             position += size;
