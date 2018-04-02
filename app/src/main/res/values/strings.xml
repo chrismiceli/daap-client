@@ -18,7 +18,7 @@
     <string name="server_settings">Server settings</string>
     <string name="share_name">DAAP Share Name</string>
     <string name="url_description">URL and Port</string>
-    <string name="login_required">Login required</string>
+    <string name="login_required">Login password required</string>
     <string name="menu_stop">Stop</string>
     <string name="password">Password</string>
     <string name="error_title">Error!</string>

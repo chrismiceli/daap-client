@@ -1,7 +1,6 @@
 package org.mult.daap;
 
 import org.mult.daap.background.GetSongsForPlaylist;
-import org.mult.daap.background.LoginManager;
 import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
@@ -31,7 +30,6 @@ public class Contents {
     public static Host daapHost;
     public static GetSongsForPlaylist getSongsForPlaylist = null;
     public static InetAddress address;
-    public static LoginManager loginManager;
     public static SearchThread searchResult;
     public static short playlist_position = -1;
     public static boolean shuffle = false;
@@ -56,8 +54,7 @@ public class Contents {
                 && position >= 0) {
             song = activeList.get(position);
             return song;
-        }
-        else {
+        } else {
             throw new IndexOutOfBoundsException("End of list");
         }
     }
@@ -98,8 +95,7 @@ public class Contents {
     public static void addToQueue(Song s) throws IndexOutOfBoundsException {
         if (queue.size() > 9) {
             throw new IndexOutOfBoundsException("Can't add more than 10");
-        }
-        else {
+        } else {
             queue.add(s);
         }
     }
