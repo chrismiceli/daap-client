@@ -60,7 +60,7 @@ public class Host {
         grabSongs();
     }
 
-    public void login() throws Exception {
+    private void login() throws Exception {
         try {
             revisionNum = 1;
             sessionId = 0;

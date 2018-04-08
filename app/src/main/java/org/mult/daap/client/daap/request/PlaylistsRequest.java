@@ -8,11 +8,10 @@ import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlaylistsRequest extends Request {
-    private ArrayList<Playlist> mPlaylist = new ArrayList<>();
+    private final ArrayList<Playlist> mPlaylist = new ArrayList<>();
 
     public PlaylistsRequest(Host h) throws BadResponseCodeException, PasswordFailedException, IOException {
         super(h);
@@ -64,7 +63,7 @@ public class PlaylistsRequest extends Request {
 
     /* Creates a list of byte arrays for use in mLIT */
     private void parseMLCL(byte[] data, ArrayList<FieldPair> mlclList) {
-        ArrayList<FieldPair> mlitList = new ArrayList();
+        ArrayList<FieldPair> mlitList = new ArrayList<>();
         for(FieldPair mlcl : mlclList) {
             mlitList.addAll(processContainerList(data, mlcl.position, mlcl.size));
         }
@@ -78,7 +77,7 @@ public class PlaylistsRequest extends Request {
     }
 
     private void processmlitItem(byte[] data, int position, int argSize) {
-        String name = "";
+        String name;
         int size;
         int startPos = position;
         Playlist p = new Playlist(host);
