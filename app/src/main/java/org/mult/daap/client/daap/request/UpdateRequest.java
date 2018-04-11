@@ -1,20 +1,24 @@
 package org.mult.daap.client.daap.request;
 
 import android.util.Log;
+import android.util.Pair;
 
 import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class UpdateRequest extends Request {
-    private int mRevisionNumber = 0;
+    private int mRevisionNumber;
 
-    public UpdateRequest(Host h) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public UpdateRequest(Host h) {
         super(h);
-        query("UpdateRequest");
+    }
+
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        query();
         byte[] data = readResponse();
         process(data);
     }
@@ -26,9 +30,10 @@ public class UpdateRequest extends Request {
     }
 
     @Override
-    protected void addRequestProperties() {
-        super.addRequestProperties();
-        httpc.addRequestProperty("Host", host.getAddress());
+    protected ArrayList<Pair<String, String>> getRequestProperties() {
+        ArrayList<Pair<String, String>> requestProperties = new ArrayList<>(super.getRequestProperties());
+        requestProperties.add(new Pair<>("Host", host.getAddress()));
+        return requestProperties;
     }
 
     private void process(byte[] data) {

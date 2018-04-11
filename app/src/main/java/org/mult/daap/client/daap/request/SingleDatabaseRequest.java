@@ -13,10 +13,12 @@ import java.util.ArrayList;
 public class SingleDatabaseRequest extends Request {
     private final ArrayList<Song> mSongList = new ArrayList<>();
 
-    public SingleDatabaseRequest(Host daapHost) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public SingleDatabaseRequest(Host daapHost) {
         super(daapHost);
-        query("SingleDatabaseRequest");
+    }
+
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        query();
         byte[] data = readResponse();
         process(data);
     }

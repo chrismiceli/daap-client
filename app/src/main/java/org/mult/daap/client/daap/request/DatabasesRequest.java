@@ -13,10 +13,13 @@ public class DatabasesRequest extends Request {
     private int databaseId;
 
 
-    public DatabasesRequest(Host daapHost) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public DatabasesRequest(Host daapHost) {
         super(daapHost);
-        query("DabasesRequest");
+    }
+
+    @Override
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        query();
         byte[] data = readResponse();
         process(data);
     }

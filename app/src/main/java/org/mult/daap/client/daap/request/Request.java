@@ -1,6 +1,7 @@
 package org.mult.daap.client.daap.request;
 
 import android.util.Log;
+import android.util.Pair;
 
 import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.Hasher;
@@ -13,32 +14,35 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
-public abstract class Request {
-    protected final Host host;
-    protected int offset = 0;
-    protected HttpURLConnection httpc;
-    protected final int access_index = 2;
+abstract class Request {
+    final Host host;
+    int offset = 0;
+    HttpURLConnection httpc;
+    final static String access_index = "2";
 
-    public Request(Host daapHost) {
-        // needed for bug in android:
-        // http://code.google.com/p/android/issues/detail?id=7786
-        System.setProperty("http.keepAlive", "false");
+    Request(Host daapHost) {
         host = daapHost;
     }
 
     abstract protected String getRequestString();
 
-    protected void query(String caller) throws BadResponseCodeException,
+    abstract public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException;
+
+    void query() throws BadResponseCodeException,
             PasswordFailedException, IOException {
-        query(caller, false);
+        query(false);
     }
 
     // Retry if we don't recognize the response code and turn of the Accept-Encoding.
     // This resolves issue 58.
-    private void query(String caller, boolean retry)
+    private void query(boolean retry)
             throws BadResponseCodeException, PasswordFailedException,
             IOException {
+        // needed for bug in android:
+        // http://code.google.com/p/android/issues/detail?id=7786
+        System.setProperty("http.keepAlive", "false");
         URL url = new URL("http://" + host.getAddress() + ":" + host.getPort()
                 + "/" + getRequestString());
         Log.d("Request", url.toString());
@@ -47,7 +51,10 @@ public abstract class Request {
         if (!retry) {
             httpc.setRequestProperty("Accept-Encoding", "identity");
         }
-        addRequestProperties();
+        for(Pair<String, String> requestProperty : getRequestProperties()) {
+            httpc.addRequestProperty(requestProperty.first, requestProperty.second);
+        }
+
         httpc.connect();
         int responseCode = httpc.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK &&
@@ -61,12 +68,12 @@ public abstract class Request {
                 throw new BadResponseCodeException(responseCode);
             }
             else {
-                query(caller, true);
+                query(true);
             }
         }
     }
 
-    protected byte[] readResponse() throws IOException {
+    byte[] readResponse() throws IOException {
         DataInputStream in = new DataInputStream(httpc.getInputStream());
         int len = httpc.getContentLength();
         if (httpc.getContentLength() == -1) {
@@ -77,24 +84,25 @@ public abstract class Request {
         return data;
     }
 
-    protected void addRequestProperties() {
-        httpc.setRequestProperty("User-Agent", "iTunes/4.6 (Windows; N)");
-        httpc.addRequestProperty("Accept-Language", "en-us, en;q=5.0");
-        httpc.addRequestProperty("Client-DAAP-Access-Index",
-                String.valueOf(access_index));
-        httpc.addRequestProperty("Client-DAAP-Version", "3.0");
-        httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
+    ArrayList<Pair<String, String>> getRequestProperties() {
+        ArrayList<Pair<String, String>> requestProperties = new ArrayList<>();
+        requestProperties.add(new Pair<>("User-Agent", "iTunes/4.6 (Windows; N)"));
+        requestProperties.add(new Pair<>("Accept-Language", "en-us, en;q=5.0"));
+        requestProperties.add(new Pair<>("Client-DAAP-Access-Index", Request.access_index));
+        requestProperties.add(new Pair<>("Client-DAAP-Version", "3.0"));
+        requestProperties.add(new Pair<>("Client-DAAP-Validation", getHashCode(this)));
         if (host.isPasswordProtected()) {
-            httpc.addRequestProperty("Authorization",
-                    "Basic " + host.getPassword());
+            requestProperties.add(new Pair<>("Authorization", "Basic " + host.getPassword()));
         }
+
+        return requestProperties;
     }
 
-    protected String getHashCode(Request r) {
+    String getHashCode(Request r) {
         return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
-    protected static String readString(byte[] data, int offset, int length) {
+    static String readString(byte[] data, int offset, int length) {
         try {
             return new String(data, offset, length, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -103,15 +111,15 @@ public abstract class Request {
         return "";
     }
 
-    protected static int readInt(byte[] data, int offset) {
-        return (((data[0 + offset] & 0xff) << 24)
+    static int readInt(byte[] data, int offset) {
+        return (((data[offset] & 0xff) << 24)
                 | ((data[1 + offset] & 0xff) << 16)
                 | ((data[2 + offset] & 0xff) << 8)
                 | (data[3 + offset] & 0xff));
     }
 
     /* convert from hex in binary to decimal */
-    protected static int readInt(byte[] data, int offset, int size) {
+    static int readInt(byte[] data, int offset, int size) {
         int i = 0;
         try {
             ByteArrayInputStream b = new ByteArrayInputStream(data, offset, size);

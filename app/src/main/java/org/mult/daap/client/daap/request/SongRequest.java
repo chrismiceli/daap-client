@@ -1,5 +1,7 @@
 package org.mult.daap.client.daap.request;
 
+import android.util.Pair;
+
 import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.Hasher;
@@ -11,29 +13,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class SongRequest extends Request {
     private BufferedInputStream bufferedInputStream;
     private final Song song;
 
-    public SongRequest(Host daapHost, Song song)
-            throws PasswordFailedException, BadResponseCodeException,
-            IOException {
+    public SongRequest(Host daapHost, Song song) {
         super(daapHost);
-        host.getNextRequestNumber();
         this.song = song;
-        query("SongRequest");
+    }
+
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        host.updateNextRequestNumber();
+        query();
     }
 
     @Override
-    protected void addRequestProperties() {
-        httpc.addRequestProperty("Host", "" + host.getAddress());
-        httpc.addRequestProperty("Accept", "*/*");
-        httpc.addRequestProperty("Cache-Control", "no-cache");
-        super.addRequestProperties();
-        httpc.addRequestProperty("Client-DAAP-Request-ID",
-                "" + host.getThisRequestNumber());
-        httpc.addRequestProperty("Connection", "close");
+    protected ArrayList<Pair<String, String>> getRequestProperties() {
+        ArrayList<Pair<String, String>> requestProperties = new ArrayList<>();
+        requestProperties.add(new Pair<>("Host", "" + host.getAddress()));
+        requestProperties.add(new Pair<>("Accept", "*/*"));
+        requestProperties.add(new Pair<>("Cache-Control", "no-cache"));
+        requestProperties.addAll(super.getRequestProperties());
+        requestProperties.add(new Pair<>("Client-DAAP-Request-ID", Integer.toString(host.getThisRequestNumber())));
+        requestProperties.add(new Pair<>("Connection", "close"));
+        return requestProperties;
     }
 
     @Override

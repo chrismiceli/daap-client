@@ -19,7 +19,7 @@ public class Contents {
     public static ArrayList<Song> filteredAlbumSongList = new ArrayList<>();
     public static ArrayList<Song> filteredArtistSongList = new ArrayList<>();
     public static ArrayList<Song> queue = new ArrayList<>(10);
-    public static ArrayList<Song> activeList = new ArrayList<>();
+    private static ArrayList<Song> activeList = new ArrayList<>();
     public static ArrayList<String> stringElements = new ArrayList<>();
     public static ArrayList<String> artistNameList = new ArrayList<>();
     public static ArrayList<String> albumNameList = new ArrayList<>();
@@ -34,7 +34,6 @@ public class Contents {
     public static short playlist_position = -1;
     public static boolean shuffle = false;
     public static boolean repeat = false;
-    public static boolean lastUsedAlbumActivity = false;
     private static int position = 0;
 
     public static void songListAdd(Song s) {

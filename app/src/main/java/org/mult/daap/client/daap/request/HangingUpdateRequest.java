@@ -1,32 +1,35 @@
 package org.mult.daap.client.daap.request;
 
+import android.util.Pair;
+
 import org.mult.daap.client.Host;
-import org.mult.daap.client.daap.exception.BadResponseCodeException;
-import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class HangingUpdateRequest extends Request {
-    /** Constructor for the HangingUpdateRequest object
-     * @throws IOException */
-    public HangingUpdateRequest(Host h) throws IOException {
+    public HangingUpdateRequest(Host h) {
         super(h);
+    }
+
+    @Override
+    public void Execute() throws IOException {
         query();
         readResponse();
     }
 
     @Override
-    protected void addRequestProperties() {
-        // super.addRequestProperties();
-        // httpc.addRequestProperty("Connection", "Close");
-        httpc.addRequestProperty("Host", host.getAddress());
-        httpc.addRequestProperty("Client-DAAP-Version", "3.0");
-        httpc.setRequestProperty("User-Agent", "iTunes/4.6 (Windows; N)");
-        httpc.addRequestProperty("Client-DAAP-Access-Index",
-                String.valueOf(access_index));
-        httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
+    ArrayList<Pair<String, String>> getRequestProperties() {
+        ArrayList<Pair<String, String>> requestProperties = new ArrayList<>();
+
+        requestProperties.add(new Pair<>("Host", host.getAddress()));
+        requestProperties.add(new Pair<>("Client-DAAP-Version", "3.0"));
+        requestProperties.add(new Pair<>("User-Agent", "iTunes/4.6 (Windows; N)"));
+        requestProperties.add(new Pair<>("Client-DAAP-Access-Index", Request.access_index));
+        requestProperties.add(new Pair<>("Client-DAAP-Validation", getHashCode(this)));
+        return requestProperties;
     }
 
     @Override
@@ -38,12 +41,16 @@ public class HangingUpdateRequest extends Request {
         return ret;
     }
 
-    private void query() {
+    @Override
+    void query() {
         try {
             URL url = new URL("http://" + host.getAddress() + ":" + host.getPort()
                     + "/" + getRequestString());
             httpc = (HttpURLConnection) url.openConnection();
-            addRequestProperties();
+            for(Pair<String, String> requestProperty : getRequestProperties()) {
+                httpc.addRequestProperty(requestProperty.first, requestProperty.second);
+            }
+
             httpc.connect();
         } catch (Exception e) {
             e.printStackTrace();

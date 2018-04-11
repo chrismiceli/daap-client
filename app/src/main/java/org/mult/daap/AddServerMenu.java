@@ -3,7 +3,6 @@ package org.mult.daap;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -76,7 +75,6 @@ public class AddServerMenu extends AppCompatActivity {
         loginCheckBox.setOnCheckedChangeListener(new LoginRequiredListener(this.findViewById(R.id.passwordSection)));
 
         addServerButton.setOnClickListener(new AddServerButtonListener(
-                this.getApplication(),
                 serverAddressEditText,
                 (EditText) this.findViewById(R.id.serverPasswordText),
                 (EditText) this.findViewById(R.id.serverPortText),
@@ -224,7 +222,7 @@ public class AddServerMenu extends AppCompatActivity {
     private static class JmDNSHandler extends Handler {
         private final WeakReference<AddServerMenu> addServerMenu;
 
-        public JmDNSHandler(AddServerMenu addServerMenu) {
+        JmDNSHandler(AddServerMenu addServerMenu) {
             this.addServerMenu = new WeakReference<>(addServerMenu);
         }
 
@@ -292,19 +290,15 @@ public class AddServerMenu extends AppCompatActivity {
      * Function that is called when the Add Server button is pressed
      */
     private class AddServerButtonListener implements OnClickListener {
-        private final Context context;
         private final EditText serverAddressEditText;
         private final EditText passwordEditText;
         private final EditText serverPortEditText;
         private final CheckBox loginCheckBox;
 
-        AddServerButtonListener(
-                Context context,
-                EditText serverAddressEditText,
-                EditText passwordEditText,
-                EditText serverPortEditText,
-                CheckBox loginCheckBox) {
-            this.context = context;
+        AddServerButtonListener(EditText serverAddressEditText,
+                                EditText passwordEditText,
+                                EditText serverPortEditText,
+                                CheckBox loginCheckBox) {
             this.serverAddressEditText = serverAddressEditText;
             this.passwordEditText = passwordEditText;
             this.serverPortEditText = serverPortEditText;
@@ -337,14 +331,14 @@ public class AddServerMenu extends AppCompatActivity {
         }
     }
 
-    public class LoginManager extends AsyncTask<Void, Integer, Integer> {
-        public final static int INITIATED = 1;
-        public final static int CONNECTION_FINISHED = 1;
-        public final static int ERROR = 2;
-        public final static int PASSWORD_FAILED = 3;
-        public final ServerEntity server;
+    class LoginManager extends AsyncTask<Void, Integer, Integer> {
+        final static int INITIATED = 1;
+        final static int CONNECTION_FINISHED = 2;
+        final static int ERROR = 3;
+        final static int PASSWORD_FAILED = 4;
+        final ServerEntity server;
 
-        public LoginManager(ServerEntity server) {
+        LoginManager(ServerEntity server) {
             this.server = server;
         }
 
@@ -381,11 +375,7 @@ public class AddServerMenu extends AppCompatActivity {
                     Contents.clearLists();
                 }
 
-                if (server.loginRequired()) {
-                    Contents.daapHost = new Host(this.server.getPassword(), Contents.address, this.server.getPort());
-                } else {
-                    Contents.daapHost = new Host(null, Contents.address, this.server.getPort());
-                }
+                Contents.daapHost = new Host(this.server.getPassword(), Contents.address, this.server.getPort());
 
                 try {
                     Contents.daapHost.connect();
@@ -410,23 +400,28 @@ public class AddServerMenu extends AppCompatActivity {
             TextView progressMessage = findViewById(R.id.progressBarText);
             LinearLayout connectingSection = findViewById(R.id.connectingSection);
             ProgressBar progressBar = findViewById(R.id.progressBar);
-            if (state == LoginManager.INITIATED) {
-                connectingSection.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-                progressMessage.setText(getString(R.string.connecting_title) + " - " + getString(R.string.connecting_detail));
-            } else if (state == LoginManager.CONNECTION_FINISHED) {
-                // success, save the server to the database
-                ServerDao serverDao = AppDatabase.getInstance(AddServerMenu.this).serverDao();
-                serverDao.setDaapServer(server);
+            switch (state) {
+                case LoginManager.INITIATED: {
+                    connectingSection.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressMessage.setText(getString(R.string.connecting_title) + " - " + getString(R.string.connecting_detail));
+                }
+                case LoginManager.CONNECTION_FINISHED: {
+                    // success, save the server to the database
+                    // ServerDao serverDao = AppDatabase.getInstance(AddServerMenu.this).serverDao();
+                    // serverDao.setDaapServer(server);
 
-                connectingSection.setVisibility(View.GONE);
-            } else if (state == LoginManager.PASSWORD_FAILED) {
-                progressBar.setVisibility(View.INVISIBLE);
-                progressMessage.setText(getString(R.string.login_required));
-            } else {
-                // error connecting
-                progressBar.setVisibility(View.INVISIBLE);
-                progressMessage.setText(getString(R.string.unable_to_connect));
+                    connectingSection.setVisibility(View.GONE);
+                }
+                case LoginManager.PASSWORD_FAILED: {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    progressMessage.setText(getString(R.string.login_required));
+                }
+                default: {
+                    // error connecting
+                    progressBar.setVisibility(View.INVISIBLE);
+                    progressMessage.setText(getString(R.string.unable_to_connect));
+                }
             }
         }
 

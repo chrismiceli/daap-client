@@ -11,10 +11,12 @@ import java.io.IOException;
 public class LoginRequest extends Request {
     private int mSessionId;
 
-    public LoginRequest(Host daapHost) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public LoginRequest(Host daapHost) {
         super(daapHost);
-        query("LoginRequest");
+    }
+
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        query();
         byte[] data = readResponse();
         process(data);
     }
