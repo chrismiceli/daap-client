@@ -8,10 +8,12 @@ import java.io.IOException;
 
 public class LogoutRequest extends Request {
 
-    public LogoutRequest(Host daapHost) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public LogoutRequest(Host daapHost) {
         super(daapHost);
-        query("LogoutRequest");
+    }
+
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        query();
         readResponse();
     }
 

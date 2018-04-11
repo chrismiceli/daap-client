@@ -7,10 +7,12 @@ import org.mult.daap.client.daap.exception.PasswordFailedException;
 import java.io.IOException;
 
 public class ServerInfoRequest extends Request {
-    public ServerInfoRequest(Host host) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public ServerInfoRequest(Host host) {
         super(host);
-        query("ServerInfoRequest");
+    }
+
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        query();
         readResponse();
     }
 

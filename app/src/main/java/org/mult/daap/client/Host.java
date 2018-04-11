@@ -65,12 +65,15 @@ public class Host {
             revisionNum = 1;
             sessionId = 0;
             ServerInfoRequest s = new ServerInfoRequest(this);
+            s.Execute();
             if (s.getServerProgram() != null) {
                 hostProgram = parseServerTypeString(s.getServerProgram());
             }
             LoginRequest loginRequest = new LoginRequest(this);
+            loginRequest.Execute();
             sessionId = loginRequest.getSessionId();
             UpdateRequest updateRequest = new UpdateRequest(this);
+            updateRequest.Execute();
             revisionNum = updateRequest.getRevNum();
         } catch (PasswordFailedException e) {
             e.printStackTrace();
@@ -103,6 +106,7 @@ public class Host {
         try {
             @SuppressWarnings("unused")
             LogoutRequest logoutRequest = new LogoutRequest(this);
+            logoutRequest.Execute();
             if (updateRequest != null) {
                 updateRequest.disconnect();
             }
@@ -119,14 +123,17 @@ public class Host {
     private void grabSongs() throws Exception {
         try {
             DatabasesRequest databasesRequest = new DatabasesRequest(this);
+            databasesRequest.Execute();
             databaseId = databasesRequest.getDatabaseId();
             SingleDatabaseRequest singleDatabaseRequest = new SingleDatabaseRequest(this);
+            singleDatabaseRequest.Execute();
             songs = singleDatabaseRequest.getSongs();
             Log.d("DaapHost", "# of songs = " + songs.size());
             Comparator<Song> sic = new SongIDComparator();
             Collections.sort(songs, sic); // for efficiency in getSongById in
             // Host
             PlaylistsRequest playlistsRequest = new PlaylistsRequest(this);
+            playlistsRequest.Execute();
             playlists = playlistsRequest.getPlaylists();
             Log.d("DaapHost", "playlist count = " + playlists.size());
             if (hostProgram == Host.GIT_SERVER) {
@@ -175,9 +182,8 @@ public class Host {
         return sessionId;
     }
 
-    public int getNextRequestNumber() {
+    public void updateNextRequestNumber() {
         requestNum++;
-        return requestNum;
     }
 
     public int getThisRequestNumber() {
@@ -209,6 +215,7 @@ public class Host {
     public String getSongURL(Song s) throws PasswordFailedException,
             BadResponseCodeException, IOException {
         SongRequest sr = new SongRequest(this, s);
+        sr.Execute();
         return sr.getSongURL().toString();
     }
 

@@ -13,9 +13,13 @@ import java.util.ArrayList;
 public class PlaylistsRequest extends Request {
     private final ArrayList<Playlist> mPlaylist = new ArrayList<>();
 
-    public PlaylistsRequest(Host h) throws BadResponseCodeException, PasswordFailedException, IOException {
+    public PlaylistsRequest(Host h) {
         super(h);
-        query("PlaylistRequest");
+    }
+
+    @Override
+    public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
+        query();
         byte[] data = readResponse();
         process(data);
     }
