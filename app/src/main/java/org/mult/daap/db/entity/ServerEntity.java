@@ -3,6 +3,7 @@ package org.mult.daap.db.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import org.mult.daap.model.Server;
 
@@ -30,7 +31,7 @@ public class ServerEntity implements Server {
      */
     public int getPort() {
         int port = 3689;
-        if (this.getAddress() == null || this.getAddress().isEmpty()) {
+        if (TextUtils.isEmpty(this.getAddress())) {
             return port;
         }
 
@@ -46,7 +47,7 @@ public class ServerEntity implements Server {
     }
 
     public boolean loginRequired() {
-        return this.getPassword() != null && !this.getPassword().isEmpty();
+        return !TextUtils.isEmpty(this.getPassword());
     }
 
     public ServerEntity(String address, String password) {

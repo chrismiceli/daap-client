@@ -31,7 +31,7 @@ public class Contents {
     public static GetSongsForPlaylist getSongsForPlaylist = null;
     public static InetAddress address;
     public static SearchThread searchResult;
-    public static short playlist_position = -1;
+    public static int playlist_id = -1;
     public static boolean shuffle = false;
     public static boolean repeat = false;
     private static int position = 0;

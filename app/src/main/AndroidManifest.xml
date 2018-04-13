@@ -30,7 +30,9 @@
                 android:value=".SearchActivity" />
         </activity>
         <activity android:name=".TabMain" android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name=".PlaylistBrowser" android:label="@string/playlist_browser_activity" />
+        <activity android:name=".PlaylistBrowser"
+                  android:label="@string/playlist_browser_activity"
+                  android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ArtistBrowser" android:theme="@android:style/Theme.NoTitleBar">
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />

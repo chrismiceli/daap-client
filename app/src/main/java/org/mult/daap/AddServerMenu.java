@@ -367,7 +367,7 @@ public class AddServerMenu extends AppCompatActivity {
                 if (Contents.daapHost != null) {
                     try {
                         Contents.daapHost.logout();
-                        Contents.playlist_position = -1;
+                        Contents.playlist_id = -1;
                     } catch (Exception e) {
                         // do nothing
                     }
