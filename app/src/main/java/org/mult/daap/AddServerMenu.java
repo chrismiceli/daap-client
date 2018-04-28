@@ -6,7 +6,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,12 +30,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.mult.daap.background.GetServerAsyncTask;
 import org.mult.daap.background.JmDNSListener;
+import org.mult.daap.background.LoginManager;
+import org.mult.daap.background.SaveServerAsyncTask;
 import org.mult.daap.background.WrapMulticastLock;
-import org.mult.daap.client.Host;
-import org.mult.daap.client.daap.exception.PasswordFailedException;
-import org.mult.daap.db.AppDatabase;
-import org.mult.daap.db.dao.ServerDao;
 import org.mult.daap.db.entity.ServerEntity;
 import org.mult.daap.model.DiscoveredServer;
 
@@ -59,31 +57,7 @@ public class AddServerMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_add_server_menus);
-
-        Toolbar toolbar = this.findViewById(R.id.toolbar);
-        this.setSupportActionBar(toolbar);
-
-        this.builder = new AlertDialog.Builder(this);
-
-        Button addServerButton = this.findViewById(R.id.addServerButton);
-
-        EditText serverAddressEditText = this.findViewById(R.id.serverUrlText);
-        serverAddressEditText.addTextChangedListener(new DaapUrlTextWatcher(addServerButton));
-
-        CheckBox loginCheckBox = this.findViewById(R.id.loginCheckBox);
-        loginCheckBox.setOnCheckedChangeListener(new LoginRequiredListener(this.findViewById(R.id.passwordSection)));
-
-        addServerButton.setOnClickListener(new AddServerButtonListener(
-                serverAddressEditText,
-                (EditText) this.findViewById(R.id.serverPasswordText),
-                (EditText) this.findViewById(R.id.serverPortText),
-                loginCheckBox));
-
-        ListView discoveredServersListView = this.findViewById(R.id.discoveredServersListView);
-        discoveredServersListViewAdapter = new ServerAdapter();
-        discoveredServersListView.setAdapter(discoveredServersListViewAdapter);
-        discoveredServersListView.setOnItemClickListener(discoveredServerClickListener);
+        new GetServerAsyncTask(this).execute();
     }
 
     @Override
@@ -160,6 +134,38 @@ public class AddServerMenu extends AppCompatActivity {
         return false;
     }
 
+    public void OnServerRetrieved(ServerEntity server) {
+        this.setContentView(R.layout.activity_add_server_menus);
+
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+
+        this.builder = new AlertDialog.Builder(this);
+
+        Button addServerButton = this.findViewById(R.id.addServerButton);
+
+        EditText serverAddressEditText = this.findViewById(R.id.serverUrlText);
+        serverAddressEditText.addTextChangedListener(new DaapUrlTextWatcher(addServerButton));
+
+        CheckBox loginCheckBox = this.findViewById(R.id.loginCheckBox);
+        loginCheckBox.setOnCheckedChangeListener(new LoginRequiredListener(this.findViewById(R.id.passwordSection)));
+
+        addServerButton.setOnClickListener(new AddServerButtonListener(
+                this,
+                serverAddressEditText,
+                (EditText) this.findViewById(R.id.serverPasswordText),
+                (EditText) this.findViewById(R.id.serverPortText),
+                loginCheckBox));
+
+        ListView discoveredServersListView = this.findViewById(R.id.discoveredServersListView);
+        discoveredServersListViewAdapter = new ServerAdapter();
+        discoveredServersListView.setAdapter(discoveredServersListViewAdapter);
+        discoveredServersListView.setOnItemClickListener(discoveredServerClickListener);
+        if (server != null) {
+            new LoginManager(this, server).execute();
+        }
+    }
+
     private void addDiscoveredServer(String name, String address) {
         DiscoveredServer discoveredServer = new DiscoveredServer(name, address);
         discoveredServers.add(discoveredServer);
@@ -176,12 +182,19 @@ public class AddServerMenu extends AppCompatActivity {
         return res;
     }
 
-    private final AdapterView.OnItemClickListener discoveredServerClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener discoveredServerClickListener = new DiscoveredServerClickListener(this);
+
+    class DiscoveredServerClickListener implements AdapterView.OnItemClickListener {
+        final AddServerMenu addServerMenu;
+
+        DiscoveredServerClickListener(AddServerMenu addServerMenu) {
+            this.addServerMenu = addServerMenu;
+        }
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DiscoveredServer discoveredServer = discoveredServers.get(position);
-            new LoginManager(discoveredServer).execute();
+            new LoginManager(this.addServerMenu, discoveredServer).execute();
         }
-    };
+    }
 
     class ServerAdapter extends BaseAdapter {
         @Override
@@ -290,15 +303,18 @@ public class AddServerMenu extends AppCompatActivity {
      * Function that is called when the Add Server button is pressed
      */
     private class AddServerButtonListener implements OnClickListener {
+        private final AddServerMenu addServerMenu;
         private final EditText serverAddressEditText;
         private final EditText passwordEditText;
         private final EditText serverPortEditText;
         private final CheckBox loginCheckBox;
 
-        AddServerButtonListener(EditText serverAddressEditText,
+        AddServerButtonListener(AddServerMenu addServerMenu,
+                                EditText serverAddressEditText,
                                 EditText passwordEditText,
                                 EditText serverPortEditText,
                                 CheckBox loginCheckBox) {
+            this.addServerMenu = addServerMenu;
             this.serverAddressEditText = serverAddressEditText;
             this.passwordEditText = passwordEditText;
             this.serverPortEditText = serverPortEditText;
@@ -327,112 +343,53 @@ public class AddServerMenu extends AppCompatActivity {
             ServerEntity server = new ServerEntity(serverAddress, loginCheckBox.isChecked() ? password : null);
 
             // login to the server, and update UI
-            new LoginManager(server).execute();
+            new LoginManager(this.addServerMenu, server).execute();
         }
     }
 
-    class LoginManager extends AsyncTask<Void, Integer, Integer> {
-        final static int INITIATED = 1;
-        final static int CONNECTION_FINISHED = 2;
-        final static int ERROR = 3;
-        final static int PASSWORD_FAILED = 4;
-        final ServerEntity server;
+    public void onBeforeLogin() {
+        Button addServerButton = findViewById(R.id.addServerButton);
+        LinearLayout connectingSection = findViewById(R.id.connectingSection);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
 
-        LoginManager(ServerEntity server) {
-            this.server = server;
-        }
+        addServerButton.setEnabled(false);
+        connectingSection.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
+    public void onAfterLogin(int result) {
+        if (result == LoginManager.CONNECTION_FINISHED) {
+            final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
+            startActivityForResult(intent, 1);
+        } else {
             Button addServerButton = findViewById(R.id.addServerButton);
-            LinearLayout connectingSection = findViewById(R.id.connectingSection);
-            ProgressBar progressBar = findViewById(R.id.progressBar);
-
-            addServerButton.setEnabled(false);
-            connectingSection.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
+            addServerButton.setEnabled(true);
         }
+    }
 
-        @Override
-        protected Integer doInBackground(Void... params) {
-            // login to the DAAP server, if successful server is stored in database
-            try {
-                String[] urlAddress = this.server.getAddress().split(":");
-                String hostname = urlAddress[0];
-
-                Contents.address = InetAddress.getByName(hostname);
-
-                if (Contents.daapHost != null) {
-                    try {
-                        Contents.daapHost.logout();
-                        Contents.playlist_id = -1;
-                    } catch (Exception e) {
-                        // do nothing
-                    }
-
-                    Contents.clearLists();
-                }
-
-                Contents.daapHost = new Host(this.server.getPassword(), Contents.address, this.server.getPort());
-
-                try {
-                    Contents.daapHost.connect();
-                } catch (PasswordFailedException e) {
-                    publishProgress(LoginManager.PASSWORD_FAILED);
-                    return LoginManager.PASSWORD_FAILED;
-                }
-            } catch (Exception e) {
-                publishProgress(LoginManager.ERROR);
-                return LoginManager.ERROR;
+    public void onLoginUpdate(int state, ServerEntity server) {
+        TextView progressMessage = findViewById(R.id.progressBarText);
+        LinearLayout connectingSection = findViewById(R.id.connectingSection);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        switch (state) {
+            case LoginManager.INITIATED: {
+                connectingSection.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                progressMessage.setText(getString(R.string.connecting_title) + " - " + getString(R.string.connecting_detail));
             }
-
-            publishProgress(LoginManager.CONNECTION_FINISHED);
-            return LoginManager.CONNECTION_FINISHED;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-
-            int state = values[0];
-            TextView progressMessage = findViewById(R.id.progressBarText);
-            LinearLayout connectingSection = findViewById(R.id.connectingSection);
-            ProgressBar progressBar = findViewById(R.id.progressBar);
-            switch (state) {
-                case LoginManager.INITIATED: {
-                    connectingSection.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-                    progressMessage.setText(getString(R.string.connecting_title) + " - " + getString(R.string.connecting_detail));
-                }
-                case LoginManager.CONNECTION_FINISHED: {
-                    // success, save the server to the database
-                    // ServerDao serverDao = AppDatabase.getInstance(AddServerMenu.this).serverDao();
-                    // serverDao.setDaapServer(server);
-
-                    connectingSection.setVisibility(View.GONE);
-                }
-                case LoginManager.PASSWORD_FAILED: {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    progressMessage.setText(getString(R.string.login_required));
-                }
-                default: {
-                    // error connecting
-                    progressBar.setVisibility(View.INVISIBLE);
-                    progressMessage.setText(getString(R.string.unable_to_connect));
-                }
+            case LoginManager.CONNECTION_FINISHED: {
+                // success, save the server to the database
+                new SaveServerAsyncTask(this, server).execute();
+                connectingSection.setVisibility(View.GONE);
             }
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            if (result == LoginManager.CONNECTION_FINISHED) {
-                final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
-                startActivityForResult(intent, 1);
-            } else {
-                Button addServerButton = findViewById(R.id.addServerButton);
-                addServerButton.setEnabled(true);
+            case LoginManager.PASSWORD_FAILED: {
+                progressBar.setVisibility(View.INVISIBLE);
+                progressMessage.setText(getString(R.string.login_required));
+            }
+            default: {
+                // error connecting
+                progressBar.setVisibility(View.INVISIBLE);
+                progressMessage.setText(getString(R.string.unable_to_connect));
             }
         }
     }

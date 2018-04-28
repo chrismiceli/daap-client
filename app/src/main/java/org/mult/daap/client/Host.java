@@ -100,26 +100,6 @@ public class Host {
         }
     }
 
-    public void logout() throws PasswordFailedException, IOException,
-            BadResponseCodeException {
-        // don't logout when connected to a de.kapsi server:
-        try {
-            @SuppressWarnings("unused")
-            LogoutRequest logoutRequest = new LogoutRequest(this);
-            logoutRequest.Execute();
-            if (updateRequest != null) {
-                updateRequest.disconnect();
-            }
-        } catch (BadResponseCodeException e) {
-            if (e.getResponseCode() == 204) {
-                sessionId = 0;
-                revisionNum = 1;
-            } else {
-                throw e;
-            }
-        }
-    }
-
     private void grabSongs() throws Exception {
         try {
             DatabasesRequest databasesRequest = new DatabasesRequest(this);
@@ -145,6 +125,26 @@ public class Host {
                 logout();
                 login();
                 grabSongs(); // try again.
+            }
+        }
+    }
+
+    public void logout() throws PasswordFailedException, IOException,
+            BadResponseCodeException {
+        // don't logout when connected to a de.kapsi server:
+        try {
+            @SuppressWarnings("unused")
+            LogoutRequest logoutRequest = new LogoutRequest(this);
+            logoutRequest.Execute();
+            if (updateRequest != null) {
+                updateRequest.disconnect();
+            }
+        } catch (BadResponseCodeException e) {
+            if (e.getResponseCode() == 204) {
+                sessionId = 0;
+                revisionNum = 1;
+            } else {
+                throw e;
             }
         }
     }
@@ -200,16 +200,6 @@ public class Host {
 
     public ArrayList<Song> getSongs() {
         return songs;
-    }
-
-    public Song getSongById(Integer id) {
-        int index = Collections.binarySearch(songs, id);
-        if (index < 0) {
-            throw new IllegalStateException("Song ID: " + id
-                    + " not found in host");
-        } else {
-            return songs.get(index);
-        }
     }
 
     public String getSongURL(Song s) throws PasswordFailedException,
