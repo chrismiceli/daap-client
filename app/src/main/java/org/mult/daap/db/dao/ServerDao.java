@@ -24,5 +24,5 @@ public interface ServerDao {
     void setDaapServer(ServerEntity server);
 
     @Delete
-    public void deleteServers(ServerEntity... users);
+    void deleteServers(ServerEntity... users);
 }

@@ -198,7 +198,7 @@ public final class DNSIncoming {
         return (readUnsignedShort() << 16) + readUnsignedShort();
     }
 
-    private byte[] readBytes(int off, int len) throws IOException {
+    private byte[] readBytes(int off, int len) {
         byte bytes[] = new byte[len];
         System.arraycopy(data, off, bytes, 0, len);
         return bytes;

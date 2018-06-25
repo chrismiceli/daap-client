@@ -354,8 +354,7 @@ public class JmDNSImpl extends JmDNS {
 
     /** @see javax.jmdns.JmDNS#addServiceTypeListener(javax.jmdns.ServiceTypeListener) */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void addServiceTypeListener(ServiceTypeListener listener)
-            throws IOException {
+    public void addServiceTypeListener(ServiceTypeListener listener) {
         synchronized (this) {
             typeListeners.remove(listener);
             typeListeners.add(listener);
@@ -424,7 +423,7 @@ public class JmDNSImpl extends JmDNS {
 
     /** @see javax.jmdns.JmDNS#registerService(javax.jmdns.ServiceInfo) */
     @SuppressWarnings("unchecked")
-    public void registerService(ServiceInfo infoAbstract) throws IOException {
+    public void registerService(ServiceInfo infoAbstract) {
         ServiceInfoImpl info = (ServiceInfoImpl) infoAbstract;
         registerServiceType(info.type);
         // bind the service to this address
@@ -667,7 +666,7 @@ public class JmDNSImpl extends JmDNS {
     /** Handle an incoming response. Cache answers, and pass them on to the
      * appropriate questions. */
     @SuppressWarnings("rawtypes")
-    void handleResponse(DNSIncoming msg) throws IOException {
+    void handleResponse(DNSIncoming msg) {
         long now = System.currentTimeMillis();
         boolean hostConflictDetected = false;
         boolean serviceConflictDetected = false;
@@ -726,8 +725,7 @@ public class JmDNSImpl extends JmDNS {
     /** Handle an incoming query. See if we can answer any part of it given our
      * service infos. */
     @SuppressWarnings("rawtypes")
-    void handleQuery(DNSIncoming in, InetAddress addr, int port)
-            throws IOException {
+    void handleQuery(DNSIncoming in, InetAddress addr, int port) {
         // Track known answers
         boolean hostConflictDetected = false;
         boolean serviceConflictDetected = false;

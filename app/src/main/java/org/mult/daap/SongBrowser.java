@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class SongBrowser extends ListActivity {
-    private ListView musicList;
     private static final int CONTEXT_QUEUE = 0;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
@@ -87,7 +86,7 @@ public class SongBrowser extends ListActivity {
     }
 
     private void createList() {
-        musicList = getListView();
+        ListView musicList = getListView();
         musicList.setOnItemClickListener(musicGridListener);
         musicList
                 .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {

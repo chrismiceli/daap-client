@@ -32,7 +32,7 @@ public class Preferences extends PreferenceActivity {
                         SharedPreferences.Editor ed = mPrefs.edit();
                         ed.putInt("font_size",
                                 Integer.valueOf((String) newValue));
-                        ed.commit();
+                        ed.apply();
                         return false;
                     }
                 });
@@ -44,7 +44,7 @@ public class Preferences extends PreferenceActivity {
                         SharedPreferences.Editor ed = mPrefs.edit();
                         ed.putBoolean("scrobbler_pref",
                                 Boolean.valueOf((Boolean) newValue));
-                        ed.commit();
+                        ed.apply();
                         return false;
                     }
                 });
