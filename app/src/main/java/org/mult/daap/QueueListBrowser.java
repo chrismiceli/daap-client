@@ -28,7 +28,6 @@ import org.mult.daap.client.Song;
 import java.util.ArrayList;
 
 public class QueueListBrowser extends Activity {
-    private ListView queuelistList;
     private ArrayList<Song> s;
     private int count;
     private static final int MENU_PLAY_QUEUE = 0;
@@ -61,7 +60,7 @@ public class QueueListBrowser extends Activity {
         for (int x = 0; x < Contents.queue.size(); x++) {
             s.add(Contents.queue.get(x));
         }
-        queuelistList = findViewById(android.R.id.list);
+        ListView queuelistList = findViewById(android.R.id.list);
         count = s.size();
         queuelistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
         queuelistList

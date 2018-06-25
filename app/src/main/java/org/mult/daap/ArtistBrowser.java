@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.Map;
 
 public class ArtistBrowser extends ListActivity {
-    private ListView artistList;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
     private static final int MENU_SEARCH = 3;
@@ -74,7 +73,7 @@ public class ArtistBrowser extends ListActivity {
     }
 
     private void createList() {
-        artistList = findViewById(android.R.id.list);
+        ListView artistList = findViewById(android.R.id.list);
         MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.artistNameList);

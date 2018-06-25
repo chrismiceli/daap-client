@@ -281,7 +281,7 @@ public abstract class DNSRecord extends DNSEntry {
         }
 
         DNSOutgoing addAnswer(JmDNSImpl dns, DNSIncoming in, InetAddress addr,
-                int port, DNSOutgoing out) throws IOException {
+                int port, DNSOutgoing out) {
             return out;
         }
 
@@ -327,7 +327,7 @@ public abstract class DNSRecord extends DNSEntry {
         }
 
         DNSOutgoing addAnswer(JmDNSImpl dns, DNSIncoming in, InetAddress addr,
-                int port, DNSOutgoing out) throws IOException {
+                int port, DNSOutgoing out) {
             return out;
         }
 
@@ -381,7 +381,7 @@ public abstract class DNSRecord extends DNSEntry {
         }
 
         DNSOutgoing addAnswer(JmDNSImpl dns, DNSIncoming in, InetAddress addr,
-                int port, DNSOutgoing out) throws IOException {
+                int port, DNSOutgoing out) {
             return out;
         }
 

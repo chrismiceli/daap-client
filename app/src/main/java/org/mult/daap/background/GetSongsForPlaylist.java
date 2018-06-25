@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 public class GetSongsForPlaylist extends Observable implements Runnable {
-    private Playlist playList;
     private int lastMessage;
 
     public GetSongsForPlaylist(Playlist playList) {
-        this.playList = playList;
+        Playlist playList1 = playList;
         this.lastMessage = PlaylistBrowser.INITIALIZED;
     }
 

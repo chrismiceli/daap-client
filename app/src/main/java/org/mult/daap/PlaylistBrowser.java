@@ -23,12 +23,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class PlaylistBrowser extends AppCompatActivity implements Observer {
-    private RecyclerView playlistListView;
     public final static int START = 0;
     public final static int FINISHED = 1;
     public final static int EMPTY = 2;
     public final static int INITIALIZED = 3;
-    private ArrayList<Playlist> playlists;
     private ProgressDialog pd = null;
 
     @Override
@@ -49,17 +47,17 @@ public class PlaylistBrowser extends AppCompatActivity implements Observer {
             return;
         }
 
-        this.playlists = new ArrayList<>(Contents.daapHost.getPlaylists());
-        this.playlists.add(0, new Playlist(Contents.daapHost, getString(R.string.all_songs)));
+        ArrayList<Playlist> playlists = new ArrayList<>(Contents.daapHost.getPlaylists());
+        playlists.add(0, new Playlist(Contents.daapHost, getString(R.string.all_songs)));
 
-        this.playlistListView = this.findViewById(R.id.playlistList);
-        this.playlistListView.setHasFixedSize(true);
+        RecyclerView playlistListView = this.findViewById(R.id.playlistList);
+        playlistListView.setHasFixedSize(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        this.playlistListView.setLayoutManager(layoutManager);
+        playlistListView.setLayoutManager(layoutManager);
 
-        PlaylistAdapter adapter = new PlaylistAdapter(this.playlists);
-        this.playlistListView.setAdapter(adapter);
+        PlaylistAdapter adapter = new PlaylistAdapter(playlists);
+        playlistListView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(playlistListOnClickListener);
     }

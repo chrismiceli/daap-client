@@ -45,7 +45,6 @@ public class LoginManager extends AsyncTask<Void, Integer, Integer> {
             if (Contents.daapHost != null) {
                 try {
                     Contents.daapHost.logout();
-                    Contents.playlist_position = -1;
                 } catch (Exception e) {
                     // do nothing
                 }

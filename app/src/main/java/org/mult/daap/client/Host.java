@@ -8,6 +8,7 @@ package org.mult.daap.client;
 import android.util.Base64;
 import android.util.Log;
 
+import org.mult.daap.background.GetSongURLAsyncTask;
 import org.mult.daap.client.Host;
 import org.mult.daap.client.Playlist;
 import org.mult.daap.client.Song;
@@ -202,11 +203,9 @@ public class Host {
         return songs;
     }
 
-    public String getSongURL(Song s) throws PasswordFailedException,
-            BadResponseCodeException, IOException {
-        SongRequest sr = new SongRequest(this, s);
-        sr.Execute();
-        return sr.getSongURL().toString();
+    public void getSongURLAsync(Song song, ISongUrlConsumer songUrlConsumer) {
+        GetSongURLAsyncTask songURLAsyncTask = new GetSongURLAsyncTask(this, song, songUrlConsumer);
+        songURLAsyncTask.execute();
     }
 
     public InputStream getSongStream(Song s) throws Exception {
