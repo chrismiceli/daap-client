@@ -6,6 +6,7 @@ import org.mult.daap.AddServerMenu;
 import org.mult.daap.db.AppDatabase;
 import org.mult.daap.db.dao.ServerDao;
 import org.mult.daap.db.entity.ServerEntity;
+import org.mult.daap.model.Server;
 
 import java.lang.ref.WeakReference;
 

@@ -10,7 +10,7 @@
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8" />
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".AddServerMenu" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".AddServerMenu" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

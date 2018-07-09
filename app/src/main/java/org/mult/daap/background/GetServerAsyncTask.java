@@ -22,9 +22,10 @@ public class GetServerAsyncTask extends AsyncTask<Void,Void, ServerEntity> {
         AddServerMenu addServerMenu = this.addServerMenu.get();
         if (addServerMenu != null && !addServerMenu.isFinishing()) {
             ServerDao serverDao = AppDatabase.getInstance(addServerMenu).serverDao();
-            ServerEntity[] servers =serverDao.loadAllServers();
-            //result = servers.length == 0 ? null : servers[0];
-            serverDao.deleteServers(servers);
+            ServerEntity server = serverDao.loadServer();
+            if (server != null) {
+                result = server;
+            }
         }
 
         return result;

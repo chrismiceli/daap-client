@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class Playlist {
     private int id;
-    private final ArrayList<Song> songs = new ArrayList<>();
+    private final ArrayList<ISong> songs = new ArrayList<>();
     private final Host host;
     private String name;
 
@@ -48,7 +48,7 @@ public class Playlist {
         this.id = id;
     }
 
-    public Collection<Song> getSongs() {
+    public Collection<ISong> getSongs() {
         return songs;
     }
 }

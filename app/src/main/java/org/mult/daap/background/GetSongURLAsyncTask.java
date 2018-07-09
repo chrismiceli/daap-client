@@ -2,10 +2,9 @@ package org.mult.daap.background;
 
 import android.os.AsyncTask;
 
-import org.mult.daap.MediaPlayback;
 import org.mult.daap.client.Host;
+import org.mult.daap.client.ISong;
 import org.mult.daap.client.ISongUrlConsumer;
-import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 import org.mult.daap.client.daap.request.SongRequest;
@@ -16,10 +15,10 @@ import java.net.MalformedURLException;
 
 public class GetSongURLAsyncTask extends AsyncTask<Void,Void, String> {
     Host host;
-    Song song;
+    ISong song;
     WeakReference<ISongUrlConsumer> songUrlConsumerWeakReference;
 
-    public GetSongURLAsyncTask(Host host, Song song, ISongUrlConsumer songUrlConsumer) {
+    public GetSongURLAsyncTask(Host host, ISong song, ISongUrlConsumer songUrlConsumer) {
         this.host = host;
         this.song = song;
         this.songUrlConsumerWeakReference = new WeakReference<>(songUrlConsumer);
