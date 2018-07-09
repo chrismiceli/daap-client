@@ -19,89 +19,95 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/formSection"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/serverUrlLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dip"
-                android:layout_marginStart="16dip"
-                android:text="@string/url_description"
-                android:textSize="24sp" />
-
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/serverUrlText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:layout_weight="1"
-                    android:inputType="textUri"
-                    android:singleLine="true" />
-
-                <EditText
-                    android:id="@+id/serverPortText"
+                <TextView
+                    android:id="@+id/serverUrlLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dip"
-                    android:layout_marginRight="20dip"
-                    android:inputType="number"
-                    android:minEms="3"
-                    android:singleLine="true"
-                    android:text="3689" />
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginStart="16dip"
+                    android:text="@string/url_description"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/serverUrlText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:layout_weight="1"
+                        android:inputType="textUri"
+                        android:singleLine="true" />
+
+                    <EditText
+                        android:id="@+id/serverPortText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dip"
+                        android:layout_marginRight="20dip"
+                        android:inputType="number"
+                        android:minEms="3"
+                        android:singleLine="true"
+                        android:text="3689" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/loginCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginStart="10dip"
-            android:text="@string/login_required"
-            android:textSize="20sp" />
-
-        <LinearLayout
-            android:id="@+id/passwordSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
+            <CheckBox
+                android:id="@+id/loginCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dip"
-                android:layout_marginStart="16dip"
-                android:state_enabled="false"
-                android:text="@string/password" />
-
-            <EditText
-                android:id="@+id/serverPasswordText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dip"
                 android:layout_marginLeft="10dip"
-                android:layout_marginRight="20dip"
                 android:layout_marginStart="10dip"
-                android:inputType="textPassword"
-                android:singleLine="true"
+                android:text="@string/login_required"
                 android:textSize="20sp" />
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/addServerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginStart="10dip"
-            android:enabled="false"
-            android:text="@string/add_server" />
+            <LinearLayout
+                android:id="@+id/passwordSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginStart="16dip"
+                    android:state_enabled="false"
+                    android:text="@string/password" />
+
+                <EditText
+                    android:id="@+id/serverPasswordText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="20dip"
+                    android:layout_marginStart="10dip"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/addServerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginStart="10dip"
+                android:enabled="false"
+                android:text="@string/add_server" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/connectingSection"

@@ -44,8 +44,7 @@ public class HangingUpdateRequest extends Request {
     @Override
     void query() {
         try {
-            URL url = new URL("http://" + host.getAddress() + ":" + host.getPort()
-                    + "/" + getRequestString());
+            URL url = new URL("http://" + host.getAddress() + "/" + getRequestString());
             httpc = (HttpURLConnection) url.openConnection();
             for(Pair<String, String> requestProperty : getRequestProperties()) {
                 httpc.addRequestProperty(requestProperty.first, requestProperty.second);

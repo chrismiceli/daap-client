@@ -36,17 +36,6 @@ public class PlaylistBrowser extends AppCompatActivity implements Observer {
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
 
-        if (Contents.address == null) {
-            // got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            this.setResult(Activity.RESULT_CANCELED);
-            this.finish();
-            return;
-        }
-
         ArrayList<Playlist> playlists = new ArrayList<>(Contents.daapHost.getPlaylists());
         playlists.add(0, new Playlist(Contents.daapHost, getString(R.string.all_songs)));
 

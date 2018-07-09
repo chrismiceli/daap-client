@@ -17,7 +17,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.mult.daap.client.Song;
+import org.mult.daap.client.ISong;
 import org.mult.daap.comparator.SongDiscNumComparator;
 import org.mult.daap.comparator.SongTrackComparator;
 import org.mult.daap.comparator.StringIgnoreCaseComparator;
@@ -38,16 +38,6 @@ public class AlbumBrowser extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
-            // We got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-            return;
-        }
         // if we haven't obtained the album list yet
         if (Contents.albumNameList.size() == 0) {
             for (Map.Entry<String, ArrayList<Integer>> entry : Contents.AlbumElements
@@ -101,29 +91,28 @@ public class AlbumBrowser extends ListActivity {
             case CONTEXT_PLAY_ALBUM:
                 Intent intent = new Intent(AlbumBrowser.this,
                         MediaPlayback.class);
-                String albName = new String(
-                        Contents.albumNameList.get(menuInfo.position));
+                String albName = Contents.albumNameList.get(menuInfo.position);
                 if (albName.equals(getString(R.string.no_album_name))) {
                     albName = "";
                 }
                 Contents.filteredAlbumSongList.clear();
-                for (Song s : Contents.songList) {
-                    if (s.album.equals(albName)) {
+                for (ISong s : Contents.songList) {
+                    if (s.getAlbum().equals(albName)) {
                         Contents.filteredAlbumSongList.add(s);
                     }
                 }
                 TreeMap<Short, Short> track_num = new TreeMap<>();
-                for (Song s : Contents.filteredAlbumSongList) {
-                    if (!track_num.keySet().contains(s.disc_num)) {
-                        track_num.put(s.disc_num, (short) 1);
+                for (ISong s : Contents.filteredAlbumSongList) {
+                    if (!track_num.keySet().contains(s.getDiscNum())) {
+                        track_num.put(s.getDiscNum(), (short) 1);
                     }
                     else {
-                        track_num.put(s.disc_num,
-                                (short) (track_num.get(s.disc_num) + 1));
+                        track_num.put(s.getDiscNum(),
+                                (short) (track_num.get(s.getDiscNum()) + 1));
                     }
                 }
-                Comparator<Song> sdnc = new SongDiscNumComparator();
-                Comparator<Song> stnc = new SongTrackComparator();
+                Comparator<ISong> sdnc = new SongDiscNumComparator();
+                Comparator<ISong> stnc = new SongTrackComparator();
                 Collections.sort(Contents.filteredAlbumSongList, sdnc);
                 // sorted by disc number now, but not within the disc
                 int pos = 0;
@@ -197,7 +186,9 @@ public class AlbumBrowser extends ListActivity {
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 intent = new Intent(AlbumBrowser.this, MediaPlayback.class);
                 startActivityForResult(intent, 1);
                 return true;

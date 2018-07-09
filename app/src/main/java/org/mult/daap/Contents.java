@@ -3,11 +3,10 @@ package org.mult.daap;
 import org.mult.daap.background.GetSongsForPlaylist;
 import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Host;
-import org.mult.daap.client.Song;
+import org.mult.daap.client.ISong;
 import org.mult.daap.comparator.SongNameComparator;
 import org.mult.daap.comparator.StringIgnoreCaseComparator;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,11 +14,11 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class Contents {
-    public static ArrayList<Song> songList = new ArrayList<>();
-    public static ArrayList<Song> filteredAlbumSongList = new ArrayList<>();
-    public static ArrayList<Song> filteredArtistSongList = new ArrayList<>();
-    public static ArrayList<Song> queue = new ArrayList<>(10);
-    private static ArrayList<Song> activeList = new ArrayList<>();
+    public static ArrayList<ISong> songList = new ArrayList<>();
+    public static ArrayList<ISong> filteredAlbumSongList = new ArrayList<>();
+    public static ArrayList<ISong> filteredArtistSongList = new ArrayList<>();
+    public static ArrayList<ISong> queue = new ArrayList<>(10);
+    private static ArrayList<ISong> activeList = new ArrayList<>();
     public static ArrayList<String> stringElements = new ArrayList<>();
     public static ArrayList<String> artistNameList = new ArrayList<>();
     public static ArrayList<String> albumNameList = new ArrayList<>();
@@ -29,25 +28,24 @@ public class Contents {
     public static TreeMap<String, ArrayList<Integer>> ArtistAlbumElements = new TreeMap<>();
     public static Host daapHost;
     public static GetSongsForPlaylist getSongsForPlaylist = null;
-    public static InetAddress address;
     public static SearchThread searchResult;
     public static int playlist_id = -1;
     public static boolean shuffle = false;
     public static boolean repeat = false;
     private static int position = 0;
 
-    public static void songListAdd(Song s) {
+    public static void songListAdd(ISong s) {
         Contents.songList.add(s);
         Contents.stringElements.add(s.toString());
     }
 
-    public static void setSongPosition(ArrayList<Song> list, int id) {
+    public static void setSongPosition(ArrayList<ISong> list, int id) {
         activeList = list;
         Contents.position = id;
     }
 
-    public static Song getSong() throws IndexOutOfBoundsException {
-        Song song;
+    public static ISong getSong() throws IndexOutOfBoundsException {
+        ISong song;
         // Not the queue
         if (activeList.size() > 0 && position < activeList.size()
                 && position >= 0) {
@@ -58,24 +56,24 @@ public class Contents {
         }
     }
 
-    public static Song getNextSong() throws IndexOutOfBoundsException {
+    public static ISong getNextSong() throws IndexOutOfBoundsException {
         position++;
         return getSong();
     }
 
-    public static Song getRandomSong() throws IndexOutOfBoundsException {
+    public static ISong getRandomSong() throws IndexOutOfBoundsException {
         position = new Random(System.currentTimeMillis()).nextInt(activeList
                 .size());
         return getSong();
     }
 
-    public static Song getPreviousSong() {
+    public static ISong getPreviousSong() {
         position--;
         return getSong();
     }
 
     public static void sortLists() {
-        Comparator<Song> snc = new SongNameComparator();
+        Comparator<ISong> snc = new SongNameComparator();
         Comparator<String> snicc = new StringIgnoreCaseComparator();
         Collections.sort(stringElements, snicc); // Must be sorted!
         Collections.sort(songList, snc);
@@ -91,7 +89,7 @@ public class Contents {
         albumNameList.clear();
     }
 
-    public static void addToQueue(Song s) throws IndexOutOfBoundsException {
+    public static void addToQueue(ISong s) throws IndexOutOfBoundsException {
         if (queue.size() > 9) {
             throw new IndexOutOfBoundsException("Can't add more than 10");
         } else {

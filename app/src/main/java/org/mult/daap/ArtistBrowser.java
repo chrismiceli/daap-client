@@ -17,7 +17,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.mult.daap.client.Song;
+import org.mult.daap.client.ISong;
 import org.mult.daap.comparator.StringIgnoreCaseComparator;
 
 import java.util.ArrayList;
@@ -36,16 +36,6 @@ public class ArtistBrowser extends ListActivity {
         // System.out.println("onCreate");
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
-            // We got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-            return;
-        }
         if (Contents.artistNameList.size() == 0) {
             for (Map.Entry<String, ArrayList<Integer>> entry : Contents.ArtistElements
                     .entrySet()) {
@@ -99,21 +89,22 @@ public class ArtistBrowser extends ListActivity {
             case CONTEXT_PLAY_ARTIST:
                 Intent intent = new Intent(ArtistBrowser.this,
                         MediaPlayback.class);
-                String albName = new String(
-                        Contents.artistNameList.get(menuInfo.position));
+                String albName = Contents.artistNameList.get(menuInfo.position);
                 if (albName.equals(getString(R.string.no_artist_name))) {
                     albName = "";
                 }
                 Contents.filteredArtistSongList.clear();
-                for (Song s : Contents.songList) {
-                    if (s.artist.equals(albName)) {
+                for (ISong s : Contents.songList) {
+                    if (s.getArtist().equals(albName)) {
                         Contents.filteredArtistSongList.add(s);
                     }
                 }
                 Contents.setSongPosition(Contents.filteredArtistSongList, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 startActivityForResult(intent, 1);
                 return true;
         }
@@ -125,17 +116,17 @@ public class ArtistBrowser extends ListActivity {
                 long id) {
             String artist = Contents.artistNameList.get(position);
             Contents.ArtistAlbumElements.clear();
-            for (Song song : Contents.songList) {
-                if (song.artist.equals(artist)) {
-                    if (Contents.ArtistAlbumElements.containsKey(song.album)) {
-                        Contents.ArtistAlbumElements.get(song.album).add(
-                                song.id);
+            for (ISong song : Contents.songList) {
+                if (song.getArtist().equals(artist)) {
+                    if (Contents.ArtistAlbumElements.containsKey(song.getAlbum())) {
+                        Contents.ArtistAlbumElements.get(song.getAlbum()).add(
+                                song.getId());
                     }
                     else {
                         ArrayList<Integer> t = new ArrayList<>();
-                        t.add(song.id);
-                        Contents.ArtistAlbumElements.put(song.album, t);
-                        Contents.artistAlbumNameList.add(song.album);
+                        t.add(song.getId());
+                        Contents.ArtistAlbumElements.put(song.getAlbum(), t);
+                        Contents.artistAlbumNameList.add(song.getAlbum());
                     }
                 }
             }
@@ -191,7 +182,9 @@ public class ArtistBrowser extends ListActivity {
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 intent = new Intent(ArtistBrowser.this, MediaPlayback.class);
                 startActivityForResult(intent, 1);
                 return true;

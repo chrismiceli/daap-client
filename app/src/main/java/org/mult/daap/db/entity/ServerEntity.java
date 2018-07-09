@@ -11,9 +11,14 @@ import org.mult.daap.model.Server;
 public class ServerEntity implements Server {
     @PrimaryKey
     @NonNull
-    private String address;
+    private final String address;
 
-    private String password;
+    private final String password;
+
+    public ServerEntity(String address, String password) {
+        this.address = address;
+        this.password = password;
+    }
 
     public String getAddress() {
         return address;
@@ -44,14 +49,5 @@ public class ServerEntity implements Server {
         }
 
         return port;
-    }
-
-    public boolean loginRequired() {
-        return !TextUtils.isEmpty(this.getPassword());
-    }
-
-    public ServerEntity(String address, String password) {
-        this.address = address;
-        this.password = password;
     }
 }

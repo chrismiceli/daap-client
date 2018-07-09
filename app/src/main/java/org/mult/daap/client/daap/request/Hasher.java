@@ -9,7 +9,7 @@
  * updated for GIT:
  * Greg Jordan, August 2004
  */
-package org.mult.daap.client.daap;
+package org.mult.daap.client.daap.request;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

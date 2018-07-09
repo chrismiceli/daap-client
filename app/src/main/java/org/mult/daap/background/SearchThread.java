@@ -1,36 +1,36 @@
 package org.mult.daap.background;
 
 import org.mult.daap.Contents;
-import org.mult.daap.client.Song;
+import org.mult.daap.client.ISong;
 
 import java.util.ArrayList;
 import java.util.Observable;
 
 public class SearchThread extends Observable implements Runnable {
     private final String searchQuery;
-    private ArrayList<Song> lastMessage;
+    private ArrayList<ISong> lastMessage;
 
     public SearchThread(String searchQuery) {
        this.searchQuery = searchQuery;
     }
 
-    public ArrayList<Song> getLastMessage() {
+    public ArrayList<ISong> getLastMessage() {
       return lastMessage;
    }
 
-    private void notifyAndSet(ArrayList<Song> value) {
+    private void notifyAndSet(ArrayList<ISong> value) {
        lastMessage = value;
        setChanged();
        notifyObservers(value);
     }
 
     public void run() {
-        ArrayList<Song> srList = new ArrayList<>();
+        ArrayList<ISong> srList = new ArrayList<>();
         String upperSearchQuery = searchQuery.toUpperCase();
-        for (Song s : Contents.songList) {
-            if (s.name.toUpperCase().contains(upperSearchQuery) ||
-                s.artist.toUpperCase().contains(upperSearchQuery) ||
-                s.album.toUpperCase().contains(upperSearchQuery)) {
+        for (ISong s : Contents.songList) {
+            if (s.getName().toUpperCase().contains(upperSearchQuery) ||
+                s.getArtist().toUpperCase().contains(upperSearchQuery) ||
+                s.getAlbum().toUpperCase().contains(upperSearchQuery)) {
                 srList.add(s);
             }
         }

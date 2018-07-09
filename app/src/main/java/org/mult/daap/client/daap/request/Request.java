@@ -4,7 +4,6 @@ import android.util.Log;
 import android.util.Pair;
 
 import org.mult.daap.client.Host;
-import org.mult.daap.client.daap.Hasher;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
@@ -43,8 +42,7 @@ abstract class Request {
         // needed for bug in android:
         // http://code.google.com/p/android/issues/detail?id=7786
         System.setProperty("http.keepAlive", "false");
-        URL url = new URL("http://" + host.getAddress() + ":" + host.getPort()
-                + "/" + getRequestString());
+        URL url = new URL("http://" + host.getAddress() + "/" + getRequestString());
         Log.d("Request", url.toString());
         httpc = (HttpURLConnection) url.openConnection();
         httpc.setConnectTimeout(45000);
