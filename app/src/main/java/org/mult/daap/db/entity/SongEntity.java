@@ -39,6 +39,18 @@ public class SongEntity implements ISong {
         this.size = size;
     }
 
+    public SongEntity(ISong song) {
+        this.id = song.getId();
+        this.name = song.getName();
+        this.time = song.getTime();
+        this.album = song.getAlbum();
+        this.artist = song.getArtist();
+        this.track = song.getTrack();
+        this.discNum = song.getDiscNum();
+        this.format = song.getFormat();
+        this.size = song.getSize();
+    }
+
     @Override
     public String getName() {
         return this.name;

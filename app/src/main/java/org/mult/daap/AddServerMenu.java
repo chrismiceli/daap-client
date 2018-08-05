@@ -368,24 +368,34 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
         addServerButton.setEnabled(true);
         switch (result) {
             case LoginManagerAsyncTask.CONNECTION_FINISHED: {
-                final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
-                startActivityForResult(intent, 1);
                 // success, save the server to the database
                 if (this.saveServer) {
-                    // new SaveServerAsyncTask(this, server).execute();
+                    new SaveServerAsyncTask(this, Contents.daapHost).execute();
+                } else {
+                    final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
+                    startActivityForResult(intent, 1);
                 }
+
+                break;
             }
             case LoginManagerAsyncTask.PASSWORD_FAILED: {
                 formLayout.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
                 progressMessage.setText(getString(R.string.login_required));
+                break;
             }
             case LoginManagerAsyncTask.ERROR:
             default: {
                 // error connecting
                 progressBar.setVisibility(View.INVISIBLE);
                 progressMessage.setText(getString(R.string.unable_to_connect));
+                break;
             }
         }
+    }
+
+    public void onAfterSave() {
+        final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
+        startActivityForResult(intent, 1);
     }
 }
