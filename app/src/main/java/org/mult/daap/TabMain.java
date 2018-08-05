@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class TabMain extends TabActivity {
+    public static String PLAYLIST_ID_BUNDLE_KEY = "__PLAYLIST_ID__";
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);

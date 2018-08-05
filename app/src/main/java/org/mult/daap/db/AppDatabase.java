@@ -7,10 +7,14 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 
+import org.mult.daap.db.dao.PlaylistDao;
 import org.mult.daap.db.dao.ServerDao;
+import org.mult.daap.db.dao.SongDao;
+import org.mult.daap.db.entity.PlaylistEntity;
 import org.mult.daap.db.entity.ServerEntity;
+import org.mult.daap.db.entity.SongEntity;
 
-@Database(entities = {ServerEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {ServerEntity.class, SongEntity.class, PlaylistEntity.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase sInstance;
 
@@ -18,6 +22,10 @@ public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "daap-db";
 
     public abstract ServerDao serverDao();
+
+    public abstract SongDao songDao();
+
+    public abstract PlaylistDao playlistDao();
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 

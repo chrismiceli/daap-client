@@ -1,6 +1,5 @@
 package org.mult.daap;
 
-import org.mult.daap.background.GetSongsForPlaylist;
 import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Host;
 import org.mult.daap.client.ISong;
@@ -27,9 +26,7 @@ public class Contents {
     public static TreeMap<String, ArrayList<Integer>> AlbumElements = new TreeMap<>();
     public static TreeMap<String, ArrayList<Integer>> ArtistAlbumElements = new TreeMap<>();
     public static Host daapHost;
-    public static GetSongsForPlaylist getSongsForPlaylist = null;
     public static SearchThread searchResult;
-    public static int playlist_id = -1;
     public static boolean shuffle = false;
     public static boolean repeat = false;
     private static int position = 0;

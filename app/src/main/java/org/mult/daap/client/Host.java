@@ -50,7 +50,6 @@ public class Host {
 
     public void connect() throws Exception {
         login();
-        grabSongs();
     }
 
     private void login() throws Exception {
@@ -91,7 +90,7 @@ public class Host {
         }
     }
 
-    private void grabSongs() throws Exception {
+    public void grabSongs() throws Exception {
         try {
             DatabasesRequest databasesRequest = new DatabasesRequest(this);
             databasesRequest.Execute();

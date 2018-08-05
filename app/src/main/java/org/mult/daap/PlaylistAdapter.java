@@ -6,29 +6,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.mult.daap.client.Playlist;
-
-import java.util.ArrayList;
+import org.mult.daap.db.entity.PlaylistEntity;
 
 /**
  * The adapter that handles rendering the playlist items for the RecyclerListView
  */
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> {
-    private ArrayList<Playlist> playlists;
+    private final PlaylistEntity[] playlists;
 
-    private RecyclerOnItemClickListener<Playlist> onItemClickListener;
+    private RecyclerOnItemClickListener<PlaylistEntity> onItemClickListener;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView playlistNameTextView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        final TextView playlistNameTextView;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             playlistNameTextView = v.findViewById(R.id.simple_row_text);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PlaylistAdapter(ArrayList<Playlist> playlists) {
+    PlaylistAdapter(PlaylistEntity[] playlists) {
         this.playlists = playlists;
     }
 
@@ -41,7 +39,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Playlist listItem = this.playlists.get(position);
+        final PlaylistEntity listItem = this.playlists[position];
         holder.playlistNameTextView.setText(listItem.getName());
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -55,10 +53,10 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return playlists.size();
+        return playlists.length;
     }
 
-    public void setOnItemClickListener(RecyclerOnItemClickListener<Playlist> onItemClickListener) {
+    public void setOnItemClickListener(RecyclerOnItemClickListener<PlaylistEntity> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 }

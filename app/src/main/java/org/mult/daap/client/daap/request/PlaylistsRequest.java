@@ -90,6 +90,9 @@ public class PlaylistsRequest extends Request {
             position += 4;
             size = readInt(data, position);
             position += 4;
+            if (name.equals("miid")) {
+                p.setId(readInt(data, position));
+            }
             if (name.equals("minm")) {
                 p.setName(readString(data, position, size));
             }
