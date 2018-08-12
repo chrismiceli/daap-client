@@ -8,11 +8,13 @@ import android.widget.TextView;
 
 import org.mult.daap.db.entity.PlaylistEntity;
 
+import java.util.List;
+
 /**
  * The adapter that handles rendering the playlist items for the RecyclerListView
  */
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> {
-    private final PlaylistEntity[] playlists;
+    private final List<PlaylistEntity> playlists;
 
     private RecyclerOnItemClickListener<PlaylistEntity> onItemClickListener;
 
@@ -26,7 +28,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    PlaylistAdapter(PlaylistEntity[] playlists) {
+    PlaylistAdapter(List<PlaylistEntity> playlists) {
         this.playlists = playlists;
     }
 
@@ -39,7 +41,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final PlaylistEntity listItem = this.playlists[position];
+        final PlaylistEntity listItem = this.playlists.get(position);
         holder.playlistNameTextView.setText(listItem.getName());
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -53,7 +55,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return playlists.length;
+        return playlists.size();
     }
 
     public void setOnItemClickListener(RecyclerOnItemClickListener<PlaylistEntity> onItemClickListener) {

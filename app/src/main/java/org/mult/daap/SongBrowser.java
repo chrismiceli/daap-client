@@ -7,225 +7,119 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.mult.daap.client.ISong;
-import org.mult.daap.comparator.SongDiscNumComparator;
-import org.mult.daap.comparator.SongTrackComparator;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.db.entity.SongEntity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class SongBrowser extends ListActivity {
     private static final int CONTEXT_QUEUE = 0;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
     private static final int MENU_SEARCH = 3;
-    private static String from = null;
+    public static String ARTIST_FILTER_KEY = "__ARTIST_FILTER_KEY__";
+    public static String ALBUM_FILTER_KEY = "__ALBUM_FILTER_KEY__";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
         setContentView(R.xml.music_browser);
-        Bundle b = getIntent().getExtras();
-        from = b.getString("from");
-        createList();
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (getListView() != null) {
-            getListView().clearTextFilter();
-        }
-        Bundle b = getIntent().getExtras();
-        from = b.getString("from");
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_CANCELED) {
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-        }
-    }
-
-    private void createList() {
-        ListView musicList = getListView();
-        musicList.setOnItemClickListener(musicGridListener);
-        musicList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                            ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, CONTEXT_QUEUE, 0,
-                                R.string.add_or_remove_from_queue);
-                    }
-                });
-        if (from.equals("album")) {
-            musicList.setFastScrollEnabled(true);
-            Contents.filteredAlbumSongList.clear();
-            Bundle b = getIntent().getExtras();
-            String albName = b.getString("albumName");
-            setTitle(albName);
-            if (albName.equals(getString(R.string.no_album_name))) {
-                albName = "";
-            }
-            for (ISong s : Contents.songList) {
-                if (s.getAlbum().equals(albName)) {
-                    Contents.filteredAlbumSongList.add(s);
-                }
-            }
-            TreeMap<Short, Short> track_num = new TreeMap<>();
-            for (ISong s : Contents.filteredAlbumSongList) {
-                if (!track_num.keySet().contains(s.getDiscNum())) {
-                    track_num.put(s.getDiscNum(), (short) 1);
-                }
-                else {
-                    track_num.put(s.getDiscNum(),
-                            (short) (track_num.get(s.getDiscNum()) + 1));
-                }
-            }
-            Comparator<ISong> sdnc = new SongDiscNumComparator();
-            Comparator<ISong> stnc = new SongTrackComparator();
-            Collections.sort(Contents.filteredAlbumSongList, sdnc);
-            // sorted by disc number now, but not within the disc
-            int pos = 0;
-            Short max_num_track;
-            for (Map.Entry<Short, Short> entry : track_num.entrySet()) {
-                max_num_track = entry.getValue();
-                Collections.sort(Contents.filteredAlbumSongList.subList(pos,
-                        (int) max_num_track + pos), stnc);
-                pos += max_num_track;
-            }
-            // Can't use myIndexAdapter because it sorts name, not by track
-            setListAdapter(new MyArrayAdapter<>(this,
-                    R.xml.long_list_text_view, Contents.filteredAlbumSongList));
-        }
-        else if (from.equals("artist")) {
-            musicList.setFastScrollEnabled(true);
-            Contents.filteredArtistSongList.clear();
-            Bundle b = getIntent().getExtras();
-            String artistName = b.getString("artistName");
-            setTitle(artistName);
-            if (artistName.equals(getString(R.string.no_artist_name))) {
-                artistName = "";
-            }
-            for (ISong s : Contents.songList) {
-                if (s.getArtist().equals(artistName)) {
-                    Contents.filteredArtistSongList.add(s);
-                }
-            }
-            // Can't use myIndexAdapter because it sorts name, not by track
-            setListAdapter(new MyArrayAdapter<>(this,
-                    R.xml.long_list_text_view, Contents.filteredArtistSongList));
-        }
-        else {
-            musicList.setFastScrollEnabled(true);
-            MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
-                    getApplicationContext(), R.xml.long_list_text_view,
-                    Contents.stringElements);
-            setListAdapter(adapter);
-        }
+        int playlistId = getIntent().getExtras().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
+        new GetSongsAsyncTask(this, playlistId).execute();
     }
 
     private OnItemClickListener musicGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                 long id) {
-            if (from.equals("album")) {
-                Contents.setSongPosition(Contents.filteredAlbumSongList,
-                        position);
-            }
-            else if (from.equals("artist")) {
-                Contents.setSongPosition(Contents.filteredArtistSongList,
-                        position);
-            }
-            else {
-                Contents.setSongPosition(Contents.songList, position);
-            }
-            MediaPlayback.clearState();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                notificationManager.cancelAll();
-            }
-            Intent intent = new Intent(SongBrowser.this, MediaPlayback.class);
-            startActivityForResult(intent, 1);
+//            if (from.equals("album")) {
+//                Contents.setSongPosition(Contents.filteredAlbumSongList,
+//                        position);
+//            }
+//            else if (from.equals("artist")) {
+//                Contents.setSongPosition(Contents.filteredArtistSongList,
+//                        position);
+//            }
+//            else {
+//                Contents.setSongPosition(Contents.songList, position);
+//            }
+//            MediaPlayback.clearState();
+//            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            if (notificationManager != null) {
+//                notificationManager.cancelAll();
+//            }
+//            Intent intent = new Intent(SongBrowser.this, MediaPlayback.class);
+//            startActivityForResult(intent, 1);
         }
     };
 
     @Override
     public boolean onContextItemSelected(MenuItem aItem) {
-        AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
-                .getMenuInfo();
-        ISong s;
-        if (from.equals("album")) {
-            s = Contents.filteredAlbumSongList.get(menuInfo.position);
-        }
-        else if (from.equals("artist")) {
-            s = Contents.filteredArtistSongList.get(menuInfo.position);
-        }
-        else {
-            s = Contents.songList.get(menuInfo.position);
-        }
-        switch (aItem.getItemId()) {
-            case CONTEXT_QUEUE:
-                if (Contents.queue.contains(s)) { // in
-                                                  // list
-                    Contents.queue.remove(Contents.queue.indexOf(s));
-                    Toast tst = Toast.makeText(SongBrowser.this,
-                            getString(R.string.removed_from_queue),
-                            Toast.LENGTH_SHORT);
-                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                            tst.getYOffset() / 2);
-                    tst.show();
-                    return true;
-                }
-                else {
-                    if (Contents.queue.size() < 9) {
-                        Contents.addToQueue(s);
-                        Toast tst = Toast.makeText(SongBrowser.this,
-                                getString(R.string.added_to_queue),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                    }
-                    else {
-                        Toast tst = Toast.makeText(SongBrowser.this,
-                                getString(R.string.queue_is_full),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                        return true;
-                    }
-                }
-        }
+//        AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
+//                .getMenuInfo();
+//        SongEntity s;
+//        if (from.equals("album")) {
+//            s = Contents.filteredAlbumSongList.get(menuInfo.position);
+//        }
+//        else if (from.equals("artist")) {
+//            s = Contents.filteredArtistSongList.get(menuInfo.position);
+//        }
+//        else {
+//            s = Contents.songList.get(menuInfo.position);
+//        }
+//        switch (aItem.getItemId()) {
+//            case CONTEXT_QUEUE:
+//                if (Contents.queue.contains(s)) { // in
+//                                                  // list
+//                    Contents.queue.remove(Contents.queue.indexOf(s));
+//                    Toast tst = Toast.makeText(SongBrowser.this,
+//                            getString(R.string.removed_from_queue),
+//                            Toast.LENGTH_SHORT);
+//                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+//                            tst.getYOffset() / 2);
+//                    tst.show();
+//                    return true;
+//                }
+//                else {
+//                    if (Contents.queue.size() < 9) {
+//                        Contents.addToQueue(s);
+//                        Toast tst = Toast.makeText(SongBrowser.this,
+//                                getString(R.string.added_to_queue),
+//                                Toast.LENGTH_SHORT);
+//                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+//                                tst.getYOffset() / 2);
+//                        tst.show();
+//                    }
+//                    else {
+//                        Toast tst = Toast.makeText(SongBrowser.this,
+//                                getString(R.string.queue_is_full),
+//                                Toast.LENGTH_SHORT);
+//                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+//                                tst.getYOffset() / 2);
+//                        tst.show();
+//                        return true;
+//                    }
+//                }
+//        }
         return false;
     }
 
@@ -259,7 +153,6 @@ public class SongBrowser extends ListActivity {
         Contents.searchResult = null;
         startSearch(null, false, null, false);
         return true;
-        // return super.onSearchRequested();
     }
 
     @Override
@@ -287,21 +180,18 @@ public class SongBrowser extends ListActivity {
     }
 
     class MyArrayAdapter<T> extends ArrayAdapter<T> {
-        ArrayList<ISong> myElements;
-        HashMap<String, Integer> alphaIndexer;
-        ArrayList<String> letterList;
+        ArrayList<SongEntity> myElements;
         Context vContext;
         int font_size;
 
-        @SuppressWarnings("unchecked")
-        public MyArrayAdapter(Context context, int textViewResourceId,
+        MyArrayAdapter(Context context, int textViewResourceId,
                 List<T> objects) {
             super(context, textViewResourceId, objects);
             SharedPreferences mPrefs = PreferenceManager
                     .getDefaultSharedPreferences(context);
             font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
             vContext = context;
-            myElements = (ArrayList<ISong>) objects;
+            myElements = (ArrayList<SongEntity>) objects;
         }
 
         @Override
@@ -309,13 +199,61 @@ public class SongBrowser extends ListActivity {
             return myElements.size();
         }
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @Override @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             TextView tv = new TextView(vContext.getApplicationContext());
             tv.setTextSize(font_size);
             tv.setTextColor(Color.WHITE);
             tv.setText(myElements.get(position).toString());
             return tv;
+        }
+    }
+
+    private void OnSongsReceived(List<SongEntity> songs) {
+        ListView musicList = getListView();
+        musicList.setOnItemClickListener(musicGridListener);
+        musicList
+                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+                    public void onCreateContextMenu(ContextMenu menu, View v,
+                                                    ContextMenuInfo menuInfo) {
+                        menu.setHeaderTitle(getString(R.string.options));
+                        menu.add(0, CONTEXT_QUEUE, 0,
+                                R.string.add_or_remove_from_queue);
+                    }
+                });
+            setListAdapter(new MyArrayAdapter<>(this,
+                    R.xml.long_list_text_view, songs));
+    }
+
+    private static class GetSongsAsyncTask extends AsyncTask<Void, Void, List<SongEntity>> {
+        private final WeakReference<SongBrowser> songBrowserWeakReference;
+        private final int playlistId;
+
+        GetSongsAsyncTask(SongBrowser songBrowser, int playlistId) {
+            this.songBrowserWeakReference = new WeakReference<>(songBrowser);
+            this.playlistId = playlistId;
+        }
+
+        @Override
+        protected List<SongEntity> doInBackground(Void... voids) {
+            List<SongEntity> result = null;
+            SongBrowser songBrowser = this.songBrowserWeakReference.get();
+            if (songBrowser != null && !songBrowser.isFinishing()) {
+                DatabaseHost databaseHost = new DatabaseHost(songBrowser.getApplicationContext());
+                result = databaseHost.getSongsForPlaylist(this.playlistId);
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(List<SongEntity> songs) {
+            super.onPostExecute(songs);
+
+            SongBrowser songBrowser = this.songBrowserWeakReference.get();
+            if (songBrowser != null && !songBrowser.isFinishing()) {
+                songBrowser.OnSongsReceived(songs);
+            }
         }
     }
 }

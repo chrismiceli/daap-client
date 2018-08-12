@@ -2,9 +2,9 @@ package org.mult.daap;
 
 import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Host;
-import org.mult.daap.client.ISong;
 import org.mult.daap.comparator.SongNameComparator;
 import org.mult.daap.comparator.StringIgnoreCaseComparator;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,11 +13,11 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class Contents {
-    public static ArrayList<ISong> songList = new ArrayList<>();
-    public static ArrayList<ISong> filteredAlbumSongList = new ArrayList<>();
-    public static ArrayList<ISong> filteredArtistSongList = new ArrayList<>();
-    public static ArrayList<ISong> queue = new ArrayList<>(10);
-    private static ArrayList<ISong> activeList = new ArrayList<>();
+    public static ArrayList<SongEntity> songList = new ArrayList<>();
+    public static ArrayList<SongEntity> filteredAlbumSongList = new ArrayList<>();
+    public static ArrayList<SongEntity> filteredArtistSongList = new ArrayList<>();
+    public static ArrayList<SongEntity> queue = new ArrayList<>(10);
+    private static ArrayList<SongEntity> activeList = new ArrayList<>();
     public static ArrayList<String> stringElements = new ArrayList<>();
     public static ArrayList<String> artistNameList = new ArrayList<>();
     public static ArrayList<String> albumNameList = new ArrayList<>();
@@ -31,18 +31,18 @@ public class Contents {
     public static boolean repeat = false;
     private static int position = 0;
 
-    public static void songListAdd(ISong s) {
+    public static void songListAdd(SongEntity s) {
         Contents.songList.add(s);
         Contents.stringElements.add(s.toString());
     }
 
-    public static void setSongPosition(ArrayList<ISong> list, int id) {
+    public static void setSongPosition(ArrayList<SongEntity> list, int id) {
         activeList = list;
         Contents.position = id;
     }
 
-    public static ISong getSong() throws IndexOutOfBoundsException {
-        ISong song;
+    public static SongEntity getSong() throws IndexOutOfBoundsException {
+        SongEntity song;
         // Not the queue
         if (activeList.size() > 0 && position < activeList.size()
                 && position >= 0) {
@@ -53,24 +53,24 @@ public class Contents {
         }
     }
 
-    public static ISong getNextSong() throws IndexOutOfBoundsException {
+    public static SongEntity getNextSong() throws IndexOutOfBoundsException {
         position++;
         return getSong();
     }
 
-    public static ISong getRandomSong() throws IndexOutOfBoundsException {
+    public static SongEntity getRandomSong() throws IndexOutOfBoundsException {
         position = new Random(System.currentTimeMillis()).nextInt(activeList
                 .size());
         return getSong();
     }
 
-    public static ISong getPreviousSong() {
+    public static SongEntity getPreviousSong() {
         position--;
         return getSong();
     }
 
     public static void sortLists() {
-        Comparator<ISong> snc = new SongNameComparator();
+        Comparator<SongEntity> snc = new SongNameComparator();
         Comparator<String> snicc = new StringIgnoreCaseComparator();
         Collections.sort(stringElements, snicc); // Must be sorted!
         Collections.sort(songList, snc);
@@ -86,7 +86,7 @@ public class Contents {
         albumNameList.clear();
     }
 
-    public static void addToQueue(ISong s) throws IndexOutOfBoundsException {
+    public static void addToQueue(SongEntity s) throws IndexOutOfBoundsException {
         if (queue.size() > 9) {
             throw new IndexOutOfBoundsException("Can't add more than 10");
         } else {

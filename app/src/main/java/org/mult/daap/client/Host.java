@@ -16,11 +16,15 @@ import org.mult.daap.client.daap.request.LoginRequest;
 import org.mult.daap.client.daap.request.PlaylistsRequest;
 import org.mult.daap.client.daap.request.ServerInfoRequest;
 import org.mult.daap.client.daap.request.SingleDatabaseRequest;
+import org.mult.daap.client.daap.request.SinglePlaylistRequest;
 import org.mult.daap.client.daap.request.SongRequest;
 import org.mult.daap.client.daap.request.UpdateRequest;
-import org.mult.daap.comparator.SongIDComparator;
+import org.mult.daap.db.entity.PlaylistEntity;
+import org.mult.daap.db.entity.SongEntity;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,18 +38,14 @@ public class Host {
     private final String address;
     private final String password;
     private int hostProgram;
-    private ArrayList<ISong> songs = new ArrayList<>();
-    private ArrayList<Playlist> playlists = new ArrayList<>();
-    private ISongFactory songFactory;
     private static final int UNKNOWN_SERVER = 0;
     private static final int ITUNES = 1;
     private static final int GIT_SERVER = 2;
     private static final int MT_DAAPD = 3;
 
-    public Host(String address, String password, ISongFactory songFactory) {
+    public Host(String address, String password) {
         this.address = address;
         this.password = Base64.encodeToString(("Android_DAAP:" + password).getBytes(), Base64.DEFAULT);
-        this.songFactory = songFactory;
     }
 
     public void connect() throws Exception {
@@ -90,7 +90,8 @@ public class Host {
         }
     }
 
-    public void grabSongs() throws Exception {
+    public ArrayList<SongEntity> fetchSongs() {
+        ArrayList<SongEntity> songs = null;
         try {
             DatabasesRequest databasesRequest = new DatabasesRequest(this);
             databasesRequest.Execute();
@@ -99,20 +100,51 @@ public class Host {
             singleDatabaseRequest.Execute();
             songs = singleDatabaseRequest.getSongs();
             Log.d("DaapHost", "# of songs = " + songs.size());
-            Comparator<ISong> sic = new SongIDComparator();
-            Collections.sort(songs, sic); // for efficiency in getSongById in
-            // Host
+        } catch (BadResponseCodeException e) {
+            Log.d("DaapHost", "Bad response code");
+        } catch (IOException e) {
+            Log.d("DaapHost", "IO Exception");
+        } catch (PasswordFailedException e) {
+            Log.d("DaapHost", "Password failed");
+        }
+
+        return songs;
+    }
+
+    public ArrayList<PlaylistEntity> fetchPlaylists() {
+        ArrayList<PlaylistEntity> playlists = null;
+        try {
             PlaylistsRequest playlistsRequest = new PlaylistsRequest(this);
             playlistsRequest.Execute();
             playlists = playlistsRequest.getPlaylists();
             Log.d("DaapHost", "playlist count = " + playlists.size());
-        } catch (BadResponseCodeException e) {
-            Log.d("DaapHost", "Bad response code");
         }
+        catch (BadResponseCodeException e) {
+            Log.d("DaapHost", "Bad response code");
+        } catch (IOException e) {
+            Log.d("DaapHost", "IO Exception");
+        } catch (PasswordFailedException e) {
+            Log.d("DaapHost", "Password failed");
+        }
+
+        return playlists;
     }
 
-    public ISongFactory getSongFactory() {
-        return songFactory;
+    public ArrayList<Integer> fetchSongIdsForPlaylist(Host host, int playlistId) {
+        ArrayList<Integer> songIds = null;
+            SinglePlaylistRequest singlePlaylistRequest = new SinglePlaylistRequest(host, playlistId);
+        try {
+            singlePlaylistRequest.Execute();
+            songIds = singlePlaylistRequest.getSongIds();
+        } catch (BadResponseCodeException e) {
+            Log.d("DaapHost", "Bad response code");
+        } catch (PasswordFailedException e) {
+            Log.d("DaapHost", "Password failed");
+        } catch (IOException e) {
+            Log.d("DaapHost", "IO Exception");
+        }
+
+        return songIds;
     }
 
     public boolean isPasswordProtected() {
@@ -147,20 +179,12 @@ public class Host {
         return password;
     }
 
-    public ArrayList<Playlist> getPlaylists() {
-        return playlists;
-    }
-
-    public ArrayList<ISong> getSongs() {
-        return songs;
-    }
-
-    public void getSongURLAsync(ISong song, ISongUrlConsumer songUrlConsumer) {
+    public void getSongURLAsync(SongEntity song, ISongUrlConsumer songUrlConsumer) {
         GetSongURLAsyncTask songURLAsyncTask = new GetSongURLAsyncTask(this, song, songUrlConsumer);
         songURLAsyncTask.execute();
     }
 
-    public InputStream getSongStream(ISong s) throws Exception {
+    public InputStream getSongStream(SongEntity s) throws Exception {
         try {
             // re-login if we're logged out, or this daap host is a GIT server:
             if (sessionId == 0 || hostProgram == GIT_SERVER) {

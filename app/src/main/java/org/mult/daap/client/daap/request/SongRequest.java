@@ -3,9 +3,9 @@ package org.mult.daap.client.daap.request;
 import android.util.Pair;
 
 import org.mult.daap.client.Host;
-import org.mult.daap.client.ISong;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class SongRequest extends Request {
     private BufferedInputStream bufferedInputStream;
-    private final ISong song;
+    private final SongEntity song;
 
-    public SongRequest(Host daapHost, ISong song) {
+    public SongRequest(Host daapHost, SongEntity song) {
         super(daapHost);
         this.song = song;
     }

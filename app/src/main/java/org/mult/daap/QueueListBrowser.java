@@ -23,12 +23,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.mult.daap.client.ISong;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
 
 public class QueueListBrowser extends Activity {
-    private ArrayList<ISong> s;
+    private ArrayList<SongEntity> s;
     private int count;
     private static final int MENU_PLAY_QUEUE = 0;
     private static final int MENU_CLEAR_QUEUE = 1;

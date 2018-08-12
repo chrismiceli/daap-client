@@ -6,6 +6,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,7 +31,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.mult.daap.background.GetServerAsyncTask;
+import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.client.ILoginConsumer;
 import org.mult.daap.background.JmDNSListener;
 import org.mult.daap.background.LoginManagerAsyncTask;
@@ -397,5 +398,35 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     public void onAfterSave() {
         final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
         startActivityForResult(intent, 1);
+    }
+
+    private static class GetServerAsyncTask extends AsyncTask<Void,Void, ServerEntity> {
+        private final WeakReference<AddServerMenu> addServerMenu;
+
+        GetServerAsyncTask(AddServerMenu addServerMenu) {
+            this.addServerMenu = new WeakReference<>(addServerMenu);
+        }
+
+        @Override
+        protected ServerEntity doInBackground(Void...voids){
+            ServerEntity result = null;
+            AddServerMenu addServerMenu = this.addServerMenu.get();
+            if (addServerMenu != null && !addServerMenu.isFinishing()) {
+                DatabaseHost databaseHost = new DatabaseHost(addServerMenu.getApplicationContext());
+                result = databaseHost.getServer();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(ServerEntity serverEntity) {
+            super.onPostExecute(serverEntity);
+
+            AddServerMenu addServerMenu = this.addServerMenu.get();
+            if (addServerMenu != null && !addServerMenu.isFinishing()) {
+                addServerMenu.OnServerRetrieved(serverEntity);
+            }
+        }
     }
 }

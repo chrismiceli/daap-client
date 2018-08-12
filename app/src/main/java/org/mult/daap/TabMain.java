@@ -14,11 +14,13 @@ public class TabMain extends TabActivity {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
         setContentView(R.xml.tab_main);
+        int playlistId = getIntent().getExtras().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost(); // The activity TabHost
         TabHost.TabSpec spec; // Resusable TabSpec for each tab
         Intent intent = new Intent(); // Reusable Intent for each tab
         intent.putExtra("from", "TabMain");
+        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
         intent.setClass(this, SongBrowser.class);
         spec = tabHost
                 .newTabSpec("songs")
@@ -27,6 +29,7 @@ public class TabMain extends TabActivity {
         tabHost.addTab(spec);
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, ArtistBrowser.class);
+        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost
                 .newTabSpec("artists")
@@ -36,6 +39,7 @@ public class TabMain extends TabActivity {
         tabHost.addTab(spec);
         // Do the same for the other tabs
         intent = new Intent().setClass(this, AlbumBrowser.class);
+        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
         intent.putExtra("from", "TabMain");
         spec = tabHost
                 .newTabSpec("albums")
