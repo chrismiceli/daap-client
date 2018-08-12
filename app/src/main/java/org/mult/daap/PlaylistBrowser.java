@@ -1,6 +1,5 @@
 package org.mult.daap;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,15 +8,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import org.mult.daap.db.AppDatabase;
-import org.mult.daap.db.dao.PlaylistDao;
+import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.db.entity.PlaylistEntity;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class PlaylistBrowser extends AppCompatActivity {
-    private ProgressDialog pd;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,27 +22,23 @@ public class PlaylistBrowser extends AppCompatActivity {
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
 
-        new GetPlaylistAsyncTask(this).execute();
+        new GetPlaylistsAsyncTask(this).execute();
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        if (pd != null) {
-            pd.dismiss();
+    private static class OnClickListener implements RecyclerOnItemClickListener<PlaylistEntity> {
+        private final PlaylistBrowser playlistBrowser;
+
+        OnClickListener(PlaylistBrowser playlistBrowser) {
+            this.playlistBrowser = playlistBrowser;
         }
-    }
 
-    /**
-     * A listener for click events on the playlist items
-     */
-    private final RecyclerOnItemClickListener<PlaylistEntity> playlistListOnClickListener = new RecyclerOnItemClickListener<PlaylistEntity>() {
         @Override
-        public void onItemClick(PlaylistEntity playlist) {
-            Intent intent = new Intent(PlaylistBrowser.this, TabMain.class);
-            intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlist.getId());
-            startActivityForResult(intent, 1);
+        public void onItemClick(PlaylistEntity item) {
+            new GetSinglePlaylistAsyncTask(this.playlistBrowser, item.getId()).execute();
         }
-    };
+    }
+
+    private final RecyclerOnItemClickListener<PlaylistEntity> playlistEntityRecyclerOnItemClickListener = new OnClickListener(this);
 
     /*
      todo cmiceli
@@ -54,42 +47,80 @@ public class PlaylistBrowser extends AppCompatActivity {
     tst.show();
     */
 
-    private void OnPlaylistRetrieved(PlaylistEntity[] playlists) {
+    private void OnPlaylistRetrieved(List<PlaylistEntity> playlists) {
         PlaylistAdapter adapter = new PlaylistAdapter(playlists);
         RecyclerView playlistListView = this.findViewById(R.id.playlistList);
         playlistListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         playlistListView.setLayoutManager(layoutManager);
         playlistListView.setAdapter(adapter);
-        adapter.setOnItemClickListener(playlistListOnClickListener);
+        adapter.setOnItemClickListener(new OnClickListener(this));
     }
 
-    private static class GetPlaylistAsyncTask extends AsyncTask<Void,Void, PlaylistEntity[]> {
+    private void OnPlaylistLoaded(int playlistId) {
+        Intent intent = new Intent(PlaylistBrowser.this, TabMain.class);
+        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
+        startActivityForResult(intent, 1);
+    }
+
+    private static class GetPlaylistsAsyncTask extends AsyncTask<Void,Void, List<PlaylistEntity>> {
         private final WeakReference<PlaylistBrowser> playlistBrowserWeakReference;
 
-        GetPlaylistAsyncTask(PlaylistBrowser playlistBrowser) {
+        GetPlaylistsAsyncTask(PlaylistBrowser playlistBrowser) {
             this.playlistBrowserWeakReference = new WeakReference<>(playlistBrowser);
         }
 
         @Override
-        protected PlaylistEntity[] doInBackground(Void...voids){
-            PlaylistEntity[] result = null;
+        protected List<PlaylistEntity> doInBackground(Void...voids){
+            List<PlaylistEntity> result = null;
             PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
             if (playlistBrowser != null) {
-                PlaylistDao playlistDao = AppDatabase.getInstance(playlistBrowser).playlistDao();
-                result = playlistDao.loadPlaylists();
+                DatabaseHost databaseHost = new DatabaseHost(playlistBrowser.getApplicationContext());
+                result = databaseHost.getPlaylists();
             }
 
             return result;
         }
 
         @Override
-        protected void onPostExecute(PlaylistEntity[] playlists) {
+        protected void onPostExecute(List<PlaylistEntity> playlists) {
             super.onPostExecute(playlists);
 
             PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
             if (playlistBrowser != null && !playlistBrowser.isFinishing()) {
-                playlistBrowser .OnPlaylistRetrieved(playlists);
+                playlistBrowser.OnPlaylistRetrieved(playlists);
+            }
+        }
+    }
+
+    private static class GetSinglePlaylistAsyncTask extends AsyncTask<Void,Void, Boolean> {
+        private final WeakReference<PlaylistBrowser> playlistBrowserWeakReference;
+        private final int playlistId;
+
+        GetSinglePlaylistAsyncTask(PlaylistBrowser playlistBrowser, int playlistId) {
+            this.playlistBrowserWeakReference = new WeakReference<>(playlistBrowser);
+            this.playlistId = playlistId;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void...voids){
+            PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
+            if (playlistBrowser != null) {
+                DatabaseHost databaseHost = new DatabaseHost(playlistBrowser.getApplicationContext());
+                databaseHost.fetchSinglePlaylist(Contents.daapHost, this.playlistId);
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
+            if (playlistBrowser != null && !playlistBrowser.isFinishing()) {
+                playlistBrowser.OnPlaylistLoaded(this.playlistId);
             }
         }
     }

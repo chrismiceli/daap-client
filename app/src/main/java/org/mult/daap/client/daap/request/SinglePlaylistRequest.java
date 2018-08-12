@@ -1,20 +1,22 @@
 package org.mult.daap.client.daap.request;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import android.util.Log;
 
 import org.mult.daap.client.Host;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
-import org.mult.daap.db.entity.PlaylistEntity;
 
-import java.io.IOException;
-import java.util.ArrayList;
+public class SinglePlaylistRequest extends Request {
+    private ArrayList<Integer> songIds = new ArrayList<>();
+    private final int playlistId;
 
-public class PlaylistsRequest extends Request {
-    private final ArrayList<PlaylistEntity> mPlaylist = new ArrayList<>();
+    public SinglePlaylistRequest(Host host, int playlistId) {
+        super(host);
+        this.playlistId = playlistId;
 
-    public PlaylistsRequest(Host h) {
-        super(h);
     }
 
     @Override
@@ -24,14 +26,14 @@ public class PlaylistsRequest extends Request {
         process(data);
     }
 
-    @Override
     protected String getRequestString() {
-        return "databases/" +
-               host.getDatabaseID() +
-               "/containers?session-id=" +
-               host.getSessionID() +
-               "&revision-number=" +
-               host.getRevisionNumber();
+        return  "databases/" +
+        host.getDatabaseID() +
+        "/containers/" + this.playlistId +
+        "/items?type=music&meta=dmap.itemid&session-id=" +
+        host.getSessionID() +
+        "&revision-number=" +
+        host.getRevisionNumber();
     }
 
     private void process(byte[] data) {
@@ -41,11 +43,11 @@ public class PlaylistsRequest extends Request {
         }
         offset += 4;
         offset += 4;
-        ArrayList<FieldPair> mlclList = processSingleDatabaseRequest(data);
+        ArrayList<FieldPair> mlclList = processSinglePlaylistRequest(data);
         parseMLCL(data, mlclList);
     }
 
-    private ArrayList<FieldPair> processSingleDatabaseRequest(byte[] data) {
+    private ArrayList<FieldPair> processSinglePlaylistRequest(byte[] data) {
         String name;
         int size;
         ArrayList<FieldPair> mlclList = new ArrayList<>();
@@ -84,22 +86,20 @@ public class PlaylistsRequest extends Request {
         String name;
         int size;
         int startPos = position;
-        PlaylistEntity p = new PlaylistEntity();
+        int song_id = 0;
+
         while (position < argSize + startPos) {
             name = readString(data, position, 4);
             position += 4;
             size = readInt(data, position);
             position += 4;
             if (name.equals("miid")) {
-                p.setId(readInt(data, position));
+                song_id = Request.readInt(data, position);
             }
-            if (name.equals("minm")) {
-                p.setName(readString(data, position, size));
-            }
-
             position += size;
         }
-        mPlaylist.add(p);
+
+        this.songIds.add(song_id);
     }
 
     /* get all mlit in mlclList */
@@ -122,7 +122,7 @@ public class PlaylistsRequest extends Request {
         return mlitList;
     }
 
-    public ArrayList<PlaylistEntity> getPlaylists() {
-        return mPlaylist;
+    public ArrayList<Integer> getSongIds() {
+        return this.songIds;
     }
 }

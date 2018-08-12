@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.mult.daap.Contents;
-import org.mult.daap.SongEntitySongFactory;
 import org.mult.daap.client.Host;
 import org.mult.daap.client.ILoginConsumer;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
@@ -45,7 +44,7 @@ public class LoginManagerAsyncTask extends AsyncTask<Void, Integer, Integer> {
                 Contents.clearLists();
             }
 
-            Contents.daapHost = new Host(this.address, this.password, new SongEntitySongFactory());
+            Contents.daapHost = new Host(this.address, this.password);
 
             try {
                 Contents.daapHost.connect();

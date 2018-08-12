@@ -17,9 +17,9 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.mult.daap.client.ISong;
 import org.mult.daap.comparator.SongTrackComparator;
 import org.mult.daap.comparator.StringIgnoreCaseComparator;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,12 +95,12 @@ public class ArtistAlbumBrowser extends ListActivity {
                     albName = "";
                 }
                 Contents.filteredArtistSongList.clear();
-                for (ISong s : Contents.songList) {
+                for (SongEntity s : Contents.songList) {
                     if (s.getAlbum().equals(albName)) {
                         Contents.filteredArtistSongList.add(s);
                     }
                 }
-                Comparator<ISong> stnc = new SongTrackComparator();
+                Comparator<SongEntity> stnc = new SongTrackComparator();
                 Collections.sort(Contents.filteredArtistSongList, stnc);
                 Contents.setSongPosition(Contents.filteredArtistSongList, 0);
                 MediaPlayback.clearState();

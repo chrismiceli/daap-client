@@ -3,10 +3,8 @@ package org.mult.daap.db.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import org.mult.daap.client.ISong;
-
 @Entity(tableName = "songs")
-public class SongEntity implements ISong {
+public class SongEntity {
     @PrimaryKey
     private int id;
     private String name;
@@ -39,7 +37,7 @@ public class SongEntity implements ISong {
         this.size = size;
     }
 
-    public SongEntity(ISong song) {
+    public SongEntity(SongEntity song) {
         this.id = song.getId();
         this.name = song.getName();
         this.time = song.getTime();
@@ -51,52 +49,42 @@ public class SongEntity implements ISong {
         this.size = song.getSize();
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public int getId() {
         return this.id;
     }
 
-    @Override
     public int getTime() {
         return this.time;
     }
 
-    @Override
     public String getAlbum() {
         return this.album;
     }
 
-    @Override
     public String getArtist() {
         return this.artist;
     }
 
-    @Override
     public short getTrack() {
         return this.track;
     }
 
-    @Override
     public short getDiscNum() {
         return this.discNum;
     }
 
-    @Override
     public String getFormat() {
         return this.format;
     }
 
-    @Override
     public int getSize() {
         return this.size;
     }
 
-    @Override
     public String toString() {
         return artist + (artist.length() > 0 ? " - " : "") + name;
     }

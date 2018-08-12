@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.background.SearchThread;
-import org.mult.daap.client.ISong;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class SearchActivity extends ListActivity implements Observer {
-    private ArrayList<ISong> srList = null;
+    private ArrayList<SongEntity> srList = null;
     private ProgressDialog pd = null;
     private final static int CONTEXT_QUEUE = 0;
     private final static int MENU_PLAY_QUEUE = 1;
@@ -104,7 +104,7 @@ public class SearchActivity extends ListActivity implements Observer {
                 .getMenuInfo();
         switch (aItem.getItemId()) {
             case CONTEXT_QUEUE:
-                ISong s = Contents.songList.get(Contents.songList.indexOf(srList
+                SongEntity s = Contents.songList.get(Contents.songList.indexOf(srList
                         .get(menuInfo.position)));
                 if (Contents.queue.contains(s)) { // in
                     // list
@@ -175,7 +175,7 @@ public class SearchActivity extends ListActivity implements Observer {
     @SuppressWarnings("unchecked")
     public void update(Observable observable, Object data) {
         if (data != null) {
-            srList = (ArrayList<ISong>) data;
+            srList = (ArrayList<SongEntity>) data;
             searchHandler.sendEmptyMessage(0);
         }
     }
@@ -248,7 +248,7 @@ public class SearchActivity extends ListActivity implements Observer {
     }
 
     class MyArrayAdapter<T> extends ArrayAdapter<T> {
-        ArrayList<ISong> myElements;
+        ArrayList<SongEntity> myElements;
         HashMap<String, Integer> alphaIndexer;
         ArrayList<String> letterList;
         Context vContext;
@@ -262,7 +262,7 @@ public class SearchActivity extends ListActivity implements Observer {
                     .getDefaultSharedPreferences(context);
             font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
             vContext = context;
-            myElements = (ArrayList<ISong>) objects;
+            myElements = (ArrayList<SongEntity>) objects;
         }
 
         @Override

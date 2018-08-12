@@ -11,10 +11,19 @@ import org.mult.daap.db.dao.PlaylistDao;
 import org.mult.daap.db.dao.ServerDao;
 import org.mult.daap.db.dao.SongDao;
 import org.mult.daap.db.entity.PlaylistEntity;
+import org.mult.daap.db.entity.PlaylistSongEntity;
 import org.mult.daap.db.entity.ServerEntity;
 import org.mult.daap.db.entity.SongEntity;
 
-@Database(entities = {ServerEntity.class, SongEntity.class, PlaylistEntity.class}, version = 1, exportSchema = false)
+@Database(
+        entities = {
+            ServerEntity.class,
+            SongEntity.class,
+            PlaylistEntity.class,
+            PlaylistSongEntity.class
+        },
+        version = 1,
+        exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase sInstance;
 

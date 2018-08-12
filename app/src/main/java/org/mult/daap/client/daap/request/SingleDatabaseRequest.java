@@ -3,21 +3,18 @@ package org.mult.daap.client.daap.request;
 import android.util.Log;
 
 import org.mult.daap.client.Host;
-import org.mult.daap.client.ISong;
-import org.mult.daap.client.ISongFactory;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class SingleDatabaseRequest extends Request {
-    private final ArrayList<ISong> mSongList = new ArrayList<>();
-    private final ISongFactory songFactory;
+    private final ArrayList<SongEntity> mSongList = new ArrayList<>();
 
     public SingleDatabaseRequest(Host daapHost) {
         super(daapHost);
-        this.songFactory = this.host.getSongFactory();
     }
 
     public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
@@ -130,7 +127,7 @@ public class SingleDatabaseRequest extends Request {
 
             position += size;
         }
-        mSongList.add(this.songFactory.createSong(id, songName, time, album, artist, track, discNum, format, songSize));
+        mSongList.add(new SongEntity(id, songName, time, album, artist, track, discNum, format, songSize));
     }
 
     private ArrayList<FieldPair> processContainerList(byte[] data, int position, int argSize) {
@@ -152,7 +149,7 @@ public class SingleDatabaseRequest extends Request {
         return mlitList;
     }
 
-    public ArrayList<ISong> getSongs() {
+    public ArrayList<SongEntity> getSongs() {
         return mSongList;
     }
 }

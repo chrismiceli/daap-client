@@ -1,10 +1,12 @@
 package org.mult.daap;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -17,14 +19,19 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.mult.daap.client.ISong;
+import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.comparator.SongDiscNumComparator;
 import org.mult.daap.comparator.SongTrackComparator;
-import org.mult.daap.comparator.StringIgnoreCaseComparator;
+import org.mult.daap.db.AppDatabase;
+import org.mult.daap.db.dao.SongDao;
+import org.mult.daap.db.entity.AlbumEntity;
+import org.mult.daap.db.entity.SongEntity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,49 +45,9 @@ public class AlbumBrowser extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
-        // if we haven't obtained the album list yet
-        if (Contents.albumNameList.size() == 0) {
-            for (Map.Entry<String, ArrayList<Integer>> entry : Contents.AlbumElements
-                    .entrySet()) {
-                String key = entry.getKey();
-                if (key.length() == 0) {
-                    Contents.albumNameList
-                            .add(getString(R.string.no_album_name));
-                }
-                else {
-                    Contents.albumNameList.add(key);
-                }
-            }
-            Comparator<String> snicc = new StringIgnoreCaseComparator();
-            Collections.sort(Contents.albumNameList, snicc);
-        }
         setContentView(R.xml.music_browser);
-        createList();
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_CANCELED) {
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-        }
-    }
-
-    private void createList() {
-        ListView albumList = findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
-                getApplicationContext(), R.xml.long_list_text_view,
-                Contents.albumNameList);
-        setListAdapter(adapter);
-        albumList.setOnItemClickListener(musicGridListener);
-        albumList.setFastScrollEnabled(true);
-        albumList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                            ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, CONTEXT_PLAY_ALBUM, 0, R.string.play_album);
-                    }
-                });
+        int playlistId = getIntent().getExtras().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
+        new GetAlbumsAsyncTask(this, playlistId).execute();
     }
 
     @Override
@@ -96,23 +63,22 @@ public class AlbumBrowser extends ListActivity {
                     albName = "";
                 }
                 Contents.filteredAlbumSongList.clear();
-                for (ISong s : Contents.songList) {
+                for (SongEntity s : Contents.songList) {
                     if (s.getAlbum().equals(albName)) {
                         Contents.filteredAlbumSongList.add(s);
                     }
                 }
                 TreeMap<Short, Short> track_num = new TreeMap<>();
-                for (ISong s : Contents.filteredAlbumSongList) {
+                for (SongEntity s : Contents.filteredAlbumSongList) {
                     if (!track_num.keySet().contains(s.getDiscNum())) {
                         track_num.put(s.getDiscNum(), (short) 1);
                     }
                     else {
-                        track_num.put(s.getDiscNum(),
-                                (short) (track_num.get(s.getDiscNum()) + 1));
+                        track_num.put(s.getDiscNum(), (short) (track_num.get(s.getDiscNum()) + 1));
                     }
                 }
-                Comparator<ISong> sdnc = new SongDiscNumComparator();
-                Comparator<ISong> stnc = new SongTrackComparator();
+                Comparator<SongEntity> sdnc = new SongDiscNumComparator();
+                Comparator<SongEntity> stnc = new SongTrackComparator();
                 Collections.sort(Contents.filteredAlbumSongList, sdnc);
                 // sorted by disc number now, but not within the disc
                 int pos = 0;
@@ -133,15 +99,20 @@ public class AlbumBrowser extends ListActivity {
         return false;
     }
 
-    private OnItemClickListener musicGridListener = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position,
-                long id) {
+    private class AlbumClickListener implements OnItemClickListener {
+        private final List<String> albums;
+
+        AlbumClickListener(List<String> albums) {
+            this.albums = albums;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
             Intent intent = new Intent(AlbumBrowser.this, SongBrowser.class);
-            intent.putExtra("from", "album");
-            intent.putExtra("albumName", Contents.albumNameList.get(position));
+            intent.putExtra(SongBrowser.ALBUM_FILTER_KEY, this.albums.get(position));
             startActivityForResult(intent, 1);
         }
-    };
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -197,5 +168,57 @@ public class AlbumBrowser extends ListActivity {
                 startActivityForResult(intent, 1);
         }
         return false;
+    }
+
+    private void OnAlbumsReceived(List<AlbumEntity> albums) {
+        ListView albumList = findViewById(android.R.id.list);
+        List<String> stringAlbums = new ArrayList<>();
+        for(AlbumEntity album : albums) {
+            stringAlbums.add(album.album);
+        }
+        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
+                getApplicationContext(), R.xml.long_list_text_view,
+                stringAlbums);
+        setListAdapter(adapter);
+        albumList.setOnItemClickListener(new AlbumClickListener(stringAlbums));
+        albumList.setFastScrollEnabled(true);
+        albumList.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+                menu.setHeaderTitle(getString(R.string.options));
+                menu.add(0, CONTEXT_PLAY_ALBUM, 0, R.string.play_album);
+            }
+        });
+    }
+
+    private static class GetAlbumsAsyncTask extends AsyncTask<Void, Void, List<AlbumEntity>> {
+        private WeakReference<AlbumBrowser> albumBrowserWeakReference;
+        private int playlistId;
+
+        GetAlbumsAsyncTask(AlbumBrowser albumBrowser, int playlistId) {
+            this.albumBrowserWeakReference = new WeakReference<>(albumBrowser);
+            this.playlistId = playlistId;
+        }
+
+        @Override
+        protected List<AlbumEntity> doInBackground(Void... voids) {
+            List<AlbumEntity> result = null;
+            AlbumBrowser albumBrowser = this.albumBrowserWeakReference.get();
+            if (albumBrowser != null && !albumBrowser.isFinishing()) {
+                DatabaseHost databaseHost = new DatabaseHost(albumBrowser.getApplicationContext());
+                result = databaseHost.getAlbumsForPlaylist(this.playlistId);
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(List<AlbumEntity> albums) {
+            super.onPostExecute(albums);
+
+            AlbumBrowser albumBrowser = this.albumBrowserWeakReference.get();
+            if (albumBrowser != null && !albumBrowser.isFinishing()) {
+                albumBrowser.OnAlbumsReceived(albums);
+            }
+        }
     }
 }
