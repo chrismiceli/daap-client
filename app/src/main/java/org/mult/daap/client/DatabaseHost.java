@@ -70,8 +70,14 @@ public class DatabaseHost {
         return playlistDao.loadAlbumsForPlaylist(playlistId);
     }
 
-    public List<SongEntity> getSongsForPlaylist(int playlistId) {
+    public List<SongEntity> getSongsForPlaylist(int playlistId, String artistFilter, String albumFilter) {
         PlaylistDao playlistDao = AppDatabase.getInstance(applicationContxt).playlistDao();
-        return playlistDao.loadSongsForPlaylist(playlistId);
+        if (artistFilter != null) {
+            return playlistDao.loadArtistSongsForPlaylist(playlistId, artistFilter);
+        } else if (albumFilter != null) {
+            return playlistDao.loadAlbumSongsForPlaylist(playlistId, albumFilter);
+        } else {
+            return playlistDao.loadSongsForPlaylist(playlistId);
+        }
     }
 }

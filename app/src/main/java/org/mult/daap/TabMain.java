@@ -15,11 +15,12 @@ public class TabMain extends TabActivity {
         setResult(Activity.RESULT_OK);
         setContentView(R.xml.tab_main);
         int playlistId = getIntent().getExtras().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
+        String albumFilterKey = getIntent().getExtras().getString(SongBrowser.ALBUM_FILTER_KEY);
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost(); // The activity TabHost
         TabHost.TabSpec spec; // Resusable TabSpec for each tab
         Intent intent = new Intent(); // Reusable Intent for each tab
-        intent.putExtra("from", "TabMain");
+        intent.putExtra(SongBrowser.ALBUM_FILTER_KEY, albumFilterKey);
         intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
         intent.setClass(this, SongBrowser.class);
         spec = tabHost

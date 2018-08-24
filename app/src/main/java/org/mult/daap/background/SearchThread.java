@@ -28,9 +28,9 @@ public class SearchThread extends Observable implements Runnable {
         ArrayList<SongEntity> srList = new ArrayList<>();
         String upperSearchQuery = searchQuery.toUpperCase();
         for (SongEntity s : Contents.songList) {
-            if (s.getName().toUpperCase().contains(upperSearchQuery) ||
-                s.getArtist().toUpperCase().contains(upperSearchQuery) ||
-                s.getAlbum().toUpperCase().contains(upperSearchQuery)) {
+            if (s.name.toUpperCase().contains(upperSearchQuery) ||
+                s.artist.toUpperCase().contains(upperSearchQuery) ||
+                s.album.toUpperCase().contains(upperSearchQuery)) {
                 srList.add(s);
             }
         }

@@ -21,8 +21,14 @@ public interface PlaylistDao {
     @Query("SELECT * FROM playlists WHERE id = :id")
     PlaylistEntity loadPlaylist(int id);
 
-    @Query("SELECT songs.* FROM playlist_song, songs where playlist_song.playlistId = :playlistId AND songs.id = playlist_song.songId ORDER BY songs.artist, songs.album, songs.track")
+    @Query("SELECT songs.* FROM playlist_song, songs WHERE playlist_song.playlistId = :playlistId AND songs.id = playlist_song.songId ORDER BY songs.artist, songs.album, songs.track")
     List<SongEntity> loadSongsForPlaylist(int playlistId);
+
+    @Query("SELECT songs.* FROM playlist_song, songs WHERE playlist_song.playlistId = :playlistId AND songs.id = playlist_song.songId AND songs.artist = :albumFilter ORDER BY songs.artist, songs.album, songs.track")
+    List<SongEntity> loadAlbumSongsForPlaylist(int playlistId, String albumFilter);
+
+    @Query("SELECT songs.* FROM playlist_song, songs WHERE playlist_song.playlistId = :playlistId AND songs.id = playlist_song.songId AND songs.artist = :artistFilter ORDER BY songs.artist, songs.album, songs.track")
+    List<SongEntity> loadArtistSongsForPlaylist(int playlistId, String artistFilter);
 
     @Query("SELECT DISTINCT songs.artist FROM playlist_song, songs where playlist_song.playlistId = :playlistId AND songs.id = playlist_song.songId ORDER BY artist ASC")
     List<ArtistEntity> loadArtistsForPlaylist(int playlistId);

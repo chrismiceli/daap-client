@@ -96,7 +96,7 @@ public class ArtistAlbumBrowser extends ListActivity {
                 }
                 Contents.filteredArtistSongList.clear();
                 for (SongEntity s : Contents.songList) {
-                    if (s.getAlbum().equals(albName)) {
+                    if (s.album.equals(albName)) {
                         Contents.filteredArtistSongList.add(s);
                     }
                 }
