@@ -45,7 +45,9 @@ public class SongBrowser extends ListActivity {
         setResult(Activity.RESULT_OK);
         setContentView(R.xml.music_browser);
         int playlistId = getIntent().getExtras().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
-        new GetSongsAsyncTask(this, playlistId).execute();
+        String artistFilter = getIntent().getExtras().getString(SongBrowser.ARTIST_FILTER_KEY);
+        String albumFilter = getIntent().getExtras().getString(SongBrowser.ALBUM_FILTER_KEY);
+        new GetSongsAsyncTask(this, playlistId, artistFilter, albumFilter).execute();
     }
 
     private OnItemClickListener musicGridListener = new OnItemClickListener() {
@@ -228,10 +230,14 @@ public class SongBrowser extends ListActivity {
     private static class GetSongsAsyncTask extends AsyncTask<Void, Void, List<SongEntity>> {
         private final WeakReference<SongBrowser> songBrowserWeakReference;
         private final int playlistId;
+        private final String artistFilter;
+        private final String albumFilter;
 
-        GetSongsAsyncTask(SongBrowser songBrowser, int playlistId) {
+        GetSongsAsyncTask(SongBrowser songBrowser, int playlistId, String artistFilter, String albumFilter) {
             this.songBrowserWeakReference = new WeakReference<>(songBrowser);
             this.playlistId = playlistId;
+            this.artistFilter = artistFilter;
+            this.albumFilter = albumFilter;
         }
 
         @Override
@@ -240,7 +246,7 @@ public class SongBrowser extends ListActivity {
             SongBrowser songBrowser = this.songBrowserWeakReference.get();
             if (songBrowser != null && !songBrowser.isFinishing()) {
                 DatabaseHost databaseHost = new DatabaseHost(songBrowser.getApplicationContext());
-                result = databaseHost.getSongsForPlaylist(this.playlistId);
+                result = databaseHost.getSongsForPlaylist(this.playlistId, this.artistFilter, this.albumFilter);
             }
 
             return result;

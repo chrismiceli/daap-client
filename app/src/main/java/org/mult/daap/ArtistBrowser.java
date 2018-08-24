@@ -62,7 +62,7 @@ public class ArtistBrowser extends ListActivity {
                 }
                 Contents.filteredArtistSongList.clear();
                 for (SongEntity s : Contents.songList) {
-                    if (s.getArtist().equals(albName)) {
+                    if (s.artist.equals(albName)) {
                         Contents.filteredArtistSongList.add(s);
                     }
                 }
@@ -84,16 +84,16 @@ public class ArtistBrowser extends ListActivity {
             String artist = Contents.artistNameList.get(position);
             Contents.ArtistAlbumElements.clear();
             for (SongEntity song : Contents.songList) {
-                if (song.getArtist().equals(artist)) {
-                    if (Contents.ArtistAlbumElements.containsKey(song.getAlbum())) {
-                        Contents.ArtistAlbumElements.get(song.getAlbum()).add(
-                                song.getId());
+                if (song.artist.equals(artist)) {
+                    if (Contents.ArtistAlbumElements.containsKey(song.album)) {
+                        Contents.ArtistAlbumElements.get(song.album).add(
+                                song.id);
                     }
                     else {
                         ArrayList<Integer> t = new ArrayList<>();
-                        t.add(song.getId());
-                        Contents.ArtistAlbumElements.put(song.getAlbum(), t);
-                        Contents.artistAlbumNameList.add(song.getAlbum());
+                        t.add(song.id);
+                        Contents.ArtistAlbumElements.put(song.album, t);
+                        Contents.artistAlbumNameList.add(song.album);
                     }
                 }
             }

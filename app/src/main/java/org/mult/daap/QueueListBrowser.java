@@ -184,7 +184,7 @@ public class QueueListBrowser extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv = new TextView(vContext.getApplicationContext());
             tv.setTextSize(font_size);
-            tv.setText(s.get(position).getName());
+            tv.setText(s.get(position).name);
             return tv;
         }
     }

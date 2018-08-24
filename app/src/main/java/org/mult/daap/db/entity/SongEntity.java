@@ -6,15 +6,15 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "songs")
 public class SongEntity {
     @PrimaryKey
-    private int id;
-    private String name;
-    private int time;
-    private String album;
-    private String artist;
-    private short track;
-    private short discNum;
-    private String format;
-    private int size;
+    public int id;
+    public String name;
+    public int time;
+    public String album;
+    public String artist;
+    public short track;
+    public short discNum;
+    public String format;
+    public int size;
 
     public SongEntity(
             int id,
@@ -38,51 +38,15 @@ public class SongEntity {
     }
 
     public SongEntity(SongEntity song) {
-        this.id = song.getId();
-        this.name = song.getName();
-        this.time = song.getTime();
-        this.album = song.getAlbum();
-        this.artist = song.getArtist();
-        this.track = song.getTrack();
-        this.discNum = song.getDiscNum();
-        this.format = song.getFormat();
-        this.size = song.getSize();
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public int getTime() {
-        return this.time;
-    }
-
-    public String getAlbum() {
-        return this.album;
-    }
-
-    public String getArtist() {
-        return this.artist;
-    }
-
-    public short getTrack() {
-        return this.track;
-    }
-
-    public short getDiscNum() {
-        return this.discNum;
-    }
-
-    public String getFormat() {
-        return this.format;
-    }
-
-    public int getSize() {
-        return this.size;
+        this.id = song.id;
+        this.name = song.name;
+        this.time = song.time;
+        this.album = song.album;
+        this.artist = song.artist;
+        this.track = song.track;
+        this.discNum = song.discNum;
+        this.format = song.format;
+        this.size = song.size;
     }
 
     public String toString() {

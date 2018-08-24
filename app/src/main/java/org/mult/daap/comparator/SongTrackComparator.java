@@ -6,6 +6,6 @@ import java.util.Comparator;
 
 public class SongTrackComparator implements Comparator<SongEntity> {
     public int compare(SongEntity s1, SongEntity s2) {
-        return s1.getTrack() - s2.getTrack();
+        return s1.track - s2.track;
     }
 }

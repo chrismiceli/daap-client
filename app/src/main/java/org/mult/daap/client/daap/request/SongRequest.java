@@ -43,7 +43,7 @@ public class SongRequest extends Request {
     @Override
     protected String getRequestString() {
         return "databases/" + host.getDatabaseID() +
-                "/items/" + song.getId() + "." + song.getFormat() +
+                "/items/" + song.id + "." + song.format +
                 "?session-id=" + host.getSessionID();
     }
 

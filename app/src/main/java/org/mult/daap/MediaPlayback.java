@@ -241,9 +241,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     private void setUpActivity() {
-        mArtistName.setText(song.getArtist());
-        mAlbumName.setText(song.getAlbum());
-        mTrackName.setText(song.getName());
+        mArtistName.setText(song.artist);
+        mAlbumName.setText(song.album);
+        mTrackName.setText(song.name);
         mProgress.setProgress(0);
         mProgress.setSecondaryProgress(0);
         // Share this notification directly with our widgets
@@ -252,11 +252,11 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     public String getTrackName() {
-        return song.getName();
+        return song.name;
     }
 
     public String getArtistName() {
-        return song.getArtist();
+        return song.artist;
     }
 
     public boolean isPlaying() {
@@ -463,7 +463,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 try {
                     File directory = new File(Environment.getExternalStorageDirectory(), "DAAP");
                     if (directory.mkdirs()) {
-                        File destination = new File(directory, "DAAP-" + song.getId() + "." + song.getFormat());
+                        File destination = new File(directory, "DAAP-" + song.id + "." + song.format);
                         mediaPlayer.pause();
                         InputStream songStream = Contents.daapHost.getSongStream(song);
                         FileOutputStream destinationStream = new FileOutputStream(destination);
@@ -520,8 +520,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             if (mediaPlayer == null) {
                 return 500;
             }
-            mTotalTime.setText(makeTimeString(song.getTime() / 1000));
-            int mDuration = song.getTime();
+            mTotalTime.setText(makeTimeString(song.time / 1000));
+            int mDuration = song.time;
             setPauseButton();
             long pos = mediaPlayer.getCurrentPosition();
             long remaining = 1000 - (pos % 1000);
@@ -569,15 +569,15 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(getApplicationContext(), "daap_channel_song_playing")
                             .setSmallIcon(R.drawable.stat_notify_musicplayer)
-                            .setContentTitle(song.getName())
-                            .setContentText(song.getArtist());
+                            .setContentTitle(song.name)
+                            .setContentText(song.artist);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
             Intent resultIntent = new Intent(this, MediaPlayback.class);
             stackBuilder.addParentStack(MediaPlayback.class);
             stackBuilder.addNextIntent(resultIntent);
             mBuilder.setContentIntent(contentIntent);
-            Notification notification = new Notification(R.drawable.stat_notify_musicplayer, song.getName(), System.currentTimeMillis());
+            Notification notification = new Notification(R.drawable.stat_notify_musicplayer, song.name, System.currentTimeMillis());
             /*notification.setLatestEventInfo(getApplicationContext(), song.name, song.artist, contentIntent);*/
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
             notification.flags |= Notification.FLAG_NO_CLEAR;
@@ -750,17 +750,17 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         bCast.putExtra("state", code);
         bCast.putExtra("app-name", "Daap-client");
         bCast.putExtra("app-package", "org.mult.daap");
-        bCast.putExtra("artist", song.getArtist());
-        bCast.putExtra("album", song.getAlbum());
-        bCast.putExtra("track", song.getName());
-        bCast.putExtra("duration", song.getTime() / 1000);
+        bCast.putExtra("artist", song.artist);
+        bCast.putExtra("album", song.album);
+        bCast.putExtra("track", song.name);
+        bCast.putExtra("duration", song.time / 1000);
         sendBroadcast(bCast);
         Intent i = new Intent("net.jjc1138.android.scrobbler.action.MUSIC_STATUS");
         i.putExtra("playing", playing);
-        i.putExtra("artist", song.getArtist());
-        i.putExtra("album", song.getAlbum());
-        i.putExtra("track", song.getName());
-        i.putExtra("secs", song.getTime() / 1000);
+        i.putExtra("artist", song.artist);
+        i.putExtra("album", song.album);
+        i.putExtra("track", song.name);
+        i.putExtra("secs", song.time / 1000);
         sendBroadcast(i);
     }
 
@@ -916,7 +916,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             String key = "47c0f71763c30293aa52f0ac166e410f";
             String result = "";
             try {
-                URL lastFM = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + URLEncoder.encode(song[0].getArtist(), "UTF-8") + "&api_key=" + key);
+                URL lastFM = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + URLEncoder.encode(song[0].artist, "UTF-8") + "&api_key=" + key);
                 URLConnection lfmConnection = lastFM.openConnection();
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
