@@ -1,11 +1,11 @@
 package org.mult.daap.comparator;
 
-import org.mult.daap.client.Song;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.Comparator;
 
-public class SongDiscNumComparator implements Comparator<Song> {
-    public int compare(Song s1, Song s2) {
-        return (s1.disc_num - s2.disc_num);
+public class SongDiscNumComparator implements Comparator<SongEntity> {
+    public int compare(SongEntity s1, SongEntity s2) {
+        return (s1.discNum - s2.discNum);
     }
 }

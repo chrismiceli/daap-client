@@ -23,12 +23,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.mult.daap.client.Song;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
 
 public class QueueListBrowser extends Activity {
-    private ArrayList<Song> s;
+    private ArrayList<SongEntity> s;
     private int count;
     private static final int MENU_PLAY_QUEUE = 0;
     private static final int MENU_CLEAR_QUEUE = 1;
@@ -38,15 +38,6 @@ public class QueueListBrowser extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
-            // We got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-        }
     }
 
     @Override
@@ -128,7 +119,9 @@ public class QueueListBrowser extends Activity {
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 intent = new Intent(QueueListBrowser.this, MediaPlayback.class);
                 startActivityForResult(intent, 1);
                 return true;
@@ -148,7 +141,9 @@ public class QueueListBrowser extends Activity {
             Contents.setSongPosition(Contents.queue, position);
             MediaPlayback.clearState();
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
+            if (notificationManager != null) {
+                notificationManager.cancelAll();
+            }
             Intent intent = new Intent(QueueListBrowser.this,
                     MediaPlayback.class);
             startActivityForResult(intent, 1);
@@ -167,7 +162,7 @@ public class QueueListBrowser extends Activity {
         private Context vContext;
         private int font_size;
 
-        public ProfilesAdapter(Context c) {
+        ProfilesAdapter(Context c) {
             vContext = c;
             SharedPreferences mPrefs = PreferenceManager
                     .getDefaultSharedPreferences(c);

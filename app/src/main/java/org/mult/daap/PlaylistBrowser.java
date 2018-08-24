@@ -1,34 +1,20 @@
 package org.mult.daap;
 
-import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.widget.Toast;
 
-import org.mult.daap.background.GetSongsForPlaylist;
-import org.mult.daap.client.Playlist;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.db.entity.PlaylistEntity;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import java.lang.ref.WeakReference;
+import java.util.List;
 
-public class PlaylistBrowser extends AppCompatActivity implements Observer {
-    public final static int START = 0;
-    public final static int FINISHED = 1;
-    public final static int EMPTY = 2;
-    public final static int INITIALIZED = 3;
-    private ProgressDialog pd = null;
-
+public class PlaylistBrowser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,130 +22,106 @@ public class PlaylistBrowser extends AppCompatActivity implements Observer {
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
 
-        if (Contents.address == null) {
-            // got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            this.setResult(Activity.RESULT_CANCELED);
-            this.finish();
-            return;
+        new GetPlaylistsAsyncTask(this).execute();
+    }
+
+    private static class OnClickListener implements RecyclerOnItemClickListener<PlaylistEntity> {
+        private final PlaylistBrowser playlistBrowser;
+
+        OnClickListener(PlaylistBrowser playlistBrowser) {
+            this.playlistBrowser = playlistBrowser;
         }
 
-        ArrayList<Playlist> playlists = new ArrayList<>(Contents.daapHost.getPlaylists());
-        playlists.add(0, new Playlist(Contents.daapHost, getString(R.string.all_songs)));
+        @Override
+        public void onItemClick(PlaylistEntity item) {
+            new GetSinglePlaylistAsyncTask(this.playlistBrowser, item.getId()).execute();
+        }
+    }
 
+    private final RecyclerOnItemClickListener<PlaylistEntity> playlistEntityRecyclerOnItemClickListener = new OnClickListener(this);
+
+    /*
+     todo cmiceli
+    Toast tst = Toast.makeText(PlaylistBrowser.this, getString(R.string.empty_playlist), Toast.LENGTH_LONG);
+    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2, tst.getYOffset() / 2);
+    tst.show();
+    */
+
+    private void OnPlaylistRetrieved(List<PlaylistEntity> playlists) {
+        PlaylistAdapter adapter = new PlaylistAdapter(playlists);
         RecyclerView playlistListView = this.findViewById(R.id.playlistList);
         playlistListView.setHasFixedSize(true);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         playlistListView.setLayoutManager(layoutManager);
-
-        PlaylistAdapter adapter = new PlaylistAdapter(playlists);
         playlistListView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(playlistListOnClickListener);
+        adapter.setOnItemClickListener(new OnClickListener(this));
     }
 
-    @Override
-    public void onResume() {
-        super.onResume(); // this.position = position;
-        GetSongsForPlaylist getSongsForPlaylist = Contents.getSongsForPlaylist;
-        if (getSongsForPlaylist != null) {
-            getSongsForPlaylist.addObserver(this);
-            // Since lm is not null, we have to create a new pd
-            Integer lastMessage = getSongsForPlaylist.getLastMessage();
-            if (lastMessage == INITIALIZED) {
-                this.update(getSongsForPlaylist, START);
-            } else {
-                this.update(getSongsForPlaylist, lastMessage);
-            }
-        }
+    private void OnPlaylistLoaded(int playlistId) {
+        Intent intent = new Intent(PlaylistBrowser.this, TabMain.class);
+        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
+        startActivityForResult(intent, 1);
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        if (pd != null) {
-            pd.dismiss();
+    private static class GetPlaylistsAsyncTask extends AsyncTask<Void,Void, List<PlaylistEntity>> {
+        private final WeakReference<PlaylistBrowser> playlistBrowserWeakReference;
+
+        GetPlaylistsAsyncTask(PlaylistBrowser playlistBrowser) {
+            this.playlistBrowserWeakReference = new WeakReference<>(playlistBrowser);
         }
 
-        if (Contents.getSongsForPlaylist != null) {
-            Contents.getSongsForPlaylist.deleteObserver(this);
-        }
-    }
-
-    /**
-     * A listener for click events on the playlist items
-     */
-    private RecyclerOnItemClickListener<Playlist> playlistListOnClickListener = new RecyclerOnItemClickListener<Playlist>() {
         @Override
-        public void onItemClick(Playlist playlist) {
-            try {
-                if (Contents.playlist_id != playlist.getId()) {
-                    // clicking new list
-                    GetSongsForPlaylist gsfp = new GetSongsForPlaylist(playlist);
-                    grabSongs(gsfp);
-                    Contents.playlist_id = playlist.getId();
-                } else {
-                    uiHandler.sendEmptyMessage(FINISHED);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        protected List<PlaylistEntity> doInBackground(Void...voids){
+            List<PlaylistEntity> result = null;
+            PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
+            if (playlistBrowser != null) {
+                DatabaseHost databaseHost = new DatabaseHost(playlistBrowser.getApplicationContext());
+                result = databaseHost.getPlaylists();
             }
-        }
-    };
 
-    public void update(Observable observable, Object data) {
-        if (((Integer) data).compareTo(START) == 0) {
-            pd = ProgressDialog.show(this, getString(R.string.fetching_music_title), getString(R.string.fetching_music_detail), true, false);
-        } else if (((Integer) data).compareTo(FINISHED) == 0) {
-            uiHandler.sendEmptyMessage(FINISHED);
-        } else if (((Integer) data).compareTo(EMPTY) == 0) {
-            uiHandler.sendEmptyMessage(EMPTY);
+            return result;
         }
-    }
 
-    private Handler uiHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == FINISHED) {
-                if (pd != null) {
-                    pd.dismiss();
-                }
+        protected void onPostExecute(List<PlaylistEntity> playlists) {
+            super.onPostExecute(playlists);
 
-                Contents.getSongsForPlaylist = null;
-                Intent intent = new Intent(PlaylistBrowser.this, TabMain.class);
-                startActivityForResult(intent, 1);
-            } else if (msg.what == EMPTY) {
-                if (pd != null) {
-                    pd.dismiss();
-                }
-
-                Contents.getSongsForPlaylist = null;
-                Toast tst = Toast.makeText(PlaylistBrowser.this, getString(R.string.empty_playlist), Toast.LENGTH_LONG);
-                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2, tst.getYOffset() / 2);
-                tst.show();
+            PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
+            if (playlistBrowser != null && !playlistBrowser.isFinishing()) {
+                playlistBrowser.OnPlaylistRetrieved(playlists);
             }
-        }
-    };
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_CANCELED) {
-            this.setResult(Activity.RESULT_CANCELED);
-            this.finish();
         }
     }
 
-    public void grabSongs(GetSongsForPlaylist getSongsForPlaylist) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
-        Contents.clearLists();
-        MediaPlayback.clearState();
-        Contents.getSongsForPlaylist = getSongsForPlaylist;
-        getSongsForPlaylist.addObserver(this);
-        Thread thread = new Thread(getSongsForPlaylist);
-        thread.start();
-        this.update(getSongsForPlaylist, START);
+    private static class GetSinglePlaylistAsyncTask extends AsyncTask<Void,Void, Boolean> {
+        private final WeakReference<PlaylistBrowser> playlistBrowserWeakReference;
+        private final int playlistId;
+
+        GetSinglePlaylistAsyncTask(PlaylistBrowser playlistBrowser, int playlistId) {
+            this.playlistBrowserWeakReference = new WeakReference<>(playlistBrowser);
+            this.playlistId = playlistId;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void...voids){
+            PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
+            if (playlistBrowser != null) {
+                DatabaseHost databaseHost = new DatabaseHost(playlistBrowser.getApplicationContext());
+                databaseHost.fetchSinglePlaylist(Contents.daapHost, this.playlistId);
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            PlaylistBrowser playlistBrowser = this.playlistBrowserWeakReference.get();
+            if (playlistBrowser != null && !playlistBrowser.isFinishing()) {
+                playlistBrowser.OnPlaylistLoaded(this.playlistId);
+            }
+        }
     }
 }

@@ -3,10 +3,9 @@ package org.mult.daap.client.daap.request;
 import android.util.Pair;
 
 import org.mult.daap.client.Host;
-import org.mult.daap.client.Song;
-import org.mult.daap.client.daap.Hasher;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 
 public class SongRequest extends Request {
     private BufferedInputStream bufferedInputStream;
-    private final Song song;
+    private final SongEntity song;
 
-    public SongRequest(Host daapHost, Song song) {
+    public SongRequest(Host daapHost, SongEntity song) {
         super(daapHost);
         this.song = song;
     }
@@ -49,18 +48,13 @@ public class SongRequest extends Request {
     }
 
     public URL getSongURL() throws MalformedURLException {
-        return new URL("http://" + host.getAddress() + ":" + host.getPort()
-                + "/" + getRequestString());
+        return new URL("http://" + host.getAddress() + "/" + getRequestString());
     }
 
     @Override
     protected byte[] readResponse() throws IOException {
         bufferedInputStream = new BufferedInputStream(httpc.getInputStream(), 8192);
         return null;
-    }
-
-    protected String getHashCode(Request r) {
-        return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
     public InputStream getStream() {

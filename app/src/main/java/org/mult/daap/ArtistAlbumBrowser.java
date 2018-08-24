@@ -17,9 +17,9 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.mult.daap.client.Song;
 import org.mult.daap.comparator.SongTrackComparator;
 import org.mult.daap.comparator.StringIgnoreCaseComparator;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,16 +36,6 @@ public class ArtistAlbumBrowser extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
-            // We got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-            return;
-        }
         String artistName = getIntent().getExtras().getString("artistName");
         setTitle(artistName);
         if (Contents.artistAlbumNameList.size() == 0) {
@@ -100,23 +90,24 @@ public class ArtistAlbumBrowser extends ListActivity {
             case CONTEXT_PLAY_ALBUM:
                 Intent intent = new Intent(ArtistAlbumBrowser.this,
                         MediaPlayback.class);
-                String albName = new String(
-                        Contents.artistAlbumNameList.get(menuInfo.position));
+                String albName = Contents.artistAlbumNameList.get(menuInfo.position);
                 if (albName.equals(getString(R.string.no_album_name))) {
                     albName = "";
                 }
                 Contents.filteredArtistSongList.clear();
-                for (Song s : Contents.songList) {
+                for (SongEntity s : Contents.songList) {
                     if (s.album.equals(albName)) {
                         Contents.filteredArtistSongList.add(s);
                     }
                 }
-                Comparator<Song> stnc = new SongTrackComparator();
+                Comparator<SongEntity> stnc = new SongTrackComparator();
                 Collections.sort(Contents.filteredArtistSongList, stnc);
                 Contents.setSongPosition(Contents.filteredArtistSongList, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 startActivityForResult(intent, 1);
                 return true;
         }
@@ -178,7 +169,9 @@ public class ArtistAlbumBrowser extends ListActivity {
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 intent = new Intent(ArtistAlbumBrowser.this,
                         MediaPlayback.class);
                 startActivityForResult(intent, 1);

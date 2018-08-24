@@ -9,56 +9,47 @@ import android.util.Base64;
 import android.util.Log;
 
 import org.mult.daap.background.GetSongURLAsyncTask;
-import org.mult.daap.client.Host;
-import org.mult.daap.client.Playlist;
-import org.mult.daap.client.Song;
-import org.mult.daap.comparator.SongIDComparator;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
-import org.mult.daap.client.daap.request.DatabasesRequest;
-import org.mult.daap.client.daap.request.HangingUpdateRequest;
-import org.mult.daap.client.daap.request.LoginRequest;
-import org.mult.daap.client.daap.request.LogoutRequest;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
+import org.mult.daap.client.daap.request.DatabasesRequest;
+import org.mult.daap.client.daap.request.LoginRequest;
 import org.mult.daap.client.daap.request.PlaylistsRequest;
 import org.mult.daap.client.daap.request.ServerInfoRequest;
 import org.mult.daap.client.daap.request.SingleDatabaseRequest;
+import org.mult.daap.client.daap.request.SinglePlaylistRequest;
 import org.mult.daap.client.daap.request.SongRequest;
 import org.mult.daap.client.daap.request.UpdateRequest;
+import org.mult.daap.db.entity.PlaylistEntity;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
+import java.lang.reflect.Array;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class Host {
-    private final String address;
-    private final int port;
     private int revisionNum;
     private int databaseId;
     private int sessionId;
     private int requestNum;
-    private String password;
-    private HangingUpdateRequest updateRequest;
+    private final String address;
+    private final String password;
     private int hostProgram;
-    private ArrayList<Song> songs = new ArrayList<>();
-    private ArrayList<Playlist> playlists = new ArrayList<>();
     private static final int UNKNOWN_SERVER = 0;
     private static final int ITUNES = 1;
     private static final int GIT_SERVER = 2;
     private static final int MT_DAAPD = 3;
 
-    public Host(String password, InetAddress inetAddress, int port) {
-        super();
+    public Host(String address, String password) {
+        this.address = address;
         this.password = Base64.encodeToString(("Android_DAAP:" + password).getBytes(), Base64.DEFAULT);
-        this.address = inetAddress.getHostAddress();
-        this.port = port;
     }
 
     public void connect() throws Exception {
         login();
-        grabSongs();
     }
 
     private void login() throws Exception {
@@ -79,7 +70,6 @@ public class Host {
         } catch (PasswordFailedException e) {
             e.printStackTrace();
             Log.d("DaapHost", "Password failed");
-            password = null;
             throw e;
         } catch (BadResponseCodeException e) {
             if (e.getResponseCode() == 503) {
@@ -89,10 +79,9 @@ public class Host {
                 e.printStackTrace();
                 throw e;
             }
-        } catch (java.net.ConnectException jce) {
+        } catch (ConnectException jce) {
             jce.printStackTrace();
             Log.d("DaapHost", "Net connection exception");
-            nullify();
             throw jce;
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +90,8 @@ public class Host {
         }
     }
 
-    private void grabSongs() throws Exception {
+    public ArrayList<SongEntity> fetchSongs() {
+        ArrayList<SongEntity> songs = null;
         try {
             DatabasesRequest databasesRequest = new DatabasesRequest(this);
             databasesRequest.Execute();
@@ -110,65 +100,55 @@ public class Host {
             singleDatabaseRequest.Execute();
             songs = singleDatabaseRequest.getSongs();
             Log.d("DaapHost", "# of songs = " + songs.size());
-            Comparator<Song> sic = new SongIDComparator();
-            Collections.sort(songs, sic); // for efficiency in getSongById in
-            // Host
+        } catch (BadResponseCodeException e) {
+            Log.d("DaapHost", "Bad response code");
+        } catch (IOException e) {
+            Log.d("DaapHost", "IO Exception");
+        } catch (PasswordFailedException e) {
+            Log.d("DaapHost", "Password failed");
+        }
+
+        return songs;
+    }
+
+    public ArrayList<PlaylistEntity> fetchPlaylists() {
+        ArrayList<PlaylistEntity> playlists = null;
+        try {
             PlaylistsRequest playlistsRequest = new PlaylistsRequest(this);
             playlistsRequest.Execute();
             playlists = playlistsRequest.getPlaylists();
             Log.d("DaapHost", "playlist count = " + playlists.size());
-            if (hostProgram == Host.GIT_SERVER) {
-                updateRequest = new HangingUpdateRequest(this);
-            }
-        } catch (BadResponseCodeException e) {
-            if (e.getResponseCode() == 500) {
-                Log.d("DaapHost", "500 Response code");
-                logout();
-                login();
-                grabSongs(); // try again.
-            }
         }
+        catch (BadResponseCodeException e) {
+            Log.d("DaapHost", "Bad response code");
+        } catch (IOException e) {
+            Log.d("DaapHost", "IO Exception");
+        } catch (PasswordFailedException e) {
+            Log.d("DaapHost", "Password failed");
+        }
+
+        return playlists;
     }
 
-    public void logout() throws PasswordFailedException, IOException,
-            BadResponseCodeException {
-        // don't logout when connected to a de.kapsi server:
+    public ArrayList<Integer> fetchSongIdsForPlaylist(Host host, int playlistId) {
+        ArrayList<Integer> songIds = null;
+            SinglePlaylistRequest singlePlaylistRequest = new SinglePlaylistRequest(host, playlistId);
         try {
-            @SuppressWarnings("unused")
-            LogoutRequest logoutRequest = new LogoutRequest(this);
-            logoutRequest.Execute();
-            if (updateRequest != null) {
-                updateRequest.disconnect();
-            }
+            singlePlaylistRequest.Execute();
+            songIds = singlePlaylistRequest.getSongIds();
         } catch (BadResponseCodeException e) {
-            if (e.getResponseCode() == 204) {
-                sessionId = 0;
-                revisionNum = 1;
-            } else {
-                throw e;
-            }
+            Log.d("DaapHost", "Bad response code");
+        } catch (PasswordFailedException e) {
+            Log.d("DaapHost", "Password failed");
+        } catch (IOException e) {
+            Log.d("DaapHost", "IO Exception");
         }
-    }
 
-    private void nullify() {
-        songs.clear();
-        playlists = null;
-        revisionNum = 0;
-        databaseId = 0;
-        sessionId = 0;
-        requestNum = 0;
+        return songIds;
     }
 
     public boolean isPasswordProtected() {
         return (password != null);
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public int getRevisionNumber() {
@@ -191,53 +171,47 @@ public class Host {
         return requestNum;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public String getPassword() {
         return password;
     }
 
-    public ArrayList<Playlist> getPlaylists() {
-        return playlists;
-    }
-
-    public ArrayList<Song> getSongs() {
-        return songs;
-    }
-
-    public void getSongURLAsync(Song song, ISongUrlConsumer songUrlConsumer) {
+    public void getSongURLAsync(SongEntity song, ISongUrlConsumer songUrlConsumer) {
         GetSongURLAsyncTask songURLAsyncTask = new GetSongURLAsyncTask(this, song, songUrlConsumer);
         songURLAsyncTask.execute();
     }
 
-    public InputStream getSongStream(Song s) throws Exception {
+    public InputStream getSongStream(SongEntity s) throws Exception {
         try {
-            // re-login if we're logged out, or this daaphost is a GIT server:
+            // re-login if we're logged out, or this daap host is a GIT server:
             if (sessionId == 0 || hostProgram == GIT_SERVER) {
                 login();
             }
+
             SongRequest sr = new SongRequest(this, s);
             return sr.getStream();
         } catch (BadResponseCodeException e) {
-            if (e.getResponseCode() == 500) {
-                // FIXME: This code here can help with failed song requests, but
-                // if the iTunes internal server error
-                // really is internal, it causes an infinite loop.
-                // System.out.println("Error 500: forbidden.. attempting to re-login ONCE");
-                // if (login(false))
-                // return getSongStream(s, bytes);
-            }
+            Log.d("DaapHost", "Bad response code");
         }
         return null;
     }
 
     private static int parseServerTypeString(String s) {
         s = s.toLowerCase().trim();
-        if (s.startsWith("itunes"))
+        if (s.startsWith("itunes")) {
             return ITUNES;
-        else if (s.startsWith("daapserver"))
+        }
+        else if (s.startsWith("daapserver")) {
             return GIT_SERVER;
-        else if (s.startsWith("mt-daapd"))
+        }
+        else if (s.startsWith("mt-daapd")) {
             return MT_DAAPD;
-        else
+        }
+        else {
             return UNKNOWN_SERVER;
+        }
     }
 }

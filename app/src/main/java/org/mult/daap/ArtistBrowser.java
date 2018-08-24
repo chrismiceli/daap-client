@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -17,13 +18,13 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.mult.daap.client.Song;
-import org.mult.daap.comparator.StringIgnoreCaseComparator;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.db.entity.ArtistEntity;
+import org.mult.daap.db.entity.SongEntity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.List;
 
 public class ArtistBrowser extends ListActivity {
     private static final int MENU_PLAY_QUEUE = 1;
@@ -36,33 +37,8 @@ public class ArtistBrowser extends ListActivity {
         // System.out.println("onCreate");
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
-            // We got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-            return;
-        }
-        if (Contents.artistNameList.size() == 0) {
-            for (Map.Entry<String, ArrayList<Integer>> entry : Contents.ArtistElements
-                    .entrySet()) {
-                String key = entry.getKey();
-                if (key.length() == 0) {
-                    Contents.artistNameList
-                            .add(getString(R.string.no_artist_name));
-                }
-                else {
-                    Contents.artistNameList.add(key);
-                }
-            }
-            Comparator<String> snicc = new StringIgnoreCaseComparator();
-            Collections.sort(Contents.artistNameList, snicc);
-        }
         setContentView(R.xml.music_browser);
-        createList();
+        new GetArtistsAsyncTask(this, this.getIntent().getIntExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, -1)).execute();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -70,25 +46,6 @@ public class ArtistBrowser extends ListActivity {
             setResult(Activity.RESULT_CANCELED);
             finish();
         }
-    }
-
-    private void createList() {
-        ListView artistList = findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
-                getApplicationContext(), R.xml.long_list_text_view,
-                Contents.artistNameList);
-        setListAdapter(adapter);
-        artistList.setOnItemClickListener(musicGridListener);
-        artistList.setFastScrollEnabled(true);
-        artistList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                            ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, CONTEXT_PLAY_ARTIST, 0,
-                                R.string.play_artist);
-                    }
-                });
     }
 
     @Override
@@ -99,13 +56,12 @@ public class ArtistBrowser extends ListActivity {
             case CONTEXT_PLAY_ARTIST:
                 Intent intent = new Intent(ArtistBrowser.this,
                         MediaPlayback.class);
-                String albName = new String(
-                        Contents.artistNameList.get(menuInfo.position));
+                String albName = Contents.artistNameList.get(menuInfo.position);
                 if (albName.equals(getString(R.string.no_artist_name))) {
                     albName = "";
                 }
                 Contents.filteredArtistSongList.clear();
-                for (Song s : Contents.songList) {
+                for (SongEntity s : Contents.songList) {
                     if (s.artist.equals(albName)) {
                         Contents.filteredArtistSongList.add(s);
                     }
@@ -113,7 +69,9 @@ public class ArtistBrowser extends ListActivity {
                 Contents.setSongPosition(Contents.filteredArtistSongList, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 startActivityForResult(intent, 1);
                 return true;
         }
@@ -125,7 +83,7 @@ public class ArtistBrowser extends ListActivity {
                 long id) {
             String artist = Contents.artistNameList.get(position);
             Contents.ArtistAlbumElements.clear();
-            for (Song song : Contents.songList) {
+            for (SongEntity song : Contents.songList) {
                 if (song.artist.equals(artist)) {
                     if (Contents.ArtistAlbumElements.containsKey(song.album)) {
                         Contents.ArtistAlbumElements.get(song.album).add(
@@ -191,7 +149,9 @@ public class ArtistBrowser extends ListActivity {
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
+                if (notificationManager != null) {
+                    notificationManager.cancelAll();
+                }
                 intent = new Intent(ArtistBrowser.this, MediaPlayback.class);
                 startActivityForResult(intent, 1);
                 return true;
@@ -200,5 +160,59 @@ public class ArtistBrowser extends ListActivity {
                 startActivityForResult(intent, 1);
         }
         return false;
+    }
+
+    private void OnArtistsReceived(List<ArtistEntity> artists) {
+        if (artists != null) {
+            ListView artistList = findViewById(android.R.id.list);
+            List<String> artistsStringList = new ArrayList<>();
+            for(ArtistEntity artist : artists) {
+                artistsStringList.add(artist.artist);
+            }
+            MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
+                getApplicationContext(), R.xml.long_list_text_view,
+                artistsStringList);
+            setListAdapter(adapter);
+            artistList.setOnItemClickListener(musicGridListener);
+            artistList.setFastScrollEnabled(true);
+            artistList.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+                    menu.setHeaderTitle(getString(R.string.options));
+                    menu.add(0, CONTEXT_PLAY_ARTIST, 0, R.string.play_artist);
+                }
+            });
+        }
+    }
+
+    private static class GetArtistsAsyncTask extends AsyncTask<Void, Void, List<ArtistEntity>> {
+        private final WeakReference<ArtistBrowser> artistBrowserWeakReference;
+        private final int playlistId;
+
+        GetArtistsAsyncTask(ArtistBrowser artistBrowser, int playlistId) {
+            this.artistBrowserWeakReference = new WeakReference<>(artistBrowser);
+            this.playlistId = playlistId;
+        }
+
+        @Override
+        protected List<ArtistEntity> doInBackground(Void... voids) {
+            List<ArtistEntity> result = null;
+            ArtistBrowser artistBrowser = this.artistBrowserWeakReference.get();
+            if (artistBrowser != null) {
+                DatabaseHost databaseHost = new DatabaseHost(artistBrowser.getApplicationContext());
+                result = databaseHost.getArtistsForPlaylist(this.playlistId);
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(List<ArtistEntity> artists) {
+            super.onPostExecute(artists);
+
+            ArtistBrowser artistBrowser = this.artistBrowserWeakReference.get();
+            if (artistBrowser != null && !artistBrowser.isFinishing()) {
+                artistBrowser.OnArtistsReceived(artists);
+            }
+        }
     }
 }

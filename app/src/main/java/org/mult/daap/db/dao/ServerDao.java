@@ -11,8 +11,8 @@ import org.mult.daap.db.entity.ServerEntity;
 
 @Dao
 public interface ServerDao {
-    @Query("SELECT * FROM servers")
-    ServerEntity[] loadAllServers();
+    @Query("SELECT * FROM servers LIMIT 1")
+    ServerEntity loadServer();
 
     /**
      * Sets the single DAAP server to use for the app.
@@ -22,7 +22,4 @@ public interface ServerDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setDaapServer(ServerEntity server);
-
-    @Delete
-    void deleteServers(ServerEntity... users);
 }

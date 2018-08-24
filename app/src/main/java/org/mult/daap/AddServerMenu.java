@@ -6,6 +6,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,9 +31,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.mult.daap.background.GetServerAsyncTask;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.client.ILoginConsumer;
 import org.mult.daap.background.JmDNSListener;
-import org.mult.daap.background.LoginManager;
+import org.mult.daap.background.LoginManagerAsyncTask;
 import org.mult.daap.background.SaveServerAsyncTask;
 import org.mult.daap.background.WrapMulticastLock;
 import org.mult.daap.db.entity.ServerEntity;
@@ -44,7 +46,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddServerMenu extends AppCompatActivity {
+public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     private JmDNSListener jmDNSListener;
     private static final int MENU_ABOUT = 0;
     private static final int MENU_DONATE = 1;
@@ -53,6 +55,7 @@ public class AddServerMenu extends AppCompatActivity {
     private WrapMulticastLock fLock;
     private ServerAdapter discoveredServersListViewAdapter;
     private final List<DiscoveredServer> discoveredServers = new ArrayList<>();
+    private boolean saveServer = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +165,8 @@ public class AddServerMenu extends AppCompatActivity {
         discoveredServersListView.setAdapter(discoveredServersListViewAdapter);
         discoveredServersListView.setOnItemClickListener(discoveredServerClickListener);
         if (server != null) {
-            new LoginManager(this, server).execute();
+            this.saveServer = false;
+            new LoginManagerAsyncTask(this, server.getAddress(), server.getPassword()).execute();
         }
     }
 
@@ -192,7 +196,7 @@ public class AddServerMenu extends AppCompatActivity {
         }
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DiscoveredServer discoveredServer = discoveredServers.get(position);
-            new LoginManager(this.addServerMenu, discoveredServer).execute();
+            new LoginManagerAsyncTask(this.addServerMenu, discoveredServer.getAddress(), null).execute();
         }
     }
 
@@ -340,56 +344,88 @@ public class AddServerMenu extends AppCompatActivity {
             }
 
             final String serverAddress = serverAddressEditText.getText().toString() + ":" + port;
-            ServerEntity server = new ServerEntity(serverAddress, loginCheckBox.isChecked() ? password : null);
 
             // login to the server, and update UI
-            new LoginManager(this.addServerMenu, server).execute();
+            new LoginManagerAsyncTask(this.addServerMenu, serverAddress, loginCheckBox.isChecked() ? password : null).execute();
         }
     }
 
     public void onBeforeLogin() {
-        Button addServerButton = findViewById(R.id.addServerButton);
+        LinearLayout formLayout = findViewById(R.id.formSection);
         LinearLayout connectingSection = findViewById(R.id.connectingSection);
-        ProgressBar progressBar = findViewById(R.id.progressBar);
 
-        addServerButton.setEnabled(false);
         connectingSection.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        formLayout.setVisibility(View.INVISIBLE);
+
+        connectingSection.setVisibility(View.VISIBLE);
     }
 
     public void onAfterLogin(int result) {
-        if (result == LoginManager.CONNECTION_FINISHED) {
-            final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
-            startActivityForResult(intent, 1);
-        } else {
-            Button addServerButton = findViewById(R.id.addServerButton);
-            addServerButton.setEnabled(true);
-        }
-    }
-
-    public void onLoginUpdate(int state, ServerEntity server) {
         TextView progressMessage = findViewById(R.id.progressBarText);
-        LinearLayout connectingSection = findViewById(R.id.connectingSection);
+        LinearLayout formLayout = findViewById(R.id.formSection);
         ProgressBar progressBar = findViewById(R.id.progressBar);
-        switch (state) {
-            case LoginManager.INITIATED: {
-                connectingSection.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-                progressMessage.setText(getString(R.string.connecting_title) + " - " + getString(R.string.connecting_detail));
-            }
-            case LoginManager.CONNECTION_FINISHED: {
+
+        Button addServerButton = findViewById(R.id.addServerButton);
+        addServerButton.setEnabled(true);
+        switch (result) {
+            case LoginManagerAsyncTask.CONNECTION_FINISHED: {
                 // success, save the server to the database
-                new SaveServerAsyncTask(this, server).execute();
-                connectingSection.setVisibility(View.GONE);
+                if (this.saveServer) {
+                    new SaveServerAsyncTask(this, Contents.daapHost).execute();
+                } else {
+                    final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
+                    startActivityForResult(intent, 1);
+                }
+
+                break;
             }
-            case LoginManager.PASSWORD_FAILED: {
+            case LoginManagerAsyncTask.PASSWORD_FAILED: {
+                formLayout.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
                 progressMessage.setText(getString(R.string.login_required));
+                break;
             }
+            case LoginManagerAsyncTask.ERROR:
             default: {
                 // error connecting
                 progressBar.setVisibility(View.INVISIBLE);
                 progressMessage.setText(getString(R.string.unable_to_connect));
+                break;
+            }
+        }
+    }
+
+    public void onAfterSave() {
+        final Intent intent = new Intent(AddServerMenu.this, PlaylistBrowser.class);
+        startActivityForResult(intent, 1);
+    }
+
+    private static class GetServerAsyncTask extends AsyncTask<Void,Void, ServerEntity> {
+        private final WeakReference<AddServerMenu> addServerMenu;
+
+        GetServerAsyncTask(AddServerMenu addServerMenu) {
+            this.addServerMenu = new WeakReference<>(addServerMenu);
+        }
+
+        @Override
+        protected ServerEntity doInBackground(Void...voids){
+            ServerEntity result = null;
+            AddServerMenu addServerMenu = this.addServerMenu.get();
+            if (addServerMenu != null && !addServerMenu.isFinishing()) {
+                DatabaseHost databaseHost = new DatabaseHost(addServerMenu.getApplicationContext());
+                result = databaseHost.getServer();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(ServerEntity serverEntity) {
+            super.onPostExecute(serverEntity);
+
+            AddServerMenu addServerMenu = this.addServerMenu.get();
+            if (addServerMenu != null && !addServerMenu.isFinishing()) {
+                addServerMenu.OnServerRetrieved(serverEntity);
             }
         }
     }

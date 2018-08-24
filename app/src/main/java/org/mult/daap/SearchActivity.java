@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.background.SearchThread;
-import org.mult.daap.client.Song;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class SearchActivity extends ListActivity implements Observer {
-    private ArrayList<Song> srList = null;
+    private ArrayList<SongEntity> srList = null;
     private ProgressDialog pd = null;
     private final static int CONTEXT_QUEUE = 0;
     private final static int MENU_PLAY_QUEUE = 1;
@@ -49,16 +49,6 @@ public class SearchActivity extends ListActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
-            // We got kicked out of memory probably
-            MediaPlayback.clearState();
-            Contents.clearLists();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-            return;
-        }
         final Intent queryIntent = getIntent();
         final String queryAction = queryIntent.getAction();
         if (Intent.ACTION_SEARCH.equals(queryAction)) {
@@ -114,7 +104,7 @@ public class SearchActivity extends ListActivity implements Observer {
                 .getMenuInfo();
         switch (aItem.getItemId()) {
             case CONTEXT_QUEUE:
-                Song s = Contents.songList.get(Contents.songList.indexOf(srList
+                SongEntity s = Contents.songList.get(Contents.songList.indexOf(srList
                         .get(menuInfo.position)));
                 if (Contents.queue.contains(s)) { // in
                     // list
@@ -185,7 +175,7 @@ public class SearchActivity extends ListActivity implements Observer {
     @SuppressWarnings("unchecked")
     public void update(Observable observable, Object data) {
         if (data != null) {
-            srList = (ArrayList<Song>) data;
+            srList = (ArrayList<SongEntity>) data;
             searchHandler.sendEmptyMessage(0);
         }
     }
@@ -258,7 +248,7 @@ public class SearchActivity extends ListActivity implements Observer {
     }
 
     class MyArrayAdapter<T> extends ArrayAdapter<T> {
-        ArrayList<Song> myElements;
+        ArrayList<SongEntity> myElements;
         HashMap<String, Integer> alphaIndexer;
         ArrayList<String> letterList;
         Context vContext;
@@ -272,7 +262,7 @@ public class SearchActivity extends ListActivity implements Observer {
                     .getDefaultSharedPreferences(context);
             font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
             vContext = context;
-            myElements = (ArrayList<Song>) objects;
+            myElements = (ArrayList<SongEntity>) objects;
         }
 
         @Override

@@ -49,7 +49,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.client.ISongUrlConsumer;
-import org.mult.daap.client.Song;
+import org.mult.daap.db.entity.SongEntity;
 import org.mult.daap.widget.DAAPClientAppWidgetOneProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -80,7 +80,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 
     private static MediaPlayer mediaPlayer;
     private MediaPlaybackService mMediaPlaybackService = null;
-    private static Song song;
+    private static SongEntity song;
     private TextView mArtistName;
     private TextView mAlbumName;
     private TextView mTrackName;
@@ -111,15 +111,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setResult(Activity.RESULT_OK);
-        if (Contents.address == null) {
-            // We got kicked out of memory probably
-            clearState();
-            Contents.clearLists();
-            stopNotification();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-            return;
-        }
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         setContentView(R.layout.audio_player);
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
@@ -209,7 +200,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         return dialog;
     }
 
-    private void startSong(Song song) {
+    private void startSong(SongEntity song) {
         clearState();
         mProgress.setEnabled(false);
         mediaPlayer = new MediaPlayer();
@@ -914,14 +905,14 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     }
 
-    private static class LastFMGetSongInfo extends AsyncTask<Song, Void, String> {
+    private static class LastFMGetSongInfo extends AsyncTask<SongEntity, Void, String> {
         private final WeakReference<MediaPlayback> mediaPlaybackWeakReference;
         LastFMGetSongInfo(MediaPlayback mediaPlayback)
         {
             this.mediaPlaybackWeakReference = new WeakReference<>(mediaPlayback);
         }
 
-        protected String doInBackground(Song... song) {
+        protected String doInBackground(SongEntity... song) {
             String key = "47c0f71763c30293aa52f0ac166e410f";
             String result = "";
             try {

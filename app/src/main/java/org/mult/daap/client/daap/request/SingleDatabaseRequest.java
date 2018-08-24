@@ -3,15 +3,15 @@ package org.mult.daap.client.daap.request;
 import android.util.Log;
 
 import org.mult.daap.client.Host;
-import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class SingleDatabaseRequest extends Request {
-    private final ArrayList<Song> mSongList = new ArrayList<>();
+    private final ArrayList<SongEntity> mSongList = new ArrayList<>();
 
     public SingleDatabaseRequest(Host daapHost) {
         super(daapHost);
@@ -79,46 +79,55 @@ public class SingleDatabaseRequest extends Request {
         String name;
         int size;
         int startPos = position;
-        Song song = new Song();
+
+        int id = 0;
+        String songName = null;
+        int time = 0;
+        String album = null;
+        String artist = null;
+        short track = 0;
+        short discNum = 0;
+        String format = null;
+        int songSize = 0;
+
         while (position < argSize + startPos) {
             name = readString(data, position, 4);
             position += 4;
             size = readInt(data, position);
             position += 4;
-            song.host = host;
             switch (name) {
                 case "miid":
-                    song.id = Request.readInt(data, position, 4);
+                    id = Request.readInt(data, position, 4);
                     break;
                 case "minm":
-                    song.name = readString(data, position, size).trim();
+                    songName = readString(data, position, size).trim();
                     break;
                 case "asal":
-                    song.album = readString(data, position, size).trim();
+                    album = readString(data, position, size).trim();
                     break;
                 case "asar":
-                    song.artist = readString(data, position, size).trim();
+                    artist = readString(data, position, size).trim();
                     break;
                 case "astn":
-                    song.track = (short) readInt(data, position, 2);
+                    track = (short) readInt(data, position, 2);
                     break;
                 case "asfm":
-                    song.format = readString(data, position, size);
+                    format = readString(data, position, size);
                     break;
                 case "astm":
-                    song.time = readInt(data, position, 4);
+                    time = readInt(data, position, 4);
                     break;
                 case "assz":
-                    song.size = readInt(data, position, 4);
+                    songSize = readInt(data, position, 4);
                     break;
                 case "asdn":
-                    song.disc_num = (short) readInt(data, position, 2);
+                    discNum = (short) readInt(data, position, 2);
                     break;
             }
 
             position += size;
         }
-        mSongList.add(song);
+        mSongList.add(new SongEntity(id, songName, time, album, artist, track, discNum, format, songSize));
     }
 
     private ArrayList<FieldPair> processContainerList(byte[] data, int position, int argSize) {
@@ -140,7 +149,7 @@ public class SingleDatabaseRequest extends Request {
         return mlitList;
     }
 
-    public ArrayList<Song> getSongs() {
+    public ArrayList<SongEntity> getSongs() {
         return mSongList;
     }
 }
