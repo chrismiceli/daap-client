@@ -33,15 +33,7 @@
         <activity android:name=".PlaylistBrowser"
                   android:label="@string/playlist_browser_activity"
                   android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ArtistBrowser" android:theme="@android:style/Theme.NoTitleBar">
-            <meta-data android:name="android.app.default_searchable"
-                android:value=".SearchActivity" />
-        </activity>
-        <activity android:name=".AlbumBrowser" android:theme="@android:style/Theme.NoTitleBar">
-            <meta-data android:name="android.app.default_searchable"
-                android:value=".SearchActivity" />
-        </activity>
-        <activity android:name=".ArtistAlbumBrowser">
+        <activity android:name=".ItemBrowser" android:theme="@android:style/Theme.NoTitleBar">
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
