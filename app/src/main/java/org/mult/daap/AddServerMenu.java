@@ -60,6 +60,34 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.setContentView(R.layout.activity_add_server_menus);
+
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
+
+        this.builder = new AlertDialog.Builder(this);
+
+        Button addServerButton = this.findViewById(R.id.addServerButton);
+
+        EditText serverAddressEditText = this.findViewById(R.id.serverUrlText);
+        serverAddressEditText.addTextChangedListener(new DaapUrlTextWatcher(addServerButton));
+
+        CheckBox loginCheckBox = this.findViewById(R.id.loginCheckBox);
+        loginCheckBox.setOnCheckedChangeListener(new LoginRequiredListener(this.findViewById(R.id.passwordSection)));
+
+        addServerButton.setOnClickListener(new AddServerButtonListener(
+                this,
+                serverAddressEditText,
+                (EditText) this.findViewById(R.id.serverPasswordText),
+                (EditText) this.findViewById(R.id.serverPortText),
+                loginCheckBox));
+
+        ListView discoveredServersListView = this.findViewById(R.id.discoveredServersListView);
+        discoveredServersListViewAdapter = new ServerAdapter();
+        discoveredServersListView.setAdapter(discoveredServersListViewAdapter);
+        discoveredServersListView.setOnItemClickListener(discoveredServerClickListener);
+
         new GetServerAsyncTask(this).execute();
     }
 
@@ -138,32 +166,6 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     }
 
     public void OnServerRetrieved(ServerEntity server) {
-        this.setContentView(R.layout.activity_add_server_menus);
-
-        Toolbar toolbar = this.findViewById(R.id.toolbar);
-        this.setSupportActionBar(toolbar);
-
-        this.builder = new AlertDialog.Builder(this);
-
-        Button addServerButton = this.findViewById(R.id.addServerButton);
-
-        EditText serverAddressEditText = this.findViewById(R.id.serverUrlText);
-        serverAddressEditText.addTextChangedListener(new DaapUrlTextWatcher(addServerButton));
-
-        CheckBox loginCheckBox = this.findViewById(R.id.loginCheckBox);
-        loginCheckBox.setOnCheckedChangeListener(new LoginRequiredListener(this.findViewById(R.id.passwordSection)));
-
-        addServerButton.setOnClickListener(new AddServerButtonListener(
-                this,
-                serverAddressEditText,
-                (EditText) this.findViewById(R.id.serverPasswordText),
-                (EditText) this.findViewById(R.id.serverPortText),
-                loginCheckBox));
-
-        ListView discoveredServersListView = this.findViewById(R.id.discoveredServersListView);
-        discoveredServersListViewAdapter = new ServerAdapter();
-        discoveredServersListView.setAdapter(discoveredServersListViewAdapter);
-        discoveredServersListView.setOnItemClickListener(discoveredServerClickListener);
         if (server != null) {
             this.saveServer = false;
             new LoginManagerAsyncTask(this, server.getAddress(), server.getPassword()).execute();
