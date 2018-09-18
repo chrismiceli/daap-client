@@ -445,7 +445,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             finish();
             break;
         case MENU_LIBRARY:
-            Intent intent = new Intent(MediaPlayback.this, PlaylistBrowser.class);
+            Intent intent = new Intent(MediaPlayback.this, SongsDrawerActivity.class);
             startActivity(intent);
             break;
         case MENU_DOWNLOAD:

@@ -16,6 +16,7 @@
     <string name="current_song">Current Song</string>
     <string name="upcoming_song"></string>
     <string name="server_settings">Server settings</string>
+    <string name="settings">Settings</string>
     <string name="share_name">DAAP Share Name</string>
     <string name="url_description">URL and Port</string>
     <string name="login_required">Login password required</string>
@@ -76,4 +77,6 @@
     <string name="media_playback_service_desc">"Service used to handle widget actions"</string>
     <string name="widget_one_initial_text">"Touch to select media."</string>
     <string name="widget_one_track_info_unavailable">"No track info available"</string>
+    <string name="navigation_drawer_open">Open Drawer</string>
+    <string name="navigation_drawer_close">Close Drawer</string>
 </resources>

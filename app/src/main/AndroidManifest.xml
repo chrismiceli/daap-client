@@ -30,9 +30,6 @@
                 android:value=".SearchActivity" />
         </activity>
         <activity android:name=".TabMain" android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name=".PlaylistBrowser"
-                  android:label="@string/playlist_browser_activity"
-                  android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ItemBrowser" android:theme="@android:style/Theme.NoTitleBar">
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
@@ -63,5 +60,9 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
+        <activity
+            android:name=".SongsDrawerActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 </manifest>
