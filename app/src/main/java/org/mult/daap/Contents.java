@@ -5,6 +5,7 @@ import org.mult.daap.client.Host;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -23,10 +24,6 @@ public class Contents {
     public static boolean shuffle = false;
     public static boolean repeat = false;
     private static int position = 0;
-
-    public static int findSongPosition(SongEntity song) {
-        return Contents.activeList.indexOf(song);
-    }
 
     public static void setSongPosition(ArrayList<SongEntity> list, int id) {
         activeList = list;

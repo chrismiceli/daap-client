@@ -20,6 +20,7 @@ import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SongsFragment extends Fragment {
@@ -120,6 +121,7 @@ public class SongsFragment extends Fragment {
         playlistListView.setLayoutManager(layoutManager);
         playlistListView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnClickListener(this));
+        Contents.songList = (ArrayList<SongEntity>)songs;
 
         RecyclerView musicList = this.getActivity().findViewById(R.id.music_list);
         musicList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -142,12 +144,14 @@ public class SongsFragment extends Fragment {
         @Override
         public void onItemClick(SongEntity item) {
             String from = getArguments().getString("mediaType");
-            int position = Contents.findSongPosition(item);
             if (from.equals("album")) {
+                int position = Contents.filteredAlbumSongList.indexOf(item);
                 Contents.setSongPosition(Contents.filteredAlbumSongList, position);
             } else if (from.equals("artist")) {
+                int position = Contents.filteredArtistSongList.indexOf(item);
                 Contents.setSongPosition(Contents.filteredArtistSongList, position);
             } else {
+                int position = Contents.songList.indexOf(item);
                 Contents.setSongPosition(Contents.songList, position);
             }
 
