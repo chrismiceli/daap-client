@@ -15,6 +15,20 @@ import android.view.MenuItem;
 public class SongsDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SearchRequestedCallback mSearchRequestedCallback;
+
+    public void setSearchRequestedCallback(SearchRequestedCallback callback) {
+        mSearchRequestedCallback = callback;
+    }
+
+    public SearchRequestedCallback getSearchRequestedCallback() {
+        return mSearchRequestedCallback;
+    }
+
+    public interface SearchRequestedCallback {
+        void onSearchRequested();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +45,7 @@ public class SongsDrawerActivity extends AppCompatActivity
         NavigationView navigationView = this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Fragment newFragment = new PlaylistFragment();
+        Fragment newFragment = new PlaylistsFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, newFragment);
         ft.addToBackStack(null);
@@ -75,21 +89,27 @@ public class SongsDrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // handle navigation view item clicks here.
         int id = item.getItemId();
-        DrawerLayout mDrawerLayout = this.findViewById(R.id.drawer_layout);
         Fragment fragment = null;
 
+        Bundle args = new Bundle();
         if (id == R.id.nav_all_songs) {
-            mDrawerLayout.closeDrawers();
+            args.putString("mediaType", "song");
             fragment = new SongsFragment();
         } else if (id == R.id.nav_playlists) {
+            fragment = new PlaylistsFragment();
         } else if (id == R.id.nav_artists) {
+            args.putString("mediaType", "artist");
+            fragment = new SongsFragment();
         } else if (id == R.id.nav_albums) {
+            args.putString("mediaType", "album");
+            fragment = new SongsFragment();
         }
 
         DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         if (fragment != null) {
+            fragment.setArguments(args);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.commit();

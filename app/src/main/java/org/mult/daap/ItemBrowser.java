@@ -38,6 +38,8 @@ public class ItemBrowser extends ListActivity {
     private static final int MENU_VIEW_QUEUE = 2;
     private static final int MENU_SEARCH = 3;
     private static final int CONTEXT_PLAY_ALBUM = 4;
+    public static String ARTIST_FILTER_KEY = "__ARTIST_FILTER_KEY__";
+    public static String ALBUM_FILTER_KEY = "__ALBUM_FILTER_KEY__";
 
     public static final String ITEM_MODE_KEY = "__ITEM_MODE__";
     public static final int ITEM_MODE_ALBUM = 0;
@@ -123,7 +125,7 @@ public class ItemBrowser extends ListActivity {
             intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
 
             if (ItemBrowser.ITEM_MODE_ALBUM == this.itemMode) {
-                intent.putExtra(SongBrowser.ALBUM_FILTER_KEY, this.items.get(position));
+                intent.putExtra(ItemBrowser.ALBUM_FILTER_KEY, this.items.get(position));
             }
 
             startActivityForResult(intent, 1);

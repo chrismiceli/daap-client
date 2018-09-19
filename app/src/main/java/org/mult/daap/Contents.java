@@ -24,6 +24,10 @@ public class Contents {
     public static boolean repeat = false;
     private static int position = 0;
 
+    public static int findSongPosition(SongEntity song) {
+        return Contents.activeList.indexOf(song);
+    }
+
     public static void setSongPosition(ArrayList<SongEntity> list, int id) {
         activeList = list;
         Contents.position = id;
@@ -65,6 +69,7 @@ public class Contents {
     }
 
     public static void addToQueue(SongEntity s) throws IndexOutOfBoundsException {
+        // TODO: need to invalidate the context menu for the songs fragment
         if (queue.size() > 9) {
             throw new IndexOutOfBoundsException("Can't add more than 10");
         } else {

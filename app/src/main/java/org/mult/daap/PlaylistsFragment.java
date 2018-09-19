@@ -1,9 +1,9 @@
 package org.mult.daap;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import org.mult.daap.db.entity.PlaylistEntity;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class PlaylistFragment extends Fragment {
+public class PlaylistsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         new GetPlaylistsAsyncTask(this).execute();
@@ -24,15 +24,15 @@ public class PlaylistFragment extends Fragment {
     }
 
     private static class OnClickListener implements RecyclerOnItemClickListener<PlaylistEntity> {
-        private final PlaylistFragment playlistFragment;
+        private final PlaylistsFragment playlistsFragment;
 
-        OnClickListener(PlaylistFragment playlistFragment) {
-            this.playlistFragment = playlistFragment;
+        OnClickListener(PlaylistsFragment playlistsFragment) {
+            this.playlistsFragment = playlistsFragment;
         }
 
         @Override
         public void onItemClick(PlaylistEntity item) {
-            new PlaylistFragment.GetSinglePlaylistAsyncTask(this.playlistFragment, item.getId()).execute();
+            new PlaylistsFragment.GetSinglePlaylistAsyncTask(this.playlistsFragment, item.getId()).execute();
         }
     }
 
@@ -56,24 +56,32 @@ public class PlaylistFragment extends Fragment {
     }
 
     private void OnPlaylistLoaded(int playlistId) {
-//        Intent intent = new Intent(PlaylistFragment.this, TabMain.class);
-//        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
-//        startActivityForResult(intent, 1);
+        Fragment fragment = new SongsFragment();
+        Bundle args = new Bundle();
+        args.putString("mediaType", "song");
+        args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
+        fragment.setArguments(args);
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.remove(this);
+        ft.add(R.id.content_frame, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     private static class GetPlaylistsAsyncTask extends AsyncTask<Void, Void, List<PlaylistEntity>> {
-        private final WeakReference<PlaylistFragment> playlistFragmentWeakReference;
+        private final WeakReference<PlaylistsFragment> playlistsFragmentWeakReference;
 
-        GetPlaylistsAsyncTask(PlaylistFragment playlistFragment) {
-            this.playlistFragmentWeakReference = new WeakReference<>(playlistFragment);
+        GetPlaylistsAsyncTask(PlaylistsFragment playlistsFragment) {
+            this.playlistsFragmentWeakReference = new WeakReference<>(playlistsFragment);
         }
 
         @Override
         protected List<PlaylistEntity> doInBackground(Void... voids) {
             List<PlaylistEntity> result = null;
-            PlaylistFragment playlistFragment = this.playlistFragmentWeakReference.get();
-            if (playlistFragment != null) {
-                DatabaseHost databaseHost = new DatabaseHost(playlistFragment.getActivity().getApplicationContext());
+            PlaylistsFragment playlistsFragment = this.playlistsFragmentWeakReference.get();
+            if (playlistsFragment != null) {
+                DatabaseHost databaseHost = new DatabaseHost(playlistsFragment.getActivity().getApplicationContext());
                 result = databaseHost.getPlaylists();
             }
 
@@ -84,28 +92,28 @@ public class PlaylistFragment extends Fragment {
         protected void onPostExecute(List<PlaylistEntity> playlists) {
             super.onPostExecute(playlists);
 
-            PlaylistFragment playlistFragment = this.playlistFragmentWeakReference.get();
-            if (playlistFragment != null && !playlistFragment.isRemoving()) {
-                playlistFragment.OnPlaylistRetrieved(playlists);
+            PlaylistsFragment playlistsFragment = this.playlistsFragmentWeakReference.get();
+            if (playlistsFragment != null && !playlistsFragment.isRemoving()) {
+                playlistsFragment.OnPlaylistRetrieved(playlists);
             }
         }
     }
 
 
     private static class GetSinglePlaylistAsyncTask extends AsyncTask<Void, Void, Boolean> {
-        private final WeakReference<PlaylistFragment> playlistFragmentWeakReference;
+        private final WeakReference<PlaylistsFragment> playlistsFragmentWeakReference;
         private final int playlistId;
 
-        GetSinglePlaylistAsyncTask(PlaylistFragment songsDrawerActivity, int playlistId) {
-            this.playlistFragmentWeakReference = new WeakReference<>(songsDrawerActivity);
+        GetSinglePlaylistAsyncTask(PlaylistsFragment songsDrawerActivity, int playlistId) {
+            this.playlistsFragmentWeakReference = new WeakReference<>(songsDrawerActivity);
             this.playlistId = playlistId;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            PlaylistFragment playlistFragment = this.playlistFragmentWeakReference.get();
-            if (playlistFragment != null) {
-                DatabaseHost databaseHost = new DatabaseHost(playlistFragment.getActivity().getApplicationContext());
+            PlaylistsFragment playlistsFragment = this.playlistsFragmentWeakReference.get();
+            if (playlistsFragment != null) {
+                DatabaseHost databaseHost = new DatabaseHost(playlistsFragment.getActivity().getApplicationContext());
                 databaseHost.fetchSinglePlaylist(Contents.daapHost, this.playlistId);
                 return true;
             }
@@ -117,9 +125,9 @@ public class PlaylistFragment extends Fragment {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
 
-            PlaylistFragment playlistFragment = this.playlistFragmentWeakReference.get();
-            if (playlistFragment != null && !playlistFragment.isRemoving()) {
-                playlistFragment.OnPlaylistLoaded(this.playlistId);
+            PlaylistsFragment playlistsFragment = this.playlistsFragmentWeakReference.get();
+            if (playlistsFragment != null && !playlistsFragment.isRemoving()) {
+                playlistsFragment.OnPlaylistLoaded(this.playlistId);
             }
         }
     }

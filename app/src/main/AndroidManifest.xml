@@ -25,10 +25,6 @@
         <activity android:name=".MediaPlayback" android:label="@string/media_playback_activity"
             android:launchMode="singleTop">
         </activity>
-        <activity android:name=".SongBrowser" android:label="@string/song_browser_activity">
-            <meta-data android:name="android.app.default_searchable"
-                android:value=".SearchActivity" />
-        </activity>
         <activity android:name=".TabMain" android:theme="@android:style/Theme.NoTitleBar" />
         <activity android:name=".ItemBrowser" android:theme="@android:style/Theme.NoTitleBar">
             <meta-data android:name="android.app.default_searchable"
