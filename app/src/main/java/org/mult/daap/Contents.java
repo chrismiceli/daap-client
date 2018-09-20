@@ -5,6 +5,7 @@ import org.mult.daap.client.Host;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -65,6 +66,7 @@ public class Contents {
     }
 
     public static void addToQueue(SongEntity s) throws IndexOutOfBoundsException {
+        // TODO: need to invalidate the context menu for the songs fragment
         if (queue.size() > 9) {
             throw new IndexOutOfBoundsException("Can't add more than 10");
         } else {
