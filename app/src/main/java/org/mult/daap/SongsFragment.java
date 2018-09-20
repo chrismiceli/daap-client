@@ -20,14 +20,9 @@ import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SongsFragment extends Fragment {
-    public SongsFragment() {
-        super();
-    }
-
     private static final int CONTEXT_QUEUE = 0;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
@@ -55,6 +50,8 @@ public class SongsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         int playlistId = getArguments().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
         String artistFilter = getArguments().getString(SongsFragment.ARTIST_FILTER_KEY);
         String albumFilter = getArguments().getString(SongsFragment.ALBUM_FILTER_KEY);
@@ -88,7 +85,6 @@ public class SongsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Intent intent;
         switch (item.getItemId()) {
             case MENU_SEARCH:
                 ((SongsDrawerActivity) getActivity()).getSearchRequestedCallback().onSearchRequested();
@@ -121,7 +117,6 @@ public class SongsFragment extends Fragment {
         playlistListView.setLayoutManager(layoutManager);
         playlistListView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnClickListener(this));
-        Contents.songList = (ArrayList<SongEntity>)songs;
 
         RecyclerView musicList = this.getActivity().findViewById(R.id.music_list);
         musicList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -143,18 +138,6 @@ public class SongsFragment extends Fragment {
 
         @Override
         public void onItemClick(SongEntity item) {
-            String from = getArguments().getString("mediaType");
-            if (from.equals("album")) {
-                int position = Contents.filteredAlbumSongList.indexOf(item);
-                Contents.setSongPosition(Contents.filteredAlbumSongList, position);
-            } else if (from.equals("artist")) {
-                int position = Contents.filteredArtistSongList.indexOf(item);
-                Contents.setSongPosition(Contents.filteredArtistSongList, position);
-            } else {
-                int position = Contents.songList.indexOf(item);
-                Contents.setSongPosition(Contents.songList, position);
-            }
-
             MediaPlayback.clearState();
             NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
             if (notificationManager != null) {

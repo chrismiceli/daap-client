@@ -93,16 +93,21 @@ public class SongsDrawerActivity extends AppCompatActivity
 
         Bundle args = new Bundle();
         if (id == R.id.nav_all_songs) {
-            args.putString("mediaType", "song");
+            // TODO what to do when a playlist isn't chosen
+            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, 1);
             fragment = new SongsFragment();
         } else if (id == R.id.nav_playlists) {
             fragment = new PlaylistsFragment();
         } else if (id == R.id.nav_artists) {
-            args.putString("mediaType", "artist");
-            fragment = new SongsFragment();
+            // TODO what to do when a playlist isn't chosen
+            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, 1);
+            args.putInt(ItemsFragment.ITEM_MODE_KEY, ItemsFragment.ITEM_MODE_ARTIST);
+            fragment = new ItemsFragment();
         } else if (id == R.id.nav_albums) {
-            args.putString("mediaType", "album");
-            fragment = new SongsFragment();
+            // TODO what to do when a playlist isn't chosen
+            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, 1);
+            args.putInt(ItemsFragment.ITEM_MODE_KEY, ItemsFragment.ITEM_MODE_ALBUM);
+            fragment = new ItemsFragment();
         }
 
         DrawerLayout drawer = this.findViewById(R.id.drawer_layout);

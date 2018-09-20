@@ -15,12 +15,12 @@ public class TabMain extends TabActivity {
         setResult(Activity.RESULT_OK);
         setContentView(R.xml.tab_main);
         int playlistId = getIntent().getExtras().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
-        String albumFilterKey = getIntent().getExtras().getString(ItemBrowser.ALBUM_FILTER_KEY);
+        String albumFilterKey = getIntent().getExtras().getString(ItemsFragment.ALBUM_FILTER_KEY);
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost(); // The activity TabHost
         TabHost.TabSpec spec; // Resusable TabSpec for each tab
         Intent intent = new Intent(); // Reusable Intent for each tab
-        intent.putExtra(ItemBrowser.ALBUM_FILTER_KEY, albumFilterKey);
+        intent.putExtra(ItemsFragment.ALBUM_FILTER_KEY, albumFilterKey);
         intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
         // intent.setClass(this, SongBrowser.class);
         spec = tabHost
@@ -29,9 +29,9 @@ public class TabMain extends TabActivity {
                         res.getDrawable(R.xml.ic_tab_songs)).setContent(intent);
         tabHost.addTab(spec);
         // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, ItemBrowser.class);
-        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
-        intent.putExtra(ItemBrowser.ITEM_MODE_KEY, ItemBrowser.ITEM_MODE_ARTIST);
+//        intent = new Intent().setClass(this, ItemBrowser.class);
+//        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
+//        intent.putExtra(ItemBrowser.ITEM_MODE_KEY, ItemBrowser.ITEM_MODE_ARTIST);
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost
                 .newTabSpec("artists")
@@ -40,9 +40,9 @@ public class TabMain extends TabActivity {
                 .setContent(intent);
         tabHost.addTab(spec);
         // Do the same for the other tabs
-        intent = new Intent().setClass(this, ItemBrowser.class);
-        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
-        intent.putExtra(ItemBrowser.ITEM_MODE_KEY, ItemBrowser.ITEM_MODE_ALBUM);
+//        intent = new Intent().setClass(this, ItemBrowser.class);
+//        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
+//        intent.putExtra(ItemBrowser.ITEM_MODE_KEY, ItemBrowser.ITEM_MODE_ALBUM);
         spec = tabHost
                 .newTabSpec("albums")
                 .setIndicator(getString(R.string.albums),
