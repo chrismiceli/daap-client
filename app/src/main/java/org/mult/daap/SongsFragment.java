@@ -144,7 +144,10 @@ public class SongsFragment extends Fragment {
                 notificationManager.cancelAll();
             }
 
+            // TODO don't use contents
+            Contents.song = item;
             Intent intent = new Intent(getContext(), MediaPlayback.class);
+            intent.putExtra("song", item.id);
             startActivityForResult(intent, 1);
         }
     }

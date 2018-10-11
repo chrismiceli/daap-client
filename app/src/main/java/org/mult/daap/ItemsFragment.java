@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -30,8 +31,6 @@ public class ItemsFragment extends Fragment {
     private static final int MENU_SEARCH = 3;
     private static final int CONTEXT_PLAY_ALBUM = 4;
     private static final int CONTEXT_QUEUE = 5;
-    public static String ARTIST_FILTER_KEY = "__ARTIST_FILTER_KEY__";
-    public static String ALBUM_FILTER_KEY = "__ALBUM_FILTER_KEY__";
 
     public static final String ITEM_MODE_KEY = "__ITEM_MODE__";
     public static final int ITEM_MODE_ALBUM = 0;
@@ -125,14 +124,22 @@ public class ItemsFragment extends Fragment {
 
         @Override
         public void onItemClick(String item) {
-            Intent intent = new Intent(getActivity(), TabMain.class);
-            intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
-
+            Fragment fragment = new SongsFragment();
+            Bundle args = new Bundle();
+            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
             if (ItemsFragment.ITEM_MODE_ALBUM == itemMode) {
-                intent.putExtra(ItemsFragment.ALBUM_FILTER_KEY, item);
+                args.putString(SongsFragment.ARTIST_FILTER_KEY, item);
+            } else {
+                args.putString(SongsFragment.ALBUM_FILTER_KEY, item);
             }
 
-            startActivityForResult(intent, 1);
+            fragment.setArguments(args);
+
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.remove(this.itemsFragment);
+            ft.add(R.id.content_frame, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
         }
     }
 

@@ -58,7 +58,6 @@ public class PlaylistsFragment extends Fragment {
     private void OnPlaylistLoaded(int playlistId) {
         Fragment fragment = new SongsFragment();
         Bundle args = new Bundle();
-        args.putString("mediaType", "song");
         args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
         fragment.setArguments(args);
 

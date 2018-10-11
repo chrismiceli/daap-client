@@ -163,6 +163,11 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mProgress.setOnSeekBarChangeListener(mSeekListener);
         if (mediaPlayer == null) {
             try {
+                Intent intent = getIntent(); // gets the previously created intent
+
+                // TODO pull song entity from database
+                // int songId = intent.getIntExtra("song"); // will
+
                 startSong(Contents.getSong());
             } catch (IndexOutOfBoundsException e) {
                 Log.e(logTag, "Something went wrong with playlist/queue");
