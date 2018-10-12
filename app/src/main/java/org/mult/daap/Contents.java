@@ -24,6 +24,7 @@ public class Contents {
     public static boolean shuffle = false;
     public static boolean repeat = false;
     private static int position = 0;
+    public static SongEntity song = null;
 
     public static void setSongPosition(ArrayList<SongEntity> list, int id) {
         activeList = list;
@@ -31,15 +32,7 @@ public class Contents {
     }
 
     public static SongEntity getSong() throws IndexOutOfBoundsException {
-        SongEntity song;
-        // Not the queue
-        if (activeList.size() > 0 && position < activeList.size()
-                && position >= 0) {
-            song = activeList.get(position);
-            return song;
-        } else {
-            throw new IndexOutOfBoundsException("End of list");
-        }
+        return Contents.song;
     }
 
     public static SongEntity getNextSong() throws IndexOutOfBoundsException {
