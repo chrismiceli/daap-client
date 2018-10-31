@@ -15,4 +15,19 @@ import java.util.List;
 public interface SongDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setSongs(List<SongEntity> songs);
+
+    @Query("SELECT songs.* FROM songs WHERE songs.artist = :albumFilter ORDER BY songs.artist, songs.album, songs.track")
+    List<SongEntity> loadAlbumSongs(String albumFilter);
+
+    @Query("SELECT songs.* FROM songs WHERE songs.artist = :artistFilter ORDER BY songs.artist, songs.album, songs.track")
+    List<SongEntity> loadArtistSongs(String artistFilter);
+
+    @Query("SELECT DISTINCT songs.album FROM songs ORDER BY album ASC")
+    List<AlbumEntity> loadAlbums();
+
+    @Query("SELECT DISTINCT songs.artist FROM songs ORDER BY album ASC")
+    List<ArtistEntity> loadArtists();
+
+    @Query("SELECT songs.* FROM songs ORDER BY songs.artist, songs.album, songs.track")
+    List<SongEntity> loadSongs();
 }

@@ -97,7 +97,9 @@ public class PlaylistActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             PlaylistActivity playlistActivity = this.playlistActivityWeakReference.get();
-            if (playlistActivity != null) {
+
+            // don't load any playlist songs for 'All Songs' playlist
+            if (playlistActivity != null && playlistId != -1) {
                 DatabaseHost databaseHost = new DatabaseHost(playlistActivity.getApplicationContext());
                 databaseHost.fetchSinglePlaylist(Contents.daapHost, this.playlistId);
                 return true;
