@@ -1,5 +1,6 @@
 package org.mult.daap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,8 @@ public class SongsDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private SearchRequestedCallback mSearchRequestedCallback;
+
+    private int playlistId;
 
     public void setSearchRequestedCallback(SearchRequestedCallback callback) {
         mSearchRequestedCallback = callback;
@@ -45,7 +48,12 @@ public class SongsDrawerActivity extends AppCompatActivity
         NavigationView navigationView = this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Fragment newFragment = new PlaylistsFragment();
+        this.playlistId = this.getIntent().getIntExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, -1);
+
+        Fragment newFragment = new SongsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
+        newFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, newFragment);
         ft.addToBackStack(null);
@@ -94,18 +102,20 @@ public class SongsDrawerActivity extends AppCompatActivity
         Bundle args = new Bundle();
         if (id == R.id.nav_all_songs) {
             // TODO what to do when a playlist isn't chosen
-            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, 1);
+            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             fragment = new SongsFragment();
         } else if (id == R.id.nav_playlists) {
-            fragment = new PlaylistsFragment();
+            Intent intent = new Intent(this, PlaylistActivity.class);
+            startActivityForResult(intent, 1);
+            return true;
         } else if (id == R.id.nav_artists) {
             // TODO what to do when a playlist isn't chosen
-            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, 1);
+            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             args.putInt(ItemsFragment.ITEM_MODE_KEY, ItemsFragment.ITEM_MODE_ARTIST);
             fragment = new ItemsFragment();
         } else if (id == R.id.nav_albums) {
             // TODO what to do when a playlist isn't chosen
-            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, 1);
+            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             args.putInt(ItemsFragment.ITEM_MODE_KEY, ItemsFragment.ITEM_MODE_ALBUM);
             fragment = new ItemsFragment();
         }

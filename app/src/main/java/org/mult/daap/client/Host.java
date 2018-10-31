@@ -24,11 +24,8 @@ import org.mult.daap.db.entity.SongEntity;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.ConnectException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Host {
     private int revisionNum;
@@ -118,8 +115,7 @@ public class Host {
             playlistsRequest.Execute();
             playlists = playlistsRequest.getPlaylists();
             Log.d("DaapHost", "playlist count = " + playlists.size());
-        }
-        catch (BadResponseCodeException e) {
+        } catch (BadResponseCodeException e) {
             Log.d("DaapHost", "Bad response code");
         } catch (IOException e) {
             Log.d("DaapHost", "IO Exception");
@@ -132,7 +128,7 @@ public class Host {
 
     public ArrayList<Integer> fetchSongIdsForPlaylist(Host host, int playlistId) {
         ArrayList<Integer> songIds = null;
-            SinglePlaylistRequest singlePlaylistRequest = new SinglePlaylistRequest(host, playlistId);
+        SinglePlaylistRequest singlePlaylistRequest = new SinglePlaylistRequest(host, playlistId);
         try {
             singlePlaylistRequest.Execute();
             songIds = singlePlaylistRequest.getSongIds();
@@ -203,14 +199,11 @@ public class Host {
         s = s.toLowerCase().trim();
         if (s.startsWith("itunes")) {
             return ITUNES;
-        }
-        else if (s.startsWith("daapserver")) {
+        } else if (s.startsWith("daapserver")) {
             return GIT_SERVER;
-        }
-        else if (s.startsWith("mt-daapd")) {
+        } else if (s.startsWith("mt-daapd")) {
             return MT_DAAPD;
-        }
-        else {
+        } else {
             return UNKNOWN_SERVER;
         }
     }

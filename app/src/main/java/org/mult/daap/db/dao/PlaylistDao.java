@@ -15,7 +15,7 @@ import java.util.List;
 
 @Dao
 public interface PlaylistDao {
-    @Query("SELECT * FROM playlists")
+    @Query("SELECT * FROM playlists ORDER BY playlists.name")
     List<PlaylistEntity> loadPlaylists();
 
     @Query("SELECT * FROM playlists WHERE id = :id")
@@ -37,11 +37,11 @@ public interface PlaylistDao {
     List<AlbumEntity> loadAlbumsForPlaylist(int playlistId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void setPlaylists(List<PlaylistEntity> playlists);
+        void setPlaylists(List<PlaylistEntity> playlists);
 
-    @Insert(onConflict =  OnConflictStrategy.REPLACE)
+@Insert(onConflict =  OnConflictStrategy.REPLACE)
     void setPlaylist(PlaylistEntity playlist);
 
-    @Insert(onConflict =  OnConflictStrategy.REPLACE)
+@Insert(onConflict =  OnConflictStrategy.REPLACE)
     void setSongsForPlaylist(List<PlaylistSongEntity> playlistSongEntities);
-}
+        }

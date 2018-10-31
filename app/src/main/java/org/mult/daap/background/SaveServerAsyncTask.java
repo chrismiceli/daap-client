@@ -31,7 +31,7 @@ public class SaveServerAsyncTask extends AsyncTask<Void, Void, Boolean> {
         AddServerMenu addServerMenu = this.addServerMenu.get();
         if (addServerMenu != null && !addServerMenu.isFinishing()) {
             DatabaseHost databaseHost = new DatabaseHost(addServerMenu.getApplicationContext());
-            databaseHost.setServer(this.host);
+            databaseHost.setServer(this.host, addServerMenu);
             return true;
         }
 
