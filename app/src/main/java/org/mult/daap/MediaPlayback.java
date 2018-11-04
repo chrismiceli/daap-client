@@ -126,7 +126,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mAlbumName = findViewById(R.id.albumname);
         mTrackName = findViewById(R.id.trackname);
         mSongSummary = findViewById(R.id.song_summary);
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         scrobbler_support = mPrefs.getBoolean("scrobbler_pref", false);
     }
 

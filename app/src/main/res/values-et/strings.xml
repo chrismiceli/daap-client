@@ -66,11 +66,9 @@
     <string name="downloading_file">Salvestan lugu…</string>
     <string name="save_complete">Lugu salvestatud!</string>
     <string name="save_error">Loo salvestamine ebaõnnestus</string>
-    <string name="font_size">Fondisuurus</string>
     <string name="scrobblerTitle">Scrobbleri tugi</string>
     <string name="scrobblerSummary">Kasuta Last.fm\i teenust Scrobbler.
 ﻿  ﻿  Selleks peab \"scrobbler\" olema paigaldatud.</string>
-    <string name="font_pref_detail">Muuda fondisuurust</string>
     <string name="menu_library">Teek</string>
     <string name="media_playback_service_desc">"Vidinaga seotud teenus"</string>
     <string name="widget_one_initial_text">"Meediumi valimiseks puuduta."</string>

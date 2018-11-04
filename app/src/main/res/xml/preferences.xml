@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+            android:title="@string/scrobblerTitle"
+            android:defaultValue="false"
+            android:summary="@string/scrobblerSummary"
+            android:key="scrobbler_pref" />
+</PreferenceScreen> 
