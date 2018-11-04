@@ -17,12 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.client.IQueueWorker;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class SongsFragment extends Fragment {
+public class SongsFragment extends Fragment implements IQueueWorker {
     private static final int CONTEXT_QUEUE = 0;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
@@ -146,13 +147,15 @@ public class SongsFragment extends Fragment {
 
             // TODO don't use contents
             Contents.song = item;
-            Intent intent = new Intent(getContext(), MediaPlayback.class);
-            intent.putExtra("song", item.id);
-            startActivityForResult(intent, 1);
+            DatabaseHost host = new DatabaseHost(this.songsFragment.getContext());
+            host.addSongToTopOfQueueAsync(item, this.songsFragment);
         }
     }
 
-    private final RecyclerOnItemClickListener<SongEntity> SongEntityRecyclerOnItemClickListener = new SongsFragment.OnClickListener(this);
+    public void songAddedToTopOfQueue(SongEntity songEntity) {
+        Intent intent = new Intent(getContext(), MediaPlayback.class);
+        startActivityForResult(intent, 1);
+    }
 
     private static class GetSongsAsyncTask extends AsyncTask<Void, Void, List<SongEntity>> {
         private final WeakReference<SongsFragment> songsFragmentWeakReference;

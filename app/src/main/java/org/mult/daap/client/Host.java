@@ -5,10 +5,10 @@
  */
 package org.mult.daap.client;
 
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
-import org.mult.daap.background.GetSongURLAsyncTask;
 import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 import org.mult.daap.client.daap.request.DatabasesRequest;
@@ -24,7 +24,9 @@ import org.mult.daap.db.entity.SongEntity;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.ConnectException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class Host {
@@ -87,7 +89,7 @@ public class Host {
         }
     }
 
-    public ArrayList<SongEntity> fetchSongs() {
+    ArrayList<SongEntity> fetchSongs() {
         ArrayList<SongEntity> songs = null;
         try {
             DatabasesRequest databasesRequest = new DatabasesRequest(this);
@@ -108,7 +110,7 @@ public class Host {
         return songs;
     }
 
-    public ArrayList<PlaylistEntity> fetchPlaylists() {
+    ArrayList<PlaylistEntity> fetchPlaylists() {
         ArrayList<PlaylistEntity> playlists = null;
         try {
             PlaylistsRequest playlistsRequest = new PlaylistsRequest(this);
@@ -126,7 +128,7 @@ public class Host {
         return playlists;
     }
 
-    public ArrayList<Integer> fetchSongIdsForPlaylist(Host host, int playlistId) {
+    ArrayList<Integer> fetchSongIdsForPlaylist(Host host, int playlistId) {
         ArrayList<Integer> songIds = null;
         SinglePlaylistRequest singlePlaylistRequest = new SinglePlaylistRequest(host, playlistId);
         try {
@@ -205,6 +207,46 @@ public class Host {
             return MT_DAAPD;
         } else {
             return UNKNOWN_SERVER;
+        }
+    }
+
+    static class GetSongURLAsyncTask extends AsyncTask<Void,Void, String> {
+        Host host;
+        SongEntity song;
+        WeakReference<ISongUrlConsumer> songUrlConsumerWeakReference;
+
+        GetSongURLAsyncTask(Host host, SongEntity song, ISongUrlConsumer songUrlConsumer) {
+            this.host = host;
+            this.song = song;
+            this.songUrlConsumerWeakReference = new WeakReference<>(songUrlConsumer);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            SongRequest sr = new SongRequest(this.host, this.song);
+            String result = null;
+
+            try {
+                sr.Execute();
+            } catch (BadResponseCodeException e) {
+            } catch (PasswordFailedException e) {
+            } catch (IOException e) {
+            }
+
+            try {
+                result = sr.getSongURL().toString();
+            } catch (MalformedURLException e) {
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String songUrl) {
+            ISongUrlConsumer songUrlConsumer = this.songUrlConsumerWeakReference.get();
+            if (null != songUrlConsumer) {
+                songUrlConsumer.onSongUrlRetrieved(songUrl);
+            }
         }
     }
 }

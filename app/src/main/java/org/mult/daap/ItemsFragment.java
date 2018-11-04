@@ -36,8 +36,8 @@ public class ItemsFragment extends Fragment {
     public static final int ITEM_MODE_ALBUM = 0;
     public static final int ITEM_MODE_ARTIST = 1;
 
-    public int itemMode;
-    public int playlistId;
+    private int itemMode;
+    private int playlistId;
 
     @Override
     public void onStart() {
@@ -145,12 +145,9 @@ public class ItemsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(0, MENU_SEARCH, 0, getString(R.string.search)).setIcon(
-                android.R.drawable.ic_menu_search);
-        menu.add(0, MENU_PLAY_QUEUE, 0, getString(R.string.play_queue))
-                .setIcon(R.drawable.ic_menu_play);
-        menu.add(0, MENU_VIEW_QUEUE, 0, getString(R.string.view_queue))
-                .setIcon(R.drawable.ic_menu_list);
+        menu.add(0, MENU_SEARCH, 0, getString(R.string.search)).setIcon(android.R.drawable.ic_menu_search);
+        menu.add(0, MENU_PLAY_QUEUE, 0, getString(R.string.play_queue)).setIcon(R.drawable.ic_menu_play);
+        menu.add(0, MENU_VIEW_QUEUE, 0, getString(R.string.view_queue)).setIcon(R.drawable.ic_menu_list);
     }
 
     @Override
@@ -197,9 +194,7 @@ public class ItemsFragment extends Fragment {
         playlistListView.setLayoutManager(layoutManager);
         playlistListView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnClickListener(this));
-
-        RecyclerView musicList = this.getActivity().findViewById(R.id.music_list);
-        musicList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+        playlistListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
                 menu.setHeaderTitle(getString(R.string.options));
