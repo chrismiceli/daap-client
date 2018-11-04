@@ -39,9 +39,9 @@ public interface PlaylistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
         void setPlaylists(List<PlaylistEntity> playlists);
 
-@Insert(onConflict =  OnConflictStrategy.REPLACE)
-    void setPlaylist(PlaylistEntity playlist);
+    @Insert(onConflict =  OnConflictStrategy.REPLACE)
+        void setPlaylist(PlaylistEntity playlist);
 
-@Insert(onConflict =  OnConflictStrategy.REPLACE)
-    void setSongsForPlaylist(List<PlaylistSongEntity> playlistSongEntities);
-        }
+    @Insert(onConflict =  OnConflictStrategy.REPLACE)
+        void setSongsForPlaylist(List<PlaylistSongEntity> playlistSongEntities);
+}

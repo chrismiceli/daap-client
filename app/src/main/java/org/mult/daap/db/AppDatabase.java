@@ -8,10 +8,12 @@ import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 
 import org.mult.daap.db.dao.PlaylistDao;
+import org.mult.daap.db.dao.QueueDao;
 import org.mult.daap.db.dao.ServerDao;
 import org.mult.daap.db.dao.SongDao;
 import org.mult.daap.db.entity.PlaylistEntity;
 import org.mult.daap.db.entity.PlaylistSongEntity;
+import org.mult.daap.db.entity.QueueEntity;
 import org.mult.daap.db.entity.ServerEntity;
 import org.mult.daap.db.entity.SongEntity;
 
@@ -20,7 +22,8 @@ import org.mult.daap.db.entity.SongEntity;
             ServerEntity.class,
             SongEntity.class,
             PlaylistEntity.class,
-            PlaylistSongEntity.class
+            PlaylistSongEntity.class,
+            QueueEntity.class
         },
         version = 1,
         exportSchema = false)
@@ -35,6 +38,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract SongDao songDao();
 
     public abstract PlaylistDao playlistDao();
+
+    public abstract QueueDao queueDao();
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 

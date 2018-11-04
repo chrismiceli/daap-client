@@ -11,14 +11,10 @@ import java.util.TreeMap;
 
 public class Contents {
     public static final ArrayList<SongEntity> songList = new ArrayList<>();
-    public static ArrayList<SongEntity> filteredAlbumSongList = new ArrayList<>();
-    public static ArrayList<SongEntity> filteredArtistSongList = new ArrayList<>();
     public static final ArrayList<SongEntity> queue = new ArrayList<>(10);
     private static ArrayList<SongEntity> activeList = new ArrayList<>();
     public static final ArrayList<String> artistNameList = new ArrayList<>();
     public static final ArrayList<String> albumNameList = new ArrayList<>();
-    public static ArrayList<String> artistAlbumNameList = new ArrayList<>();
-    public static TreeMap<String, ArrayList<Integer>> ArtistAlbumElements = new TreeMap<>();
     public static Host daapHost;
     public static SearchThread searchResult;
     public static boolean shuffle = false;
