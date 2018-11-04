@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -160,13 +158,9 @@ public class QueueListBrowser extends Activity {
 
     public class ProfilesAdapter extends BaseAdapter {
         private Context vContext;
-        private int font_size;
 
         ProfilesAdapter(Context c) {
             vContext = c;
-            SharedPreferences mPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(c);
-            font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
         }
 
         public int getCount() {
@@ -183,7 +177,7 @@ public class QueueListBrowser extends Activity {
 
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv = new TextView(vContext.getApplicationContext());
-            tv.setTextSize(font_size);
+            tv.setTextSize(18);
             tv.setText(s.get(position).name);
             return tv;
         }

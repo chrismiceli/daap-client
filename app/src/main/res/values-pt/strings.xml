@@ -65,7 +65,5 @@
     <string name="songs">Músicas</string>
     <string name="save">Salvar</string>
     <string name="save_complete">Arquivo salvo para </string>
-    <string name="font_size">Tamanho da Fonte</string>
-    <string name="font_pref_detail">Alterar o tamanho da fonte</string>
     <string name="seeking_disabled">Pular está desativado durante o download.</string>
 </resources>

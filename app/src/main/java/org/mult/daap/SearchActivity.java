@@ -7,12 +7,10 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -252,15 +250,11 @@ public class SearchActivity extends ListActivity implements Observer {
         HashMap<String, Integer> alphaIndexer;
         ArrayList<String> letterList;
         Context vContext;
-        int font_size;
 
         @SuppressWarnings("unchecked")
         public MyArrayAdapter(Context context, int textViewResourceId,
                 List<T> objects) {
             super(context, textViewResourceId, objects);
-            SharedPreferences mPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(context);
-            font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
             vContext = context;
             myElements = (ArrayList<SongEntity>) objects;
         }
@@ -273,7 +267,7 @@ public class SearchActivity extends ListActivity implements Observer {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv = new TextView(vContext.getApplicationContext());
-            tv.setTextSize(font_size);
+            tv.setTextSize(18);
             tv.setTextColor(Color.WHITE);
             tv.setText(myElements.get(position).toString());
             return tv;

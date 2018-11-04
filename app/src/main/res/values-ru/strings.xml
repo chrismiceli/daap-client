@@ -65,10 +65,8 @@
     <string name="downloading_file">Сохранение песни…</string>
     <string name="save_complete">Песня сохранена!</string>
     <string name="save_error">Ошибка сохранения песни</string>
-    <string name="font_size">Размер шрифта</string>
     <string name="scrobblerTitle">Статистика прослушиваний</string>
     <string name="scrobblerSummary">Отправлять статистику. Скробблер должен быть установлен отдельно.</string>
-    <string name="font_pref_detail">Изменить размер шрифта</string>
     <string name="menu_library">Библиотека</string>
     <string name="media_playback_service_desc">Сервис поддержки виджета</string>
     <string name="widget_one_initial_text">Нажмите, чтобы выбрать источник.</string>

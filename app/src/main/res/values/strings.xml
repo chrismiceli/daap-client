@@ -68,11 +68,10 @@
     <string name="downloading_file">Saving song…</string>
     <string name="save_complete">Saved song!</string>
     <string name="save_error">Error saving song</string>
-    <string name="font_size">Font Size</string>
     <string name="scrobblerTitle">Scrobbler Support</string>
+    <string name="title_activity_playlist">Playlist</string>
     <string name="scrobblerSummary">Enable support for Last.fm\'s Scrobbler service.
         Must have a \"scrobbler\" installed.</string>
-    <string name="font_pref_detail">Change the font size</string>
     <string name="menu_library">Library</string>
     <string name="media_playback_service_desc">"Service used to handle widget actions"</string>
     <string name="widget_one_initial_text">"Touch to select media."</string>
