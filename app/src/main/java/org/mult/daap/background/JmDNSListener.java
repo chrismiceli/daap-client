@@ -27,12 +27,15 @@ public class JmDNSListener extends Thread {
             jmdns = JmDNS.create(wifi);
             jmdns.addServiceListener("_daap._tcp.local.",
                     new ServiceListener() {
+                        @Override
                         public void serviceResolved(ServiceEvent arg0) {
                         }
 
+                        @Override
                         public void serviceRemoved(ServiceEvent arg0) {
                         }
 
+                        @Override
                         public void serviceAdded(ServiceEvent serviceEvent) {
                             addServer(serviceEvent);
                         }
@@ -46,19 +49,26 @@ public class JmDNSListener extends Thread {
 
     public void interrupt() {
         if (jmdns != null) {
-            jmdns.close();
+            try {
+                jmdns.close();
+            } catch (IOException e) {
+                // todo
+            }
         }
     }
 
     private void addServer(ServiceEvent serviceEvent) {
         ServiceInfo si = jmdns.getServiceInfo(serviceEvent.getType(), serviceEvent.getName());
-        Bundle bundle = new Bundle();
-        bundle.putString("name", si.getName());
-        bundle.putString("address",
-                si.getHostAddress() + ":" + si.getPort());
-        Message msg = Message.obtain();
-        msg.setTarget(handler);
-        msg.setData(bundle);
-        handler.sendMessage(msg);
+        String[] addresses = si.getHostAddresses();
+        if (null != addresses && addresses.length > 0) {
+            Bundle bundle = new Bundle();
+            bundle.putString("name", si.getName());
+            bundle.putString("address",
+                    addresses[0] + ":" + si.getPort());
+            Message msg = Message.obtain();
+            msg.setTarget(handler);
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+        }
     }
 }
