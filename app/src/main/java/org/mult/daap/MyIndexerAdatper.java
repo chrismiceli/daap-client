@@ -16,12 +16,11 @@ import java.util.List;
 
 class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
         Filterable {
-    ArrayList<String> myElements;
-    HashMap<String, Integer> alphaIndexer;
-    ArrayList<String> letterList;
-    Context vContext;
+    private final ArrayList<String> myElements;
+    private final HashMap<String, Integer> alphaIndexer;
+    private final ArrayList<String> letterList;
+    private final Context vContext;
 
-    @SuppressWarnings("unchecked")
     public MyIndexerAdapter(Context context, int textViewResourceId,
             List<T> objects) {
         super(context, textViewResourceId, objects);

@@ -14,16 +14,8 @@ package org.mult.daap.client.daap.request;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Hasher {
+class Hasher {
     private static final String hexchars = "0123456789ABCDEF";
-    private static MessageDigest md;
-    static {
-        try {
-            md = MessageDigest.getInstance("md5");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static String DigestToString(byte[] digest) {
         StringBuilder string = new StringBuilder();
@@ -34,7 +26,9 @@ public class Hasher {
         }
         return string.toString();
     }
-    public static String GenerateHash(String url) {
+
+    static String GenerateHash(String url) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("md5");
         md.update(url.getBytes());
         return DigestToString(md.digest());
     }

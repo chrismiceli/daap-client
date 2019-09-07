@@ -2,7 +2,6 @@ package org.mult.daap;
 
 import android.app.Activity;
 import android.app.ListActivity;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -100,41 +99,38 @@ public class SearchActivity extends ListActivity implements Observer {
     public boolean onContextItemSelected(MenuItem aItem) {
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
-        switch (aItem.getItemId()) {
-            case CONTEXT_QUEUE:
-                SongEntity s = Contents.songList.get(Contents.songList.indexOf(srList
-                        .get(menuInfo.position)));
-                if (Contents.queue.contains(s)) { // in
-                    // list
-                    Contents.queue.remove(Contents.queue.indexOf(s));
+        if (aItem.getItemId() == CONTEXT_QUEUE) {
+            SongEntity s = Contents.songList.get(Contents.songList.indexOf(srList
+                    .get(menuInfo.position)));
+            if (Contents.queue.contains(s)) { // in
+                // list
+                Contents.queue.remove(Contents.queue.indexOf(s));
+                Toast tst = Toast.makeText(SearchActivity.this,
+                        getString(R.string.removed_from_queue),
+                        Toast.LENGTH_SHORT);
+                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                        tst.getYOffset() / 2);
+                tst.show();
+                return true;
+            } else {
+                if (Contents.queue.size() < 9) {
+                    Contents.addToQueue(s);
                     Toast tst = Toast.makeText(SearchActivity.this,
-                            getString(R.string.removed_from_queue),
+                            getString(R.string.added_to_queue),
+                            Toast.LENGTH_SHORT);
+                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                            tst.getYOffset() / 2);
+                    tst.show();
+                } else {
+                    Toast tst = Toast.makeText(SearchActivity.this,
+                            getString(R.string.queue_is_full),
                             Toast.LENGTH_SHORT);
                     tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
                             tst.getYOffset() / 2);
                     tst.show();
                     return true;
                 }
-                else {
-                    if (Contents.queue.size() < 9) {
-                        Contents.addToQueue(s);
-                        Toast tst = Toast.makeText(SearchActivity.this,
-                                getString(R.string.added_to_queue),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                    }
-                    else {
-                        Toast tst = Toast.makeText(SearchActivity.this,
-                                getString(R.string.queue_is_full),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                        return true;
-                    }
-                }
+            }
         }
         return false;
     }
@@ -157,14 +153,12 @@ public class SearchActivity extends ListActivity implements Observer {
         searchResultsList.setFastScrollEnabled(true);
     }
 
-    private OnItemClickListener songListListener = new OnItemClickListener() {
+    private final OnItemClickListener songListListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                 long id) {
             Contents.setSongPosition(Contents.songList,
                     Contents.songList.indexOf(srList.get(position)));
             MediaPlayback.clearState();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
             Intent intent = new Intent(SearchActivity.this, MediaPlayback.class);
             startActivityForResult(intent, 1);
         }
@@ -208,8 +202,6 @@ public class SearchActivity extends ListActivity implements Observer {
             case MENU_PLAY_QUEUE:
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
                 intent = new Intent(SearchActivity.this, MediaPlayback.class);
                 startActivityForResult(intent, 1);
                 return true;
@@ -220,7 +212,7 @@ public class SearchActivity extends ListActivity implements Observer {
         return false;
     }
 
-    private Handler searchHandler = new Handler() {
+    private final Handler searchHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             createList();
@@ -246,14 +238,14 @@ public class SearchActivity extends ListActivity implements Observer {
     }
 
     class MyArrayAdapter<T> extends ArrayAdapter<T> {
-        ArrayList<SongEntity> myElements;
+        final ArrayList<SongEntity> myElements;
         HashMap<String, Integer> alphaIndexer;
         ArrayList<String> letterList;
-        Context vContext;
+        final Context vContext;
 
         @SuppressWarnings("unchecked")
-        public MyArrayAdapter(Context context, int textViewResourceId,
-                List<T> objects) {
+        MyArrayAdapter(Context context, int textViewResourceId,
+                       List<T> objects) {
             super(context, textViewResourceId, objects);
             vContext = context;
             myElements = (ArrayList<SongEntity>) objects;

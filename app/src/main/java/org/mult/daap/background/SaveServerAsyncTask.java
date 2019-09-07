@@ -5,17 +5,8 @@ import android.os.AsyncTask;
 import org.mult.daap.AddServerMenu;
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.client.Host;
-import org.mult.daap.db.AppDatabase;
-import org.mult.daap.db.dao.PlaylistDao;
-import org.mult.daap.db.dao.ServerDao;
-import org.mult.daap.db.dao.SongDao;
-import org.mult.daap.db.entity.PlaylistEntity;
-import org.mult.daap.db.entity.ServerEntity;
-import org.mult.daap.db.entity.SongEntity;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SaveServerAsyncTask extends AsyncTask<Void, Void, Boolean> {
     private final Host host;

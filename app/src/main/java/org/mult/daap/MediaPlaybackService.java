@@ -53,7 +53,7 @@ public class MediaPlaybackService extends Service {
         initializeRemoteControlRegistrationMethods();
     }
 
-    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

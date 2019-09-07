@@ -2,12 +2,7 @@ package org.mult.daap.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Relation;
 import android.support.annotation.NonNull;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(tableName = "playlists")
 public class PlaylistEntity {

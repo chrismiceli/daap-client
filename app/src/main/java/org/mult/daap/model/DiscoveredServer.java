@@ -15,5 +15,5 @@ public class DiscoveredServer extends ServerEntity {
         return this.name;
     }
 
-    private String name;
+    private final String name;
 }

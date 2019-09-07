@@ -3,7 +3,7 @@ package org.mult.daap;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -22,6 +22,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -29,6 +30,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -69,6 +71,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MediaPlayback extends Activity implements View.OnTouchListener, View.OnLongClickListener, ISongUrlConsumer {
+    private static final String CHANNEL_ID = "daap_channel_song_playing";
     private static final int MENU_STOP = 0;
     private static final int MENU_LIBRARY = 1;
     private static final int MENU_DOWNLOAD = 2;
@@ -110,6 +113,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        createNotificationChannel();
+        stopNotification();
         setResult(Activity.RESULT_OK);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         setContentView(R.layout.audio_player);
@@ -128,6 +133,24 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mSongSummary = findViewById(R.id.song_summary);
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         scrobbler_support = mPrefs.getBoolean("scrobbler_pref", false);
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.media_playback_notification_channel_name);
+            String description = getString(R.string.media_playback_notification_channel_name);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
     }
 
     @Override
@@ -569,50 +592,39 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     private void startNotification() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (null != notificationManager) {
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(getApplicationContext(), "daap_channel_song_playing")
-                            .setSmallIcon(R.drawable.stat_notify_musicplayer)
-                            .setContentTitle(song.name)
-                            .setContentText(song.artist);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
-            Intent resultIntent = new Intent(this, MediaPlayback.class);
-            stackBuilder.addParentStack(MediaPlayback.class);
-            stackBuilder.addNextIntent(resultIntent);
-            mBuilder.setContentIntent(contentIntent);
-            Notification notification = new Notification(R.drawable.stat_notify_musicplayer, song.name, System.currentTimeMillis());
-            /*notification.setLatestEventInfo(getApplicationContext(), song.name, song.artist, contentIntent);*/
-            notification.flags |= Notification.FLAG_ONGOING_EVENT;
-            notification.flags |= Notification.FLAG_NO_CLEAR;
-            notificationManager.notify(0, mBuilder.build());
-        }
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                        .setSmallIcon(R.drawable.stat_notify_musicplayer)
+                        .setContentTitle(song.name)
+                        .setContentText(song.artist)
+                        .setSmallIcon(R.drawable.stat_notify_musicplayer);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
+        Intent resultIntent = new Intent(this, MediaPlayback.class);
+        stackBuilder.addParentStack(MediaPlayback.class);
+        stackBuilder.addNextIntent(resultIntent);
+        mBuilder.setContentIntent(contentIntent);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(0, mBuilder.build());
     }
 
     private void stopNotification() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (null != notificationManager) {
-            notificationManager.cancelAll();
-        }
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.cancelAll();
     }
 
     private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
         public void onCallStateChanged(int state, String incomingNumber) {
             switch (state) {
-            // change to idle
-            case TelephonyManager.CALL_STATE_IDLE:
-                break;
-            case TelephonyManager.CALL_STATE_OFFHOOK:
-                if (mediaPlayer != null) {
-                    mediaPlayer.pause();
-                }
-                break;
-            case TelephonyManager.CALL_STATE_RINGING:
-                if (mediaPlayer != null) {
-                    mediaPlayer.pause();
-                }
-                break;
+                // change to idle
+                case TelephonyManager.CALL_STATE_IDLE:
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                case TelephonyManager.CALL_STATE_RINGING:
+                    if (mediaPlayer != null) {
+                        mediaPlayer.pause();
+                    }
+                    break;
             }
         }
     };
@@ -803,25 +815,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                         mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                         break;
                     case MediaPlaybackService.TOGGLEPAUSE:
-                        if (mediaPlayer != null) {
-                            if (mediaPlayer.isPlaying()) {
-                                if (scrobbler_support) {
-                                    scrobble(2); // PAUSE
-                                }
-                                mediaPlayer.pause();
-                                stopNotification();
-                            } else {
-                                if (scrobbler_support) {
-                                    scrobble(1); // RESUME
-                                }
-                                mediaPlayer.start();
-                                startNotification();
-                            }
-                            setPauseButton();
-                            queueNextRefresh(refreshNow());
-                            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-                        }
-                        break;
                     case MediaPlaybackService.PAUSE:
                         if (mediaPlayer != null) {
                             if (mediaPlayer.isPlaying()) {

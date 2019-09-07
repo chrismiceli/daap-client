@@ -14,8 +14,8 @@ public class LoginManagerAsyncTask extends AsyncTask<Void, Integer, Integer> {
     final public static int CONNECTION_FINISHED = 1;
     final public static int ERROR = 2;
     final public static int PASSWORD_FAILED = 3;
-    final public String address;
-    final public String password;
+    private final String address;
+    private final String password;
     final private WeakReference<ILoginConsumer> loginConsumerWeakReference;
 
     public LoginManagerAsyncTask(ILoginConsumer loginConsumer, String address, String password) {
@@ -37,9 +37,6 @@ public class LoginManagerAsyncTask extends AsyncTask<Void, Integer, Integer> {
     protected Integer doInBackground(Void... params) {
         // login to the DAAP server, if successful server is stored in database
         try {
-            String[] urlAddress = this.address.split(":");
-            String hostname = urlAddress[0];
-
             if (Contents.daapHost != null) {
                 Contents.clearLists();
             }

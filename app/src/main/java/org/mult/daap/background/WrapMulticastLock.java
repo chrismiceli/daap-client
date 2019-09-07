@@ -2,12 +2,11 @@ package org.mult.daap.background;
 
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
-import android.os.Build;
 
 public class WrapMulticastLock {
-    public final WrapMulticastLock instance;
+    private final WrapMulticastLock instance;
 
-    public WrapMulticastLock() {
+    private WrapMulticastLock() {
         instance = null;
     }
 
@@ -17,37 +16,21 @@ public class WrapMulticastLock {
     public void release() {
     }
 
-    public WrapMulticastLock(WifiManager wifim) {
-        instance = Integer.parseInt(Build.VERSION.SDK) < 4 ? new Old(wifim)
-                : new New(wifim);
+    public WrapMulticastLock(WifiManager wifiManager) {
+        instance = new New(wifiManager);
     }
 
     public WrapMulticastLock getInstance() {
         return instance;
     }
 
-    private class Old extends WrapMulticastLock {
-        public Old(WifiManager wifim) {
-        }
-
-        @Override
-        public void acquire() {
-        }
-
-        @Override
-        public void release() {
-        }
-    }
-
     private class New extends WrapMulticastLock {
         private MulticastLock mInstance;
-        private WifiManager wifiManager = null;
 
-        public New(WifiManager wifim) {
+        New(WifiManager wifiManager) {
             try {
-                wifiManager = wifim;
-                mInstance = wifiManager.createMulticastLock("mylock");
-            } catch (Exception e) {
+                mInstance = wifiManager.createMulticastLock("myLock");
+            } catch (Exception ignored) {
             }
         }
 
@@ -55,7 +38,7 @@ public class WrapMulticastLock {
         public void acquire() {
             try {
                 mInstance.acquire();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -63,7 +46,7 @@ public class WrapMulticastLock {
         public void release() {
             try {
                 mInstance.release();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
     }
