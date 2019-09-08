@@ -10,7 +10,7 @@ import org.mult.daap.client.daap.exception.BadResponseCodeException;
 import org.mult.daap.client.daap.exception.PasswordFailedException;
 
 public class SinglePlaylistRequest extends Request {
-    private ArrayList<Integer> songIds = new ArrayList<>();
+    private final ArrayList<Integer> songIds = new ArrayList<>();
     private final int playlistId;
 
     public SinglePlaylistRequest(Host host, int playlistId) {

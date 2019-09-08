@@ -36,8 +36,6 @@ import org.mult.daap.R;
  * with play/pause and next track buttons.  
  */
 public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
-    static final String TAG = DAAPClientAppWidgetOneProvider.class.getName();
-    
     public static final String CMDAPPWIDGETUPDATE = "appwidgetupdate";
 
     private static DAAPClientAppWidgetOneProvider sInstance;
@@ -132,8 +130,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
             //CharSequence errorState = null;
         
             if (trackName == null) {
-                if (trackName == null)
-                    trackName = res.getText(R.string.widget_one_track_info_unavailable);
+                trackName = res.getText(R.string.widget_one_track_info_unavailable);
             }
 
             if (artistName == null)

@@ -211,9 +211,9 @@ public class Host {
     }
 
     static class GetSongURLAsyncTask extends AsyncTask<Void,Void, String> {
-        Host host;
-        SongEntity song;
-        WeakReference<ISongUrlConsumer> songUrlConsumerWeakReference;
+        final Host host;
+        final SongEntity song;
+        final WeakReference<ISongUrlConsumer> songUrlConsumerWeakReference;
 
         GetSongURLAsyncTask(Host host, SongEntity song, ISongUrlConsumer songUrlConsumer) {
             this.host = host;
@@ -228,14 +228,12 @@ public class Host {
 
             try {
                 sr.Execute();
-            } catch (BadResponseCodeException e) {
-            } catch (PasswordFailedException e) {
-            } catch (IOException e) {
+            } catch (BadResponseCodeException | IOException | PasswordFailedException ignored) {
             }
 
             try {
                 result = sr.getSongURL().toString();
-            } catch (MalformedURLException e) {
+            } catch (MalformedURLException ignored) {
             }
 
             return result;

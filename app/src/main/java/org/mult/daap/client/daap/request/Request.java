@@ -10,16 +10,17 @@ import org.mult.daap.client.daap.exception.PasswordFailedException;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 abstract class Request {
     final Host host;
     int offset = 0;
     HttpURLConnection httpc;
-    final static String access_index = "2";
+    private final static String access_index = "2";
 
     Request(Host daapHost) {
         host = daapHost;
@@ -88,7 +89,11 @@ abstract class Request {
         requestProperties.add(new Pair<>("Accept-Language", "en-us, en;q=5.0"));
         requestProperties.add(new Pair<>("Client-DAAP-Access-Index", Request.access_index));
         requestProperties.add(new Pair<>("Client-DAAP-Version", "3.0"));
-        requestProperties.add(new Pair<>("Client-DAAP-Validation", getHashCode(this)));
+        try {
+            requestProperties.add(new Pair<>("Client-DAAP-Validation", getHashCode(this)));
+        } catch (NoSuchAlgorithmException e) {
+            requestProperties.add(new Pair<>("Client-DAAP-Validation", ""));
+        }
         if (host.isPasswordProtected()) {
             requestProperties.add(new Pair<>("Authorization", "Basic " + host.getPassword()));
         }
@@ -96,17 +101,12 @@ abstract class Request {
         return requestProperties;
     }
 
-    String getHashCode(Request r) {
+    private String getHashCode(Request r) throws NoSuchAlgorithmException {
         return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
     static String readString(byte[] data, int offset, int length) {
-        try {
-            return new String(data, offset, length, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
+        return new String(data, offset, length, StandardCharsets.UTF_8);
     }
 
     static int readInt(byte[] data, int offset) {

@@ -22,7 +22,8 @@ public class JmDNSListener extends Thread {
         this.wifi = wifi;
     }
 
-    public void Run() {
+    @Override
+    public void run() {
         try {
             jmdns = JmDNS.create(wifi);
             jmdns.addServiceListener("_daap._tcp.local.",
@@ -40,9 +41,7 @@ public class JmDNSListener extends Thread {
                             addServer(serviceEvent);
                         }
                     });
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodError e) {
+        } catch (IOException | NoSuchMethodError e) {
             e.printStackTrace();
         }
     }

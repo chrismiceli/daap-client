@@ -74,7 +74,7 @@ public class DatabasesRequest extends Request {
     }
 
     private void parseMLIT(byte[] data, ArrayList<FieldPair> mlitList) {
-        processmLitList(data, mlitList.get(0).position, mlitList.get(0).size);
+        processMlitList(data, mlitList.get(0).position, mlitList.get(0).size);
     }
 
     /* get all mlit in mlclList */
@@ -97,7 +97,7 @@ public class DatabasesRequest extends Request {
         return mlitList;
     }
 
-    private void processmLitList(byte[] data, int position, int argSize) {
+    private void processMlitList(byte[] data, int position, int argSize) {
         String name;
         int size;
         int startPos = position;

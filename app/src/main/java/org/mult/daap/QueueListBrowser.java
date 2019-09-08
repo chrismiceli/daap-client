@@ -1,7 +1,6 @@
 package org.mult.daap;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -68,25 +67,23 @@ public class QueueListBrowser extends Activity {
     public boolean onContextItemSelected(MenuItem aItem) {
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
-        switch (aItem.getItemId()) {
-            case REMOVE_FROM_QUEUE:
-                Contents.queue.remove(menuInfo.position);
-                Toast tst = Toast.makeText(QueueListBrowser.this,
-                        getString(R.string.removed_from_queue),
-                        Toast.LENGTH_SHORT);
-                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                        tst.getYOffset() / 2);
-                tst.show();
-                if (Contents.queue.size() == 0) {
-                    finish();
-                }
-                else {
-                    final Intent intent = new Intent(QueueListBrowser.this,
-                            QueueListBrowser.class);
-                    startActivityForResult(intent, 1);
-                    finish();
-                }
-                return true;
+        if (aItem.getItemId() == REMOVE_FROM_QUEUE) {
+            Contents.queue.remove(menuInfo.position);
+            Toast tst = Toast.makeText(QueueListBrowser.this,
+                    getString(R.string.removed_from_queue),
+                    Toast.LENGTH_SHORT);
+            tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                    tst.getYOffset() / 2);
+            tst.show();
+            if (Contents.queue.size() == 0) {
+                finish();
+            } else {
+                final Intent intent = new Intent(QueueListBrowser.this,
+                        QueueListBrowser.class);
+                startActivityForResult(intent, 1);
+                finish();
+            }
+            return true;
         }
         return false;
     }
@@ -116,10 +113,6 @@ public class QueueListBrowser extends Activity {
             case MENU_PLAY_QUEUE:
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null) {
-                    notificationManager.cancelAll();
-                }
                 intent = new Intent(QueueListBrowser.this, MediaPlayback.class);
                 startActivityForResult(intent, 1);
                 return true;
@@ -133,15 +126,11 @@ public class QueueListBrowser extends Activity {
         return false;
     }
 
-    private OnItemClickListener queuelistGridListener = new OnItemClickListener() {
+    private final OnItemClickListener queuelistGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                 long id) {
             Contents.setSongPosition(Contents.queue, position);
             MediaPlayback.clearState();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                notificationManager.cancelAll();
-            }
             Intent intent = new Intent(QueueListBrowser.this,
                     MediaPlayback.class);
             startActivityForResult(intent, 1);
@@ -156,8 +145,8 @@ public class QueueListBrowser extends Activity {
         }
     }
 
-    public class ProfilesAdapter extends BaseAdapter {
-        private Context vContext;
+    class ProfilesAdapter extends BaseAdapter {
+        private final Context vContext;
 
         ProfilesAdapter(Context c) {
             vContext = c;

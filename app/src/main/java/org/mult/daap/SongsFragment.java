@@ -1,7 +1,5 @@
 package org.mult.daap;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,8 +26,8 @@ public class SongsFragment extends Fragment implements IQueueWorker {
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
     private static final int MENU_SEARCH = 3;
-    public static String ARTIST_FILTER_KEY = "__ARTIST_FILTER_KEY__";
-    public static String ALBUM_FILTER_KEY = "__ALBUM_FILTER_KEY__";
+    public static final String ARTIST_FILTER_KEY = "__ARTIST_FILTER_KEY__";
+    public static final String ALBUM_FILTER_KEY = "__ALBUM_FILTER_KEY__";
 
     @Override
     public void onStart() {
@@ -93,10 +91,6 @@ public class SongsFragment extends Fragment implements IQueueWorker {
             case MENU_PLAY_QUEUE:
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
-                NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null) {
-                    notificationManager.cancelAll();
-                }
 
                 // TODO update fragment
 //                intent = new Intent(SongsFragment.this, MediaPlayback.class);
@@ -140,10 +134,6 @@ public class SongsFragment extends Fragment implements IQueueWorker {
         @Override
         public void onItemClick(SongEntity item) {
             MediaPlayback.clearState();
-            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                notificationManager.cancelAll();
-            }
 
             // TODO don't use contents
             Contents.song = item;

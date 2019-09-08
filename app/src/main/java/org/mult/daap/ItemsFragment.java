@@ -1,7 +1,5 @@
 package org.mult.daap;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -70,8 +68,7 @@ public class ItemsFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case CONTEXT_PLAY_ALBUM:
+        if (item.getItemId() == CONTEXT_PLAY_ALBUM) {
 //                Intent intent = new Intent(getActivity(), MediaPlayback.class);
 //                String albName = Contents.albumNameList.get(menuInfo.position);
 //                if (albName.equals(getString(R.string.no_album_name))) {
@@ -172,10 +169,6 @@ public class ItemsFragment extends Fragment {
             case MENU_PLAY_QUEUE:
                 Contents.setSongPosition(Contents.queue, 0);
                 MediaPlayback.clearState();
-                NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null) {
-                    notificationManager.cancelAll();
-                }
                 intent = new Intent(getActivity(), MediaPlayback.class);
                 startActivityForResult(intent, 1);
                 return true;

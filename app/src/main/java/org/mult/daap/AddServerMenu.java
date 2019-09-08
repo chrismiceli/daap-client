@@ -165,7 +165,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
         return false;
     }
 
-    public void OnServerRetrieved(ServerEntity server) {
+    private void OnServerRetrieved(ServerEntity server) {
         if (server != null) {
             this.saveServer = false;
             new LoginManagerAsyncTask(this, server.getAddress(), server.getPassword()).execute();

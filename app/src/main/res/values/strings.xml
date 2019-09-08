@@ -78,4 +78,6 @@
     <string name="widget_one_track_info_unavailable">"No track info available"</string>
     <string name="navigation_drawer_open">Open Drawer</string>
     <string name="navigation_drawer_close">Close Drawer</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="media_playback_notification_channel_description">Currently playing song.</string>
 </resources>

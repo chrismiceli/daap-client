@@ -6,7 +6,7 @@ package org.mult.daap;
  *
  * @param <T>
  */
-public interface RecyclerOnItemClickListener<T> {
+interface RecyclerOnItemClickListener<T> {
     /**
      * Handles a click of an item from a list of data
      *
