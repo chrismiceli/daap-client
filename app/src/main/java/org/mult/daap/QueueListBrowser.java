@@ -45,9 +45,7 @@ public class QueueListBrowser extends Activity {
         if (Contents.queue.size() == 0) {
             finish();
         }
-        for (int x = 0; x < Contents.queue.size(); x++) {
-            s.add(Contents.queue.get(x));
-        }
+        s.addAll(Contents.queue);
         ListView queuelistList = findViewById(android.R.id.list);
         count = s.size();
         queuelistList.setAdapter(new ProfilesAdapter(getApplicationContext()));

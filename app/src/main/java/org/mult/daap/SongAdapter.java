@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.mult.daap.db.entity.PlaylistEntity;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.util.List;

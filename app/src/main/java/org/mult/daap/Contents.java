@@ -5,9 +5,7 @@ import org.mult.daap.client.Host;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.TreeMap;
 
 public class Contents {
     public static final ArrayList<SongEntity> songList = new ArrayList<>();

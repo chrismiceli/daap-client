@@ -104,7 +104,7 @@ public class SearchActivity extends ListActivity implements Observer {
                     .get(menuInfo.position)));
             if (Contents.queue.contains(s)) { // in
                 // list
-                Contents.queue.remove(Contents.queue.indexOf(s));
+                Contents.queue.remove(s);
                 Toast tst = Toast.makeText(SearchActivity.this,
                         getString(R.string.removed_from_queue),
                         Toast.LENGTH_SHORT);
@@ -243,7 +243,6 @@ public class SearchActivity extends ListActivity implements Observer {
         ArrayList<String> letterList;
         final Context vContext;
 
-        @SuppressWarnings("unchecked")
         MyArrayAdapter(Context context, int textViewResourceId,
                        List<T> objects) {
             super(context, textViewResourceId, objects);
