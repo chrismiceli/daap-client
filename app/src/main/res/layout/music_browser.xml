@@ -6,7 +6,7 @@
          It is filled with via the AlbumsFragment, ArtistsFragment, or the SongsFragment
          After the items are the music_list is populated via OnItemsReceived via the ItemAdapter
          every item is added as a simple_row_item -->
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/music_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

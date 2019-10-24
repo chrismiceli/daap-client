@@ -2,7 +2,6 @@ package org.mult.daap.client;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 
 import org.mult.daap.R;
 import org.mult.daap.db.AppDatabase;
@@ -21,6 +20,8 @@ import org.mult.daap.db.entity.SongEntity;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class DatabaseHost {
     private final Context applicationContext;

@@ -10,8 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -31,12 +29,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.mult.daap.client.DatabaseHost;
-import org.mult.daap.client.ILoginConsumer;
 import org.mult.daap.background.JmDNSListener;
 import org.mult.daap.background.LoginManagerAsyncTask;
 import org.mult.daap.background.SaveServerAsyncTask;
 import org.mult.daap.background.WrapMulticastLock;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.client.ILoginConsumer;
 import org.mult.daap.db.entity.ServerEntity;
 import org.mult.daap.model.DiscoveredServer;
 
@@ -45,6 +43,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     private JmDNSListener jmDNSListener;
@@ -196,6 +197,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
         DiscoveredServerClickListener(AddServerMenu addServerMenu) {
             this.addServerMenu = addServerMenu;
         }
+
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DiscoveredServer discoveredServer = discoveredServers.get(position);
             new LoginManagerAsyncTask(this.addServerMenu, discoveredServer.getAddress(), null).execute();
@@ -402,7 +404,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
         startActivityForResult(intent, 1);
     }
 
-    private static class GetServerAsyncTask extends AsyncTask<Void,Void, ServerEntity> {
+    private static class GetServerAsyncTask extends AsyncTask<Void, Void, ServerEntity> {
         private final WeakReference<AddServerMenu> addServerMenu;
 
         GetServerAsyncTask(AddServerMenu addServerMenu) {
@@ -410,7 +412,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
         }
 
         @Override
-        protected ServerEntity doInBackground(Void...voids){
+        protected ServerEntity doInBackground(Void... voids) {
             ServerEntity result = null;
             AddServerMenu addServerMenu = this.addServerMenu.get();
             if (addServerMenu != null && !addServerMenu.isFinishing()) {
