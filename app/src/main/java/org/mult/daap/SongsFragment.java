@@ -1,11 +1,9 @@
 package org.mult.daap;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,17 +15,28 @@ import android.view.ViewGroup;
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.client.IQueueWorker;
 import org.mult.daap.db.entity.SongEntity;
+import org.mult.daap.lists.SongListAdapter;
+import org.mult.daap.lists.SongListItem;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
-public class SongsFragment extends Fragment implements IQueueWorker {
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import eu.davidea.fastscroller.FastScroller;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.SelectableAdapter;
+
+public class SongsFragment extends Fragment implements IQueueWorker, FlexibleAdapter.OnItemClickListener {
     private static final int CONTEXT_QUEUE = 0;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
     private static final int MENU_SEARCH = 3;
     public static final String ARTIST_FILTER_KEY = "__ARTIST_FILTER_KEY__";
     public static final String ALBUM_FILTER_KEY = "__ALBUM_FILTER_KEY__";
+    private SongListAdapter<SongListItem> mAdapter;
 
     @Override
     public void onStart() {
@@ -104,14 +113,42 @@ public class SongsFragment extends Fragment implements IQueueWorker {
         return false;
     }
 
+    @Override
+    public boolean onItemClick(View view, int position) {
+        SongListItem listItem = this.mAdapter.getItem(position);
+        MediaPlaybackActivity.clearState();
+
+        // TODO don't use contents
+        Contents.song = listItem.getSong();
+
+        DatabaseHost host = new DatabaseHost(this.getContext());
+        host.addSongToTopOfQueueAsync(listItem.getSong(), this);
+
+        return true;
+    }
+
     private void OnSongsReceived(List<SongEntity> songs) {
-        SongAdapter adapter = new SongAdapter(songs);
+        List<SongListItem> songItems = new ArrayList<>();
+        for (SongEntity song : songs) {
+            songItems.add(new SongListItem(song));
+        }
+
+        this.mAdapter = new SongListAdapter<>(songItems);
+
         RecyclerView playlistListView = this.getActivity().findViewById(R.id.music_list);
         playlistListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         playlistListView.setLayoutManager(layoutManager);
-        playlistListView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnClickListener(this));
+        playlistListView.setAdapter(mAdapter);
+
+        FastScroller fastScroller = this.getView().findViewById(R.id.fast_scroller);
+
+        fastScroller.setMinimumScrollThreshold(70);
+        fastScroller.setBubbleAndHandleColor(Color.parseColor("#4DB6AC"));
+
+        this.mAdapter.setFastScroller(fastScroller);
+        this.mAdapter.setMode(SelectableAdapter.Mode.SINGLE);
+        this.mAdapter.addListener(this);
 
         RecyclerView musicList = this.getActivity().findViewById(R.id.music_list);
         musicList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -122,24 +159,6 @@ public class SongsFragment extends Fragment implements IQueueWorker {
                         R.string.add_or_remove_from_queue);
             }
         });
-    }
-
-    private class OnClickListener implements RecyclerOnItemClickListener<SongEntity> {
-        private final SongsFragment songsFragment;
-
-        OnClickListener(SongsFragment songsFragment) {
-            this.songsFragment = songsFragment;
-        }
-
-        @Override
-        public void onItemClick(SongEntity item) {
-            MediaPlaybackActivity.clearState();
-
-            // TODO don't use contents
-            Contents.song = item;
-            DatabaseHost host = new DatabaseHost(this.songsFragment.getContext());
-            host.addSongToTopOfQueueAsync(item, this.songsFragment);
-        }
     }
 
     public void songAddedToTopOfQueue(SongEntity songEntity) {

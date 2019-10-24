@@ -56,7 +56,6 @@ public class DrawerActivity extends AppCompatActivity
         playlistsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
                 DrawerActivity.super.finish();
             }
         });

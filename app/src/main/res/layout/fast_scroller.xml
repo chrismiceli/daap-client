@@ -1,0 +1,17 @@
+<eu.davidea.fastscroller.FastScroller
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fast_scroller"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    app:fastScrollerAutoHideEnabled="true"
+    app:fastScrollerAutoHideDelayInMillis="750"
+    app:fastScrollerBubblePosition="adjacent"
+    app:fastScrollerBubbleEnabled="true"
+    app:fastScrollerHandleAlwaysVisible="false"
+    app:fastScrollerIgnoreTouchesOutsideHandle="false"
+    tools:visibility="visible"/>

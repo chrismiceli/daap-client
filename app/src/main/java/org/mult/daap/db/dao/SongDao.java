@@ -28,6 +28,6 @@ public interface SongDao {
     @Query("SELECT DISTINCT songs.artist FROM songs ORDER BY album ASC")
     List<ArtistEntity> loadArtists();
 
-    @Query("SELECT songs.* FROM songs ORDER BY songs.artist, songs.album, songs.track")
+    @Query("SELECT songs.* FROM songs ORDER BY songs.name ASC")
     List<SongEntity> loadSongs();
 }
