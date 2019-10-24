@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -37,11 +39,11 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_songs_drawer);
-        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_drawer);
+        final Toolbar toolbar = this.findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -50,9 +52,21 @@ public class DrawerActivity extends AppCompatActivity
         NavigationView navigationView = this.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        this.playlistId = this.getIntent().getIntExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, -1);
+        Button playlistsButton = navigationView.getHeaderView(0).findViewById(R.id.btn_back_to_playlists);
+        playlistsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                DrawerActivity.super.finish();
+            }
+        });
 
-        Fragment newFragment = new PlaylistsFragment();
+        this.playlistId = this.getIntent().getIntExtra(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, -1);
+
+        Fragment newFragment = new SongsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, playlistId);
+        newFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, newFragment);
         ft.addToBackStack(null);
@@ -100,15 +114,13 @@ public class DrawerActivity extends AppCompatActivity
 
         Bundle args = new Bundle();
         if (id == R.id.nav_all_songs) {
-            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
+            args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             fragment = new SongsFragment();
-        } else if (id == R.id.nav_playlists) {
-            fragment = new PlaylistsFragment();
         } else if (id == R.id.nav_artists) {
-            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
+            args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             fragment = new ArtistsFragment();
         } else if (id == R.id.nav_albums) {
-            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
+            args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             fragment = new AlbumsFragment();
         }
 

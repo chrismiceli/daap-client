@@ -377,7 +377,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
                 if (this.saveServer) {
                     new SaveServerAsyncTask(this, Contents.daapHost).execute();
                 } else {
-                    final Intent intent = new Intent(AddServerMenu.this, DrawerActivity.class);
+                    final Intent intent = new Intent(AddServerMenu.this, PlaylistActivity.class);
                     startActivityForResult(intent, 1);
                 }
 
@@ -400,7 +400,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     }
 
     public void onAfterSave() {
-        final Intent intent = new Intent(AddServerMenu.this, DrawerActivity.class);
+        final Intent intent = new Intent(AddServerMenu.this, PlaylistActivity.class);
         startActivityForResult(intent, 1);
     }
 

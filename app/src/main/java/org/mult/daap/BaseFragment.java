@@ -9,6 +9,7 @@ public abstract class BaseFragment extends Fragment {
     protected static final int CONTEXT_PLAY_ALBUM = 4;
     protected static final int CONTEXT_QUEUE = 5;
 
+    public static final String PLAYLIST_ID_BUNDLE_KEY = "__PLAYLIST_ID__";
     public static final String ITEM_MODE_KEY = "__ITEM_MODE__";
     public static final int ITEM_MODE_ALBUM = 0;
     public static final int ITEM_MODE_ARTIST = 1;

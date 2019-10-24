@@ -51,7 +51,7 @@ public class SongsFragment extends Fragment implements IQueueWorker {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        int playlistId = getArguments().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY);
+        int playlistId = getArguments().getInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY);
         String artistFilter = getArguments().getString(SongsFragment.ARTIST_FILTER_KEY);
         String albumFilter = getArguments().getString(SongsFragment.ALBUM_FILTER_KEY);
 

@@ -24,7 +24,7 @@ public class ArtistsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        this.playlistId = getArguments().getInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, -1);
+        this.playlistId = getArguments().getInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, -1);
         new GetArtistsAsyncTask(this, this.playlistId).execute();
         return inflater.inflate(R.layout.music_browser, container, false);
     }
@@ -42,7 +42,7 @@ public class ArtistsFragment extends BaseFragment {
         public void onItemClick(String artist) {
             SongsFragment artistSongsFragment = new SongsFragment();
             Bundle args = new Bundle();
-            args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
+            args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             args.putString(SongsFragment.ARTIST_FILTER_KEY, artist);
             args.putString(SongsFragment.ALBUM_FILTER_KEY, null);
             artistSongsFragment.setArguments(args);

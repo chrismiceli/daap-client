@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/songs_drawer_header"
-        app:menu="@menu/activity_songs_drawer_drawer" />
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/menu_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
