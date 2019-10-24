@@ -1,6 +1,6 @@
 package org.mult.daap.db.entity;
 
-import android.arch.persistence.room.Entity;
+import androidx.room.Entity;
 
 @Entity(primaryKeys = {"playlistId", "songId"}, tableName = "playlist_song")
 public class PlaylistSongEntity {

@@ -31,7 +31,6 @@ public class TabMain extends TabActivity {
         // Create an Intent to launch an Activity for the tab (to be reused)
 //        intent = new Intent().setClass(this, ItemBrowser.class);
 //        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
-//        intent.putExtra(ItemBrowser.ITEM_MODE_KEY, ItemBrowser.ITEM_MODE_ARTIST);
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost
                 .newTabSpec("artists")
@@ -42,7 +41,6 @@ public class TabMain extends TabActivity {
         // Do the same for the other tabs
 //        intent = new Intent().setClass(this, ItemBrowser.class);
 //        intent.putExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
-//        intent.putExtra(ItemBrowser.ITEM_MODE_KEY, ItemBrowser.ITEM_MODE_ALBUM);
         spec = tabHost
                 .newTabSpec("albums")
                 .setIndicator(getString(R.string.albums),

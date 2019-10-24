@@ -3,9 +3,9 @@ package org.mult.daap;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +32,7 @@ public class SongsFragment extends Fragment implements IQueueWorker {
     @Override
     public void onStart() {
         super.onStart();
-        ((SongsDrawerActivity) getActivity()).setSearchRequestedCallback(new SongsDrawerActivity.SearchRequestedCallback() {
+        ((DrawerActivity) getActivity()).setSearchRequestedCallback(new DrawerActivity.SearchRequestedCallback() {
             @Override
             public void onSearchRequested() {
                 Contents.searchResult = null;
@@ -43,7 +43,7 @@ public class SongsFragment extends Fragment implements IQueueWorker {
 
     @Override
     public void onStop() {
-        ((SongsDrawerActivity) getActivity()).setSearchRequestedCallback(null);
+        ((DrawerActivity) getActivity()).setSearchRequestedCallback(null);
         super.onStop();
     }
 
@@ -86,14 +86,14 @@ public class SongsFragment extends Fragment implements IQueueWorker {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_SEARCH:
-                ((SongsDrawerActivity) getActivity()).getSearchRequestedCallback().onSearchRequested();
+                ((DrawerActivity) getActivity()).getSearchRequestedCallback().onSearchRequested();
                 return true;
             case MENU_PLAY_QUEUE:
                 Contents.setSongPosition(Contents.queue, 0);
-                MediaPlayback.clearState();
+                MediaPlaybackActivity.clearState();
 
                 // TODO update fragment
-//                intent = new Intent(SongsFragment.this, MediaPlayback.class);
+//                intent = new Intent(SongsFragment.this, MediaPlaybackActivity.class);
 //                startActivityForResult(intent, 1);
                 return true;
             case MENU_VIEW_QUEUE:
@@ -133,7 +133,7 @@ public class SongsFragment extends Fragment implements IQueueWorker {
 
         @Override
         public void onItemClick(SongEntity item) {
-            MediaPlayback.clearState();
+            MediaPlaybackActivity.clearState();
 
             // TODO don't use contents
             Contents.song = item;
@@ -143,7 +143,7 @@ public class SongsFragment extends Fragment implements IQueueWorker {
     }
 
     public void songAddedToTopOfQueue(SongEntity songEntity) {
-        Intent intent = new Intent(getContext(), MediaPlayback.class);
+        Intent intent = new Intent(getContext(), MediaPlaybackActivity.class);
         startActivityForResult(intent, 1);
     }
 

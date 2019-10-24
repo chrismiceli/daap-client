@@ -1,9 +1,9 @@
 package org.mult.daap.db.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Query;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 
 import org.mult.daap.db.entity.AlbumEntity;
 import org.mult.daap.db.entity.ArtistEntity;
@@ -16,7 +16,7 @@ public interface SongDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setSongs(List<SongEntity> songs);
 
-    @Query("SELECT songs.* FROM songs WHERE songs.artist = :albumFilter ORDER BY songs.artist, songs.album, songs.track")
+    @Query("SELECT songs.* FROM songs WHERE songs.album = :albumFilter ORDER BY songs.album, songs.track, songs.artist")
     List<SongEntity> loadAlbumSongs(String albumFilter);
 
     @Query("SELECT songs.* FROM songs WHERE songs.artist = :artistFilter ORDER BY songs.artist, songs.album, songs.track")

@@ -29,9 +29,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.TaskStackBuilder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.Html;
@@ -70,7 +70,7 @@ import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class MediaPlayback extends Activity implements View.OnTouchListener, View.OnLongClickListener, ISongUrlConsumer {
+public class MediaPlaybackActivity extends Activity implements View.OnTouchListener, View.OnLongClickListener, ISongUrlConsumer {
     private static final String CHANNEL_ID = "daap_channel_song_playing";
     private static final int MENU_STOP = 0;
     private static final int MENU_LIBRARY = 1;
@@ -106,10 +106,12 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 
     private final DAAPClientAppWidgetOneProvider mAppWidgetProvider = DAAPClientAppWidgetOneProvider.getInstance();
 
-    public MediaPlayback() {
+    public MediaPlaybackActivity() {
     }
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -232,7 +234,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         clearState();
         mProgress.setEnabled(false);
         mediaPlayer = new MediaPlayer();
-        MediaPlayback.song = song;
+        MediaPlaybackActivity.song = song;
         Contents.daapHost.getSongURLAsync(song, this);
     }
 
@@ -249,7 +251,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                     stopNotification();
                     startNotification();
                     queueNextRefresh(refreshNow());
-                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                 }
             });
             mediaPlayer.prepareAsync();
@@ -365,7 +367,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 }
                 setPauseButton();
                 queueNextRefresh(refreshNow());
-                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
             }
         }
     };
@@ -373,7 +375,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         public void onClick(View v) {
             try {
                 startSong(Contents.getPreviousSong());
-                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
             } catch (IndexOutOfBoundsException e) {
                 handler.removeMessages(REFRESH);
                 stopNotification();
@@ -385,7 +387,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private final View.OnClickListener mNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             normalOnCompletionListener.onCompletion(mediaPlayer);
-            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
         }
     };
 
@@ -467,19 +469,19 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case MENU_STOP:
-            clearState();
-            stopNotification();
-            finish();
-            break;
-        case MENU_LIBRARY:
-            Intent intent = new Intent(MediaPlayback.this, SongsDrawerActivity.class);
-            startActivity(intent);
-            break;
-        case MENU_DOWNLOAD:
-            showDialog(COPYING_DIALOG);
-            new Thread(new FileCopier()).start();
-            break;
+            case MENU_STOP:
+                clearState();
+                stopNotification();
+                finish();
+                break;
+            case MENU_LIBRARY:
+                Intent intent = new Intent(MediaPlaybackActivity.this, DrawerActivity.class);
+                startActivity(intent);
+                break;
+            case MENU_DOWNLOAD:
+                showDialog(COPYING_DIALOG);
+                new Thread(new FileCopier()).start();
+                break;
         }
         return true;
     }
@@ -600,8 +602,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                         .setSmallIcon(R.drawable.stat_notify_musicplayer);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
-        Intent resultIntent = new Intent(this, MediaPlayback.class);
-        stackBuilder.addParentStack(MediaPlayback.class);
+        Intent resultIntent = new Intent(this, MediaPlaybackActivity.class);
+        stackBuilder.addParentStack(MediaPlaybackActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         mBuilder.setContentIntent(contentIntent);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -808,11 +810,11 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 switch (action) {
                     case MediaPlaybackService.PREVIOUS:
                         startSong(Contents.getPreviousSong());
-                        mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                        mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                         break;
                     case MediaPlaybackService.NEXT:
                         normalOnCompletionListener.onCompletion(mediaPlayer);
-                        mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                        mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                         break;
                     case MediaPlaybackService.TOGGLEPAUSE:
                     case MediaPlaybackService.PAUSE:
@@ -832,7 +834,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                             }
                             setPauseButton();
                             queueNextRefresh(refreshNow());
-                            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                         }
                         break;
                     case MediaPlaybackService.STOP:
@@ -847,12 +849,12 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                             }
                             setPauseButton();
                             queueNextRefresh(refreshNow());
-                            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                         }
                         break;
                     case MediaPlaybackService.ADDED:
                         int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-                        mAppWidgetProvider.performUpdate(mMediaPlaybackService, MediaPlayback.this, appWidgetIds, "");
+                        mAppWidgetProvider.performUpdate(mMediaPlaybackService, MediaPlaybackActivity.this, appWidgetIds, "");
                         break;
                     case MediaPlaybackService.HEADSET_CHANGE:
                         if (mediaPlayer != null) {
@@ -865,7 +867,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                             }
                             setPauseButton();
                             queueNextRefresh(refreshNow());
-                            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                         }
                         break;
                 }
@@ -874,40 +876,39 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     };
 
     private static class CopyHandler extends Handler {
-        private final WeakReference<MediaPlayback> mediaPlaybackWeakReference;
+        private final WeakReference<MediaPlaybackActivity> mediaPlaybackActivityWeakReference;
 
-        CopyHandler(MediaPlayback mediaPlayback) {
-            this.mediaPlaybackWeakReference = new WeakReference<>(mediaPlayback);
+        CopyHandler(MediaPlaybackActivity mediaPlayback) {
+            this.mediaPlaybackActivityWeakReference = new WeakReference<>(mediaPlayback);
         }
 
         @Override
         public void handleMessage(Message message) {
-            MediaPlayback mediaPlayback = this.mediaPlaybackWeakReference.get();
-            if (mediaPlayback != null)
-            {
+            MediaPlaybackActivity mediaPlaybackActivity = this.mediaPlaybackActivityWeakReference.get();
+            if (mediaPlaybackActivity != null) {
                 switch (message.what) {
                     case REFRESH:
-                        mediaPlayback.queueNextRefresh(mediaPlayback.refreshNow());
+                        mediaPlaybackActivity.queueNextRefresh(mediaPlaybackActivity.refreshNow());
                         break;
                     case COPYING_DIALOG:
-                        mediaPlayback.dismissDialog(COPYING_DIALOG);
+                        mediaPlaybackActivity.dismissDialog(COPYING_DIALOG);
                         break;
                     case SUCCESS_COPYING_DIALOG:
-                        mediaPlayback.showDialog(SUCCESS_COPYING_DIALOG);
+                        mediaPlaybackActivity.showDialog(SUCCESS_COPYING_DIALOG);
                         break;
                     case ERROR_COPYING_DIALOG:
-                        mediaPlayback.showDialog(ERROR_COPYING_DIALOG);
+                        mediaPlaybackActivity.showDialog(ERROR_COPYING_DIALOG);
                         break;
                 }
-             }
+            }
         }
     }
 
     private static class LastFMGetSongInfo extends AsyncTask<SongEntity, Void, String> {
-        private final WeakReference<MediaPlayback> mediaPlaybackWeakReference;
-        LastFMGetSongInfo(MediaPlayback mediaPlayback)
-        {
-            this.mediaPlaybackWeakReference = new WeakReference<>(mediaPlayback);
+        private final WeakReference<MediaPlaybackActivity> mediaPlaybackActivityWeakReference;
+
+        LastFMGetSongInfo(MediaPlaybackActivity mediaPlaybackActivity) {
+            this.mediaPlaybackActivityWeakReference = new WeakReference<>(mediaPlaybackActivity);
         }
 
         protected String doInBackground(SongEntity... song) {
@@ -935,22 +936,19 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
 
         protected void onPostExecute(String result) {
-            MediaPlayback mediaPlayback = this.mediaPlaybackWeakReference.get();
-            if (mediaPlayback != null)
-            {
-                mediaPlayback.mSongSummary.setText(Html.fromHtml(result));
-                mediaPlayback.mSongSummary.setMovementMethod(LinkMovementMethod.getInstance());
+            MediaPlaybackActivity mediaPlaybackActivity = this.mediaPlaybackActivityWeakReference.get();
+            if (mediaPlaybackActivity != null) {
+                mediaPlaybackActivity.mSongSummary.setText(Html.fromHtml(result));
+                mediaPlaybackActivity.mSongSummary.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
     }
 
-    private static class ScrollHandler extends Handler
-    {
-        private final WeakReference<MediaPlayback> mediaPlaybackWeakReference;
+    private static class ScrollHandler extends Handler {
+        private final WeakReference<MediaPlaybackActivity> mediaPlaybackWeakReference;
 
-        ScrollHandler(MediaPlayback mediaPlayback)
-        {
-            this.mediaPlaybackWeakReference = new WeakReference<>(mediaPlayback);
+        ScrollHandler(MediaPlaybackActivity mediaPlaybackActivity) {
+            this.mediaPlaybackWeakReference = new WeakReference<>(mediaPlaybackActivity);
         }
 
         @Override
@@ -963,10 +961,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 tv.setEllipsize(TruncateAt.END);
             } else {
                 Message newMessage = obtainMessage(0, tv);
-                MediaPlayback mediaPlayback = this.mediaPlaybackWeakReference.get();
-                if (mediaPlayback != null)
-                {
-                    mediaPlayback.mLabelScroller.sendMessageDelayed(newMessage, 15);
+                MediaPlaybackActivity mediaPlaybackActivity = this.mediaPlaybackWeakReference.get();
+                if (mediaPlaybackActivity != null) {
+                    mediaPlaybackActivity.mLabelScroller.sendMessageDelayed(newMessage, 15);
                 }
             }
         }

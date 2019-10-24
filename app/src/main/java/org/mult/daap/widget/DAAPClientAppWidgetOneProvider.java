@@ -27,19 +27,19 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import org.mult.daap.AddServerMenu;
-import org.mult.daap.MediaPlayback;
+import org.mult.daap.MediaPlaybackActivity;
 import org.mult.daap.MediaPlaybackService;
 import org.mult.daap.R;
 
 /**
  * Simple widget to show currently playing album art along
- * with play/pause and next track buttons.  
+ * with play/pause and next track buttons.
  */
 public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
     public static final String CMDAPPWIDGETUPDATE = "appwidgetupdate";
 
     private static DAAPClientAppWidgetOneProvider sInstance;
-    
+
     public static synchronized DAAPClientAppWidgetOneProvider getInstance() {
         if (sInstance == null) {
             sInstance = new DAAPClientAppWidgetOneProvider();
@@ -50,7 +50,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         defaultAppWidget(context, appWidgetIds);
-        
+
         // Send broadcast intent to any running MediaPlaybackService so it can
         // wrap around with an immediate update.
         Intent updateIntent = new Intent(MediaPlaybackService.SERVICECMD);
@@ -60,7 +60,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
         updateIntent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
         context.sendBroadcast(updateIntent);
     }
-    
+
     /**
      * Initialize given widgets to default state, where we launch ServeStream on default click
      * and hide actions if service not running.
@@ -68,14 +68,14 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
     private void defaultAppWidget(Context context, int[] appWidgetIds) {
         final Resources res = context.getResources();
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget_one);
-        
+
         views.setViewVisibility(R.id.title, View.GONE);
         views.setTextViewText(R.id.artist, res.getText(R.string.widget_one_initial_text));
 
         linkButtons(context, views, false /* not playing */);
         pushUpdate(context, appWidgetIds, views);
     }
-    
+
     private void pushUpdate(Context context, int[] appWidgetIds, RemoteViews views) {
         // Update specific list of appWidgetIds if given, otherwise default to all
         final AppWidgetManager gm = AppWidgetManager.getInstance(context);
@@ -85,7 +85,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
             gm.updateAppWidget(new ComponentName(context, this.getClass()), views);
         }
     }
-    
+
     /**
      * Check against {@link AppWidgetManager} if there are any instances of this widget.
      */
@@ -99,10 +99,10 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
     /**
      * Handle a change notification coming over from {@link MediaService}
      */
-    public void notifyChange(MediaPlaybackService service, MediaPlayback activity, String what) {
+    public void notifyChange(MediaPlaybackService service, MediaPlaybackActivity activity, String what) {
         if (service == null)
             return;
-        
+
         if (hasInstances(service)) {
             if (MediaPlaybackService.META_CHANGED.equals(what) ||
                     MediaPlaybackService.PLAYSTATE_CHANGED.equals(what) ||
@@ -111,24 +111,24 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
             }
         }
     }
-    
+
     /**
-     * Update all active widget instances by pushing changes 
+     * Update all active widget instances by pushing changes
      */
-    public void performUpdate(MediaPlaybackService service, MediaPlayback activity, int[] appWidgetIds, String what) {
+    public void performUpdate(MediaPlaybackService service, MediaPlaybackActivity activity, int[] appWidgetIds, String what) {
         final Resources res = service.getResources();
         final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.appwidget_one);
-        
+
         if (what.equals(MediaPlaybackService.PLAYER_CLOSED)) {
             views.setViewVisibility(R.id.title, View.GONE);
             views.setTextViewText(R.id.artist, res.getText(R.string.widget_one_initial_text));
-            
+
             linkButtons(service, views, false /* not playing */);
         } else {
             CharSequence trackName = activity.getTrackName();
             CharSequence artistName = activity.getArtistName();
             //CharSequence errorState = null;
-        
+
             if (trackName == null) {
                 trackName = res.getText(R.string.widget_one_track_info_unavailable);
             }
@@ -148,30 +148,30 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
             } else {
                 views.setImageViewResource(R.id.control_play, R.drawable.ic_appwidget_music_play);
             }
-            
+
             // Link actions buttons to intents
             linkButtons(service, views, true);
         }
-        
+
         pushUpdate(service, appWidgetIds, views);
     }
-    
+
     /**
      * Link up various button actions using {@link PendingIntents}.
-     * 
+     *
      * @param playerActive True if player is active in background, which means
-     *            widget click will launch {@link StreamMediaActivity},
-     *            otherwise we launch {@link StreamListActivity}.
+     *                     widget click will launch {@link StreamMediaActivity},
+     *                     otherwise we launch {@link StreamListActivity}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
         // Connect up various buttons and touch events
         Intent intent;
         PendingIntent pendingIntent;
-        
+
         final ComponentName serviceName = new ComponentName(context, MediaPlaybackService.class);
-        
+
         if (playerActive) {
-            intent = new Intent(context, MediaPlayback.class);
+            intent = new Intent(context, MediaPlaybackActivity.class);
             pendingIntent = PendingIntent.getActivity(context,
                     0 /* no requestCode */, intent, 0 /* no flags */);
             views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
@@ -181,13 +181,13 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
                     0 /* no requestCode */, intent, 0 /* no flags */);
             views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
         }
-        
+
         intent = new Intent(MediaPlaybackService.TOGGLEPAUSE_ACTION);
         intent.setComponent(serviceName);
         pendingIntent = PendingIntent.getService(context,
                 0 /* no requestCode */, intent, 0 /* no flags */);
         views.setOnClickPendingIntent(R.id.control_play, pendingIntent);
-        
+
         intent = new Intent(MediaPlaybackService.NEXT_ACTION);
         intent.setComponent(serviceName);
         pendingIntent = PendingIntent.getService(context,
