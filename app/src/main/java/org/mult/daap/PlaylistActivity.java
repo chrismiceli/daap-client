@@ -1,21 +1,32 @@
 package org.mult.daap;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.db.entity.PlaylistEntity;
+import org.mult.daap.lists.PlaylistListAdapter;
+import org.mult.daap.lists.PlaylistListItem;
+import org.mult.daap.lists.StringListAdapter;
+import org.mult.daap.lists.StringListItem;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import eu.davidea.fastscroller.FastScroller;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.SelectableAdapter;
 
-public class PlaylistActivity extends AppCompatActivity {
+public class PlaylistActivity extends AppCompatActivity implements FlexibleAdapter.OnItemClickListener {
+    private PlaylistListAdapter<PlaylistListItem> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,27 +38,36 @@ public class PlaylistActivity extends AppCompatActivity {
         new GetPlaylistsAsyncTask(this).execute();
     }
 
-    private static class OnClickListener implements RecyclerOnItemClickListener<PlaylistEntity> {
-        private final PlaylistActivity playlistActivity;
+    @Override
+    public boolean onItemClick(View view, int position) {
+        PlaylistListItem listItem = this.mAdapter.getItem(position);
+        new PlaylistActivity.GetSinglePlaylistAsyncTask(this, Integer.parseInt(listItem.getId())).execute();
 
-        OnClickListener(PlaylistActivity playlistActivity) {
-            this.playlistActivity = playlistActivity;
-        }
-
-        @Override
-        public void onItemClick(PlaylistEntity item) {
-            new PlaylistActivity.GetSinglePlaylistAsyncTask(this.playlistActivity, item.getId()).execute();
-        }
+        return true;
     }
 
     private void OnPlaylistRetrieved(List<PlaylistEntity> playlists) {
-        PlaylistAdapter adapter = new PlaylistAdapter(playlists);
+        List<PlaylistListItem> playlistItems = new ArrayList<>();
+        for (PlaylistEntity playlist : playlists) {
+            playlistItems.add(new PlaylistListItem(playlist));
+        }
+
+        this.mAdapter = new PlaylistListAdapter<>(playlistItems);
+
         RecyclerView playlistListView = this.findViewById(R.id.playlistList);
         playlistListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         playlistListView.setLayoutManager(layoutManager);
-        playlistListView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnClickListener(this));
+        playlistListView.setAdapter(mAdapter);
+
+        FastScroller fastScroller = this.findViewById(R.id.fast_scroller);
+
+        fastScroller.setMinimumScrollThreshold(70);
+        fastScroller.setBubbleAndHandleColor(Color.parseColor("#4DB6AC"));
+
+        this.mAdapter.setFastScroller(fastScroller);
+        this.mAdapter.setMode(SelectableAdapter.Mode.SINGLE);
+        this.mAdapter.addListener(this);
     }
 
     private void OnPlaylistLoaded(int playlistId) {

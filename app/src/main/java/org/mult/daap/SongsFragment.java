@@ -135,11 +135,11 @@ public class SongsFragment extends Fragment implements IQueueWorker, FlexibleAda
 
         this.mAdapter = new SongListAdapter<>(songItems);
 
-        RecyclerView playlistListView = this.getActivity().findViewById(R.id.music_list);
-        playlistListView.setHasFixedSize(true);
+        RecyclerView songListView = this.getActivity().findViewById(R.id.music_list);
+        songListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        playlistListView.setLayoutManager(layoutManager);
-        playlistListView.setAdapter(mAdapter);
+        songListView.setLayoutManager(layoutManager);
+        songListView.setAdapter(mAdapter);
 
         FastScroller fastScroller = this.getView().findViewById(R.id.fast_scroller);
 

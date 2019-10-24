@@ -1,5 +1,6 @@
 package org.mult.daap;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,9 @@ import android.view.ViewGroup;
 
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.db.entity.AlbumEntity;
+import org.mult.daap.lists.SongListItem;
+import org.mult.daap.lists.StringListAdapter;
+import org.mult.daap.lists.StringListItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -16,9 +20,13 @@ import java.util.List;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import eu.davidea.fastscroller.FastScroller;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.SelectableAdapter;
 
-public class AlbumsFragment extends BaseFragment {
+public class AlbumsFragment extends BaseFragment implements FlexibleAdapter.OnItemClickListener {
     private int playlistId;
+    private StringListAdapter<StringListItem> mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,40 +37,47 @@ public class AlbumsFragment extends BaseFragment {
         return inflater.inflate(R.layout.music_browser, container, false);
     }
 
-    private class OnClickListener implements RecyclerOnItemClickListener<String> {
-        private final AlbumsFragment albumsFragment;
-        private final int playlistId;
+    @Override
+    public boolean onItemClick(View view, int position) {
+        SongsFragment albumSongsFragment = new SongsFragment();
+        StringListItem listItem = this.mAdapter.getItem(position);
+        Bundle args = new Bundle();
+        args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
+        args.putString(SongsFragment.ARTIST_FILTER_KEY, null);
+        args.putString(SongsFragment.ALBUM_FILTER_KEY, listItem.getText());
+        albumSongsFragment.setArguments(args);
 
-        OnClickListener(AlbumsFragment albumsFragment, int playlistId) {
-            this.albumsFragment = albumsFragment;
-            this.playlistId = playlistId;
-        }
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.remove(this);
+        ft.add(R.id.content_frame, albumSongsFragment);
+        ft.addToBackStack(null);
+        ft.commit();
 
-        @Override
-        public void onItemClick(String album) {
-            SongsFragment albumSongsFragment = new SongsFragment();
-            Bundle args = new Bundle();
-            args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
-            args.putString(SongsFragment.ARTIST_FILTER_KEY, null);
-            args.putString(SongsFragment.ALBUM_FILTER_KEY, album);
-            albumSongsFragment.setArguments(args);
-
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-            ft.remove(this.albumsFragment);
-            ft.add(R.id.content_frame, albumSongsFragment);
-            ft.addToBackStack(null);
-            ft.commit();
-        }
+        return true;
     }
 
     private void OnItemsReceived(List<String> albums) {
-        ItemAdapter adapter = new ItemAdapter(albums);
-        RecyclerView playlistListView = this.getActivity().findViewById(R.id.music_list);
-        playlistListView.setHasFixedSize(true);
+        List<StringListItem> albumItems = new ArrayList<>();
+        for (String album : albums) {
+            albumItems.add(new StringListItem(album));
+        }
+
+        this.mAdapter = new StringListAdapter<>(albumItems);
+
+        RecyclerView albumListView = this.getActivity().findViewById(R.id.music_list);
+        albumListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        playlistListView.setLayoutManager(layoutManager);
-        playlistListView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnClickListener(this, this.playlistId));
+        albumListView.setLayoutManager(layoutManager);
+        albumListView.setAdapter(mAdapter);
+
+        FastScroller fastScroller = this.getView().findViewById(R.id.fast_scroller);
+
+        fastScroller.setMinimumScrollThreshold(70);
+        fastScroller.setBubbleAndHandleColor(Color.parseColor("#4DB6AC"));
+
+        this.mAdapter.setFastScroller(fastScroller);
+        this.mAdapter.setMode(SelectableAdapter.Mode.SINGLE);
+        this.mAdapter.addListener(this);
     }
 
     private static class GetAlbumsAsyncTask extends AsyncTask<Void, Void, List<AlbumEntity>> {

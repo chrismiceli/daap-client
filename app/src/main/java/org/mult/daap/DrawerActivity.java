@@ -56,7 +56,9 @@ public class DrawerActivity extends AppCompatActivity
         playlistsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DrawerActivity.super.finish();
+                final Intent intent = new Intent(DrawerActivity.this, PlaylistActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -68,7 +70,6 @@ public class DrawerActivity extends AppCompatActivity
         newFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, newFragment);
-        ft.addToBackStack(null);
         ft.commit();
     }
 
