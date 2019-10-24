@@ -16,7 +16,7 @@ public interface SongDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setSongs(List<SongEntity> songs);
 
-    @Query("SELECT songs.* FROM songs WHERE songs.artist = :albumFilter ORDER BY songs.artist, songs.album, songs.track")
+    @Query("SELECT songs.* FROM songs WHERE songs.album = :albumFilter ORDER BY songs.album, songs.track, songs.artist")
     List<SongEntity> loadAlbumSongs(String albumFilter);
 
     @Query("SELECT songs.* FROM songs WHERE songs.artist = :artistFilter ORDER BY songs.artist, songs.album, songs.track")

@@ -61,20 +61,26 @@ public class DatabaseHost {
         if (playlistEntity.getIsSongsRetrieved()) {
             return playlistEntity;
         } else {
-        List<Integer> songIds = host.fetchSongIdsForPlaylist(host, playlistId);
-        List<PlaylistSongEntity> playlistSongEntities = new ArrayList<>();
-        for (Integer songId : songIds) {
-            playlistSongEntities.add(new PlaylistSongEntity(playlistId, songId));
+            List<Integer> songIds = host.fetchSongIdsForPlaylist(host, playlistId);
+            List<PlaylistSongEntity> playlistSongEntities = new ArrayList<>();
+            for (Integer songId : songIds) {
+                playlistSongEntities.add(new PlaylistSongEntity(playlistId, songId));
+            }
+            playlistEntity.setIsSongsRetrieved(true);
+            playlistDao.setPlaylist(playlistEntity);
+            playlistDao.setSongsForPlaylist(playlistSongEntities);
+            return playlistEntity;
         }
-        playlistEntity.setIsSongsRetrieved(true);
-        playlistDao.setPlaylist(playlistEntity);
-        playlistDao.setSongsForPlaylist(playlistSongEntities);
-        return playlistEntity;
-    }
     }
 
-    public List<ArtistEntity> getArtistsForPlaylist(int playlistId) {
-        if(playlistId == -1) {
+    /**
+     * Retrieves the list of artists, optionally filtered to a playlist
+     *
+     * @param playlistId The playlist identifier to filter the artists to, -1 to retrieve all artists
+     * @return The list of artists
+     */
+    public List<ArtistEntity> getArtists(int playlistId) {
+        if (playlistId == -1) {
             SongDao songDao = AppDatabase.getInstance(applicationContext).songDao();
             return songDao.loadArtists();
         } else {
@@ -83,8 +89,14 @@ public class DatabaseHost {
         }
     }
 
-    public List<AlbumEntity> getAlbumsForPlaylist(int playlistId) {
-        if(playlistId == -1) {
+    /**
+     * Retrieves the list of albums, optionally filtered to a playlist
+     *
+     * @param playlistId The playlist identifier to filter the albums to, -1 to retrieve all albums
+     * @return The list of albums
+     */
+    public List<AlbumEntity> getAlbums(int playlistId) {
+        if (playlistId == -1) {
             SongDao songDao = AppDatabase.getInstance(applicationContext).songDao();
             return songDao.loadAlbums();
         } else {
@@ -94,7 +106,7 @@ public class DatabaseHost {
     }
 
     public List<SongEntity> getSongsForPlaylist(int playlistId, String artistFilter, String albumFilter) {
-        if(playlistId == -1) {
+        if (playlistId == -1) {
             SongDao songDao = AppDatabase.getInstance(applicationContext).songDao();
             if (artistFilter != null) {
                 return songDao.loadArtistSongs(artistFilter);

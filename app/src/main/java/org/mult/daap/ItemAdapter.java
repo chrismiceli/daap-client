@@ -17,11 +17,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private RecyclerOnItemClickListener<String> onItemClickListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView playlistNameTextView;
+        final TextView textView;
 
         ViewHolder(View v) {
             super(v);
-            playlistNameTextView = v.findViewById(R.id.simple_row_text);
+            textView = v.findViewById(R.id.simple_row_text);
         }
     }
 
@@ -40,7 +40,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final String listItem = this.items.get(position);
-        holder.playlistNameTextView.setText(listItem);
+        holder.textView.setText(listItem);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +48,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             }
         };
 
-        holder.playlistNameTextView.setOnClickListener(listener);
+        holder.textView.setOnClickListener(listener);
     }
 
     @Override

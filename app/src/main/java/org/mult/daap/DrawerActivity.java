@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SongsDrawerActivity extends AppCompatActivity
+public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private SearchRequestedCallback mSearchRequestedCallback;
@@ -50,10 +50,7 @@ public class SongsDrawerActivity extends AppCompatActivity
 
         this.playlistId = this.getIntent().getIntExtra(TabMain.PLAYLIST_ID_BUNDLE_KEY, -1);
 
-        Fragment newFragment = new SongsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, playlistId);
-        newFragment.setArguments(bundle);
+        Fragment newFragment = new PlaylistsFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, newFragment);
         ft.addToBackStack(null);
@@ -101,23 +98,16 @@ public class SongsDrawerActivity extends AppCompatActivity
 
         Bundle args = new Bundle();
         if (id == R.id.nav_all_songs) {
-            // TODO what to do when a playlist isn't chosen
             args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             fragment = new SongsFragment();
         } else if (id == R.id.nav_playlists) {
-            Intent intent = new Intent(this, PlaylistActivity.class);
-            startActivityForResult(intent, 1);
-            return true;
+            fragment = new PlaylistsFragment();
         } else if (id == R.id.nav_artists) {
-            // TODO what to do when a playlist isn't chosen
             args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
-            args.putInt(ItemsFragment.ITEM_MODE_KEY, ItemsFragment.ITEM_MODE_ARTIST);
-            fragment = new ItemsFragment();
+            fragment = new ArtistsFragment();
         } else if (id == R.id.nav_albums) {
-            // TODO what to do when a playlist isn't chosen
             args.putInt(TabMain.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
-            args.putInt(ItemsFragment.ITEM_MODE_KEY, ItemsFragment.ITEM_MODE_ALBUM);
-            fragment = new ItemsFragment();
+            fragment = new AlbumsFragment();
         }
 
         DrawerLayout drawer = this.findViewById(R.id.drawer_layout);

@@ -110,8 +110,8 @@ public class QueueListBrowser extends Activity {
         switch (item.getItemId()) {
             case MENU_PLAY_QUEUE:
                 Contents.setSongPosition(Contents.queue, 0);
-                MediaPlayback.clearState();
-                intent = new Intent(QueueListBrowser.this, MediaPlayback.class);
+                MediaPlaybackActivity.clearState();
+                intent = new Intent(QueueListBrowser.this, MediaPlaybackActivity.class);
                 startActivityForResult(intent, 1);
                 return true;
             case MENU_CLEAR_QUEUE:
@@ -128,9 +128,9 @@ public class QueueListBrowser extends Activity {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                 long id) {
             Contents.setSongPosition(Contents.queue, position);
-            MediaPlayback.clearState();
+            MediaPlaybackActivity.clearState();
             Intent intent = new Intent(QueueListBrowser.this,
-                    MediaPlayback.class);
+                    MediaPlaybackActivity.class);
             startActivityForResult(intent, 1);
             // Contents.playlist_position = (short) position;
         }

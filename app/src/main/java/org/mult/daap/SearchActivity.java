@@ -158,8 +158,8 @@ public class SearchActivity extends ListActivity implements Observer {
                 long id) {
             Contents.setSongPosition(Contents.songList,
                     Contents.songList.indexOf(srList.get(position)));
-            MediaPlayback.clearState();
-            Intent intent = new Intent(SearchActivity.this, MediaPlayback.class);
+            MediaPlaybackActivity.clearState();
+            Intent intent = new Intent(SearchActivity.this, MediaPlaybackActivity.class);
             startActivityForResult(intent, 1);
         }
     };
@@ -201,8 +201,8 @@ public class SearchActivity extends ListActivity implements Observer {
         switch (item.getItemId()) {
             case MENU_PLAY_QUEUE:
                 Contents.setSongPosition(Contents.queue, 0);
-                MediaPlayback.clearState();
-                intent = new Intent(SearchActivity.this, MediaPlayback.class);
+                MediaPlaybackActivity.clearState();
+                intent = new Intent(SearchActivity.this, MediaPlaybackActivity.class);
                 startActivityForResult(intent, 1);
                 return true;
             case MENU_VIEW_QUEUE:
