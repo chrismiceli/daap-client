@@ -128,6 +128,12 @@ public class DatabaseHost {
         }
     }
 
+    public List<SongEntity> getMatchingSongs(String searchFilter) {
+        SongDao songDao = AppDatabase.getInstance(applicationContext).songDao();
+        searchFilter = "%" + searchFilter + "%";
+        return songDao.loadMatchingSongs(searchFilter);
+    }
+
     public void addSongToTopOfQueueAsync(SongEntity songEntity, IQueueWorker queueWorker) {
         new SongQueueAdder(this.applicationContext, queueWorker, songEntity).execute();
     }

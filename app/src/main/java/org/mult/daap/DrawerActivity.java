@@ -45,7 +45,7 @@ public class DrawerActivity extends AppCompatActivity
 
         final DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -86,7 +86,7 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        this.getMenuInflater().inflate(R.menu.songs_drawer, menu);
+        this.getMenuInflater().inflate(R.menu.drawer_context_menu, menu);
         return true;
     }
 
@@ -97,10 +97,14 @@ public class DrawerActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, Preferences.class);
-            startActivity(intent);
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, Preferences.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_search:
+                this.onSearchRequested();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

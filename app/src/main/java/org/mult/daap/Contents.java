@@ -14,7 +14,6 @@ public class Contents {
     public static final ArrayList<String> artistNameList = new ArrayList<>();
     public static final ArrayList<String> albumNameList = new ArrayList<>();
     public static Host daapHost;
-    public static SearchThread searchResult;
     public static boolean shuffle = false;
     public static boolean repeat = false;
     private static int position = 0;

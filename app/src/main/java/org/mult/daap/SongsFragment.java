@@ -44,7 +44,6 @@ public class SongsFragment extends Fragment implements IQueueWorker, FlexibleAda
         ((DrawerActivity) getActivity()).setSearchRequestedCallback(new DrawerActivity.SearchRequestedCallback() {
             @Override
             public void onSearchRequested() {
-                Contents.searchResult = null;
                 getActivity().startSearch(null, false, null, false);
             }
         });

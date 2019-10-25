@@ -1,10 +1,5 @@
 package org.mult.daap.db.dao;
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
-
 import org.mult.daap.db.entity.AlbumEntity;
 import org.mult.daap.db.entity.ArtistEntity;
 import org.mult.daap.db.entity.PlaylistEntity;
@@ -12,6 +7,11 @@ import org.mult.daap.db.entity.PlaylistSongEntity;
 import org.mult.daap.db.entity.SongEntity;
 
 import java.util.List;
+
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 
 @Dao
 public interface PlaylistDao {
@@ -37,11 +37,11 @@ public interface PlaylistDao {
     List<AlbumEntity> loadAlbumsForPlaylist(int playlistId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-        void setPlaylists(List<PlaylistEntity> playlists);
+    void setPlaylists(List<PlaylistEntity> playlists);
 
-    @Insert(onConflict =  OnConflictStrategy.REPLACE)
-        void setPlaylist(PlaylistEntity playlist);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void setPlaylist(PlaylistEntity playlist);
 
-    @Insert(onConflict =  OnConflictStrategy.REPLACE)
-        void setSongsForPlaylist(List<PlaylistSongEntity> playlistSongEntities);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void setSongsForPlaylist(List<PlaylistSongEntity> playlistSongEntities);
 }

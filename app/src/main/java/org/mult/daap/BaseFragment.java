@@ -20,7 +20,6 @@ public abstract class BaseFragment extends Fragment {
         ((DrawerActivity) getActivity()).setSearchRequestedCallback(new DrawerActivity.SearchRequestedCallback() {
             @Override
             public void onSearchRequested() {
-                Contents.searchResult = null;
                 getActivity().startSearch(null, false, null, false);
             }
         });
