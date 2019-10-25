@@ -10,8 +10,6 @@ import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.db.entity.PlaylistEntity;
 import org.mult.daap.lists.PlaylistListAdapter;
 import org.mult.daap.lists.PlaylistListItem;
-import org.mult.daap.lists.StringListAdapter;
-import org.mult.daap.lists.StringListItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

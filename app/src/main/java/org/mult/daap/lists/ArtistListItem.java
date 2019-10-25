@@ -1,5 +1,7 @@
 package org.mult.daap.lists;
 
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -7,28 +9,28 @@ import org.mult.daap.R;
 
 import java.util.List;
 
+import androidx.appcompat.widget.PopupMenu;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.FlexibleViewHolder;
 
 /**
- * A list item for listing artists, or albums (any plain string really).
- * To use with the flexible adapter
+ * A list item for listing artists to use with the flexible adapter
  */
-public class StringListItem extends AbstractFlexibleItem<StringListItem.MyViewHolder> {
-    private final String text;
+public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHolder> {
+    private final String artist;
 
-    public StringListItem(String text) {
-        this.text = text;
+    public ArtistListItem(String artist) {
+        this.artist = artist;
     }
 
     public String getId() {
-        return String.valueOf(this.text);
+        return String.valueOf(this.artist);
     }
 
     public String getText() {
-        return this.text;
+        return this.artist;
     }
 
     /**
@@ -39,8 +41,8 @@ public class StringListItem extends AbstractFlexibleItem<StringListItem.MyViewHo
      */
     @Override
     public boolean equals(Object inObject) {
-        if (inObject instanceof StringListItem) {
-            StringListItem inItem = (StringListItem) inObject;
+        if (inObject instanceof ArtistListItem) {
+            ArtistListItem inItem = (ArtistListItem) inObject;
             return this.getId().equals(inItem.getId());
         }
         return false;
@@ -84,24 +86,40 @@ public class StringListItem extends AbstractFlexibleItem<StringListItem.MyViewHo
     public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, MyViewHolder holder,
                                int position,
                                List<Object> payloads) {
-        holder.label.setText(this.text);
+        holder.label.setText(this.artist);
 
         // text appears disabled if item is disabled
         holder.label.setEnabled(isEnabled());
     }
 
-    /**
-     * The ViewHolder used by this item.
-     * Extending from FlexibleViewHolder is recommended especially when you will use
-     * more advanced features.
-     */
     public class MyViewHolder extends FlexibleViewHolder {
-
         public TextView label;
 
         public MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             label = view.findViewById(R.id.simple_row_text);
+        }
+
+        @Override
+        public boolean onLongClick(final View view) {
+            PopupMenu popup = new PopupMenu(view.getContext(), view, Gravity.CENTER);
+            popup.inflate(R.menu.artist_popup_menu);
+            popup.show();
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.play_artist:
+                            // queue up entire artist, then start playing
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+
+            return super.onLongClick(view);
         }
     }
 }

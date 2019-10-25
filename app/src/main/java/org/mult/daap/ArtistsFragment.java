@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.db.entity.ArtistEntity;
-import org.mult.daap.lists.StringListAdapter;
-import org.mult.daap.lists.StringListItem;
+import org.mult.daap.lists.ArtistListAdapter;
+import org.mult.daap.lists.ArtistListItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -23,9 +23,9 @@ import eu.davidea.fastscroller.FastScroller;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.SelectableAdapter;
 
-public class ArtistsFragment extends BaseFragment implements FlexibleAdapter.OnItemClickListener {
+public class ArtistsFragment extends BaseFragment implements FlexibleAdapter.OnItemClickListener, FlexibleAdapter.OnItemLongClickListener {
     private int playlistId;
-    private StringListAdapter<StringListItem> mAdapter;
+    private ArtistListAdapter<ArtistListItem> mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class ArtistsFragment extends BaseFragment implements FlexibleAdapter.OnI
     @Override
     public boolean onItemClick(View view, int position) {
         SongsFragment artistSongsFragment = new SongsFragment();
-        StringListItem listItem = this.mAdapter.getItem(position);
+        ArtistListItem listItem = this.mAdapter.getItem(position);
         Bundle args = new Bundle();
         args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
         args.putString(SongsFragment.ARTIST_FILTER_KEY, listItem.getText());
@@ -55,13 +55,18 @@ public class ArtistsFragment extends BaseFragment implements FlexibleAdapter.OnI
         return true;
     }
 
+    @Override
+    public void onItemLongClick(int position) {
+        // purposefully empty, the adapter's view holder intercept's the long click
+    }
+
     private void OnItemsReceived(List<String> artists) {
-        List<StringListItem> artistItems = new ArrayList<>();
+        List<ArtistListItem> artistItems = new ArrayList<>();
         for (String artist : artists) {
-            artistItems.add(new StringListItem(artist));
+            artistItems.add(new ArtistListItem(artist));
         }
 
-        this.mAdapter = new StringListAdapter<>(artistItems);
+        this.mAdapter = new ArtistListAdapter<>(artistItems);
 
         RecyclerView artistListView = this.getActivity().findViewById(R.id.music_list);
         artistListView.setHasFixedSize(true);

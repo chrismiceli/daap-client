@@ -29,7 +29,7 @@ import eu.davidea.fastscroller.FastScroller;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.SelectableAdapter;
 
-public class SongsFragment extends Fragment implements IQueueWorker, FlexibleAdapter.OnItemClickListener {
+public class SongsFragment extends Fragment implements IQueueWorker, FlexibleAdapter.OnItemClickListener, FlexibleAdapter.OnItemLongClickListener {
     private static final int CONTEXT_QUEUE = 0;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
@@ -71,12 +71,7 @@ public class SongsFragment extends Fragment implements IQueueWorker, FlexibleAda
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(0, MENU_SEARCH, 0, getString(R.string.search)).setIcon(
-                android.R.drawable.ic_menu_search);
-        menu.add(0, MENU_PLAY_QUEUE, 0, getString(R.string.play_queue))
-                .setIcon(R.drawable.ic_menu_play);
-        menu.add(0, MENU_VIEW_QUEUE, 0, getString(R.string.view_queue))
-                .setIcon(R.drawable.ic_menu_list);
+
     }
 
     @Override
@@ -125,6 +120,11 @@ public class SongsFragment extends Fragment implements IQueueWorker, FlexibleAda
         host.addSongToTopOfQueueAsync(listItem.getSong(), this);
 
         return true;
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        // purposefully empty, the adapter's view holder intercept's the long click
     }
 
     private void OnSongsReceived(List<SongEntity> songs) {
