@@ -1,6 +1,5 @@
 package org.mult.daap;
 
-import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Host;
 import org.mult.daap.db.entity.SongEntity;
 
