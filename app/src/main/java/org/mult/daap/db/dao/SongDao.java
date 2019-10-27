@@ -16,10 +16,10 @@ public interface SongDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setSongs(List<SongEntity> songs);
 
-    @Query("SELECT songs.* FROM songs WHERE songs.album = :albumFilter ORDER BY songs.album, songs.track, songs.artist")
+    @Query("SELECT songs.* FROM songs WHERE songs.album = :albumFilter ORDER BY songs.track, songs.name")
     List<SongEntity> loadAlbumSongs(String albumFilter);
 
-    @Query("SELECT songs.* FROM songs WHERE songs.artist = :artistFilter ORDER BY songs.artist, songs.album, songs.track")
+    @Query("SELECT songs.* FROM songs WHERE songs.artist = :artistFilter ORDER BY songs.track, songs.name")
     List<SongEntity> loadArtistSongs(String artistFilter);
 
     @Query("SELECT DISTINCT songs.album FROM songs ORDER BY album ASC")

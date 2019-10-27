@@ -127,6 +127,9 @@ public class DrawerActivity extends AppCompatActivity
             args.putInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY, this.playlistId);
             fragment = new AlbumsFragment();
         }
+        else if (id == R.id.nav_queue) {
+            fragment = new QueueFragment();
+        }
 
         DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

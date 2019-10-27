@@ -16,6 +16,10 @@
             android:id="@+id/nav_albums"
             android:icon="@drawable/ic_tab_albums_selected"
             android:title="Albums" />
+        <item
+            android:id="@+id/nav_queue"
+            android:icon="@drawable/ic_menu_list"
+            android:title="Queue" />
     </group>
 
 </menu>

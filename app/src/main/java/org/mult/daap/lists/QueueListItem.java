@@ -14,6 +14,9 @@ import org.mult.daap.db.entity.SongEntity;
 import java.util.List;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -22,11 +25,13 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 /**
  * A list item for listing songs.  To use with the flexible adapter
  */
-public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder> {
+public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHolder> {
     private final SongEntity song;
+    private final Fragment fragment;
 
-    public SongListItem(SongEntity song) {
+    public QueueListItem(SongEntity song, Fragment fragment) {
         this.song = song;
+        this.fragment = fragment;
     }
 
     public String getId() {
@@ -45,8 +50,8 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
      */
     @Override
     public boolean equals(Object inObject) {
-        if (inObject instanceof SongListItem) {
-            SongListItem inItem = (SongListItem) inObject;
+        if (inObject instanceof QueueListItem) {
+            QueueListItem inItem = (QueueListItem) inObject;
             return this.getId().equals(inItem.getId());
         }
         return false;
@@ -91,8 +96,8 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
                                int position,
                                List<Object> payloads) {
         holder.label.setText(this.song.name);
-
         holder.setSong(this.song);
+        holder.setFragment(this.fragment);
 
         // text appears disabled if item is disabled
         holder.label.setEnabled(isEnabled());
@@ -104,10 +109,9 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
      * more advanced features.
      */
     public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
-
         public final TextView label;
-
         public SongEntity song;
+        private Fragment fragment;
 
         public MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
@@ -118,17 +122,21 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
             this.song = song;
         }
 
+        public void setFragment(Fragment fragment) {
+            this.fragment = fragment;
+        }
+
         @Override
         public boolean onLongClick(final View view) {
             PopupMenu popup = new PopupMenu(view.getContext(), view, Gravity.CENTER);
-            popup.inflate(R.menu.song_popup_menu);
+            popup.inflate(R.menu.queue_popup_menu);
             popup.show();
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
-                        case R.id.queue_song:
+                        case R.id.dequeue_song:
                             DatabaseHost host = new DatabaseHost(view.getContext());
                             host.toggleSongInQueue(song, MyViewHolder.this);
                             return true;
@@ -143,12 +151,18 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
 
         @Override
         public void songsAddedToQueue(List<SongEntity> songs) {
-            Toast.makeText(this.getContentView().getContext(), "Song Added To Queue", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContentView().getContext(), "Song Added To Queue", Toast.LENGTH_LONG);
+            FragmentManager fragmentManager = this.fragment.getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.detach(this.fragment).attach(this.fragment).commit();
         }
 
         @Override
         public void songsRemovedFromQueue(List<SongEntity> songs) {
-            Toast.makeText(this.getContentView().getContext(), "Song Removed From Queue", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContentView().getContext(), "Song Removed From Queue", Toast.LENGTH_LONG);
+            FragmentManager fragmentManager = this.fragment.getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.detach(this.fragment).attach(this.fragment).commit();
         }
     }
 }

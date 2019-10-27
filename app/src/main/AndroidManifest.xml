@@ -38,9 +38,6 @@
             android:label="@string/media_playback_activity"
             android:launchMode="singleTop"></activity>
         <activity
-            android:name=".QueueListBrowser"
-            android:label="@string/queue_browser_activity" />
-        <activity
             android:name=".Preferences"
             android:label="Preferences" />
         <activity

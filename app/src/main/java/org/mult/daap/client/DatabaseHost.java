@@ -1,9 +1,9 @@
 package org.mult.daap.client;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import org.mult.daap.R;
+import org.mult.daap.client.daap.SongQueueManagementTask;
 import org.mult.daap.db.AppDatabase;
 import org.mult.daap.db.dao.PlaylistDao;
 import org.mult.daap.db.dao.QueueDao;
@@ -13,11 +13,9 @@ import org.mult.daap.db.entity.AlbumEntity;
 import org.mult.daap.db.entity.ArtistEntity;
 import org.mult.daap.db.entity.PlaylistEntity;
 import org.mult.daap.db.entity.PlaylistSongEntity;
-import org.mult.daap.db.entity.QueueEntity;
 import org.mult.daap.db.entity.ServerEntity;
 import org.mult.daap.db.entity.SongEntity;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +70,16 @@ public class DatabaseHost {
             playlistDao.setSongsForPlaylist(playlistSongEntities);
             return playlistEntity;
         }
+    }
+
+
+    /**
+     * Retrieves the list of songs from the queue in order
+     * @return A list of songs
+     */
+    public List<SongEntity> getQueue() {
+        QueueDao queueDao = AppDatabase.getInstance(this.applicationContext).queueDao();
+        return queueDao.loadQueue();
     }
 
     /**
@@ -134,39 +142,19 @@ public class DatabaseHost {
         return songDao.loadMatchingSongs(searchFilter);
     }
 
-    public void addSongToTopOfQueueAsync(SongEntity songEntity, IQueueWorker queueWorker) {
-        new SongQueueAdder(this.applicationContext, queueWorker, songEntity).execute();
+    public void toggleSongInQueue(SongEntity songEntity, IQueueWorker queueWorker) {
+        new SongQueueManagementTask(this.applicationContext, queueWorker, songEntity, SongQueueManagementTask.SongQueueCommand.TOGGLE).execute();
     }
 
-    private static class SongQueueAdder extends AsyncTask<Void, Void, SongEntity> {
-        private final WeakReference<Context> contextWeakReference;
-        private final WeakReference<IQueueWorker> queueWorkerWeakReference;
-        private final SongEntity songEntity;
+    public void queueAlbum(String albumName, int playlistId, IQueueWorker queueWorker) {
+        new SongQueueManagementTask(this.applicationContext, queueWorker, playlistId, albumName, SongQueueManagementTask.ObjectTypeToQueue.ALBUM).execute();
+    }
 
-        SongQueueAdder(Context applicationContext, IQueueWorker queueWorker, SongEntity songEntity) {
-            this.contextWeakReference = new WeakReference<>(applicationContext);
-            this.queueWorkerWeakReference = new WeakReference<>(queueWorker);
-            this.songEntity = songEntity;
-        }
+    public void queueArtist(String artistName, int playlistId, IQueueWorker queueWorker) {
+        new SongQueueManagementTask(this.applicationContext, queueWorker, playlistId, artistName, SongQueueManagementTask.ObjectTypeToQueue.ARTIST).execute();
+    }
 
-        @Override
-        protected SongEntity doInBackground(Void... voids) {
-            Context applicationContext = this.contextWeakReference.get();
-            if (null != applicationContext) {
-                QueueDao queueDao = AppDatabase.getInstance(applicationContext).queueDao();
-                queueDao.add(new QueueEntity(this.songEntity.id));
-                return this.songEntity;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(SongEntity songEntity) {
-            IQueueWorker queueWorker = this.queueWorkerWeakReference.get();
-            if (null != queueWorker && null != songEntity) {
-                queueWorker.songAddedToTopOfQueue(songEntity);
-            }
-        }
+    public void pushSongTopOfQueue(SongEntity songEntity, IQueueWorker queueWorker) {
+        new SongQueueManagementTask(this.applicationContext, queueWorker, songEntity, SongQueueManagementTask.SongQueueCommand.UNSHIFT).execute();
     }
 }

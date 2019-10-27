@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.client.IQueueWorker;
 import org.mult.daap.db.entity.SongEntity;
 import org.mult.daap.lists.SongListAdapter;
 import org.mult.daap.lists.SongListItem;
@@ -24,7 +25,7 @@ import eu.davidea.fastscroller.FastScroller;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.SelectableAdapter;
 
-public class SearchActivity extends AppCompatActivity implements FlexibleAdapter.OnItemClickListener {
+public class SearchActivity extends AppCompatActivity implements FlexibleAdapter.OnItemClickListener, FlexibleAdapter.OnItemLongClickListener, IQueueWorker {
     private SongListAdapter<SongListItem> mAdapter;
 
     @Override
@@ -41,6 +42,11 @@ public class SearchActivity extends AppCompatActivity implements FlexibleAdapter
             String searchKeywords = queryIntent.getStringExtra(SearchManager.QUERY);
             new SearchActivity.GetSearchResultsAsyncTask(this, searchKeywords).execute();
         }
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        // purposefully empty, the adapter's view holder intercept's the long click
     }
 
     private void OnSongsReceived(List<SongEntity> songs) {
@@ -67,14 +73,29 @@ public class SearchActivity extends AppCompatActivity implements FlexibleAdapter
         this.mAdapter.addListener(this);
     }
 
-    public void songAddedToTopOfQueue(SongEntity songEntity) {
-        Intent intent = new Intent(this, MediaPlaybackActivity.class);
+    @Override
+    public boolean onItemClick(View view, int position) {
+        SongListItem listItem = this.mAdapter.getItem(position);
+        MediaPlaybackActivity.clearState();
+
+        // TODO don't use contents
+        Contents.song = listItem.getSong();
+
+        DatabaseHost host = new DatabaseHost(this);
+        host.pushSongTopOfQueue(listItem.getSong(), this);
+
+        return true;
+    }
+
+    public void songsAddedToQueue(List<SongEntity> songs) {
+        Intent intent = new Intent(this.getApplicationContext(), MediaPlaybackActivity.class);
         startActivityForResult(intent, 1);
     }
 
-    @Override
-    public boolean onItemClick(View view, int position) {
-        return false;
+    public void songsRemovedFromQueue(List<SongEntity> songs) {
+        // should not be able to remove/toggle a song from the fragment itself,
+        // if toggled via long press on list item, then song will be removed in the
+        // ListItem's ViewHolder
     }
 
     private static class GetSearchResultsAsyncTask extends AsyncTask<Void, Void, List<SongEntity>> {
@@ -108,84 +129,4 @@ public class SearchActivity extends AppCompatActivity implements FlexibleAdapter
             }
         }
     }
-
-//    @Override
-//    public boolean onContextItemSelected(MenuItem aItem) {
-//        AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
-//                .getMenuInfo();
-//        if (aItem.getItemId() == CONTEXT_QUEUE) {
-//            SongEntity s = Contents.songList.get(Contents.songList.indexOf(srList
-//                    .get(menuInfo.position)));
-//            if (Contents.queue.contains(s)) { // in
-//                // list
-//                Contents.queue.remove(s);
-//                Toast tst = Toast.makeText(SearchActivity.this,
-//                        getString(R.string.removed_from_queue),
-//                        Toast.LENGTH_SHORT);
-//                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-//                        tst.getYOffset() / 2);
-//                tst.show();
-//                return true;
-//            } else {
-//                if (Contents.queue.size() < 9) {
-//                    Contents.addToQueue(s);
-//                    Toast tst = Toast.makeText(SearchActivity.this,
-//                            getString(R.string.added_to_queue),
-//                            Toast.LENGTH_SHORT);
-//                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-//                            tst.getYOffset() / 2);
-//                    tst.show();
-//                } else {
-//                    Toast tst = Toast.makeText(SearchActivity.this,
-//                            getString(R.string.queue_is_full),
-//                            Toast.LENGTH_SHORT);
-//                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-//                            tst.getYOffset() / 2);
-//                    tst.show();
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        menu.add(0, MENU_PLAY_QUEUE, 0, getString(R.string.play_queue))
-//                .setIcon(R.drawable.ic_menu_play);
-//        menu.add(0, MENU_VIEW_QUEUE, 0, getString(R.string.view_queue))
-//                .setIcon(R.drawable.ic_menu_list);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//        if (Contents.queue.size() == 0) {
-//            menu.findItem(MENU_PLAY_QUEUE).setEnabled(false);
-//            menu.findItem(MENU_VIEW_QUEUE).setEnabled(false);
-//        }
-//        else {
-//            menu.findItem(MENU_PLAY_QUEUE).setEnabled(true);
-//            menu.findItem(MENU_VIEW_QUEUE).setEnabled(true);
-//        }
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        Intent intent;
-//        switch (item.getItemId()) {
-//            case MENU_PLAY_QUEUE:
-//                Contents.setSongPosition(Contents.queue, 0);
-//                MediaPlaybackActivity.clearState();
-//                intent = new Intent(SearchActivity.this, MediaPlaybackActivity.class);
-//                startActivityForResult(intent, 1);
-//                return true;
-//            case MENU_VIEW_QUEUE:
-//                intent = new Intent(SearchActivity.this, QueueListBrowser.class);
-//                startActivityForResult(intent, 1);
-//        }
-//        return false;
-//    }
 }

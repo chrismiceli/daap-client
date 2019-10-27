@@ -63,7 +63,7 @@ public class ArtistsFragment extends BaseFragment implements FlexibleAdapter.OnI
     private void OnItemsReceived(List<String> artists) {
         List<ArtistListItem> artistItems = new ArrayList<>();
         for (String artist : artists) {
-            artistItems.add(new ArtistListItem(artist));
+            artistItems.add(new ArtistListItem(artist, this.playlistId));
         }
 
         this.mAdapter = new ArtistListAdapter<>(artistItems);

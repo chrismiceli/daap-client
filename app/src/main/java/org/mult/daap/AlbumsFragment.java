@@ -63,7 +63,7 @@ public class AlbumsFragment extends BaseFragment implements FlexibleAdapter.OnIt
     private void OnItemsReceived(List<String> albums) {
         List<AlbumListItem> albumItems = new ArrayList<>();
         for (String album : albums) {
-            albumItems.add(new AlbumListItem(album));
+            albumItems.add(new AlbumListItem(album, this.playlistId));
         }
 
         this.mAdapter = new AlbumListAdapter<>(albumItems);

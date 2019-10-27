@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/queue_song"
-        android:title="Toggle Queue Song" />
+        android:id="@+id/dequeue_song"
+        android:title="Dequeue Song" />
 </menu>

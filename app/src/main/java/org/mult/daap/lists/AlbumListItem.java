@@ -9,9 +9,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.AlbumsFragment;
+import org.mult.daap.Contents;
 import org.mult.daap.DrawerActivity;
+import org.mult.daap.MediaPlaybackActivity;
 import org.mult.daap.PlaylistActivity;
 import org.mult.daap.R;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.client.IQueueWorker;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.List;
 
@@ -27,9 +32,11 @@ import eu.davidea.viewholders.FlexibleViewHolder;
  */
 public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHolder> {
     private final String albumName;
+    private final int playlistId;
 
-    public AlbumListItem(String albumName) {
+    public AlbumListItem(String albumName, int playlistId) {
         this.albumName = albumName;
+        this.playlistId = playlistId;
     }
 
     public String getId() {
@@ -40,12 +47,6 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
         return this.albumName;
     }
 
-    /**
-     * When an item is equals to another?
-     * Write your own concept of equals, mandatory to implement or use
-     * default java implementation (return this == o;) if you don't have unique IDs!
-     * This will be explained in the "Item interfaces" Wiki page.
-     */
     @Override
     public boolean equals(Object inObject) {
         if (inObject instanceof AlbumListItem) {
@@ -55,62 +56,48 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
         return false;
     }
 
-    /**
-     * You should implement also this method if equals() is implemented.
-     * This method, if implemented, has several implications that Adapter handles better:
-     * - The Hash, increases performance in big list during Update & Filter operations.
-     * - You might want to activate stable ids via Constructor for RV, if your id
-     * is unique (read more in the wiki page: "Setting Up Advanced") you will benefit
-     * of the animations also if notifyDataSetChanged() is invoked.
-     */
     @Override
     public int hashCode() {
         return this.getId().hashCode();
     }
 
-    /**
-     * For the item type we need an int value: the layoutResID is sufficient.
-     */
     @Override
     public int getLayoutRes() {
         return R.layout.simple_row_item;
     }
 
-    /**
-     * Delegates the creation of the ViewHolder to the user (AutoMap).
-     * The inflated view is already provided as well as the Adapter.
-     */
     @Override
     public MyViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
         return new MyViewHolder(view, adapter);
     }
 
-    /**
-     * The Adapter and the Payload are provided to perform and get more specific
-     * information.
-     */
     @Override
     public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, MyViewHolder holder,
                                int position,
                                List<Object> payloads) {
         holder.label.setText(this.albumName);
+        holder.setAlbumName(this.albumName);
+        holder.setPlaylistId(this.playlistId);
 
         // albumName appears disabled if item is disabled
         holder.label.setEnabled(isEnabled());
     }
 
-    /**
-     * The ViewHolder used by this item.
-     * Extending from FlexibleViewHolder is recommended especially when you will use
-     * more advanced features.
-     */
-    public class MyViewHolder extends FlexibleViewHolder {
-
+    public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
         public TextView label;
+        public String albumName;
+        public int playlistId;
 
         public MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             label = view.findViewById(R.id.simple_row_text);
+        }
+
+        public void setAlbumName(String albumName) {
+            this.albumName = albumName;
+        }
+        public void setPlaylistId(int playlistId) {
+            this.playlistId = playlistId;
         }
 
         @Override
@@ -125,6 +112,8 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
                     switch (menuItem.getItemId()) {
                         case R.id.play_album:
                             // queue up entire album, then start playing
+                            DatabaseHost host = new DatabaseHost(view.getContext());
+                            host.queueAlbum(albumName, playlistId, MyViewHolder.this);
                             return true;
                         default:
                             return false;
@@ -133,6 +122,21 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
             });
 
             return super.onLongClick(view);
+        }
+
+        @Override
+        public void songsAddedToQueue(List<SongEntity> songs) {
+            if (!songs.isEmpty()) {
+                Contents.song = songs.get(0);
+                Intent intent = new Intent(this.getContentView().getContext(), MediaPlaybackActivity.class);
+                this.getContentView().getContext().startActivity(intent);
+            }
+        }
+
+        @Override
+        public void songsRemovedFromQueue(List<SongEntity> songs) {
+            // this shouldn't be possible because you can only queue albums, not remove an album from a queue
+            Toast.makeText(this.getContentView().getContext(), "Album Removed From Queue", Toast.LENGTH_LONG).show();
         }
     }
 }

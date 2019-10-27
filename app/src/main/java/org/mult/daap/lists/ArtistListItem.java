@@ -1,11 +1,18 @@
 package org.mult.daap.lists;
 
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.mult.daap.Contents;
+import org.mult.daap.MediaPlaybackActivity;
 import org.mult.daap.R;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.client.IQueueWorker;
+import org.mult.daap.db.entity.SongEntity;
 
 import java.util.List;
 
@@ -19,18 +26,20 @@ import eu.davidea.viewholders.FlexibleViewHolder;
  * A list item for listing artists to use with the flexible adapter
  */
 public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHolder> {
-    private final String artist;
+    private final String artistName;
+    private final int playlistId;
 
-    public ArtistListItem(String artist) {
-        this.artist = artist;
+    public ArtistListItem(String artistName, int playlistId) {
+        this.artistName = artistName;
+        this.playlistId = playlistId;
     }
 
     public String getId() {
-        return String.valueOf(this.artist);
+        return String.valueOf(this.artistName);
     }
 
     public String getText() {
-        return this.artist;
+        return this.artistName;
     }
 
     /**
@@ -86,18 +95,30 @@ public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHo
     public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, MyViewHolder holder,
                                int position,
                                List<Object> payloads) {
-        holder.label.setText(this.artist);
+        holder.label.setText(this.artistName);
+        holder.setArtistName(this.artistName);
+        holder.setPlaylistId(this.playlistId);
 
         // text appears disabled if item is disabled
         holder.label.setEnabled(isEnabled());
     }
 
-    public class MyViewHolder extends FlexibleViewHolder {
+    public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
         public TextView label;
+        private String artistName;
+        private int playlistId;
 
         public MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             label = view.findViewById(R.id.simple_row_text);
+        }
+
+        public void setArtistName(String artistName) {
+            this.artistName = artistName;
+        }
+
+        public void setPlaylistId(int playlistId) {
+            this.playlistId = playlistId;
         }
 
         @Override
@@ -111,7 +132,9 @@ public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHo
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
                         case R.id.play_artist:
-                            // queue up entire artist, then start playing
+                            // queue up entire artistName, then start playing
+                            DatabaseHost host = new DatabaseHost(view.getContext());
+                            host.queueArtist(artistName, playlistId, MyViewHolder.this);
                             return true;
                         default:
                             return false;
@@ -120,6 +143,21 @@ public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHo
             });
 
             return super.onLongClick(view);
+        }
+
+        @Override
+        public void songsAddedToQueue(List<SongEntity> songs) {
+            if (!songs.isEmpty()) {
+                Contents.song = songs.get(0);
+                Intent intent = new Intent(this.getContentView().getContext(), MediaPlaybackActivity.class);
+                this.getContentView().getContext().startActivity(intent);
+            }
+        }
+
+        @Override
+        public void songsRemovedFromQueue(List<SongEntity> songs) {
+            // this shouldn't be possible because you can only queue artists, not remove an artist from a queue
+            Toast.makeText(this.getContentView().getContext(), "Artist Removed From Queue", Toast.LENGTH_LONG).show();
         }
     }
 }

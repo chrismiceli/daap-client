@@ -13,7 +13,11 @@ public class QueueEntity {
     @NonNull
     public final int songId;
 
-    public QueueEntity(int songId) {
+    @NonNull
+    public final int queueOrder;
+
+    public QueueEntity(int songId, int queueOrder) {
         this.songId = songId;
+        this.queueOrder = queueOrder;
     }
 }
