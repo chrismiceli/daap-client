@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Contents {
-    public static final ArrayList<SongEntity> songList = new ArrayList<>();
-    public static final ArrayList<SongEntity> queue = new ArrayList<>(10);
+    private static final ArrayList<SongEntity> songList = new ArrayList<>();
+    private static final ArrayList<SongEntity> queue = new ArrayList<>(10);
     private static ArrayList<SongEntity> activeList = new ArrayList<>();
-    public static final ArrayList<String> artistNameList = new ArrayList<>();
-    public static final ArrayList<String> albumNameList = new ArrayList<>();
+    private static final ArrayList<String> artistNameList = new ArrayList<>();
+    private static final ArrayList<String> albumNameList = new ArrayList<>();
     public static Host daapHost;
     public static boolean shuffle = false;
     public static boolean repeat = false;

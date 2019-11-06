@@ -7,7 +7,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 
 public class ArtistListAdapter<T extends IFlexible> extends FlexibleAdapter<T> {
-    public ArtistListAdapter(@Nullable List items) {
+    public ArtistListAdapter(@Nullable List<T> items) {
         super(items);
     }
 

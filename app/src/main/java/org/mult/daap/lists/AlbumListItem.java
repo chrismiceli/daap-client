@@ -1,6 +1,5 @@
 package org.mult.daap.lists;
 
-import android.app.Application;
 import android.content.Intent;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -8,11 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.mult.daap.AlbumsFragment;
 import org.mult.daap.Contents;
-import org.mult.daap.DrawerActivity;
 import org.mult.daap.MediaPlaybackActivity;
-import org.mult.daap.PlaylistActivity;
 import org.mult.daap.R;
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.client.IQueueWorker;
@@ -39,7 +35,7 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
         this.playlistId = playlistId;
     }
 
-    public String getId() {
+    private String getId() {
         return String.valueOf(this.albumName);
     }
 
@@ -84,19 +80,19 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
     }
 
     public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
-        public TextView label;
-        public String albumName;
-        public int playlistId;
+        final TextView label;
+        String albumName;
+        int playlistId;
 
-        public MyViewHolder(View view, FlexibleAdapter adapter) {
+        MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             label = view.findViewById(R.id.simple_row_text);
         }
 
-        public void setAlbumName(String albumName) {
+        void setAlbumName(String albumName) {
             this.albumName = albumName;
         }
-        public void setPlaylistId(int playlistId) {
+        void setPlaylistId(int playlistId) {
             this.playlistId = playlistId;
         }
 
@@ -109,15 +105,12 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.play_album:
-                            // queue up entire album, then start playing
-                            DatabaseHost host = new DatabaseHost(view.getContext());
-                            host.queueAlbum(albumName, playlistId, MyViewHolder.this);
-                            return true;
-                        default:
-                            return false;
-                    }
+                if (menuItem.getItemId() == R.id.play_album) {// queue up entire album, then start playing
+                    DatabaseHost host = new DatabaseHost(view.getContext());
+                    host.queueAlbum(albumName, playlistId, MyViewHolder.this);
+                    return true;
+                }
+                return false;
                 }
             });
 
