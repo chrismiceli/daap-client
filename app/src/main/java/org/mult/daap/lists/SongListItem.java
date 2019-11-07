@@ -29,7 +29,7 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
         this.song = song;
     }
 
-    public String getId() {
+    private String getId() {
         return String.valueOf(this.song.id);
     }
 
@@ -105,16 +105,16 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
      */
     public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
 
-        public final TextView label;
+        final TextView label;
 
-        public SongEntity song;
+        SongEntity song;
 
-        public MyViewHolder(View view, FlexibleAdapter adapter) {
+        MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             this.label = view.findViewById(R.id.simple_row_text);
         }
 
-        public void setSong(SongEntity song) {
+        void setSong(SongEntity song) {
             this.song = song;
         }
 
@@ -127,14 +127,12 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.queue_song:
-                            DatabaseHost host = new DatabaseHost(view.getContext());
-                            host.toggleSongInQueue(song, MyViewHolder.this);
-                            return true;
-                        default:
-                            return false;
+                    if (menuItem.getItemId() == R.id.queue_song) {
+                        DatabaseHost host = new DatabaseHost(view.getContext());
+                        host.toggleSongInQueue(song, MyViewHolder.this);
+                        return true;
                     }
+                    return false;
                 }
             });
 

@@ -82,9 +82,7 @@ public class SongQueueManagementTask extends AsyncTask<Void, Void, SongQueueMana
                     albumSongs = songDao.loadAlbumSongs(this.queueObject);
                 }
 
-                for (SongEntity s : albumSongs) {
-                    this.songsAddedOrRemovedFromQueue.add(s);
-                }
+                this.songsAddedOrRemovedFromQueue.addAll(albumSongs);
             } else if (this.objectType == ObjectTypeToQueue.ARTIST) {
                 List<SongEntity> artistSongs;
                 if (this.playlistId != -1) {
@@ -94,9 +92,7 @@ public class SongQueueManagementTask extends AsyncTask<Void, Void, SongQueueMana
                     artistSongs = songDao.loadAlbumSongs(this.queueObject);
                 }
 
-                for (SongEntity s : artistSongs) {
-                    this.songsAddedOrRemovedFromQueue.add(s);
-                }
+                this.songsAddedOrRemovedFromQueue.addAll(artistSongs);
             }
         }
 

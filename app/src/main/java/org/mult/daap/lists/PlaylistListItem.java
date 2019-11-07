@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import org.mult.daap.R;
 import org.mult.daap.db.entity.PlaylistEntity;
-import org.mult.daap.db.entity.SongEntity;
 
 import java.util.List;
 
@@ -98,9 +97,9 @@ public class PlaylistListItem extends AbstractFlexibleItem<PlaylistListItem.MyVi
      */
     public class MyViewHolder extends FlexibleViewHolder {
 
-        public TextView label;
+        final TextView label;
 
-        public MyViewHolder(View view, FlexibleAdapter adapter) {
+        MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             label = view.findViewById(R.id.simple_row_text);
         }

@@ -97,7 +97,7 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
     }
 
     /**
-     * Handle a change notification coming over from {@link MediaService}
+     * Handle a change notification coming over from {@link MediaPlaybackService}
      */
     public void notifyChange(MediaPlaybackService service, MediaPlaybackActivity activity, String what) {
         if (service == null)
@@ -157,11 +157,11 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
     }
 
     /**
-     * Link up various button actions using {@link PendingIntents}.
+     * Link up various button actions using {@link PendingIntent}.
      *
      * @param playerActive True if player is active in background, which means
-     *                     widget click will launch {@link StreamMediaActivity},
-     *                     otherwise we launch {@link StreamListActivity}.
+     *                     widget click will launch {@link MediaPlaybackActivity},
+     *                     otherwise we launch {@link AddServerMenu}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
         // Connect up various buttons and touch events

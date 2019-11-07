@@ -34,7 +34,7 @@ public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHold
         this.fragment = fragment;
     }
 
-    public String getId() {
+    private String getId() {
         return String.valueOf(this.song.id);
     }
 
@@ -109,20 +109,20 @@ public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHold
      * more advanced features.
      */
     public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
-        public final TextView label;
-        public SongEntity song;
+        final TextView label;
+        SongEntity song;
         private Fragment fragment;
 
-        public MyViewHolder(View view, FlexibleAdapter adapter) {
+        MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             this.label = view.findViewById(R.id.simple_row_text);
         }
 
-        public void setSong(SongEntity song) {
+        void setSong(SongEntity song) {
             this.song = song;
         }
 
-        public void setFragment(Fragment fragment) {
+        void setFragment(Fragment fragment) {
             this.fragment = fragment;
         }
 
@@ -135,14 +135,12 @@ public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHold
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.dequeue_song:
-                            DatabaseHost host = new DatabaseHost(view.getContext());
-                            host.toggleSongInQueue(song, MyViewHolder.this);
-                            return true;
-                        default:
-                            return false;
-                    }
+                if (menuItem.getItemId() == R.id.dequeue_song) {
+                    DatabaseHost host = new DatabaseHost(view.getContext());
+                    host.toggleSongInQueue(song, MyViewHolder.this);
+                    return true;
+                }
+                return false;
                 }
             });
 

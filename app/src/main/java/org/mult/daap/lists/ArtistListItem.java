@@ -34,7 +34,7 @@ public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHo
         this.playlistId = playlistId;
     }
 
-    public String getId() {
+    private String getId() {
         return String.valueOf(this.artistName);
     }
 
@@ -104,20 +104,20 @@ public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHo
     }
 
     public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
-        public TextView label;
+        final TextView label;
         private String artistName;
         private int playlistId;
 
-        public MyViewHolder(View view, FlexibleAdapter adapter) {
+        MyViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             label = view.findViewById(R.id.simple_row_text);
         }
 
-        public void setArtistName(String artistName) {
+        void setArtistName(String artistName) {
             this.artistName = artistName;
         }
 
-        public void setPlaylistId(int playlistId) {
+        void setPlaylistId(int playlistId) {
             this.playlistId = playlistId;
         }
 
@@ -130,15 +130,12 @@ public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHo
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.play_artist:
-                            // queue up entire artistName, then start playing
-                            DatabaseHost host = new DatabaseHost(view.getContext());
-                            host.queueArtist(artistName, playlistId, MyViewHolder.this);
-                            return true;
-                        default:
-                            return false;
-                    }
+                if (menuItem.getItemId() == R.id.play_artist) {// queue up entire artistName, then start playing
+                    DatabaseHost host = new DatabaseHost(view.getContext());
+                    host.queueArtist(artistName, playlistId, MyViewHolder.this);
+                    return true;
+                }
+                return false;
                 }
             });
 

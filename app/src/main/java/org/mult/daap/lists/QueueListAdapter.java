@@ -7,7 +7,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 
 public class QueueListAdapter<T extends IFlexible> extends FlexibleAdapter<T> {
-    public QueueListAdapter(@Nullable List items) {
+    public QueueListAdapter(@Nullable List<T> items) {
         super(items);
     }
 
