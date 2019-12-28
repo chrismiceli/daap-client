@@ -5,12 +5,14 @@ import android.content.Context;
 import org.mult.daap.R;
 import org.mult.daap.client.daap.SongQueueManagementTask;
 import org.mult.daap.db.AppDatabase;
+import org.mult.daap.db.dao.HistoryDao;
 import org.mult.daap.db.dao.PlaylistDao;
 import org.mult.daap.db.dao.QueueDao;
 import org.mult.daap.db.dao.ServerDao;
 import org.mult.daap.db.dao.SongDao;
 import org.mult.daap.db.entity.AlbumEntity;
 import org.mult.daap.db.entity.ArtistEntity;
+import org.mult.daap.db.entity.HistoryEntity;
 import org.mult.daap.db.entity.PlaylistEntity;
 import org.mult.daap.db.entity.PlaylistSongEntity;
 import org.mult.daap.db.entity.ServerEntity;
@@ -54,12 +56,10 @@ public class DatabaseHost {
         playlistDao.setPlaylists(playlists);
     }
 
-    public PlaylistEntity fetchSinglePlaylist(Host host, int playlistId) {
+    public void fetchSinglePlaylist(Host host, int playlistId) {
         PlaylistDao playlistDao = AppDatabase.getInstance(applicationContext).playlistDao();
         PlaylistEntity playlistEntity = playlistDao.loadPlaylist(playlistId);
-        if (playlistEntity.getIsSongsRetrieved()) {
-            return playlistEntity;
-        } else {
+        if (!playlistEntity.getIsSongsRetrieved()) {
             List<Integer> songIds = host.fetchSongIdsForPlaylist(host, playlistId);
             List<PlaylistSongEntity> playlistSongEntities = new ArrayList<>();
             for (Integer songId : songIds) {
@@ -68,7 +68,6 @@ public class DatabaseHost {
             playlistEntity.setIsSongsRetrieved(true);
             playlistDao.setPlaylist(playlistEntity);
             playlistDao.setSongsForPlaylist(playlistSongEntities);
-            return playlistEntity;
         }
     }
 
@@ -156,5 +155,24 @@ public class DatabaseHost {
 
     public void pushSongTopOfQueue(SongEntity songEntity, IQueueWorker queueWorker) {
         new SongQueueManagementTask(this.applicationContext, queueWorker, songEntity, SongQueueManagementTask.SongQueueCommand.UNSHIFT).execute();
+    }
+
+    public void addPreviousSong(SongEntity songEntity) {
+        HistoryDao historyDao = AppDatabase.getInstance(applicationContext).historyDao();
+        historyDao.addEntry(new HistoryEntity(songEntity.id));
+        historyDao.removeOldEntries();
+    }
+
+    public SongEntity getPreviousSong() {
+        AppDatabase appDatabase = AppDatabase.getInstance(applicationContext);
+        HistoryDao historyDao = appDatabase.historyDao();
+        HistoryEntity historyEntity = historyDao.getPreviousEntry();
+        if (historyEntity != null) {
+            historyDao.deleteEntry(historyEntity);
+            SongDao songDao = appDatabase.songDao();
+            return songDao.loadSongById(historyEntity.songId);
+        }
+
+        return null;
     }
 }

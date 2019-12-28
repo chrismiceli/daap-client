@@ -37,10 +37,6 @@ public class LoginManagerAsyncTask extends AsyncTask<Void, Integer, Integer> {
     protected Integer doInBackground(Void... params) {
         // login to the DAAP server, if successful server is stored in database
         try {
-            if (Contents.daapHost != null) {
-                Contents.clearLists();
-            }
-
             Contents.daapHost = new Host(this.address, this.password);
 
             try {

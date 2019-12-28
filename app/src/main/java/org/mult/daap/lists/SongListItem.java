@@ -145,7 +145,7 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
         }
 
         @Override
-        public void songsRemovedFromQueue(List<SongEntity> songs) {
+        public void songsRemovedFromQueue() {
             Toast.makeText(this.getContentView().getContext(), "Song Removed From Queue", Toast.LENGTH_LONG).show();
         }
     }

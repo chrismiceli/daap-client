@@ -1,4 +1,4 @@
-package org.mult.daap;
+package org.mult.daap.mediaplayback;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -11,6 +11,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import org.mult.daap.MediaButtonIntentReceiver;
 import org.mult.daap.widget.DAAPClientAppWidgetOneProvider;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,15 +28,15 @@ public class MediaPlaybackService extends Service {
     public static final String CMDNAME = "command";
     public static final String CMDTOGGLEPAUSE = "togglepause";
     public static final String CMDSTOP = "stop";
-    public static final String CMDPAUSE = "pause";
+    private static final String CMDPAUSE = "pause";
     public static final String CMDPREVIOUS = "previous";
     public static final String CMDNEXT = "next";
     public static final String HEADSET_CHANGE = "headset_change";
 
     public static final String TOGGLEPAUSE_ACTION = "org.mult.daap.mediaservicecommand.togglepause";
-    public static final String PAUSE_ACTION = "org.mult.daap.mediaservicecommand.pause";
+    private static final String PAUSE_ACTION = "org.mult.daap.mediaservicecommand.pause";
     public static final String NEXT_ACTION = "org.mult.daap.mediaservicecommand.next";
-    public static final String HEADSET_ACTION = "org.mult.daap.mediaservicecommand.headset";
+    private static final String HEADSET_ACTION = "org.mult.daap.mediaservicecommand.headset";
 
     public static final String TOGGLEPAUSE = "togglepause";
     public static final String STOP = "stop";

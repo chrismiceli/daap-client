@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.view.KeyEvent;
 
+import org.mult.daap.mediaplayback.MediaPlaybackService;
+
 public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
     private static long mLastClickTime = 0;

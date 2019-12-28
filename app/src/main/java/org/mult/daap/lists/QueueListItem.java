@@ -156,7 +156,7 @@ public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHold
         }
 
         @Override
-        public void songsRemovedFromQueue(List<SongEntity> songs) {
+        public void songsRemovedFromQueue() {
             Toast.makeText(this.getContentView().getContext(), "Song Removed From Queue", Toast.LENGTH_LONG);
             FragmentManager fragmentManager = this.fragment.getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

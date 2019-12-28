@@ -2,12 +2,10 @@ package org.mult.daap.db.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
 @Entity(tableName = "playlists")
 public class PlaylistEntity {
     @PrimaryKey
-    @NonNull
     private int id;
 
     private String name;
