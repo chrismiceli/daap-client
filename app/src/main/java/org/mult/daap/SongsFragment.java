@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.mult.daap.mediaplayback.MediaPlaybackActivity;
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.client.IQueueWorker;
 import org.mult.daap.db.entity.SongEntity;
@@ -19,6 +20,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import eu.davidea.fastscroller.FastScroller;
@@ -32,7 +34,18 @@ public class SongsFragment extends BaseFragment implements IQueueWorker, Flexibl
     private SongListAdapter<SongListItem> mAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public boolean onItemClick(View view, int position) {
+        SongListItem listItem = this.mAdapter.getItem(position);
+        MediaPlaybackActivity.clearState();
+
+        DatabaseHost host = new DatabaseHost(this.getContext());
+        host.pushSongTopOfQueue(listItem.getSong(), this);
+
+        return true;
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
         int playlistId = getArguments().getInt(BaseFragment.PLAYLIST_ID_BUNDLE_KEY);
@@ -42,20 +55,6 @@ public class SongsFragment extends BaseFragment implements IQueueWorker, Flexibl
         new SongsFragment.GetSongsAsyncTask(this, playlistId, artistFilter, albumFilter).execute();
 
         return inflater.inflate(R.layout.music_browser, container, false);
-    }
-
-    @Override
-    public boolean onItemClick(View view, int position) {
-        SongListItem listItem = this.mAdapter.getItem(position);
-        MediaPlaybackActivity.clearState();
-
-        // TODO don't use contents
-        Contents.song = listItem.getSong();
-
-        DatabaseHost host = new DatabaseHost(this.getContext());
-        host.pushSongTopOfQueue(listItem.getSong(), this);
-
-        return true;
     }
 
     @Override
@@ -86,8 +85,7 @@ public class SongsFragment extends BaseFragment implements IQueueWorker, Flexibl
         this.mAdapter.setMode(SelectableAdapter.Mode.SINGLE);
         this.mAdapter.addListener(this);
 
-        RecyclerView musicList = this.getActivity().findViewById(R.id.music_list);
-        musicList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+        songListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
                 menu.setHeaderTitle(getString(R.string.options));
@@ -102,7 +100,7 @@ public class SongsFragment extends BaseFragment implements IQueueWorker, Flexibl
         startActivityForResult(intent, 1);
     }
 
-    public void songsRemovedFromQueue(List<SongEntity> songs) {
+    public void songsRemovedFromQueue() {
         // should not be able to remove/toggle a song from the fragment itself,
         // if toggled via long press on list item, then song will be removed in the
         // ListItem's ViewHolder

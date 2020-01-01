@@ -27,10 +27,6 @@ public class PlaylistListItem extends AbstractFlexibleItem<PlaylistListItem.MyVi
         return String.valueOf(this.playlist.getId());
     }
 
-    public PlaylistEntity getPlaylist() {
-        return this.playlist;
-    }
-
     /**
      * When an item is equals to another?
      * Write your own concept of equals, mandatory to implement or use

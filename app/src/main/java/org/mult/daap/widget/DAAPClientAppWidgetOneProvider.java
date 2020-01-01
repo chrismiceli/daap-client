@@ -27,8 +27,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import org.mult.daap.AddServerMenu;
-import org.mult.daap.MediaPlaybackActivity;
-import org.mult.daap.MediaPlaybackService;
+import org.mult.daap.mediaplayback.MediaPlaybackActivity;
+import org.mult.daap.mediaplayback.MediaPlaybackService;
 import org.mult.daap.R;
 
 /**

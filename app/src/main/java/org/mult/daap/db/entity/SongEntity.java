@@ -1,9 +1,11 @@
 package org.mult.daap.db.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "songs")
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"}) /* needed for entity */
 public class SongEntity {
     @PrimaryKey
     public int id;
@@ -49,6 +51,8 @@ public class SongEntity {
         this.size = song.size;
     }
 
+    @Override
+    @NonNull
     public String toString() {
         return artist + (artist.length() > 0 ? " - " : "") + name;
     }

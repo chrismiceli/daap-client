@@ -51,7 +51,6 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     private JmDNSListener jmDNSListener;
     private static final int MENU_ABOUT = 0;
     private static final int MENU_DONATE = 1;
-    private static final int MENU_PREFS = 2;
     private Builder builder;
     private WrapMulticastLock fLock;
     private ServerAdapter discoveredServersListViewAdapter;
@@ -102,7 +101,6 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
         }
         if (wiFi) {
             try {
-                wiFi = true;
                 fLock = new WrapMulticastLock(wifiManager);
                 fLock.getInstance().acquire();
                 byte[] wifiAddress = intToIp(wifiManager.getDhcpInfo().ipAddress);
@@ -137,8 +135,6 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
                 R.drawable.ic_menu_about);
         menu.add(0, MENU_DONATE, 0, getString(R.string.donate)).setIcon(
                 R.drawable.ic_menu_send);
-        menu.add(0, MENU_PREFS, 0, getString(R.string.preferences)).setIcon(
-                android.R.drawable.ic_menu_preferences);
         return true;
     }
 
@@ -152,10 +148,6 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
                 builder.setMessage(getString(R.string.info));
                 builder.setPositiveButton(getString(android.R.string.ok), null);
                 builder.show();
-                return true;
-            case MENU_PREFS:
-                intent = new Intent(AddServerMenu.this, Preferences.class);
-                startActivityForResult(intent, 1);
                 return true;
             case MENU_DONATE:
                 intent = new Intent(Intent.ACTION_VIEW);
@@ -227,7 +219,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
 
         @Override
         public Object getItem(int position) {
-            if (position >= discoveredServers.size()) {
+            if (position < discoveredServers.size()) {
                 return discoveredServers.get(position);
             }
 

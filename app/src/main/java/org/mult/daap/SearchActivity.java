@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
+import org.mult.daap.mediaplayback.MediaPlaybackActivity;
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.client.IQueueWorker;
 import org.mult.daap.db.entity.SongEntity;
@@ -78,9 +79,6 @@ public class SearchActivity extends AppCompatActivity implements FlexibleAdapter
         SongListItem listItem = this.mAdapter.getItem(position);
         MediaPlaybackActivity.clearState();
 
-        // TODO don't use contents
-        Contents.song = listItem.getSong();
-
         DatabaseHost host = new DatabaseHost(this);
         host.pushSongTopOfQueue(listItem.getSong(), this);
 
@@ -92,7 +90,7 @@ public class SearchActivity extends AppCompatActivity implements FlexibleAdapter
         startActivityForResult(intent, 1);
     }
 
-    public void songsRemovedFromQueue(List<SongEntity> songs) {
+    public void songsRemovedFromQueue() {
         // should not be able to remove/toggle a song from the fragment itself,
         // if toggled via long press on list item, then song will be removed in the
         // ListItem's ViewHolder

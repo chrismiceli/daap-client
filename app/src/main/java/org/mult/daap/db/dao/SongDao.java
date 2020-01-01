@@ -31,6 +31,9 @@ public interface SongDao {
     @Query("SELECT songs.* FROM songs ORDER BY songs.name ASC")
     List<SongEntity> loadSongs();
 
+    @Query("SELECT songs.* FROM songs WHERE songs.id = :songId LIMIT 1")
+    SongEntity loadSongById(int songId);
+
     @Query("SELECT songs.* FROM songs WHERE songs.name LIKE :searchFilter OR songs.artist LIKE :searchFilter OR songs.album LIKE :searchFilter ORDER BY songs.name")
     List<SongEntity> loadMatchingSongs(String searchFilter);
 }

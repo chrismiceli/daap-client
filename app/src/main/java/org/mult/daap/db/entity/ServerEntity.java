@@ -3,7 +3,6 @@ package org.mult.daap.db.entity;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
-import android.text.TextUtils;
 
 import org.mult.daap.model.Server;
 
@@ -15,39 +14,17 @@ public class ServerEntity implements Server {
 
     private final String password;
 
-    public ServerEntity(String address, String password) {
+    public ServerEntity(@NonNull String address, String password) {
         this.address = address;
         this.password = password;
     }
 
+    @NonNull
     public String getAddress() {
         return address;
     }
 
     public String getPassword() {
         return password;
-    }
-
-    /**
-     * Retrieves the port associated with the server from the address.
-     * Defaults to 3689 if none is found
-     *
-     * @return The port associated with the server
-     */
-    public int getPort() {
-        int port = 3689;
-        if (TextUtils.isEmpty(this.getAddress())) {
-            return port;
-        }
-
-        String[] urlAddress = this.getAddress().split(":");
-
-        if (urlAddress.length == 2) { // port specified
-            port = Integer.valueOf(urlAddress[1]);
-        } else if (urlAddress.length > 2) { // ipv6
-            port = Integer.valueOf(urlAddress[urlAddress.length - 1]);
-        }
-
-        return port;
     }
 }

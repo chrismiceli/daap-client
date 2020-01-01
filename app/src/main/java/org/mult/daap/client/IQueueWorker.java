@@ -7,5 +7,5 @@ import java.util.List;
 public interface IQueueWorker {
     void songsAddedToQueue(List<SongEntity> songEntity);
 
-    void songsRemovedFromQueue(List<SongEntity> songEntity);
+    void songsRemovedFromQueue();
 }

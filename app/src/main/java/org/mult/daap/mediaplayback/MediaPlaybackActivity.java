@@ -1,4 +1,4 @@
-package org.mult.daap;
+package org.mult.daap.mediaplayback;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,7 +16,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -28,7 +27,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.preference.PreferenceManager;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
@@ -50,6 +49,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.mult.daap.Contents;
+import org.mult.daap.DrawerActivity;
+import org.mult.daap.R;
+import org.mult.daap.client.DatabaseHost;
+import org.mult.daap.client.IQueueWorker;
 import org.mult.daap.client.ISongUrlConsumer;
 import org.mult.daap.db.entity.SongEntity;
 import org.mult.daap.widget.DAAPClientAppWidgetOneProvider;
@@ -65,7 +69,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -75,15 +81,15 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
     private static final int MENU_STOP = 0;
     private static final int MENU_LIBRARY = 1;
     private static final int MENU_DOWNLOAD = 2;
-    private static final int REFRESH = 0;
-    private static final int COPYING_DIALOG = 1;
-    private static final int SUCCESS_COPYING_DIALOG = 2;
-    private static final int ERROR_COPYING_DIALOG = 3;
+    static final int REFRESH = 0;
+    static final int COPYING_DIALOG = 1;
+    static final int SUCCESS_COPYING_DIALOG = 2;
+    static final int ERROR_COPYING_DIALOG = 3;
     private static final String logTag = MediaPlayer.class.getName();
 
     private static MediaPlayer mediaPlayer;
-    private MediaPlaybackService mMediaPlaybackService = null;
-    private static SongEntity song;
+    private MediaPlaybackService mMediaPlaybackService;
+    private SongEntity song;
     private TextView mArtistName;
     private TextView mAlbumName;
     private TextView mTrackName;
@@ -102,7 +108,6 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
     private int mTextWidth = 0;
     private int mViewWidth = 0;
     private boolean mDraggingLabel = false;
-    private boolean scrobbler_support = false;
 
     private final DAAPClientAppWidgetOneProvider mAppWidgetProvider = DAAPClientAppWidgetOneProvider.getInstance();
 
@@ -133,8 +138,6 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
         mAlbumName = findViewById(R.id.albumname);
         mTrackName = findViewById(R.id.trackname);
         mSongSummary = findViewById(R.id.song_summary);
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        scrobbler_support = mPrefs.getBoolean("scrobbler_pref", false);
     }
 
     private void createNotificationChannel() {
@@ -187,20 +190,8 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
         mProgress.setSecondaryProgress(0);
         mProgress.setOnSeekBarChangeListener(mSeekListener);
         if (mediaPlayer == null) {
-            try {
-                Intent intent = getIntent(); // gets the previously created intent
-
-                // TODO pull song entity from database
-                // int songId = intent.getIntExtra("song"); // will
-
-                startSong(Contents.getSong());
-            } catch (IndexOutOfBoundsException e) {
-                Log.e(logTag, "Something went wrong with playlist/queue");
-                e.printStackTrace();
-                finish();
-            }
+            new GetNextSongAsyncTask(this, GetNextSongAsyncTask.OPERATION.NEXT).execute();
         }
-        setUpActivity();
         queueNextRefresh(refreshNow());
     }
 
@@ -231,10 +222,11 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
     }
 
     private void startSong(SongEntity song) {
+        this.song = song;
         clearState();
         mProgress.setEnabled(false);
         mediaPlayer = new MediaPlayer();
-        MediaPlaybackActivity.song = song;
+        setUpActivity(song);
         Contents.daapHost.getSongURLAsync(song, this);
     }
 
@@ -259,10 +251,6 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
             if (null != tm) {
                 tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
             }
-            setUpActivity();
-            if (scrobbler_support) {
-                scrobble(0); // START
-            }
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, R.string.media_playback_error, Toast.LENGTH_LONG).show();
@@ -270,7 +258,7 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
         }
     }
 
-    private void setUpActivity() {
+    private void setUpActivity(SongEntity song) {
         mArtistName.setText(song.artist);
         mAlbumName.setText(song.album);
         mTrackName.setText(song.name);
@@ -282,11 +270,11 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
     }
 
     public String getTrackName() {
-        return song.name;
+        return song != null ? song.name : null;
     }
 
     public String getArtistName() {
-        return song.artist;
+        return song != null ? song.artist : null;
     }
 
     public boolean isPlaying() {
@@ -353,15 +341,9 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
         public void onClick(View v) {
             if (mediaPlayer != null) {
                 if (mediaPlayer.isPlaying()) {
-                    if (scrobbler_support) {
-                        scrobble(2); // PAUSE
-                    }
                     mediaPlayer.pause();
                     stopNotification();
                 } else {
-                    if (scrobbler_support) {
-                        scrobble(1); // RESUME
-                    }
                     mediaPlayer.start();
                     startNotification();
                 }
@@ -371,12 +353,14 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
             }
         }
     };
+
     private final View.OnClickListener mPrevListener = new View.OnClickListener() {
         public void onClick(View v) {
             try {
-                startSong(Contents.getPreviousSong());
+                startPreviousSong();
                 mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
             } catch (IndexOutOfBoundsException e) {
+                // todo move into queue listener response
                 handler.removeMessages(REFRESH);
                 stopNotification();
                 clearState();
@@ -384,6 +368,7 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
             }
         }
     };
+
     private final View.OnClickListener mNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             normalOnCompletionListener.onCompletion(mediaPlayer);
@@ -430,9 +415,6 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
     @Override
     public void onDestroy() {
         handler.removeMessages(REFRESH);
-        if (scrobbler_support) {
-            scrobble(3); // COMPLETE
-        }
         super.onDestroy();
 
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
@@ -540,12 +522,12 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
 
     private final Handler handler = new CopyHandler(this);
 
-    private void queueNextRefresh(long delay) {
+    void queueNextRefresh(long delay) {
         handler.removeMessages(REFRESH);
         handler.sendEmptyMessageDelayed(REFRESH, delay);
     }
 
-    private long refreshNow() {
+    long refreshNow() {
         try {
             if (mediaPlayer == null) {
                 return 500;
@@ -741,17 +723,14 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
     private final OnCompletionListener normalOnCompletionListener = new OnCompletionListener() {
         public void onCompletion(MediaPlayer mp) {
             try {
-                if (scrobbler_support) {
-                    scrobble(3); // COMPLETE
-                }
                 if (Contents.shuffle) {
-                    startSong(Contents.getRandomSong());
+                    startRandomSong();
                 } else if (Contents.repeat) {
                     mp.seekTo(0);
                     mp.start();
                     queueNextRefresh(refreshNow());
                 } else {
-                    startSong(Contents.getNextSong());
+                    startNextSong();
                 }
             } catch (IndexOutOfBoundsException e) {
                 handler.removeMessages(REFRESH);
@@ -762,25 +741,16 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
         }
     };
 
-    private void scrobble(int code) {
-        boolean playing = code == 0 || code == 1;
-        @SuppressWarnings("SpellCheckingInspection")
-        Intent bCast = new Intent("com.adam.aslfms.notify.playstatechanged");
-        bCast.putExtra("state", code);
-        bCast.putExtra("app-name", "Daap-client");
-        bCast.putExtra("app-package", "org.mult.daap");
-        bCast.putExtra("artist", song.artist);
-        bCast.putExtra("album", song.album);
-        bCast.putExtra("track", song.name);
-        bCast.putExtra("duration", song.time / 1000);
-        sendBroadcast(bCast);
-        Intent i = new Intent("net.jjc1138.android.scrobbler.action.MUSIC_STATUS");
-        i.putExtra("playing", playing);
-        i.putExtra("artist", song.artist);
-        i.putExtra("album", song.album);
-        i.putExtra("track", song.name);
-        i.putExtra("secs", song.time / 1000);
-        sendBroadcast(i);
+    private void startPreviousSong() {
+        new GetNextSongAsyncTask(this, GetNextSongAsyncTask.OPERATION.PREVIOUS).execute();
+    }
+
+    private void startNextSong() {
+        new GetNextSongAsyncTask(this, GetNextSongAsyncTask.OPERATION.NEXT).execute();
+    }
+
+    private void startRandomSong() {
+        new GetNextSongAsyncTask(this, GetNextSongAsyncTask.OPERATION.RANDOM).execute();
     }
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -809,7 +779,7 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
             if (null != action) {
                 switch (action) {
                     case MediaPlaybackService.PREVIOUS:
-                        startSong(Contents.getPreviousSong());
+                        startPreviousSong();
                         mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                         break;
                     case MediaPlaybackService.NEXT:
@@ -820,15 +790,9 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
                     case MediaPlaybackService.PAUSE:
                         if (mediaPlayer != null) {
                             if (mediaPlayer.isPlaying()) {
-                                if (scrobbler_support) {
-                                    scrobble(2); // PAUSE
-                                }
                                 mediaPlayer.pause();
                                 stopNotification();
                             } else {
-                                if (scrobbler_support) {
-                                    scrobble(1); // RESUME
-                                }
                                 mediaPlayer.start();
                                 startNotification();
                             }
@@ -840,9 +804,6 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
                     case MediaPlaybackService.STOP:
                         if (mediaPlayer != null) {
                             if (mediaPlayer.isPlaying()) {
-                                if (scrobbler_support) {
-                                    scrobble(2); // PAUSE
-                                }
                                 mediaPlayer.pause();
                                 mediaPlayer.seekTo(0);
                                 stopNotification();
@@ -859,9 +820,6 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
                     case MediaPlaybackService.HEADSET_CHANGE:
                         if (mediaPlayer != null) {
                             if (mediaPlayer.isPlaying()) {
-                                if (scrobbler_support) {
-                                    scrobble(2); // PAUSE
-                                }
                                 mediaPlayer.pause();
                                 stopNotification();
                             }
@@ -875,33 +833,74 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
         }
     };
 
-    private static class CopyHandler extends Handler {
+    private static class GetNextSongAsyncTask extends AsyncTask<Void, Void, SongEntity> {
+        enum OPERATION {
+            NEXT,
+            PREVIOUS,
+            RANDOM
+        }
         private final WeakReference<MediaPlaybackActivity> mediaPlaybackActivityWeakReference;
+        private final OPERATION operation;
+        private static final Random random = new Random();
 
-        CopyHandler(MediaPlaybackActivity mediaPlayback) {
-            this.mediaPlaybackActivityWeakReference = new WeakReference<>(mediaPlayback);
+        GetNextSongAsyncTask(MediaPlaybackActivity mediaPlaybackActivity, OPERATION operation) {
+            this.mediaPlaybackActivityWeakReference = new WeakReference<>(mediaPlaybackActivity);
+            this.operation = operation;
         }
 
         @Override
-        public void handleMessage(Message message) {
+        protected SongEntity doInBackground(Void... voids) {
+            SongEntity result = null;
             MediaPlaybackActivity mediaPlaybackActivity = this.mediaPlaybackActivityWeakReference.get();
-            if (mediaPlaybackActivity != null) {
-                switch (message.what) {
-                    case REFRESH:
-                        mediaPlaybackActivity.queueNextRefresh(mediaPlaybackActivity.refreshNow());
-                        break;
-                    case COPYING_DIALOG:
-                        mediaPlaybackActivity.dismissDialog(COPYING_DIALOG);
-                        break;
-                    case SUCCESS_COPYING_DIALOG:
-                        mediaPlaybackActivity.showDialog(SUCCESS_COPYING_DIALOG);
-                        break;
-                    case ERROR_COPYING_DIALOG:
-                        mediaPlaybackActivity.showDialog(ERROR_COPYING_DIALOG);
-                        break;
+            if (mediaPlaybackActivity != null && !mediaPlaybackActivity.isFinishing()) {
+                DatabaseHost databaseHost = new DatabaseHost(mediaPlaybackActivity.getApplicationContext());
+                if (mediaPlaybackActivity.song != null) {
+                    databaseHost.addPreviousSong(mediaPlaybackActivity.song);
+                }
+                if (this.operation == OPERATION.NEXT || this.operation == OPERATION.RANDOM) {
+                    List<SongEntity> queue = databaseHost.getQueue();
+                    if (!queue.isEmpty()) {
+                        if (this.operation == OPERATION.NEXT) {
+                            result = queue.get(0);
+                        }
+                        else {
+                            result = queue.get(random.nextInt(queue.size()));
+                        }
+                        databaseHost.toggleSongInQueue(result, new IQueueWorker() {
+                            @Override
+                            public void songsAddedToQueue(List<SongEntity> songEntity) {
+                                // do nothing;
+                            }
+
+                            @Override
+                            public void songsRemovedFromQueue() {
+                                // do nothing;
+                            }
+                        });
+                    }
+                } else {
+                    result = databaseHost.getPreviousSong();
                 }
             }
+
+            return result;
         }
+
+        @Override
+        protected void onPostExecute(SongEntity song) {
+            super.onPostExecute(song);
+
+            MediaPlaybackActivity mediaPlaybackActivity = this.mediaPlaybackActivityWeakReference.get();
+            if (mediaPlaybackActivity != null && !mediaPlaybackActivity.isFinishing()) {
+                mediaPlaybackActivity.onNextSongReceived(song);
+            }
+        }
+    }
+
+    private void onNextSongReceived(SongEntity nextSong)
+    {
+        startSong(nextSong);
+        mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
     }
 
     private static class LastFMGetSongInfo extends AsyncTask<SongEntity, Void, String> {

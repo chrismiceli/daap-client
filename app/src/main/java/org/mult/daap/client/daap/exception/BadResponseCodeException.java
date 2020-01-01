@@ -1,7 +1,6 @@
 /*
  * Created on Aug 10, 2004
  *
-  * Window - Preferences - Java - Code Style - Code Templates
  */
 package org.mult.daap.client.daap.exception;
 

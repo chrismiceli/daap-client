@@ -7,8 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.mult.daap.Contents;
-import org.mult.daap.MediaPlaybackActivity;
+import org.mult.daap.mediaplayback.MediaPlaybackActivity;
 import org.mult.daap.R;
 import org.mult.daap.client.DatabaseHost;
 import org.mult.daap.client.IQueueWorker;
@@ -120,14 +119,13 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
         @Override
         public void songsAddedToQueue(List<SongEntity> songs) {
             if (!songs.isEmpty()) {
-                Contents.song = songs.get(0);
                 Intent intent = new Intent(this.getContentView().getContext(), MediaPlaybackActivity.class);
                 this.getContentView().getContext().startActivity(intent);
             }
         }
 
         @Override
-        public void songsRemovedFromQueue(List<SongEntity> songs) {
+        public void songsRemovedFromQueue() {
             // this shouldn't be possible because you can only queue albums, not remove an album from a queue
             Toast.makeText(this.getContentView().getContext(), "Album Removed From Queue", Toast.LENGTH_LONG).show();
         }

@@ -103,7 +103,7 @@ public class SongQueueManagementTask extends AsyncTask<Void, Void, SongQueueMana
             // otherwise, add the song to the end of the queue
             if (this.command == SongQueueCommand.TOGGLE) {
                 // should only be able to toggle queuing a specific song and not
-                // an entire album/artist
+                //                // an entire album/artist
                 QueueEntity songInQueue = queueDao.getSongQueueId(song.id);
                 if (songInQueue != null) {
                     songQueueResult = SongQueueResult.REMOVED;
@@ -134,7 +134,7 @@ public class SongQueueManagementTask extends AsyncTask<Void, Void, SongQueueMana
             if (songQueueResult == SongQueueResult.ADDED) {
                 queueWorker.songsAddedToQueue(this.songsAddedOrRemovedFromQueue);
             } else if (songQueueResult == SongQueueResult.REMOVED) {
-                queueWorker.songsRemovedFromQueue(this.songsAddedOrRemovedFromQueue);
+                queueWorker.songsRemovedFromQueue();
             }
         }
     }

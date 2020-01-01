@@ -97,14 +97,9 @@ public class DrawerActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.action_settings:
-                Intent intent = new Intent(this, Preferences.class);
-                startActivity(intent);
-                return true;
-            case R.id.action_search:
-                this.onSearchRequested();
-                return true;
+        if (id == R.id.action_search) {
+            this.onSearchRequested();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
