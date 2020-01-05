@@ -149,7 +149,8 @@ public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHold
 
         @Override
         public void songsAddedToQueue(List<SongEntity> songs) {
-            Toast.makeText(this.getContentView().getContext(), "Song Added To Queue", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this.getContentView().getContext(), "Song Added To Queue", Toast.LENGTH_LONG);
+            toast.show();
             FragmentManager fragmentManager = this.fragment.getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.detach(this.fragment).attach(this.fragment).commit();
@@ -157,7 +158,8 @@ public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHold
 
         @Override
         public void songsRemovedFromQueue() {
-            Toast.makeText(this.getContentView().getContext(), "Song Removed From Queue", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this.getContentView().getContext(), "Song Removed From Queue", Toast.LENGTH_LONG);
+            toast.show();
             FragmentManager fragmentManager = this.fragment.getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.detach(this.fragment).attach(this.fragment).commit();

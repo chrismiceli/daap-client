@@ -19,22 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private SearchRequestedCallback mSearchRequestedCallback;
-
     private int playlistId;
-
-    public void setSearchRequestedCallback(SearchRequestedCallback callback) {
-        mSearchRequestedCallback = callback;
-    }
-
-    public SearchRequestedCallback getSearchRequestedCallback() {
-        return mSearchRequestedCallback;
-    }
-
-    public interface SearchRequestedCallback {
-        void onSearchRequested();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

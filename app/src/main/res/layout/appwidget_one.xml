@@ -52,7 +52,8 @@
     <ImageView
         android:layout_width="1dip"
         android:layout_height="fill_parent"
-        android:background="@drawable/appwidget_divider" />
+        android:background="@drawable/appwidget_divider"
+        android:importantForAccessibility="no" />
 
     <ImageButton
         android:id="@+id/control_play"
@@ -60,13 +61,15 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:background="@drawable/appwidget_button_center"
+        android:contentDescription="@string/play_or_pause_media"
         android:scaleType="center"
         android:src="@drawable/ic_appwidget_music_play" />
 
     <ImageView
         android:layout_width="1dip"
         android:layout_height="fill_parent"
-        android:background="@drawable/appwidget_divider" />
+        android:background="@drawable/appwidget_divider"
+        android:importantForAccessibility="no" />
 
     <ImageButton
         android:id="@+id/control_next"
@@ -74,6 +77,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:background="@drawable/appwidget_button_right"
+        android:contentDescription="@string/next_song"
         android:scaleType="center"
         android:src="@drawable/ic_appwidget_music_next" />
 

@@ -149,6 +149,7 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
+            channel.setSound(null, null);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -581,7 +582,8 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
                         .setSmallIcon(R.drawable.stat_notify_musicplayer)
                         .setContentTitle(song.name)
                         .setContentText(song.artist)
-                        .setSmallIcon(R.drawable.stat_notify_musicplayer);
+                        .setSmallIcon(R.drawable.stat_notify_musicplayer)
+                        .setSound(null);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
         Intent resultIntent = new Intent(this, MediaPlaybackActivity.class);
@@ -899,7 +901,9 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
 
     private void onNextSongReceived(SongEntity nextSong)
     {
-        startSong(nextSong);
+        if (nextSong != null) {
+            startSong(nextSong);
+        }
         mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlaybackActivity.this, MediaPlaybackService.PLAYSTATE_CHANGED);
     }
 

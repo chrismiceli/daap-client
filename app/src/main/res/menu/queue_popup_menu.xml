@@ -2,5 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/dequeue_song"
-        android:title="Dequeue Song" />
+        android:title="@string/dequeue_song" />
 </menu>

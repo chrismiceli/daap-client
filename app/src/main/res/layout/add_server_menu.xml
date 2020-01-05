@@ -33,6 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dip"
+                    android:labelFor="@+id/serverUrlText"
                     android:text="@string/url_description"
                     android:textSize="24sp" />
 
@@ -47,6 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dip"
                         android:layout_weight="1"
+                        android:importantForAutofill="no"
                         android:inputType="textUri"
                         android:singleLine="true" />
 
@@ -55,10 +57,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dip"
+                        android:hint="@string/daap_server_port"
+                        android:importantForAutofill="no"
                         android:inputType="number"
                         android:minEms="3"
                         android:singleLine="true"
-                        android:text="3689" />
+                        android:text="@string/daap_default_port" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -79,6 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dip"
+                    android:labelFor="@+id/serverPasswordText"
                     android:state_enabled="false"
                     android:text="@string/password" />
 
@@ -88,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dip"
                     android:layout_marginEnd="20dip"
+                    android:autofillHints="password"
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:textSize="20sp" />
@@ -135,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5sp"
-                android:text="Discovered servers:"
+                android:text="@string/discovered_servers"
                 android:textSize="24sp" />
 
             <ProgressBar

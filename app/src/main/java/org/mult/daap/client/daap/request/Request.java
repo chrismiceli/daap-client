@@ -28,8 +28,6 @@ abstract class Request {
 
     abstract protected String getRequestString();
 
-    abstract public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException;
-
     void query() throws BadResponseCodeException,
             PasswordFailedException, IOException {
         query(false);

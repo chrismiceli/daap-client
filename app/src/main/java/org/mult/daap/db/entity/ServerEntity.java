@@ -4,10 +4,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
-import org.mult.daap.model.Server;
-
 @Entity(tableName = "servers")
-public class ServerEntity implements Server {
+public class ServerEntity {
     @PrimaryKey
     @NonNull
     private final String address;

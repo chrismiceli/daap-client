@@ -36,4 +36,24 @@
     <string name="navigation_drawer_open">Open Drawer</string>
     <string name="navigation_drawer_close">Close Drawer</string>
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">DAAP Server Port</string>
+    <string name="daap_default_port">3689</string>
+    <string name="discovered_servers">Discovered servers:</string>
+    <string name="play_album">Play Album</string>
+    <string name="play_artist">Play Artist</string>
+    <string name="search">Search</string>
+    <string name="playlists">Playlists</string>
+    <string name="artists">Artists</string>
+    <string name="albums">Albums</string>
+    <string name="queue">Queue</string>
+    <string name="dequeue_song">Dequeue Song</string>
+    <string name="toggle_song_queue">Toggle Queue Song</string>
+    <string name="next_song">Next song</string>
+    <string name="previous_song">Previous song</string>
+    <string name="play_or_pause_media">Play or pause media</string>
+    <string name="artist">Artist</string>
+    <string name="album">Album</string>
+    <string name="song">Song</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="repeat">Repeat</string>
 </resources>

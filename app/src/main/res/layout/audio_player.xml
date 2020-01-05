@@ -31,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dip"
+            android:contentDescription="@string/artist"
             android:src="@drawable/ic_mp_artist_playback" />
 
         <TextView
@@ -59,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dip"
+            android:contentDescription="@string/album"
             android:src="@drawable/ic_mp_album_playback" />
 
         <TextView
@@ -85,6 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dip"
+            android:contentDescription="@string/song"
             android:src="@drawable/ic_mp_song_playback" />
 
         <TextView
@@ -109,12 +112,14 @@
             android:id="@+id/shuffleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/shuffle"
             android:src="@drawable/ic_menu_shuffle" />
 
         <ImageButton
             android:id="@+id/repeatButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/repeat"
             android:src="@drawable/ic_menu_repeat" />
     </LinearLayout>
 
@@ -164,15 +169,18 @@
 
             <ImageButton
                 android:id="@+id/prev"
-                style="@android:style/MediaButton.Previous" />
+                style="@android:style/MediaButton.Previous"
+                android:contentDescription="@string/previous_song" />
 
             <ImageButton
                 android:id="@+id/pause"
-                style="@android:style/MediaButton.Play" />
+                style="@android:style/MediaButton.Play"
+                android:contentDescription="@string/play_or_pause_media" />
 
             <ImageButton
                 android:id="@+id/next"
-                style="@android:style/MediaButton.Next" />
+                style="@android:style/MediaButton.Next"
+                android:contentDescription="@string/next_song" />
         </LinearLayout>
 
         <TextView
