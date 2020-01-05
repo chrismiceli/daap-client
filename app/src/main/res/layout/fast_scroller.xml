@@ -1,14 +1,13 @@
-<eu.davidea.fastscroller.FastScroller
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<eu.davidea.fastscroller.FastScroller xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fast_scroller"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    app:fastScrollerAutoHideEnabled="true"
     app:fastScrollerAutoHideDelayInMillis="750"
-    app:fastScrollerBubblePosition="adjacent"
+    app:fastScrollerAutoHideEnabled="true"
     app:fastScrollerBubbleEnabled="true"
+    app:fastScrollerBubblePosition="adjacent"
     app:fastScrollerHandleAlwaysVisible="false"
     app:fastScrollerIgnoreTouchesOutsideHandle="false"
-    tools:visibility="visible"/>
+    tools:visibility="visible" />
