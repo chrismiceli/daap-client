@@ -6,12 +6,14 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/simple_row_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

@@ -2,5 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/queue_song"
-        android:title="Toggle Queue Song" />
+        android:title="@string/toggle_song_queue" />
 </menu>

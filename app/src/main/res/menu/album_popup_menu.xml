@@ -2,5 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/play_album"
-        android:title="Play Album" />
+        android:title="@string/play_album" />
 </menu>

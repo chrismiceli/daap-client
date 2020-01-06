@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,9 +14,7 @@
 -->
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/appwidget_one"
     android:minWidth="294dip"
     android:minHeight="72dip"
-    android:updatePeriodMillis="0"
-    android:initialLayout="@layout/appwidget_one"
-    >
-</appwidget-provider>
+    android:updatePeriodMillis="0" />

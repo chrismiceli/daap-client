@@ -7,19 +7,19 @@
         <item
             android:id="@+id/nav_all_songs"
             android:icon="@drawable/ic_tab_songs_selected"
-            android:title="All Songs" />
+            android:title="@string/all_songs" />
         <item
             android:id="@+id/nav_artists"
             android:icon="@drawable/ic_tab_artists_selected"
-            android:title="Artists" />
+            android:title="@string/artists" />
         <item
             android:id="@+id/nav_albums"
             android:icon="@drawable/ic_tab_albums_selected"
-            android:title="Albums" />
+            android:title="@string/albums" />
         <item
             android:id="@+id/nav_queue"
             android:icon="@drawable/ic_menu_list"
-            android:title="Queue" />
+            android:title="@string/queue" />
     </group>
 
 </menu>

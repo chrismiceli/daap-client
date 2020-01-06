@@ -19,5 +19,6 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <include layout="@layout/add_server_menu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -17,7 +17,6 @@ public class DatabasesRequest extends Request {
         super(daapHost);
     }
 
-    @Override
     public void Execute() throws BadResponseCodeException, PasswordFailedException, IOException {
         query();
         byte[] data = readResponse();
