@@ -30,4 +30,23 @@
     <string name="media_playback_service_desc">Сервис поддержки виджета</string>
     <string name="widget_one_initial_text">Нажмите, чтобы выбрать источник.</string>
     <string name="widget_one_track_info_unavailable">Информация недоступна</string>
+    <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="album">альбом</string>
+    <string name="albums">альбомы</string>
+    <string name="artist">исполнитель</string>
+    <string name="artists">исполнители</string>
+    <string name="daap_server_port">порт сервера daap</string>
+    <string name="dequeue_song">добавить в очередь</string>
+    <string name="discovered_servers">обнаруженные серверы</string>
+    <string name="navigation_drawer_close">закрыть ящик</string>
+    <string name="navigation_drawer_open">открыть ящик</string>
+    <string name="next_song">Дaлee</string>
+    <string name="play_or_pause_media">играть или пауза</string>
+    <string name="playlists">плейлист</string>
+    <string name="previous_song">haзaд</string>
+    <string name="repeat">повторять</string>
+    <string name="search">поиск</string>
+    <string name="shuffle">шаркать</string>
+    <string name="title_activity_playlist">плейлист</string>
 </resources>
