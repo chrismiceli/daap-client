@@ -26,5 +26,20 @@
     <string name="search_label">Cerca etichette</string>
     <string name="save">Salva</string>
     <string name="save_complete">File salvato in </string>
+    <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="album">Album</string>
+    <string name="albums">Album</string>
+    <string name="artists">Artisti</string>
+    <string name="artist">Artista</string>
+    <string name="menu_library">Libreria</string>
+    <string name="next_song">Successivo</string>
+    <string name="play_or_pause_media">Play o pausa</string>
+    <string name="playlists">Playlist</string>
+    <string name="previous_song">Precedente</string>
+    <string name="repeat">Ripeti</string>
+    <string name="search">Cerca</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="title_activity_playlist">Playlist</string>
 
 </resources>

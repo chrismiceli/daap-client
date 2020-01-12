@@ -28,4 +28,6 @@
     <string name="search_label">라벨을 찾습니다</string>
     <string name="save">저장</string>
     <string name="save_complete">파일을 저장했습니다 </string>
+    <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
 </resources>
