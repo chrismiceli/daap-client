@@ -27,5 +27,19 @@
     <string name="search_label">Rechercher des titres</string>
     <string name="save">Télécharger</string>
     <string name="save_complete">Sauvegarde musique à </string>
+    <string name="daap_default_port">3689</string>
+    <string name="search">Rechercher</string>
+    <string name="repeat">Répéter</string>
+    <string name="title_activity_playlist">Playlist</string>
+    <string name="shuffle">Aléatoire</string>
+    <string name="playlists">Playlists</string>
+    <string name="play_or_pause_media">Lire ou pause</string>
+    <string name="next_song">Suivant</string>
+    <string name="previous_song">Précédent</string>
+    <string name="albums">Albums</string>
+    <string name="artists">Artistes</string>
+    <string name="artist">Artiste</string>
+    <string name="album">Album</string>
+    <string name="menu_library">Bibliothèque</string>
 
 </resources>

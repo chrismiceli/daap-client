@@ -28,5 +28,6 @@
     <string name="search_label">Søg Label</string>
     <string name="save">Gæm</string>
     <string name="save_complete">Gemte filen til </string>
+    <string name="daap_default_port">3689</string>
 
 </resources>

@@ -27,4 +27,6 @@
     <string name="search_label">Rótulo da pesquisa</string>
     <string name="save">Salvar</string>
     <string name="save_complete">Arquivo salvo para </string>
+    <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
 </resources>

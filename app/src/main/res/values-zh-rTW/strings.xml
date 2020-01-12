@@ -27,6 +27,7 @@
     <string name="search_label">搜尋標籤</string>
     <string name="save">儲存檔案</string>
     <string name="save_complete">儲存檔案檔案到 </string>
+    <string name="daap_default_port">3689</string>
 </resources>
 
 
