@@ -14,20 +14,45 @@
     <string name="password">密碼</string>
     <string name="error_title">錯誤!</string>
     <string name="add_or_remove_from_queue">從清單中新增或移除</string>
-    <string name="add_server_error_message">請確保正確填寫所有欄位。
-        </string>
+    <string name="add_server_error_message">請確保正確填寫所有欄位。</string>
     <string name="add_server">新增伺服器</string>
     <string name="media_playback_activity">DAAP - 媒體播放機</string>
     <string name="media_playback_error">播放歌曲時發生錯誤, 請再試一次。</string>
     <string name="options">選項</string>
     <string name="unable_to_connect">無法連線!</string>
-    <string name="connecting_detail">請耐心等待，因為這可能需要一些時間。
-        </string>
+    <string name="connecting_detail">請耐心等待，因為這可能需要一些時間。</string>
     <string name="search_hint">搜尋歌曲</string>
     <string name="search_label">搜尋標籤</string>
     <string name="save">儲存檔案</string>
-    <string name="save_complete">儲存檔案檔案到 </string>
+    <string name="downloading_file">下載中…</string>
+    <string name="save_complete">儲存檔案檔案到</string>
+    <string name="save_error">保存文件時出錯</string>
+    <string name="title_activity_playlist">歌單</string>
+    <string name="menu_library">數據庫</string>
+    <string name="media_playback_service_desc">"守護進程用於接受應用微件的命令"</string>
+    <string name="widget_one_initial_text">"按按鈕選媒體。"</string>
+    <string name="widget_one_track_info_unavailable">"沒有歌曲的信息"</string>
+    <string name="navigation_drawer_open">打開抽屜</string>
+    <string name="navigation_drawer_close">關閉抽屜</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">DAAP的通訊埠</string>
     <string name="daap_default_port">3689</string>
+    <string name="discovered_servers">發現的服務器：</string>
+    <string name="play_album">播放專輯</string>
+    <string name="play_artist">播放歌手</string>
+    <string name="search">尋找</string>
+    <string name="playlists">歌單</string>
+    <string name="artists">歌手</string>
+    <string name="albums">專輯</string>
+    <string name="queue">播放隊列</string>
+    <string name="dequeue_song">出列歌曲</string>
+    <string name="toggle_song_queue">插入或者出列歌曲</string>
+    <string name="next_song">夏一首歌</string>
+    <string name="previous_song">上一首歌</string>
+    <string name="play_or_pause_media">播放或者暫停媒體</string>
+    <string name="artist">歌手</string>
+    <string name="album">專輯</string>
+    <string name="song">歌曲</string>
+    <string name="shuffle">隨機</string>
+    <string name="repeat">循環</string>
 </resources>
-
-
