@@ -41,5 +41,21 @@
     <string name="artist">Artiste</string>
     <string name="album">Album</string>
     <string name="menu_library">Bibliothèque</string>
+    <string name="daap_server_port">Port du serveur DAAP</string>
+    <string name="discovered_servers">Serveurs Découverts:</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="song">Chanson</string>
+    <string name="play_album">Lire L\'album</string>
+    <string name="play_artist">Lire L\'artiste</string>
+    <string name="downloading_file">Télécharger la chanson…</string>
+    <string name="media_playback_service_desc">Service utilisé pour gérer les actions des widgets</string>
+    <string name="navigation_drawer_open">Ouvrir le tiroir</string>
+    <string name="navigation_drawer_close">Fermez le tiroir</string>
+    <string name="queue">Queue</string>
+    <string name="save_error">Erreur lors du téléchargement de la chanson</string>
+    <string name="toggle_song_queue">basculer la chanson en queue</string>
+    <string name="widget_one_initial_text">Toucher pour sélectionner le média</string>
+    <string name="widget_one_track_info_unavailable">Informations de suivi non disponibles</string>
+    <string name="dequeue_song">Retirer la chanson</string>
 
 </resources>
