@@ -32,4 +32,27 @@
     <string name="widget_one_initial_text">"Meediumi valimiseks puuduta."</string>
     <string name="widget_one_track_info_unavailable">"Loo kohta pole infot"</string>
     <string name="daap_default_port">3689</string>
+    <string name="album">Album</string>
+    <string name="albums">Albumid</string>
+    <string name="artist">Kunstnik</string>
+    <string name="artists">Kunstnikud</string>
+    <string name="daap_server_port">DAAP serveri port</string>
+    <string name="dequeue_song">Eemalda Laul</string>
+    <string name="discovered_servers">Avastatud serverid</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="navigation_drawer_close">Sulge</string>
+    <string name="navigation_drawer_open">Avatud</string>
+    <string name="next_song">Järgmine</string>
+    <string name="play_album">Esita lugusid albumis</string>
+    <string name="play_artist">Esitage artisti laule</string>
+    <string name="play_or_pause_media">esita või peata lugu</string>
+    <string name="playlists">Esitusloendid</string>
+    <string name="previous_song">Eelmine</string>
+    <string name="queue">Järjekord</string>
+    <string name="repeat">Korda</string>
+    <string name="search">Otsing</string>
+    <string name="shuffle">Juhuslik</string>
+    <string name="song">Laul</string>
+    <string name="title_activity_playlist">Esitusloend</string>
+    <string name="toggle_song_queue">Sisse või välja lülitada</string>
 </resources>
