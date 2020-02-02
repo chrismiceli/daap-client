@@ -41,5 +41,20 @@
     <string name="search">Cerca</string>
     <string name="shuffle">Shuffle</string>
     <string name="title_activity_playlist">Playlist</string>
+    <string name="daap_server_port">Porta del server di DAAP</string>
+    <string name="dequeue_song">Rimuovi dalla coda</string>
+    <string name="discovered_servers">Trovato server</string>
+    <string name="downloading_file">Salvataggio della canzone…</string>
+    <string name="media_playback_service_desc">Servizio utilizzato per gestire le azioni dei widget</string>
+    <string name="navigation_drawer_close">Chiuso</string>
+    <string name="navigation_drawer_open">Aperto</string>
+    <string name="play_album">Riproduci album</string>
+    <string name="play_artist">Riproduci artista</string>
+    <string name="queue">Coda</string>
+    <string name="save_error">Errore durante la il salvataggio</string>
+    <string name="song">Canzone</string>
+    <string name="toggle_song_queue">Attiva / disattiva la canzone in coda</string>
+    <string name="widget_one_initial_text">Toccare per selezionare media</string>
+    <string name="widget_one_track_info_unavailable">Nessuna informazione sulla traccia disponibile</string>
 
 </resources>
