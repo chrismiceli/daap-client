@@ -54,5 +54,5 @@
     <string name="shuffle">Aleatorio</string>
     <string name="toggle_song_queue">Tlternar la canción en la cola</string>
     <string name="previous_song">Anterior</string>
-    <string name="dequeue_song">Añadir a la cola</string>
+    <string name="dequeue_song">Eliminar  a la cola</string>
 </resources>
