@@ -29,5 +29,34 @@
     <string name="save">Gæm</string>
     <string name="save_complete">Gemte filen til </string>
     <string name="daap_default_port">3689</string>
+    <string name="album">Album</string>
+    <string name="albums">Albums</string>
+    <string name="artists">kunstnere</string>
+    <string name="artist">kunstner</string>
+    <string name="daap_server_port">DAAP Server Port</string>
+    <string name="dequeue_song">fjern sang fra køen</string>
+    <string name="discovered_servers">fundne servere:</string>
+    <string name="downloading_file">gemme sang…</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="media_playback_service_desc">Tjeneste, der bruges til at håndtere widget-handlinger</string>
+    <string name="menu_library">bibliotek</string>
+    <string name="navigation_drawer_close">tæt</string>
+    <string name="navigation_drawer_open">åben</string>
+    <string name="next_song">Næste</string>
+    <string name="play_album">afspil sange i album</string>
+    <string name="play_artist">spille sange af kunstner</string>
+    <string name="play_or_pause_media">Afspil eller sæt medier på pause</string>
+    <string name="playlists">afspilningslister</string>
+    <string name="previous_song">Tidligere</string>
+    <string name="queue">kø</string>
+    <string name="repeat">gentage</string>
+    <string name="save_error">fejl ved lagring af sang</string>
+    <string name="search">Søg</string>
+    <string name="shuffle">tilfældig</string>
+    <string name="song">sang</string>
+    <string name="title_activity_playlist">afspilningsliste</string>
+    <string name="toggle_song_queue">tilføj eller fjern sang i køen</string>
+    <string name="widget_one_initial_text">Tryk for at vælge medie.</string>
+    <string name="widget_one_track_info_unavailable">Ingen sporinformation tilgængelig</string>
 
 </resources>
