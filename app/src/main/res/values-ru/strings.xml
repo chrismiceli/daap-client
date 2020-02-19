@@ -49,4 +49,9 @@
     <string name="search">поиск</string>
     <string name="shuffle">шаркать</string>
     <string name="title_activity_playlist">плейлист</string>
+    <string name="play_album">Воспроизвести альбом</string>
+    <string name="play_artist">Исполнитель</string>
+    <string name="queue">очередь</string>
+    <string name="song">песня</string>
+    <string name="toggle_song_queue">добавить или удалить песню из очереди</string>
 </resources>

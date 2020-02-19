@@ -35,4 +35,26 @@
     <string name="widget_one_track_info_unavailable">"Ingen informasjon om sporet er tilgjengelig"</string>
     <string name="daap_default_port">3689</string>
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="album">Album</string>
+    <string name="albums">album</string>
+    <string name="artist">Kunstner</string>
+    <string name="artists">Kunstnere</string>
+    <string name="daap_server_port">DAAP Server Port</string>
+    <string name="dequeue_song">fjern sangen fra køen</string>
+    <string name="discovered_servers">funnet servere:</string>
+    <string name="navigation_drawer_close">Lukk</string>
+    <string name="navigation_drawer_open">åpen</string>
+    <string name="next_song">neste</string>
+    <string name="play_album">spille sanger i album</string>
+    <string name="play_artist">spille sanger av artist</string>
+    <string name="play_or_pause_media">spille av eller pause media</string>
+    <string name="playlists">"spillelister "</string>
+    <string name="previous_song">tidligere</string>
+    <string name="queue">kø</string>
+    <string name="repeat">gjenta</string>
+    <string name="search">Søk</string>
+    <string name="shuffle">tilfeldig</string>
+    <string name="song">sang</string>
+    <string name="title_activity_playlist">"spilleliste "</string>
+    <string name="toggle_song_queue">tilføj eller fjern sang fra køen</string>
 </resources>
