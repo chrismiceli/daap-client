@@ -1,6 +1,7 @@
 package org.mult.daap;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import org.mult.daap.client.DatabaseHost;
+
+import java.lang.ref.WeakReference;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,6 +90,10 @@ public class DrawerActivity extends AppCompatActivity
         if (id == R.id.action_search) {
             this.onSearchRequested();
             return true;
+        } else if (id == R.id.action_reset) {
+            ClearDatabaseAsyncTask clearDatabaseAsyncTask = new ClearDatabaseAsyncTask(this);
+            clearDatabaseAsyncTask.execute();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -122,5 +131,40 @@ public class DrawerActivity extends AppCompatActivity
         }
 
         return true;
+    }
+
+    private void onDatabaseCleared() {
+        final Intent intent = new Intent(DrawerActivity.this, AddServerMenu.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, 1);
+    }
+
+    private static class ClearDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
+        final WeakReference<DrawerActivity> drawerActivityWeakReference;
+
+        ClearDatabaseAsyncTask(DrawerActivity drawerActivity) {
+            this.drawerActivityWeakReference = new WeakReference<>(drawerActivity);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DrawerActivity drawerActivity = this.drawerActivityWeakReference.get();
+            if (drawerActivity != null && !drawerActivity.isFinishing()) {
+                DatabaseHost databaseHost = new DatabaseHost(drawerActivity.getApplicationContext());
+                databaseHost.clearServer();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            super.onPostExecute(v);
+
+            DrawerActivity drawerActivity = this.drawerActivityWeakReference.get();
+            if (drawerActivity != null && !drawerActivity.isFinishing()) {
+                drawerActivity.onDatabaseCleared();
+            }
+        }
     }
 }

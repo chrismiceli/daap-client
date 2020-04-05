@@ -91,7 +91,7 @@ public class PlaylistListItem extends AbstractFlexibleItem<PlaylistListItem.MyVi
      * Extending from FlexibleViewHolder is recommended especially when you will use
      * more advanced features.
      */
-    public class MyViewHolder extends FlexibleViewHolder {
+    public static class MyViewHolder extends FlexibleViewHolder {
 
         final TextView label;
 

@@ -108,7 +108,7 @@ public class QueueListItem extends AbstractFlexibleItem<QueueListItem.MyViewHold
      * Extending from FlexibleViewHolder is recommended especially when you will use
      * more advanced features.
      */
-    public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
+    public static class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
         final TextView label;
         SongEntity song;
         private Fragment fragment;

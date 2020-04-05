@@ -56,4 +56,5 @@
     <string name="song">Song</string>
     <string name="shuffle">Shuffle</string>
     <string name="repeat">Repeat</string>
+    <string name="clear_database">Clear Database</string>
 </resources>

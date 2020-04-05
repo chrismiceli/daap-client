@@ -102,7 +102,7 @@ public class ArtistListItem extends AbstractFlexibleItem<ArtistListItem.MyViewHo
         holder.label.setEnabled(isEnabled());
     }
 
-    public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
+    public static class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
         final TextView label;
         private String artistName;
         private int playlistId;

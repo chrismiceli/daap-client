@@ -36,4 +36,7 @@ public interface SongDao {
 
     @Query("SELECT songs.* FROM songs WHERE songs.name LIKE :searchFilter OR songs.artist LIKE :searchFilter OR songs.album LIKE :searchFilter ORDER BY songs.name")
     List<SongEntity> loadMatchingSongs(String searchFilter);
+
+    @Query("DELETE FROM songs")
+    void clearSongs();
 }

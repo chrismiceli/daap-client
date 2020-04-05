@@ -21,4 +21,7 @@ public interface HistoryDao {
 
     @Query("DELETE FROM history WHERE history.entryId NOT IN (SELECT entryId FROM history LIMIT 100)")
     void removeOldEntries();
+
+    @Query("DELETE FROM history")
+    void clearHistory();
 }

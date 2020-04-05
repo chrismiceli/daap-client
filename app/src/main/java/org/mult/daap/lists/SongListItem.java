@@ -103,7 +103,7 @@ public class SongListItem extends AbstractFlexibleItem<SongListItem.MyViewHolder
      * Extending from FlexibleViewHolder is recommended especially when you will use
      * more advanced features.
      */
-    public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
+    public static class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
 
         final TextView label;
 

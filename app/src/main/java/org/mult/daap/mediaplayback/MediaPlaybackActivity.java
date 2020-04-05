@@ -295,11 +295,10 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
             if (mediaPlayer == null) {
                 bar.setProgress(0);
             } else {
-                double doubleProgress = (double) progress;
                 double doubleDuration;
                 // get correct length of the song we are going to seek in
                 doubleDuration = mediaPlayer.getDuration();
-                int desiredSeek = (int) ((doubleProgress / 100.0) * doubleDuration);
+                int desiredSeek = (int) (((double) progress / 100.0) * doubleDuration);
                 mediaPlayer.seekTo(desiredSeek);
                 bar.setProgress(progress);
                 handler.removeMessages(REFRESH);

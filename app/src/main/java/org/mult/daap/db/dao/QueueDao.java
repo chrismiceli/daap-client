@@ -29,4 +29,7 @@ public interface QueueDao {
 
     @Delete
     void remove(QueueEntity queueEntity);
+
+    @Query("DELETE FROM queue")
+    void clearQueue();
 }

@@ -253,7 +253,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
     /**
      * A text watcher to enable/disable the 'add server' button depending on the server url text
      */
-    private class DaapUrlTextWatcher implements TextWatcher {
+    private static class DaapUrlTextWatcher implements TextWatcher {
         private final Button okButton;
 
         DaapUrlTextWatcher(Button okButton) {
@@ -282,7 +282,7 @@ public class AddServerMenu extends AppCompatActivity implements ILoginConsumer {
      * A listener for the login required checkbox.
      * When checked, a layout box will be shown to allow the user to enter the password.
      */
-    private class LoginRequiredListener implements OnCheckedChangeListener {
+    private static class LoginRequiredListener implements OnCheckedChangeListener {
         private final View passwordSection;
 
         LoginRequiredListener(View passwordSectionView) {
