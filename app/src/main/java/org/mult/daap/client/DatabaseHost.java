@@ -35,6 +35,20 @@ public class DatabaseHost {
         return serverDao.loadServer();
     }
 
+    public void clearServer() {
+        ServerDao serverDao = AppDatabase.getInstance(this.applicationContext).serverDao();
+        SongDao songDao = AppDatabase.getInstance(this.applicationContext).songDao();
+        PlaylistDao playlistDao = AppDatabase.getInstance(this.applicationContext).playlistDao();
+        HistoryDao historyDao = AppDatabase.getInstance(this.applicationContext).historyDao();
+        QueueDao queueDao = AppDatabase.getInstance(this.applicationContext).queueDao();
+        historyDao.clearHistory();
+        queueDao.clearQueue();
+        playlistDao.clearPlaylistSongs();
+        playlistDao.clearPlaylists();
+        songDao.clearSongs();
+        serverDao.clearDaapServer();
+    }
+
     public List<PlaylistEntity> getPlaylists() {
         PlaylistDao playlistDao = AppDatabase.getInstance(this.applicationContext).playlistDao();
         return playlistDao.loadPlaylists();

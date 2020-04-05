@@ -20,4 +20,7 @@ public interface ServerDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setDaapServer(ServerEntity server);
+
+    @Query("DELETE FROM servers")
+    void clearDaapServer();
 }

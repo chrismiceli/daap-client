@@ -78,7 +78,7 @@ public class AlbumListItem extends AbstractFlexibleItem<AlbumListItem.MyViewHold
         holder.label.setEnabled(isEnabled());
     }
 
-    public class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
+    public static class MyViewHolder extends FlexibleViewHolder implements IQueueWorker {
         final TextView label;
         String albumName;
         int playlistId;

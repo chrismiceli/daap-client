@@ -44,4 +44,10 @@ public interface PlaylistDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setSongsForPlaylist(List<PlaylistSongEntity> playlistSongEntities);
+
+    @Query("DELETE FROM playlist_song")
+    void clearPlaylistSongs();
+
+    @Query("DELETE FROM playlists")
+    void clearPlaylists();
 }
