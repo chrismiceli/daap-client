@@ -15,7 +15,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class SongRequest extends Request {
-    private BufferedInputStream bufferedInputStream;
     private final SongEntity song;
 
     public SongRequest(Host daapHost, SongEntity song) {
@@ -53,11 +52,10 @@ public class SongRequest extends Request {
 
     @Override
     protected byte[] readResponse() throws IOException {
-        bufferedInputStream = new BufferedInputStream(httpc.getInputStream(), 8192);
         return null;
     }
 
-    public InputStream getStream() {
-        return bufferedInputStream;
+    public InputStream getStream() throws IOException {
+        return new BufferedInputStream(httpc.getInputStream(), 8192);
     }
 }
