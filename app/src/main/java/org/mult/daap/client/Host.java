@@ -73,11 +73,11 @@ public class Host {
         } catch (BadResponseCodeException e) {
             if (e.getResponseCode() == 503) {
                 Log.d("DaapHost", "tooManyUsers");
-                throw e;
             } else {
                 e.printStackTrace();
-                throw e;
             }
+
+            throw e;
         } catch (ConnectException jce) {
             jce.printStackTrace();
             Log.d("DaapHost", "Net connection exception");
@@ -190,6 +190,7 @@ public class Host {
             }
 
             SongRequest sr = new SongRequest(this, s);
+            sr.Execute();
             return sr.getStream();
         } catch (BadResponseCodeException e) {
             Log.d("DaapHost", "Bad response code");

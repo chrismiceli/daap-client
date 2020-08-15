@@ -462,40 +462,41 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
                 break;
             case MENU_DOWNLOAD:
                 showDialog(COPYING_DIALOG);
-                new Thread(new FileCopier()).start();
+                new Thread(new FileCopier(this.getExternalFilesDir(Environment.DIRECTORY_MUSIC))).start();
                 break;
         }
         return true;
     }
 
     private class FileCopier implements Runnable {
+        private final File directory;
+
+        FileCopier(File directory) {
+            this.directory = directory;
+        }
+
         public void run() {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && mediaPlayer != null) {
                 boolean wasPlaying = mediaPlayer.isPlaying();
                 try {
-                    File directory = new File(Environment.getExternalStorageDirectory(), "DAAP");
-                    if (directory.mkdirs()) {
-                        File destination = new File(directory, "DAAP-" + song.id + "." + song.format);
-                        mediaPlayer.pause();
-                        InputStream songStream = Contents.daapHost.getSongStream(song);
-                        FileOutputStream destinationStream = new FileOutputStream(destination);
-                        byte[] buffer = new byte[1024];
-                        int len;
-                        while ((len = songStream.read(buffer)) > 0) {
-                            destinationStream.write(buffer, 0, len);
-                        }
-
-                        songStream.close();
-                        destinationStream.close();
-                        destination.deleteOnExit();
-                        handler.sendEmptyMessage(COPYING_DIALOG);
-
-                        if (wasPlaying)
-                            mediaPlayer.start();
-                        handler.sendEmptyMessage(SUCCESS_COPYING_DIALOG);
-                    } else {
-                        handler.sendEmptyMessage(ERROR_COPYING_DIALOG);
+                    File destination = new File(directory, "DAAP-" + song.id + "." + song.format);
+                    mediaPlayer.pause();
+                    InputStream songStream = Contents.daapHost.getSongStream(song);
+                    FileOutputStream destinationStream = new FileOutputStream(destination);
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = songStream.read(buffer)) > 0) {
+                        destinationStream.write(buffer, 0, len);
                     }
+
+                    songStream.close();
+                    destinationStream.close();
+                    handler.sendEmptyMessage(COPYING_DIALOG);
+
+                    if (wasPlaying) {
+                        mediaPlayer.start();
+                    }
+                    handler.sendEmptyMessage(SUCCESS_COPYING_DIALOG);
                 } catch (Exception e) {
                     if (wasPlaying)
                         mediaPlayer.start();
@@ -927,7 +928,7 @@ public class MediaPlaybackActivity extends Activity implements View.OnTouchListe
                     Node nNode = nList.item(temp);
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                         result = nNode.getFirstChild().getNodeValue();
-                        result = result.replace("&quot;", "\"").replace("&apos;", "\'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+                        result = result.replace("&quot;", "\"").replace("&apos;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
                         break;
                     }
                 }
