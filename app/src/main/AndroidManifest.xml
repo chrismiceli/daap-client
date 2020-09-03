@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.mult.daap" android:versionName=".9.7" android:versionCode="45"
+	android:installLocation="auto">
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+	<uses-sdk android:targetSdkVersion="8" />
+	<application android:icon="@drawable/icon" android:label="@string/app_name" android:usesCleartextTraffic="true">
+		<activity android:name=".Servers" android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.PICK" />
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="daap" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".ServerEditorActivity"
+			android:configChanges="keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".MediaPlayback" android:label="@string/media_playback_activity"
+			android:launchMode="singleTop">
+		</activity>
+		<activity android:name=".SongBrowser" android:label="@string/song_browser_activity">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".TabMain" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".PlaylistBrowser" android:label="@string/playlist_browser_activity" />
+		<activity android:name=".ArtistBrowser" android:theme="@android:style/Theme.NoTitleBar">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".AlbumBrowser" android:theme="@android:style/Theme.NoTitleBar">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".ArtistAlbumBrowser">
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".SearchActivity" />
+		</activity>
+		<activity android:name=".QueueListBrowser" android:label="@string/queue_browser_activity" />
+		<activity android:name=".AddServerMenu" android:label="@string/add_server_menu_activity">
+			<intent-filter>
+				<action android:name="android.intent.action.CREATE_SHORTCUT" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".Preferences" android:label="Preferences" />
+		<activity android:name=".SearchActivity" android:label="Search">
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable"
+				android:resource="@xml/searchable" />
+		</activity>
+		<service android:name=".MediaPlaybackService"
+			android:configChanges="keyboardHidden|orientation"
+			android:description="@string/media_playback_service_desc" />
+		<receiver android:name=".client.widget.DAAPClientAppWidgetOneProvider">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider"
+				android:resource="@xml/appwidget_one" />
+		</receiver>
+		<receiver android:name=".MediaButtonIntentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                                <action android:name="android.intent.action.CALL_BUTTON" />
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+            </intent-filter>
+        </receiver>
+	</application>
+</manifest>
