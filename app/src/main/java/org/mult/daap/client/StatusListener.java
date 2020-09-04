@@ -14,6 +14,6 @@ package org.mult.daap.client;
  */
 public interface StatusListener {
 
-    public void stateUpdated(Object h);
+    void stateUpdated(Object h);
     
 }

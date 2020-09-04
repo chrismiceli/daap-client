@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.Hasher;
@@ -139,13 +140,7 @@ public abstract class Request {
     }
 
     public static String readString(byte[] data, int offset, int length) {
-        try {
-            return new String(data, offset, length, "UTF-8");
-            // data,start,length, encoding
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
+        return new String(data, offset, length, StandardCharsets.UTF_8);
     }
 
     protected int dataInt() {
@@ -154,7 +149,7 @@ public abstract class Request {
 
     protected static int readInt(byte[] data, int offset) {
         int i = 0;
-        i = (((data[0 + offset] & 0xff) << 24)
+        i = (((data[offset] & 0xff) << 24)
                 | ((data[1 + offset] & 0xff) << 16)
                 | ((data[2 + offset] & 0xff) << 8) | (data[3 + offset] & 0xff));
         return i;

@@ -105,7 +105,7 @@ public class MD5
     /**
      * Padding for Final()
      */
-    static byte padding[] = { (byte) 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    static byte[] padding = { (byte) 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0 };
@@ -141,7 +141,7 @@ public class MD5
         Update(ob.toString());
     }
 
-    private void Decode(byte buffer[], int shift, int[] out)
+    private void Decode(byte[] buffer, int shift, int[] out)
     {
         /*
          * len += shift; for (int i = 0; shift < len; i++, shift += 4) { out[i]
@@ -218,10 +218,14 @@ public class MD5
                 | (((int) buffer[shift + 63]) << 24);
     }
 
-    private void Transform(MD5State state, byte buffer[], int shift,
-            int[] decode_buf)
+    private void Transform(MD5State state, byte[] buffer, int shift,
+                           int[] decode_buf)
     {
-        int a = state.state[0], b = state.state[1], c = state.state[2], d = state.state[3], x[] = decode_buf;
+        int a = state.state[0];
+        int b = state.state[1];
+        int c = state.state[2];
+        int d = state.state[3];
+        int[] x = decode_buf;
 
         Decode(buffer, shift, decode_buf);
 
@@ -393,7 +397,7 @@ public class MD5
      *            Use at maximum `length' bytes (absolute maximum is
      *            buffer.length)
      */
-    public void Update(MD5State stat, byte buffer[], int offset, int length)
+    public void Update(MD5State stat, byte[] buffer, int offset, int length)
     {
         int index, partlen, i, start;
         finals = null;
@@ -453,12 +457,12 @@ public class MD5
      * Plain update, updates this object
      */
 
-    public void Update(byte buffer[], int offset, int length)
+    public void Update(byte[] buffer, int offset, int length)
     {
         Update(this.state, buffer, offset, length);
     }
 
-    public void Update(byte buffer[], int length)
+    public void Update(byte[] buffer, int length)
     {
         Update(this.state, buffer, 0, length);
     }
@@ -469,7 +473,7 @@ public class MD5
      * @param buffer
      *            Array of bytes to use for updating the hash
      */
-    public void Update(byte buffer[])
+    public void Update(byte[] buffer)
     {
         Update(buffer, 0, buffer.length);
     }
@@ -482,7 +486,7 @@ public class MD5
      */
     public void Update(byte b)
     {
-        byte buffer[] = new byte[1];
+        byte[] buffer = new byte[1];
         buffer[0] = b;
 
         Update(buffer, 1);
@@ -504,7 +508,7 @@ public class MD5
      */
     public void Update(String s)
     {
-        byte chars[] = s.getBytes();
+        byte[] chars = s.getBytes();
         Update(chars, chars.length);
     }
 
@@ -526,7 +530,7 @@ public class MD5
     {
         if (charset_name == null)
             charset_name = "ISO8859_1";
-        byte chars[] = s.getBytes(charset_name);
+        byte[] chars = s.getBytes(charset_name);
         Update(chars, chars.length);
     }
 
@@ -542,10 +546,10 @@ public class MD5
         Update((byte) (i & 0xff));
     }
 
-    private byte[] Encode(int input[], int len)
+    private byte[] Encode(int[] input, int len)
     {
         int i, j;
-        byte out[];
+        byte[] out;
 
         out = new byte[len];
 
@@ -569,7 +573,7 @@ public class MD5
      */
     public synchronized byte[] Final()
     {
-        byte bits[];
+        byte[] bits;
         int index, padlen;
         MD5State fin;
 
@@ -602,7 +606,7 @@ public class MD5
      *            Array of bytes to convert to hex-string
      * @return Generated hex string
      */
-    public static String asHex(byte hash[])
+    public static String asHex(byte[] hash)
     {
         StringBuffer buf = new StringBuffer(hash.length * 2);
         int i;

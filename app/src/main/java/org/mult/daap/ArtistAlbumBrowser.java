@@ -27,8 +27,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class ArtistAlbumBrowser extends ListActivity {
-    private ListView albumList;
-    private String artistName;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
     private static final int MENU_SEARCH = 3;
@@ -48,7 +46,7 @@ public class ArtistAlbumBrowser extends ListActivity {
             finish();
             return;
         }
-        artistName = getIntent().getExtras().getString("artistName");
+        String artistName = getIntent().getExtras().getString("artistName");
         setTitle(artistName);
         if (Contents.artistAlbumNameList.size() == 0) {
             for (Map.Entry<String, ArrayList<Integer>> entry : Contents.ArtistAlbumElements
@@ -77,7 +75,7 @@ public class ArtistAlbumBrowser extends ListActivity {
     }
 
     private void createList() {
-        albumList = (ListView) findViewById(android.R.id.list);
+        ListView albumList = (ListView) findViewById(android.R.id.list);
         MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.artistAlbumNameList);
@@ -102,8 +100,7 @@ public class ArtistAlbumBrowser extends ListActivity {
             case CONTEXT_PLAY_ALBUM:
                 Intent intent = new Intent(ArtistAlbumBrowser.this,
                         MediaPlayback.class);
-                String albName = new String(
-                        Contents.artistAlbumNameList.get(menuInfo.position));
+                String albName = Contents.artistAlbumNameList.get(menuInfo.position);
                 if (albName.equals(getString(R.string.no_album_name))) {
                     albName = "";
                 }

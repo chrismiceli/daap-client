@@ -264,7 +264,6 @@ public class SearchActivity extends ListActivity implements Observer {
         Context vContext;
         int font_size;
 
-        @SuppressWarnings("unchecked")
         public MyArrayAdapter(Context context, int textViewResourceId,
                 List<T> objects) {
             super(context, textViewResourceId, objects);

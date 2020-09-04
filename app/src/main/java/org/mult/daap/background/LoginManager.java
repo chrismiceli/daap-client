@@ -8,11 +8,11 @@ import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.request.PasswordFailedException;
 
 public class LoginManager extends Observable implements Runnable {
-    public final static Integer INITIATED = new Integer(-1);
+    public final static Integer INITIATED = Integer.valueOf(-1);
     // public final static Integer FETCHED_MUSIC = new Integer(0);
-    public final static Integer CONNECTION_FINISHED = new Integer(1);
-    public final static Integer ERROR = new Integer(2);
-    public final static Integer PASSWORD_FAILED = new Integer(3);
+    public final static Integer CONNECTION_FINISHED = Integer.valueOf(1);
+    public final static Integer ERROR = Integer.valueOf(2);
+    public final static Integer PASSWORD_FAILED = Integer.valueOf(3);
     public String name;
     public String address;
     public String password;

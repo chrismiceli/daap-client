@@ -27,7 +27,6 @@ public class AddServerMenu extends Activity {
 	private EditText passwordEditText;
 	private CheckBox loginCheckBox;
 	private Button okButton;
-	private Button cancelButton;
 	private DBAdapter db;
 	private boolean creatingShortcut;
 	Builder builder;
@@ -40,7 +39,7 @@ public class AddServerMenu extends Activity {
 		db = new DBAdapter(this);
 		okButton = (Button) findViewById(R.id.serverOkButton);
 		okButton.setEnabled(false);
-		cancelButton = (Button) findViewById(R.id.serverCancelButton);
+		Button cancelButton = (Button) findViewById(R.id.serverCancelButton);
 		serverNameEditText = (EditText) findViewById(R.id.serverNameText);
 		serverAddressEditText = (EditText) findViewById(R.id.serverUrlText);
 		serverPortEditText = (EditText) findViewById(R.id.serverPortText);
@@ -73,7 +72,7 @@ public class AddServerMenu extends Activity {
 		public void onTextChanged(CharSequence s, int start, int before,
 				int count) {
 		}
-	};
+	}
 
 	private class loginRequiredListener implements OnCheckedChangeListener {
 		public void onCheckedChanged(CompoundButton buttonView,
@@ -84,7 +83,7 @@ public class AddServerMenu extends Activity {
 				passwordEditText.setEnabled(false);
 			}
 		}
-	};
+	}
 
 	/**
 	 * Function that is called when the Add Server button is pressed

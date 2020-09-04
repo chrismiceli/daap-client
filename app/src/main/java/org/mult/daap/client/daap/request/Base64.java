@@ -27,7 +27,7 @@ public class Base64 {
 	 * Description of the Parameter
 	 * @return Description of the Return Value */
 	public String encode(String input) {
-		String output = new String();
+		String output = "";
 		int pos = 0;
 		byte[] outbyte = new byte[4];
 		int buffer;

@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QueueListBrowser extends Activity {
-    private ListView queuelistList;
     private ArrayList<Song> s;
     private int count;
     private static final int MENU_PLAY_QUEUE = 0;
@@ -47,7 +46,6 @@ public class QueueListBrowser extends Activity {
             notificationManager.cancelAll();
             setResult(Activity.RESULT_CANCELED);
             finish();
-            return;
         }
     }
 
@@ -62,7 +60,7 @@ public class QueueListBrowser extends Activity {
         for (int x = 0; x < Contents.queue.size(); x++) {
             s.add(Contents.queue.get(x));
         }
-        queuelistList = (ListView) findViewById(android.R.id.list);
+        ListView queuelistList = (ListView) findViewById(android.R.id.list);
         count = s.size();
         queuelistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
         queuelistList

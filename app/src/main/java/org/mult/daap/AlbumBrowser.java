@@ -29,7 +29,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class AlbumBrowser extends ListActivity {
-    private ListView albumList;
     private static final int MENU_PLAY_QUEUE = 1;
     private static final int MENU_VIEW_QUEUE = 2;
     private static final int MENU_SEARCH = 3;
@@ -77,7 +76,7 @@ public class AlbumBrowser extends ListActivity {
     }
 
     private void createList() {
-        albumList = (ListView) findViewById(android.R.id.list);
+        ListView albumList = (ListView) findViewById(android.R.id.list);
         MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.albumNameList);
@@ -102,8 +101,7 @@ public class AlbumBrowser extends ListActivity {
             case CONTEXT_PLAY_ALBUM:
                 Intent intent = new Intent(AlbumBrowser.this,
                         MediaPlayback.class);
-                String albName = new String(
-                        Contents.albumNameList.get(menuInfo.position));
+                String albName = Contents.albumNameList.get(menuInfo.position);
                 if (albName.equals(getString(R.string.no_album_name))) {
                     albName = "";
                 }

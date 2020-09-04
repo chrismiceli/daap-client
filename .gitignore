@@ -1,3 +1,4 @@
 .gradle
 app/build
 local.properties
+.idea/libraries

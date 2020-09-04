@@ -41,12 +41,10 @@ public class WrapMulticastLock {
 
 	private class New extends WrapMulticastLock {
 		private MulticastLock mInstance;
-		private WifiManager wifiManager = null;
 
-		public New(WifiManager wifim) {
+        public New(WifiManager wifim) {
 			try {
-				wifiManager = wifim;
-				mInstance = wifiManager.createMulticastLock("mylock");
+                mInstance = wifim.createMulticastLock("mylock");
 			} catch (Exception e) {
 			}
 		}

@@ -24,7 +24,6 @@ class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
 	Context vContext;
 	int font_size;
 
-	@SuppressWarnings("unchecked")
 	public MyIndexerAdapter(Context context, int textViewResourceId,
 			List<T> objects) {
 		super(context, textViewResourceId, objects);

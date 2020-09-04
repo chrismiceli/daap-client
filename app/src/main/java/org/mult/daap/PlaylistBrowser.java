@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class PlaylistBrowser extends Activity implements Observer {
-    private ListView playlistList;
     private int count;
     public final static int START = 0;
     public final static int FINISHED = 1;
@@ -56,7 +55,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         l.add(0, new DaapPlaylist(Contents.daapHost,
                 getString(R.string.all_songs), true));
         count = l.size();
-        playlistList = (ListView) findViewById(R.id.playlistList);
+        ListView playlistList = (ListView) findViewById(R.id.playlistList);
         playlistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
         playlistList.setOnItemClickListener(playlistGridListener);
     }

@@ -64,9 +64,7 @@ public class Servers extends Activity implements Observer {
 	private static final int MENU_DONATE = 5;
 	private static final int MENU_PREFS = 6;
 	private static final int PASSWORD_DIALOG = 0;
-	private static final String donateLink = new String(
-			"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=chrismiceli%40gmail%2ecom&lc=US&item_name=DAAP%20%2d%20Android%20Application&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted");
-	private ListView list = null;
+	private static final String donateLink = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=chrismiceli%40gmail%2ecom&lc=US&item_name=DAAP%20%2d%20Android%20Application&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted";
 	private static List<Map<String, ?>> localServers = null;
 	private SeparatedListAdapter adapter = null;
 	private DBAdapter db;
@@ -75,8 +73,6 @@ public class Servers extends Activity implements Observer {
 	private List<Map<String, String>> serversList = new ArrayList<Map<String, String>>();
 	private ArrayList<Bundle> discoveredServers = new ArrayList<Bundle>();
 	private ProgressDialog pd = null;
-	// private MulticastLock fLock;
-	private boolean wiFi = false;
 	private WrapMulticastLock fLock;
 
 	public Map<String, ?> createItem(String title, String caption) {
@@ -151,6 +147,7 @@ public class Servers extends Activity implements Observer {
 		super.onResume();
 		List<Map<String, ?>> rememberedServers = new LinkedList<Map<String, ?>>();
 		WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+		boolean wiFi = false;
 		if (!wifiManager.isWifiEnabled()) {
 			wiFi = false;
 		} else {
@@ -213,7 +210,7 @@ public class Servers extends Activity implements Observer {
 									R.id.list_complex_title,
 									R.id.list_complex_caption }));
 		}
-		list = new ListView(this);
+		ListView list = new ListView(this);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(clickListener);
 		list.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
@@ -414,16 +411,13 @@ public class Servers extends Activity implements Observer {
 		} else if (((Integer) data).compareTo(LoginManager.CONNECTION_FINISHED) == 0) {
 			loginHandler.sendEmptyMessage(LoginManager.CONNECTION_FINISHED
 					.intValue());
-			return;
 		} else if (((Integer) data).compareTo(LoginManager.PASSWORD_FAILED) == 0) {
 			loginHandler.sendEmptyMessage(LoginManager.PASSWORD_FAILED
 					.intValue());
-			return;
 		} else {
 			// ERROR
 			Contents.loginManager.deleteObserver(this);
 			loginHandler.sendEmptyMessage(LoginManager.ERROR.intValue());
-			return;
 		}
 	}
 

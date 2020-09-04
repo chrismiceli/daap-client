@@ -277,7 +277,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 			}
 			if (mediaPlayer == null) {
 				bar.setProgress(0);
-				return;
 			} else {
 				double doubleProgress = (double) progress;
 				double doubleDuration;
@@ -354,7 +353,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 				stopNotification();
 				clearState();
 				finish();
-				return;
 			}
 		}
 	};
@@ -609,12 +607,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 			case TelephonyManager.CALL_STATE_IDLE:
 				break;
 			case TelephonyManager.CALL_STATE_OFFHOOK:
-				if (mediaPlayer != null) {
-					mediaPlayer.pause();
-				}
-				break;
-			case TelephonyManager.CALL_STATE_RINGING:
-				if (mediaPlayer != null) {
+				case TelephonyManager.CALL_STATE_RINGING:
+					if (mediaPlayer != null) {
 					mediaPlayer.pause();
 				}
 				break;
@@ -757,7 +751,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 				stopNotification();
 				clearState();
 				finish();
-				return;
 			}
 		}
 	};
@@ -778,7 +771,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 					Node nNode = nList.item(temp);
 					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 						retval = nNode.getFirstChild().getNodeValue();
-						retval = retval.replace("&quot;", "\"").replace("&apos;", "\'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
+						retval = retval.replace("&quot;", "\"").replace("&apos;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
 						break;
 					}
 				}
@@ -919,4 +912,4 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
 			}
 		}
 	};
-};
+}

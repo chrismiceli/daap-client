@@ -23,13 +23,11 @@ public class DBAdapter {
 	private static final String DATABASE_CREATE = "create table servers (_id integer primary key autoincrement, "
 			+ "server_name text not null, address text not null, "
 			+ "password text not null, " + "login_required integer not null);";
-	private final Context context;
 	private DatabaseHelper DBHelper;
 	private SQLiteDatabase db;
 
 	public DBAdapter(Context ctx) {
-		this.context = ctx;
-		DBHelper = new DatabaseHelper(context);
+		DBHelper = new DatabaseHelper(ctx);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -133,7 +131,7 @@ public class DBAdapter {
 		else
 			selectionValuesList.add("0");
 
-		String selectionValues[] = new String[selectionValuesList.size()];
+		String[] selectionValues = new String[selectionValuesList.size()];
 		selectionValuesList.toArray(selectionValues);
 		selectionValuesList = null;
 

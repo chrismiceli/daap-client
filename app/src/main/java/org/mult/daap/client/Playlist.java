@@ -25,7 +25,7 @@ public abstract class Playlist {
 	public static final int STATUS_INITIALIZED = 2;
 
 	public void initialize() throws Exception {
-	};
+	}
 
 	@SuppressWarnings("rawtypes")
 	public abstract Collection getSongs();
