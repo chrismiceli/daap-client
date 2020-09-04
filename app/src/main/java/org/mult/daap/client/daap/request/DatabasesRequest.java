@@ -18,144 +18,144 @@
  */
 package org.mult.daap.client.daap.request;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import android.util.Log;
 
 import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.Database;
 
-import android.util.Log;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class DatabasesRequest extends Request {
-	private class FieldPair {
-		public FieldPair(int s, int p) {
-			size = s;
-			position = p;
-		}
+    private class FieldPair {
+        public FieldPair(int s, int p) {
+            size = s;
+            position = p;
+        }
 
-		public int position;
-		public int size;
-	}
+        public int position;
+        public int size;
+    }
 
-	private ArrayList<Database> mDatabases;
-	private ArrayList<FieldPair> mlclList;
-	private ArrayList<FieldPair> mlitList;
+    private ArrayList<Database> mDatabases;
+    private ArrayList<FieldPair> mlclList;
+    private ArrayList<FieldPair> mlitList;
 
-	public DatabasesRequest(DaapHost h) throws BadResponseCodeException,
-			PasswordFailedException, IOException {
-		super(h);
-		mlclList = new ArrayList<FieldPair>();
-		mlitList = new ArrayList<FieldPair>();
-		mDatabases = new ArrayList<Database>();
-		query("DabasesRequest");
-		readResponse();
-		process();
-	}
+    public DatabasesRequest(DaapHost h) throws BadResponseCodeException,
+            PasswordFailedException, IOException {
+        super(h);
+        mlclList = new ArrayList<FieldPair>();
+        mlitList = new ArrayList<FieldPair>();
+        mDatabases = new ArrayList<Database>();
+        query("DabasesRequest");
+        readResponse();
+        process();
+    }
 
-	protected String getRequestString() {
-		String ret = "databases?";
-		ret += "session-id=" + host.getSessionID();
-		ret += "&revision-number=" + host.getRevisionNumber();
-		return ret;
-	}
+    protected String getRequestString() {
+        String ret = "databases?";
+        ret += "session-id=" + host.getSessionID();
+        ret += "&revision-number=" + host.getRevisionNumber();
+        return ret;
+    }
 
-	protected void addRequestProperties() {
-		super.addRequestProperties();
-	}
+    protected void addRequestProperties() {
+        super.addRequestProperties();
+    }
 
-	protected void process() {
-		mlclList = new ArrayList<FieldPair>();
-		mlitList = new ArrayList<FieldPair>();
-		if (data.length == 0) {
-			Log.d("Request", "Zero Length");
-			return;
-		}
-		offset += 4;
-		offset += 4;
-		processDatabaseRequest();
-		parseMLCL();
-	}
+    protected void process() {
+        mlclList = new ArrayList<FieldPair>();
+        mlitList = new ArrayList<FieldPair>();
+        if (data.length == 0) {
+            Log.d("Request", "Zero Length");
+            return;
+        }
+        offset += 4;
+        offset += 4;
+        processDatabaseRequest();
+        parseMLCL();
+    }
 
-	public void processDatabaseRequest() {
-		String name;
-		int size;
-		while (offset < data.length) {
-			name = readString(data, offset, 4);
-			offset += 4;
-			size = readInt(data, offset);
-			offset += 4;
-			if (size > 10000000)
-				Log.d("Request", "This host probably uses gzip encoding");
-			if (name.equals("mlcl")) {
-				mlclList.add(new FieldPair(size, offset));
-			}
-			offset += size;
-		}
-	}
+    public void processDatabaseRequest() {
+        String name;
+        int size;
+        while (offset < data.length) {
+            name = readString(data, offset, 4);
+            offset += 4;
+            size = readInt(data, offset);
+            offset += 4;
+            if (size > 10000000)
+                Log.d("Request", "This host probably uses gzip encoding");
+            if (name.equals("mlcl")) {
+                mlclList.add(new FieldPair(size, offset));
+            }
+            offset += size;
+        }
+    }
 
-	/* Creates a list of byte arrays for use in mLIT */
-	protected void parseMLCL() {
-		for (int i = 0; i < mlclList.size(); i++) {
-			processContainerList(mlclList.get(i).position, mlclList.get(i).size);
-		}
-		parseMLIT();
-	}
+    /* Creates a list of byte arrays for use in mLIT */
+    protected void parseMLCL() {
+        for (int i = 0; i < mlclList.size(); i++) {
+            processContainerList(mlclList.get(i).position, mlclList.get(i).size);
+        }
+        parseMLIT();
+    }
 
-	protected void parseMLIT() {
-		for (int i = 0; i < mlitList.size(); i++) {
-			processmLitList(mlitList.get(i).position, mlitList.get(i).size);
-		}
-		mlitList = null;
-		mlclList = null;
-	}
+    protected void parseMLIT() {
+        for (int i = 0; i < mlitList.size(); i++) {
+            processmLitList(mlitList.get(i).position, mlitList.get(i).size);
+        }
+        mlitList = null;
+        mlclList = null;
+    }
 
-	/* get all mlit in mlclList */
-	public void processContainerList(int position, int argSize) {
-		String name;
-		int size;
-		int startPos = position;
-		while (position < argSize + startPos) {
-			name = readString(data, position, 4);
-			position += 4;
-			size = readInt(data, position);
-			position += 4;
-			if (name.equals("mlit")) {
-				mlitList.add(new FieldPair(size, position));
-			}
-			position += size;
-		}
-	}
+    /* get all mlit in mlclList */
+    public void processContainerList(int position, int argSize) {
+        String name;
+        int size;
+        int startPos = position;
+        while (position < argSize + startPos) {
+            name = readString(data, position, 4);
+            position += 4;
+            size = readInt(data, position);
+            position += 4;
+            if (name.equals("mlit")) {
+                mlitList.add(new FieldPair(size, position));
+            }
+            position += size;
+        }
+    }
 
-	public void processmLitList(int position, int argSize) {
-		String name = "";
-		int size;
-		int startPos = position;
-		Database d = new Database();
-		boolean bMiid = false;
-		boolean bMinm = false;
-		while (position < argSize + startPos) {
-			name = readString(data, position, 4);
-			position += 4;
-			size = readInt(data, position);
-			position += 4;
-			if (name.equals("miid")) {
-				bMiid = true;
-				d.id = readInt(data, position);
-			} else if (name.equals("minm")) {
-				bMinm = true;
-				d.name = readString(data, position, size);
-			}
-			if (bMiid == true && bMinm == true) {
-				mDatabases.add(d);
-				bMiid = false;
-				bMinm = false;
-				break;
-			}
-			position += size;
-		}
-	}
+    public void processmLitList(int position, int argSize) {
+        String name = "";
+        int size;
+        int startPos = position;
+        Database d = new Database();
+        boolean bMiid = false;
+        boolean bMinm = false;
+        while (position < argSize + startPos) {
+            name = readString(data, position, 4);
+            position += 4;
+            size = readInt(data, position);
+            position += 4;
+            if (name.equals("miid")) {
+                bMiid = true;
+                d.id = readInt(data, position);
+            } else if (name.equals("minm")) {
+                bMinm = true;
+                d.name = readString(data, position, size);
+            }
+            if (bMiid == true && bMinm == true) {
+                mDatabases.add(d);
+                bMiid = false;
+                bMinm = false;
+                break;
+            }
+            position += size;
+        }
+    }
 
-	public ArrayList<Database> getDbs() {
-		return mDatabases;
-	}
+    public ArrayList<Database> getDbs() {
+        return mDatabases;
+    }
 }

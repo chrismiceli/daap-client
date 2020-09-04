@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<EditTextPreference android:title="@string/share_name"
-		android:singleLine="true" android:key="server_name" />
-	<PreferenceCategory android:title="@string/server_settings">
-		<EditTextPreference android:title="@string/url_description"
-			android:singleLine="true" android:key="address" />
-		<EditTextPreference android:title="@string/password"
-			android:singleLine="true" android:key="password" />
-		<CheckBoxPreference android:title="@string/login_required"
-			android:singleLine="true" android:key="login_required" />
-	</PreferenceCategory>
+    <EditTextPreference
+        android:title="@string/share_name"
+        android:singleLine="true"
+        android:key="server_name" />
+    <PreferenceCategory android:title="@string/server_settings">
+        <EditTextPreference
+            android:title="@string/url_description"
+            android:singleLine="true"
+            android:key="address" />
+        <EditTextPreference
+            android:title="@string/password"
+            android:singleLine="true"
+            android:key="password" />
+        <CheckBoxPreference
+            android:title="@string/login_required"
+            android:singleLine="true"
+            android:key="login_required" />
+    </PreferenceCategory>
 </PreferenceScreen>

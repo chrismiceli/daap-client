@@ -18,6 +18,9 @@
  */
 package org.mult.daap.client.daap.request;
 
+import org.mult.daap.client.Song;
+import org.mult.daap.client.daap.DaapHost;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,12 +28,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
-import org.mult.daap.client.Song;
-import org.mult.daap.client.daap.DaapHost;
-
 /**
  * @author jbarnett To change the template for this generated type comment go to
- *         Window>Preferences>Java>Code Generation>Code and Comments
+ * Window>Preferences>Java>Code Generation>Code and Comments
  * @created August 6, 2004
  */
 public class SongRequest extends Request {
@@ -84,7 +84,8 @@ public class SongRequest extends Request {
         return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
-    protected void process() {}
+    protected void process() {
+    }
 
     public InputStream getStream() {
         return b;

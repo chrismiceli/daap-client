@@ -1,14 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-
-import org.mult.daap.client.Song;
-import org.mult.daap.client.SongTrackComparator;
-import org.mult.daap.client.StringIgnoreCaseComparator;
-
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.NotificationManager;
@@ -25,6 +16,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import org.mult.daap.client.Song;
+import org.mult.daap.client.SongTrackComparator;
+import org.mult.daap.client.StringIgnoreCaseComparator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map;
 
 public class ArtistAlbumBrowser extends ListActivity {
     private static final int MENU_PLAY_QUEUE = 1;
@@ -55,8 +55,7 @@ public class ArtistAlbumBrowser extends ListActivity {
                 if (key.length() == 0) {
                     Contents.artistAlbumNameList
                             .add(getString(R.string.no_album_name));
-                }
-                else {
+                } else {
                     Contents.artistAlbumNameList.add(key);
                 }
             }
@@ -85,7 +84,7 @@ public class ArtistAlbumBrowser extends ListActivity {
         albumList
                 .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
                     public void onCreateContextMenu(ContextMenu menu, View v,
-                            ContextMenuInfo menuInfo) {
+                                                    ContextMenuInfo menuInfo) {
                         menu.setHeaderTitle(getString(R.string.options));
                         menu.add(0, CONTEXT_PLAY_ALBUM, 0, R.string.play_album);
                     }
@@ -124,7 +123,7 @@ public class ArtistAlbumBrowser extends ListActivity {
 
     private OnItemClickListener musicGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
-                long id) {
+                                long id) {
             Intent intent = new Intent(ArtistAlbumBrowser.this,
                     SongBrowser.class);
             intent.putExtra("from", "album");
@@ -151,8 +150,7 @@ public class ArtistAlbumBrowser extends ListActivity {
         if (Contents.queue.size() == 0) {
             menu.findItem(MENU_PLAY_QUEUE).setEnabled(false);
             menu.findItem(MENU_VIEW_QUEUE).setEnabled(false);
-        }
-        else {
+        } else {
             menu.findItem(MENU_PLAY_QUEUE).setEnabled(true);
             menu.findItem(MENU_VIEW_QUEUE).setEnabled(true);
         }

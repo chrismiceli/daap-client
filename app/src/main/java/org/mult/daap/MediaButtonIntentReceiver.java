@@ -1,7 +1,5 @@
 package org.mult.daap;
 
-import org.mult.daap.MediaPlaybackService;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +10,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
     private static long mLastClickTime = 0;
     private static boolean mDown = false;
-    
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String intentAction = intent.getAction();
@@ -24,7 +22,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
         } else if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
             KeyEvent event = (KeyEvent)
                     intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-            
+
             if (event == null) {
                 return;
             }
@@ -35,7 +33,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
             // single quick press: pause/resume. 
             // double press: next track
-            
+
             String command = null;
             switch (keycode) {
                 case KeyEvent.KEYCODE_MEDIA_STOP:

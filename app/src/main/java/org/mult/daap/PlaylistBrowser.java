@@ -1,12 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
-import org.mult.daap.background.GetSongsForPlaylist;
-import org.mult.daap.client.daap.DaapPlaylist;
-
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -24,6 +17,13 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.background.GetSongsForPlaylist;
+import org.mult.daap.client.daap.DaapPlaylist;
+
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 public class PlaylistBrowser extends Activity implements Observer {
     private int count;
@@ -70,8 +70,7 @@ public class PlaylistBrowser extends Activity implements Observer {
             Integer lastMessage = gsfp.getLastMessage();
             if (lastMessage == INITIALIZED) {
                 update(gsfp, START);
-            }
-            else {
+            } else {
                 update(gsfp, lastMessage);
             }
         }
@@ -89,7 +88,7 @@ public class PlaylistBrowser extends Activity implements Observer {
 
     private OnItemClickListener playlistGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
-                long id) {
+                                long id) {
             try {
                 if (Contents.playlist_position != position) {
                     // clicking new list
@@ -97,8 +96,7 @@ public class PlaylistBrowser extends Activity implements Observer {
                             l.get(position));
                     grabSongs(gsfp);
                     Contents.playlist_position = (short) position;
-                }
-                else {
+                } else {
                     uiHandler.sendEmptyMessage(FINISHED);
                 }
             } catch (Exception e) {
@@ -112,11 +110,9 @@ public class PlaylistBrowser extends Activity implements Observer {
             pd = ProgressDialog.show(this,
                     getString(R.string.fetching_music_title),
                     getString(R.string.fetching_music_detail), true, false);
-        }
-        else if (((Integer) data).compareTo(FINISHED) == 0) {
+        } else if (((Integer) data).compareTo(FINISHED) == 0) {
             uiHandler.sendEmptyMessage(FINISHED);
-        }
-        else if (((Integer) data).compareTo(EMPTY) == 0) {
+        } else if (((Integer) data).compareTo(EMPTY) == 0) {
             uiHandler.sendEmptyMessage(EMPTY);
         }
     }
@@ -131,8 +127,7 @@ public class PlaylistBrowser extends Activity implements Observer {
                 Contents.getSongsForPlaylist = null;
                 Intent intent = new Intent(PlaylistBrowser.this, TabMain.class);
                 startActivityForResult(intent, 1);
-            }
-            else if (msg.what == EMPTY) {
+            } else if (msg.what == EMPTY) {
                 if (pd != null) {
                     pd.dismiss();
                 }

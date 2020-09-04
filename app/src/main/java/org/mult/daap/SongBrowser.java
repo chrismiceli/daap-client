@@ -1,17 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.mult.daap.client.Song;
-import org.mult.daap.client.SongDiscNumComparator;
-import org.mult.daap.client.SongTrackComparator;
-
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.NotificationManager;
@@ -36,6 +24,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.client.Song;
+import org.mult.daap.client.SongDiscNumComparator;
+import org.mult.daap.client.SongTrackComparator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SongBrowser extends ListActivity {
     private static final int CONTEXT_QUEUE = 0;
@@ -91,7 +91,7 @@ public class SongBrowser extends ListActivity {
         musicList
                 .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
                     public void onCreateContextMenu(ContextMenu menu, View v,
-                            ContextMenuInfo menuInfo) {
+                                                    ContextMenuInfo menuInfo) {
                         menu.setHeaderTitle(getString(R.string.options));
                         menu.add(0, CONTEXT_QUEUE, 0,
                                 R.string.add_or_remove_from_queue);
@@ -115,8 +115,7 @@ public class SongBrowser extends ListActivity {
             for (Song s : Contents.filteredAlbumSongList) {
                 if (track_num.keySet().contains(s.disc_num) == false) {
                     track_num.put(s.disc_num, (short) 1);
-                }
-                else {
+                } else {
                     track_num.put(s.disc_num,
                             (short) (track_num.get(s.disc_num) + 1));
                 }
@@ -136,8 +135,7 @@ public class SongBrowser extends ListActivity {
             // Can't use myIndexAdapter because it sorts name, not by track
             setListAdapter(new MyArrayAdapter<Song>(this,
                     R.xml.long_list_text_view, Contents.filteredAlbumSongList));
-        }
-        else if (from.equals("artist")) {
+        } else if (from.equals("artist")) {
             musicList.setFastScrollEnabled(true);
             Contents.filteredArtistSongList.clear();
             Bundle b = getIntent().getExtras();
@@ -154,8 +152,7 @@ public class SongBrowser extends ListActivity {
             // Can't use myIndexAdapter because it sorts name, not by track
             setListAdapter(new MyArrayAdapter<Song>(this,
                     R.xml.long_list_text_view, Contents.filteredArtistSongList));
-        }
-        else {
+        } else {
             musicList.setFastScrollEnabled(true);
             MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
                     getApplicationContext(), R.xml.long_list_text_view,
@@ -166,16 +163,14 @@ public class SongBrowser extends ListActivity {
 
     private OnItemClickListener musicGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
-                long id) {
+                                long id) {
             if (from.equals("album")) {
                 Contents.setSongPosition(Contents.filteredAlbumSongList,
                         position);
-            }
-            else if (from.equals("artist")) {
+            } else if (from.equals("artist")) {
                 Contents.setSongPosition(Contents.filteredArtistSongList,
                         position);
-            }
-            else {
+            } else {
                 Contents.setSongPosition(Contents.songList, position);
             }
             MediaPlayback.clearState();
@@ -193,17 +188,15 @@ public class SongBrowser extends ListActivity {
         Song s;
         if (from.equals("album")) {
             s = Contents.filteredAlbumSongList.get(menuInfo.position);
-        }
-        else if (from.equals("artist")) {
+        } else if (from.equals("artist")) {
             s = Contents.filteredArtistSongList.get(menuInfo.position);
-        }
-        else {
+        } else {
             s = Contents.songList.get(menuInfo.position);
         }
         switch (aItem.getItemId()) {
             case CONTEXT_QUEUE:
                 if (Contents.queue.contains(s)) { // in
-                                                  // list
+                    // list
                     Contents.queue.remove(Contents.queue.indexOf(s));
                     Toast tst = Toast.makeText(SongBrowser.this,
                             getString(R.string.removed_from_queue),
@@ -212,8 +205,7 @@ public class SongBrowser extends ListActivity {
                             tst.getYOffset() / 2);
                     tst.show();
                     return true;
-                }
-                else {
+                } else {
                     if (Contents.queue.size() < 9) {
                         Contents.addToQueue(s);
                         Toast tst = Toast.makeText(SongBrowser.this,
@@ -222,8 +214,7 @@ public class SongBrowser extends ListActivity {
                         tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
                                 tst.getYOffset() / 2);
                         tst.show();
-                    }
-                    else {
+                    } else {
                         Toast tst = Toast.makeText(SongBrowser.this,
                                 getString(R.string.queue_is_full),
                                 Toast.LENGTH_SHORT);
@@ -254,8 +245,7 @@ public class SongBrowser extends ListActivity {
         if (Contents.queue.size() == 0) {
             menu.findItem(MENU_PLAY_QUEUE).setEnabled(false);
             menu.findItem(MENU_VIEW_QUEUE).setEnabled(false);
-        }
-        else {
+        } else {
             menu.findItem(MENU_PLAY_QUEUE).setEnabled(true);
             menu.findItem(MENU_VIEW_QUEUE).setEnabled(true);
         }
@@ -300,7 +290,7 @@ public class SongBrowser extends ListActivity {
         int font_size;
 
         public MyArrayAdapter(Context context, int textViewResourceId,
-                List<T> objects) {
+                              List<T> objects) {
             super(context, textViewResourceId, objects);
             SharedPreferences mPrefs = PreferenceManager
                     .getDefaultSharedPreferences(context);

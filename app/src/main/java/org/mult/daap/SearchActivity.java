@@ -1,14 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-
-import org.mult.daap.background.SearchThread;
-import org.mult.daap.client.Song;
-
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.NotificationManager;
@@ -37,6 +28,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.background.SearchThread;
+import org.mult.daap.client.Song;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class SearchActivity extends ListActivity implements Observer {
     private ArrayList<Song> srList = null;
@@ -79,8 +79,7 @@ public class SearchActivity extends ListActivity implements Observer {
                 sr.addObserver(this);
                 Thread thread = new Thread(sr);
                 thread.start();
-            }
-            else {
+            } else {
                 srList = sr.getLastMessage();
                 if (srList == null) {
                     // We haven't finished yet
@@ -89,8 +88,7 @@ public class SearchActivity extends ListActivity implements Observer {
                             getString(R.string.searching_title),
                             getString(R.string.search_result_caption) + " \""
                                     + searchKeywords + "\"", true, false);
-                }
-                else {
+                } else {
                     // We finished, use the results
                     update(sr, srList);
                 }
@@ -126,8 +124,7 @@ public class SearchActivity extends ListActivity implements Observer {
                             tst.getYOffset() / 2);
                     tst.show();
                     return true;
-                }
-                else {
+                } else {
                     if (Contents.queue.size() < 9) {
                         Contents.addToQueue(s);
                         Toast tst = Toast.makeText(SearchActivity.this,
@@ -136,8 +133,7 @@ public class SearchActivity extends ListActivity implements Observer {
                         tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
                                 tst.getYOffset() / 2);
                         tst.show();
-                    }
-                    else {
+                    } else {
                         Toast tst = Toast.makeText(SearchActivity.this,
                                 getString(R.string.queue_is_full),
                                 Toast.LENGTH_SHORT);
@@ -159,7 +155,7 @@ public class SearchActivity extends ListActivity implements Observer {
         searchResultsList
                 .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
                     public void onCreateContextMenu(ContextMenu menu, View v,
-                            ContextMenuInfo menuInfo) {
+                                                    ContextMenuInfo menuInfo) {
                         menu.setHeaderTitle(getString(R.string.options));
                         menu.add(0, CONTEXT_QUEUE, 0,
                                 R.string.add_or_remove_from_queue);
@@ -171,7 +167,7 @@ public class SearchActivity extends ListActivity implements Observer {
 
     private OnItemClickListener songListListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
-                long id) {
+                                long id) {
             Contents.setSongPosition(Contents.songList,
                     Contents.songList.indexOf(srList.get(position)));
             MediaPlayback.clearState();
@@ -205,8 +201,7 @@ public class SearchActivity extends ListActivity implements Observer {
         if (Contents.queue.size() == 0) {
             menu.findItem(MENU_PLAY_QUEUE).setEnabled(false);
             menu.findItem(MENU_VIEW_QUEUE).setEnabled(false);
-        }
-        else {
+        } else {
             menu.findItem(MENU_PLAY_QUEUE).setEnabled(true);
             menu.findItem(MENU_VIEW_QUEUE).setEnabled(true);
         }
@@ -265,7 +260,7 @@ public class SearchActivity extends ListActivity implements Observer {
         int font_size;
 
         public MyArrayAdapter(Context context, int textViewResourceId,
-                List<T> objects) {
+                              List<T> objects) {
             super(context, textViewResourceId, objects);
             SharedPreferences mPrefs = PreferenceManager
                     .getDefaultSharedPreferences(context);

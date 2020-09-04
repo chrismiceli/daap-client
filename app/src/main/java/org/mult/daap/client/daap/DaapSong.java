@@ -26,30 +26,32 @@ package org.mult.daap.client.daap;
 
 import org.mult.daap.client.Song;
 
-/** @author jbarnett
+/**
+ * @author jbarnett
  * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments */
+ * Window>Preferences>Java>Code Generation>Code and Comments
+ */
 public class DaapSong extends Song {
-	public String persistent_id;
+    public String persistent_id;
 
-	public DaapSong() {
-		super();
-	}
+    public DaapSong() {
+        super();
+    }
 
-	public DaapSong(DaapHost h) {
-		super();
-		host = h;
-	}
+    public DaapSong(DaapHost h) {
+        super();
+        host = h;
+    }
 
-	/*
-	 * public boolean equals(Object o) { if (((DaapSong)o).id == id) return
-	 * true; return false; }
-	 */
-	public void setHost(DaapHost h) {
-		host = h;
-	}
+    /*
+     * public boolean equals(Object o) { if (((DaapSong)o).id == id) return
+     * true; return false; }
+     */
+    public void setHost(DaapHost h) {
+        host = h;
+    }
 
-	public String getPersistentId() {
-		return persistent_id;
-	}
+    public String getPersistentId() {
+        return persistent_id;
+    }
 }

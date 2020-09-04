@@ -13,7 +13,7 @@
     <string name="play_artist">Воспроизвести песни артиста</string>
     <string name="all_songs">Все песни</string>
     <string name="current_song">Текущая песня</string>
-    <string name="upcoming_song"/>
+    <string name="upcoming_song" />
     <string name="server_settings">Настройки сервера</string>
     <string name="share_name">Имя DAAP ресурса</string>
     <string name="url_description">Адрес и порт</string>

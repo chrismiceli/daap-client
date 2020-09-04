@@ -1,12 +1,5 @@
 package org.mult.daap;
 
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Random;
-import java.util.TreeMap;
-
 import org.mult.daap.background.GetSongsForPlaylist;
 import org.mult.daap.background.LoginManager;
 import org.mult.daap.background.SearchThread;
@@ -14,6 +7,13 @@ import org.mult.daap.client.Song;
 import org.mult.daap.client.SongNameComparator;
 import org.mult.daap.client.StringIgnoreCaseComparator;
 import org.mult.daap.client.daap.DaapHost;
+
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
+import java.util.TreeMap;
 
 public class Contents {
     public static ArrayList<Song> songList = new ArrayList<Song>();
@@ -56,8 +56,7 @@ public class Contents {
                 && position >= 0) {
             song = activeList.get(position);
             return song;
-        }
-        else {
+        } else {
             throw new IndexOutOfBoundsException("End of list");
         }
     }
@@ -98,8 +97,7 @@ public class Contents {
     public static void addToQueue(Song s) throws IndexOutOfBoundsException {
         if (queue.size() > 9) {
             throw new IndexOutOfBoundsException("Can't add more than 10");
-        }
-        else {
+        } else {
             queue.add(s);
         }
     }

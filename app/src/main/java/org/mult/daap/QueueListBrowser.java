@@ -1,9 +1,5 @@
 package org.mult.daap;
 
-import java.util.ArrayList;
-
-import org.mult.daap.client.Song;
-
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -26,6 +22,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.mult.daap.client.Song;
+
+import java.util.ArrayList;
 
 public class QueueListBrowser extends Activity {
     private ArrayList<Song> s;
@@ -66,7 +66,7 @@ public class QueueListBrowser extends Activity {
         queuelistList
                 .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
                     public void onCreateContextMenu(ContextMenu menu, View v,
-                            ContextMenuInfo menuInfo) {
+                                                    ContextMenuInfo menuInfo) {
                         menu.setHeaderTitle(getString(R.string.options));
                         menu.add(0, REMOVE_FROM_QUEUE, 0,
                                 R.string.remove_from_queue);
@@ -90,8 +90,7 @@ public class QueueListBrowser extends Activity {
                 tst.show();
                 if (Contents.queue.size() == 0) {
                     finish();
-                }
-                else {
+                } else {
                     final Intent intent = new Intent(QueueListBrowser.this,
                             QueueListBrowser.class);
                     startActivityForResult(intent, 1);
@@ -111,8 +110,7 @@ public class QueueListBrowser extends Activity {
                     .setIcon(R.drawable.ic_menu_play);
             menu.add(0, MENU_CLEAR_QUEUE, 0, getString(R.string.clear_queue))
                     .setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-        }
-        else if (Contents.queue.size() > 0) {
+        } else if (Contents.queue.size() > 0) {
             menu.clear();
             menu.add(0, MENU_PLAY_QUEUE, 0, getString(R.string.play_queue))
                     .setIcon(R.drawable.ic_menu_play);
@@ -144,7 +142,7 @@ public class QueueListBrowser extends Activity {
 
     private OnItemClickListener queuelistGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
-                long id) {
+                                long id) {
             Contents.setSongPosition(Contents.queue, position);
             MediaPlayback.clearState();
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

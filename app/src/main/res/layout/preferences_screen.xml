@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	android:key="preferences">
-	<ListPreference android:key="font_pref"
-		android:persistent="true" android:title="@string/font_size"
-		android:summary="@string/font_pref_detail" android:entries="@array/fontArray"
-		android:defaultValue="18" android:entryValues="@array/fontValues" />
-	<CheckBoxPreference android:title="@string/scrobblerTitle"
-		android:defaultValue="false" android:summary="@string/scrobblerSummary"
-		android:key="scrobbler_pref" />
+    android:key="preferences">
+
+    <ListPreference
+        android:key="font_pref"
+        android:persistent="true"
+        android:title="@string/font_size"
+        android:summary="@string/font_pref_detail"
+        android:entries="@array/fontArray"
+        android:defaultValue="18"
+        android:entryValues="@array/fontValues" />
+
+    <CheckBoxPreference
+        android:title="@string/scrobblerTitle"
+        android:defaultValue="false"
+        android:summary="@string/scrobblerSummary"
+        android:key="scrobbler_pref" />
 </PreferenceScreen> 

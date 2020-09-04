@@ -1,11 +1,11 @@
 package org.mult.daap.background;
 
-import java.net.InetAddress;
-import java.util.Observable;
-
 import org.mult.daap.Contents;
 import org.mult.daap.client.daap.DaapHost;
 import org.mult.daap.client.daap.request.PasswordFailedException;
+
+import java.net.InetAddress;
+import java.util.Observable;
 
 public class LoginManager extends Observable implements Runnable {
     public final static Integer INITIATED = Integer.valueOf(-1);
@@ -21,7 +21,7 @@ public class LoginManager extends Observable implements Runnable {
     private boolean interrupted;
 
     public LoginManager(String serverName, String add, String password,
-            boolean loginRequired) {
+                        boolean loginRequired) {
         this.name = serverName;
         this.address = add;
         this.password = password;
@@ -50,11 +50,9 @@ public class LoginManager extends Observable implements Runnable {
             String hostname = urlAddress[0];
             int port = 3689;
             if (urlAddress.length == 1) { // No port specified use default
-            }
-            else if (urlAddress.length == 2) { // port specified
+            } else if (urlAddress.length == 2) { // port specified
                 port = Integer.valueOf(urlAddress[1]);
-            }
-            else if (urlAddress.length > 2) { // ipv6
+            } else if (urlAddress.length > 2) { // ipv6
                 port = Integer.valueOf(urlAddress[urlAddress.length - 1]);
             }
             Contents.address = InetAddress.getByName(hostname);
@@ -72,8 +70,7 @@ public class LoginManager extends Observable implements Runnable {
             if (login_required) {
                 Contents.daapHost = new DaapHost(name, password,
                         Contents.address, port);
-            }
-            else {
+            } else {
                 Contents.daapHost = new DaapHost(name, null, Contents.address,
                         port);
             }
