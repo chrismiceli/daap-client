@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.DaapHost;
-import org.mult.daap.client.daap.Hasher;
 
 /**
  * @author jbarnett To change the template for this generated type comment go to
@@ -80,8 +80,8 @@ public class SongRequest extends Request {
         b = new BufferedInputStream(httpc.getInputStream(), 8192);
     }
 
-    protected String getHashCode(Request r) {
-        return Hasher.GenerateHash("/" + r.getRequestString(), this, true);
+    protected String getHashCode(Request r) throws NoSuchAlgorithmException {
+        return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
     protected void process() {}

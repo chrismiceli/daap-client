@@ -29,13 +29,12 @@ package org.mult.daap.client.daap.request;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 
 import org.mult.daap.client.daap.DaapHost;
-import org.mult.daap.client.daap.Hasher;
 
 import android.util.Log;
 
@@ -122,7 +121,11 @@ public abstract class Request {
         httpc.addRequestProperty("Client-DAAP-Access-Index",
                 String.valueOf(access_index));
         httpc.addRequestProperty("Client-DAAP-Version", "3.0");
-        httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
+        try {
+            httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
+        } catch (NoSuchAlgorithmException e) {
+            httpc.addRequestProperty("Client-DAAP-Validation", "");
+        }
         // httpc.addRequestProperty("Accept-Encoding", "");
         if (host.isPasswordProtected()) {
             httpc.addRequestProperty("Authorization",
@@ -135,8 +138,8 @@ public abstract class Request {
         return response_code;
     }
 
-    protected String getHashCode(Request r) {
-        return Hasher.GenerateHash("/" + r.getRequestString(), this, false);
+    String getHashCode(Request r) throws NoSuchAlgorithmException {
+        return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
     public static String readString(byte[] data, int offset, int length) {

@@ -21,6 +21,7 @@ package org.mult.daap.client.daap.request;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 
 import org.mult.daap.client.daap.DaapHost;
 
@@ -48,7 +49,11 @@ public class HangingUpdateRequest extends Request {
 		httpc.setRequestProperty("User-Agent", "iTunes/4.6 (Windows; N)");
 		httpc.addRequestProperty("Client-DAAP-Access-Index",
 				String.valueOf(access_index));
-		httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
+		try {
+			httpc.addRequestProperty("Client-DAAP-Validation", getHashCode(this));
+		} catch (NoSuchAlgorithmException e) {
+			httpc.addRequestProperty("Client-DAAP-Validation", "");
+		}
 	}
 
 	protected String getRequestString() {

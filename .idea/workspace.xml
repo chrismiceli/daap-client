@@ -11,34 +11,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="134d0892-19e3-4aad-9093-b40a23a956e1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/twmacinta/util/MD5.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/twmacinta/util/MD5.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/twmacinta/util/MD5State.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/twmacinta/util/MD5State.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AlbumBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AlbumBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistAlbumBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistAlbumBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlayback.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlayback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MyIndexerAdatper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MyIndexerAdatper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/QueueListBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/QueueListBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Servers.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Servers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SongBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SongBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/DBAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/DBAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/LoginManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SearchThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SearchThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/WrapMulticastLock.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/WrapMulticastLock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Playlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Playlist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/StatusListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/StatusListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Base64.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Base64.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/twmacinta/util/MD5.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/twmacinta/util/MD5State.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/Hasher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/HangingUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/HangingUpdateRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/audio_player.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/audio_player.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/password_prompt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/password_prompt.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SongRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SongRequest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,9 +152,9 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state width="2003" height="263" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1599182420504" />
-    <state x="719" y="289" width="609" height="534" key="find.popup" timestamp="1599182710350">
+    <state x="719" y="289" width="609" height="534" key="find.popup" timestamp="1599183117702">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="719" y="289" width="609" height="534" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1599182710350" />
+    <state x="719" y="289" width="609" height="534" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1599183117702" />
   </component>
 </project>
