@@ -27,7 +27,7 @@ public class DaapPlaylist extends Playlist {
     public boolean smart_playlist;
     public int song_count = 0;
     protected ArrayList<Song> songs;
-    protected DaapHost host;
+    protected final DaapHost host;
 
     public DaapPlaylist(DaapHost h) {
         host = h;

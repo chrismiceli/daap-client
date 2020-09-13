@@ -25,19 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * @author jbarnett To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * @created July 15, 2004
- */
 public class HangingUpdateRequest extends Request {
-    /**
-     * Constructor for the HangingUpdateRequest object
-     *
-     * @throws BadResponseCodeException
-     * @throws PasswordFailedException
-     * @throws IOException
-     */
     public HangingUpdateRequest(DaapHost h) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(h);

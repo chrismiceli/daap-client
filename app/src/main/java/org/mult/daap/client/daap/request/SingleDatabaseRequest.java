@@ -26,20 +26,15 @@ import org.mult.daap.client.daap.DaapHost;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * @author jbarnett To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * @created
- */
 public class SingleDatabaseRequest extends Request {
-    private class FieldPair {
+    private static class FieldPair {
         public FieldPair(int s, int p) {
             size = s;
             position = p;
         }
 
-        public int position;
-        public int size;
+        public final int position;
+        public final int size;
     }
 
     private ArrayList<Song> mSongList;

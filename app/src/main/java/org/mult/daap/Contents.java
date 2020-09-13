@@ -16,18 +16,18 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class Contents {
-    public static ArrayList<Song> songList = new ArrayList<Song>();
-    public static ArrayList<Song> filteredAlbumSongList = new ArrayList<Song>();
-    public static ArrayList<Song> filteredArtistSongList = new ArrayList<Song>();
-    public static ArrayList<Song> queue = new ArrayList<Song>(10);
+    public static final ArrayList<Song> songList = new ArrayList<Song>();
+    public static final ArrayList<Song> filteredAlbumSongList = new ArrayList<Song>();
+    public static final ArrayList<Song> filteredArtistSongList = new ArrayList<Song>();
+    public static final ArrayList<Song> queue = new ArrayList<Song>(10);
     public static ArrayList<Song> activeList = new ArrayList<Song>();
-    public static ArrayList<String> stringElements = new ArrayList<String>();
-    public static ArrayList<String> artistNameList = new ArrayList<String>();
-    public static ArrayList<String> albumNameList = new ArrayList<String>();
-    public static ArrayList<String> artistAlbumNameList = new ArrayList<String>();
-    public static TreeMap<String, ArrayList<Integer>> ArtistElements = new TreeMap<String, ArrayList<Integer>>();
-    public static TreeMap<String, ArrayList<Integer>> AlbumElements = new TreeMap<String, ArrayList<Integer>>();
-    public static TreeMap<String, ArrayList<Integer>> ArtistAlbumElements = new TreeMap<String, ArrayList<Integer>>();
+    public static final ArrayList<String> stringElements = new ArrayList<String>();
+    public static final ArrayList<String> artistNameList = new ArrayList<String>();
+    public static final ArrayList<String> albumNameList = new ArrayList<String>();
+    public static final ArrayList<String> artistAlbumNameList = new ArrayList<String>();
+    public static final TreeMap<String, ArrayList<Integer>> ArtistElements = new TreeMap<String, ArrayList<Integer>>();
+    public static final TreeMap<String, ArrayList<Integer>> AlbumElements = new TreeMap<String, ArrayList<Integer>>();
+    public static final TreeMap<String, ArrayList<Integer>> ArtistAlbumElements = new TreeMap<String, ArrayList<Integer>>();
     public static DaapHost daapHost;
     public static GetSongsForPlaylist getSongsForPlaylist = null;
     public static InetAddress address;
@@ -36,7 +36,6 @@ public class Contents {
     public static short playlist_position = -1;
     public static boolean shuffle = false;
     public static boolean repeat = false;
-    public static boolean lastUsedAlbumActivity = false;
     private static int position = 0;
 
     public static void songListAdd(Song s) {

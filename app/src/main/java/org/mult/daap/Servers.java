@@ -70,8 +70,8 @@ public class Servers extends Activity implements Observer {
     private DBAdapter db;
     private JmDNSListener jmDNSListener = null;
     private String localLabel = null;
-    private List<Map<String, String>> serversList = new ArrayList<Map<String, String>>();
-    private ArrayList<Bundle> discoveredServers = new ArrayList<Bundle>();
+    private final List<Map<String, String>> serversList = new ArrayList<Map<String, String>>();
+    private final ArrayList<Bundle> discoveredServers = new ArrayList<Bundle>();
     private ProgressDialog pd = null;
     private WrapMulticastLock fLock;
 
@@ -197,7 +197,7 @@ public class Servers extends Activity implements Observer {
                         R.layout.list_complex, new String[]{TITLE, CAPTION},
                         new int[]{R.id.list_complex_title,
                                 R.id.list_complex_caption}));
-        if (wiFi == true) {
+        if (wiFi) {
             adapter.addSection(localLabel, new ServerAdapter(this,
                     localServers, R.layout.list_complex, new String[]{TITLE,
                     CAPTION}, new int[]{R.id.list_complex_title,
@@ -240,13 +240,12 @@ public class Servers extends Activity implements Observer {
                 String password = uri.getFragment();
                 if (password == null) {
                     lm = new LoginManager("", uri.getHost(), "", false);
-                    startLogin(lm);
                 } else {
                     Log.d("Servers", "host = (" + uri.getHost() + ")");
                     Log.d("Servers", "password = (" + password + ")");
                     lm = new LoginManager("", uri.getHost(), password, true);
-                    startLogin(lm);
                 }
+                startLogin(lm);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -320,7 +319,7 @@ public class Servers extends Activity implements Observer {
         return false;
     }
 
-    private OnItemClickListener clickListener = new OnItemClickListener() {
+    private final OnItemClickListener clickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             db.open();
@@ -421,14 +420,14 @@ public class Servers extends Activity implements Observer {
         }
     }
 
-    private Handler loginHandler = new Handler() {
+    private final Handler loginHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == LoginManager.CONNECTION_FINISHED.intValue()) {
                 pd.dismiss();
                 // save the server
-                boolean loginRequired = (Contents.loginManager.password
-                        .length() == 0) ? false : true;
+                boolean loginRequired = Contents.loginManager.password
+                        .length() != 0;
                 saveServer(Contents.loginManager.name,
                         Contents.loginManager.address,
                         Contents.loginManager.password, loginRequired);
@@ -486,7 +485,7 @@ public class Servers extends Activity implements Observer {
 
     class ServerAdapter extends SimpleAdapter {
         class ViewWrapper {
-            View base;
+            final View base;
             TextView vwlcT = null;
             TextView vwlcC = null;
             ImageView vwimage = null;
@@ -512,7 +511,7 @@ public class Servers extends Activity implements Observer {
             }
         }
 
-        List<Map<String, ?>> mList;
+        final List<Map<String, ?>> mList;
 
         public ServerAdapter(Context context, List<Map<String, ?>> data,
                              int resource, String[] from, int[] to) {
@@ -559,7 +558,7 @@ public class Servers extends Activity implements Observer {
         }
     }
 
-    private Handler labelChanger = new Handler() {
+    private final Handler labelChanger = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             localLabel = getString(R.string.local_servers);
@@ -573,7 +572,7 @@ public class Servers extends Activity implements Observer {
             labelChanger.sendEmptyMessageDelayed((msg.what + 1) % 4, 1000);
         }
     };
-    private Handler mDNSHandler = new Handler() {
+    private final Handler mDNSHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle = (Bundle) msg.getData();

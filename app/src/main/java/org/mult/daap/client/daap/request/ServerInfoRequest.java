@@ -24,11 +24,6 @@ import org.mult.daap.client.daap.DaapHost;
 
 import java.io.IOException;
 
-/**
- * @author jbarnett To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * @created August 6, 2004
- */
 public class ServerInfoRequest extends Request {
     private double mServerVersion = 0.0;
 

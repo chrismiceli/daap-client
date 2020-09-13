@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public abstract class Playlist {
     @SuppressWarnings("rawtypes")
-    protected ArrayList status_listeners = new ArrayList();
+    protected final ArrayList status_listeners = new ArrayList();
 
     public String name;
     public boolean all_songs;
@@ -42,10 +42,7 @@ public abstract class Playlist {
     public boolean contains(Object o) {
         if (o == null)
             return false;
-        if (getSongs().contains(o))
-            return true;
-        else
-            return false;
+        return getSongs().contains(o);
     }
 
     public String getName() {

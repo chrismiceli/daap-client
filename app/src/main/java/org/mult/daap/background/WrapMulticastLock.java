@@ -26,7 +26,7 @@ public class WrapMulticastLock {
         return instance;
     }
 
-    private class Old extends WrapMulticastLock {
+    private static class Old extends WrapMulticastLock {
         public Old(WifiManager wifim) {
         }
 

@@ -14,9 +14,9 @@ import java.util.Collection;
  * @author Greg
  */
 public abstract class Host {
-    protected ArrayList<StatusListener> status_listeners;
+    protected final ArrayList<StatusListener> status_listeners;
     protected boolean auto_connect;
-    protected String name;
+    protected final String name;
     protected int status;
     protected boolean visible;
     @SuppressWarnings("rawtypes")
@@ -40,12 +40,6 @@ public abstract class Host {
         visible = false;
     }
 
-    /**
-     * Causes this Host to connect to the song source and load the songs into
-     * memory.
-     *
-     * @throws Exception
-     */
     public void connect() throws Exception {
     }
 

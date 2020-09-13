@@ -98,9 +98,6 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
         return (appWidgetIds.length > 0);
     }
 
-    /**
-     * Handle a change notification coming over from {@link MediaService}
-     */
     public void notifyChange(MediaPlaybackService service, MediaPlayback activity, String what) {
         if (service == null)
             return;
@@ -175,15 +172,12 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
 
         if (playerActive) {
             intent = new Intent(context, MediaPlayback.class);
-            pendingIntent = PendingIntent.getActivity(context,
-                    0 /* no requestCode */, intent, 0 /* no flags */);
-            views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
         } else {
             intent = new Intent(context, Servers.class);
-            pendingIntent = PendingIntent.getActivity(context,
-                    0 /* no requestCode */, intent, 0 /* no flags */);
-            views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
         }
+        pendingIntent = PendingIntent.getActivity(context,
+                0 /* no requestCode */, intent, 0 /* no flags */);
+        views.setOnClickPendingIntent(R.id.appwidget_one, pendingIntent);
 
         intent = new Intent(MediaPlaybackService.TOGGLEPAUSE_ACTION);
         intent.setComponent(serviceName);

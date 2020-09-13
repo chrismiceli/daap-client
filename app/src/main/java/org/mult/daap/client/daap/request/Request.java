@@ -43,13 +43,13 @@ import java.security.NoSuchAlgorithmException;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public abstract class Request {
-    protected DaapHost host;
+    protected final DaapHost host;
     protected int response_code;
     protected String response_message;
     public byte[] data;
     protected int offset;
     protected HttpURLConnection httpc;
-    protected int access_index;
+    protected final int access_index;
 
     // start of song request.
     public Request(DaapHost h) throws BadResponseCodeException,

@@ -165,7 +165,7 @@ public class SearchActivity extends ListActivity implements Observer {
         searchResultsList.setFastScrollEnabled(true);
     }
 
-    private OnItemClickListener songListListener = new OnItemClickListener() {
+    private final OnItemClickListener songListListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             Contents.setSongPosition(Contents.songList,
@@ -227,7 +227,7 @@ public class SearchActivity extends ListActivity implements Observer {
         return false;
     }
 
-    private Handler searchHandler = new Handler() {
+    private final Handler searchHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             createList();
@@ -252,12 +252,12 @@ public class SearchActivity extends ListActivity implements Observer {
         }
     }
 
-    class MyArrayAdapter<T> extends ArrayAdapter<T> {
-        ArrayList<Song> myElements;
+    static class MyArrayAdapter<T> extends ArrayAdapter<T> {
+        final ArrayList<Song> myElements;
         HashMap<String, Integer> alphaIndexer;
         ArrayList<String> letterList;
-        Context vContext;
-        int font_size;
+        final Context vContext;
+        final int font_size;
 
         public MyArrayAdapter(Context context, int textViewResourceId,
                               List<T> objects) {

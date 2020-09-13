@@ -27,14 +27,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class DatabasesRequest extends Request {
-    private class FieldPair {
+    private static class FieldPair {
         public FieldPair(int s, int p) {
             size = s;
             position = p;
         }
 
-        public int position;
-        public int size;
+        public final int position;
+        public final int size;
     }
 
     private ArrayList<Database> mDatabases;
@@ -145,7 +145,7 @@ public class DatabasesRequest extends Request {
                 bMinm = true;
                 d.name = readString(data, position, size);
             }
-            if (bMiid == true && bMinm == true) {
+            if (bMiid && bMinm) {
                 mDatabases.add(d);
                 bMiid = false;
                 bMinm = false;

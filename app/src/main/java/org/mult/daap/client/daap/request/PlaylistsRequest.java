@@ -25,20 +25,15 @@ import org.mult.daap.client.daap.DaapPlaylist;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * @author jbarnett To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * @created August 6, 2004
- */
 public class PlaylistsRequest extends Request {
-    private class FieldPair {
+    private static class FieldPair {
         public FieldPair(int s, int p) {
             size = s;
             position = p;
         }
 
-        public int position;
-        public int size;
+        public final int position;
+        public final int size;
     }
 
     private ArrayList<DaapPlaylist> mPlaylist;

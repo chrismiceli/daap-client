@@ -10,7 +10,7 @@ public class SearchThread extends Observable implements Runnable {
     public final static Integer INITIATED = Integer.valueOf(-1);
     public final static Integer CONNECTION_FINISHED = Integer.valueOf(1);
     public final static Integer ERROR = Integer.valueOf(2);
-    private String searchQuery;
+    private final String searchQuery;
     private ArrayList<Song> lastMessage;
     public ArrayList<Song> srList = null;
 

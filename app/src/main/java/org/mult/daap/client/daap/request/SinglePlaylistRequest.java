@@ -12,14 +12,14 @@ import java.util.ArrayList;
  * @author Greg
  */
 public class SinglePlaylistRequest extends Request {
-    private class FieldPair {
+    private static class FieldPair {
         public FieldPair(int s, int p) {
             size = s;
             position = p;
         }
 
-        public int position;
-        public int size;
+        public final int position;
+        public final int size;
     }
 
     private ArrayList<Song> mSongList;

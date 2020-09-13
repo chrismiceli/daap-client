@@ -3,7 +3,7 @@ package org.mult.daap;
 import java.io.File;
 
 public class FileUtils {
-    static public boolean deleteDirectory(File path) {
+    static public void deleteDirectory(File path) {
         if (path.exists()) {
             File[] files = path.listFiles();
             for (int i = 0; i < files.length; i++) {
@@ -14,12 +14,12 @@ public class FileUtils {
                 }
             }
         }
-        return (path.delete());
+        path.delete();
     }
 
     static void deleteIfExists(File file) {
         if (file != null) {
-            if (file.exists() == true) {
+            if (file.exists()) {
                 file.delete();
             }
         }

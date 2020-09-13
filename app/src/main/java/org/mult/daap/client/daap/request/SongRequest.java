@@ -28,11 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * @author jbarnett To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- * @created August 6, 2004
- */
 public class SongRequest extends Request {
     protected BufferedInputStream b;
     protected long skip_bytes;

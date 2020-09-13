@@ -98,7 +98,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private boolean mDraggingLabel = false;
     boolean scrobbler_support = false;
 
-    private DAAPClientAppWidgetOneProvider mAppWidgetProvider = DAAPClientAppWidgetOneProvider.getInstance();
+    private final DAAPClientAppWidgetOneProvider mAppWidgetProvider = DAAPClientAppWidgetOneProvider.getInstance();
 
     public MediaPlayback() {
     }
@@ -268,7 +268,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         return false;
     }
 
-    private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
+    private final OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
         public void onStartTrackingTouch(SeekBar bar) {
             // intentionally left blank
         }
@@ -297,7 +297,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     };
 
-    private View.OnClickListener mShuffleListener = new View.OnClickListener() {
+    private final View.OnClickListener mShuffleListener = new View.OnClickListener() {
 
         public void onClick(View v) {
             if (Contents.shuffle) {
@@ -310,7 +310,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     };
 
-    private View.OnClickListener mRepeatListener = new View.OnClickListener() {
+    private final View.OnClickListener mRepeatListener = new View.OnClickListener() {
 
         public void onClick(View v) {
             if (Contents.repeat) {
@@ -323,7 +323,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     };
 
-    private View.OnClickListener mPauseListener = new View.OnClickListener() {
+    private final View.OnClickListener mPauseListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (mediaPlayer != null) {
                 if (mediaPlayer.isPlaying()) {
@@ -345,7 +345,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             }
         }
     };
-    private View.OnClickListener mPrevListener = new View.OnClickListener() {
+    private final View.OnClickListener mPrevListener = new View.OnClickListener() {
         public void onClick(View v) {
             try {
                 startSong(Contents.getPreviousSong());
@@ -358,7 +358,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             }
         }
     };
-    private View.OnClickListener mNextListener = new View.OnClickListener() {
+    private final View.OnClickListener mNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             normalOnCompletionListener.onCompletion(mediaPlayer);
             mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
@@ -602,7 +602,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         notificationManager.cancelAll();
     }
 
-    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+    private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
         public void onCallStateChanged(int state, String incomingNumsber) {
             switch (state) {
                 // change to idle
@@ -696,7 +696,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         return false;
     }
 
-    Handler mLabelScroller = new Handler() {
+    final Handler mLabelScroller = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             TextView tv = (TextView) msg.obj;
@@ -725,7 +725,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mediaPlayer = null;
     }
 
-    private OnErrorListener mediaPlayerErrorListener = new MediaPlayer.OnErrorListener() {
+    private final OnErrorListener mediaPlayerErrorListener = new MediaPlayer.OnErrorListener() {
         public boolean onError(MediaPlayer mp, int what, int extra) {
             Log.e(logTag, "Error in MediaPlayer: (" + what + ") with extra (" + extra + ")");
             clearState();
@@ -733,15 +733,15 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     };
 
-    private OnCompletionListener normalOnCompletionListener = new OnCompletionListener() {
+    private final OnCompletionListener normalOnCompletionListener = new OnCompletionListener() {
         public void onCompletion(MediaPlayer mp) {
             try {
                 if (scrobbler_support) {
                     scrobble(3); // COMPLETE
                 }
-                if (Contents.shuffle == true) {
+                if (Contents.shuffle) {
                     startSong(Contents.getRandomSong());
-                } else if (Contents.repeat == true) {
+                } else if (Contents.repeat) {
                     mp.seekTo(0);
                     mp.start();
                     queueNextRefresh(refreshNow());
@@ -814,7 +814,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         sendBroadcast(i);
     }
 
-    private ServiceConnection connection = new ServiceConnection() {
+    private final ServiceConnection connection = new ServiceConnection() {
         public void onServiceConnected(ComponentName classname, IBinder service) {
             // This is called when the connection with the service has been
             // established, giving us the service object we can use to
@@ -833,7 +833,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     };
 
-    private BroadcastReceiver mStatusListener = new BroadcastReceiver() {
+    private final BroadcastReceiver mStatusListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

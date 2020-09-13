@@ -121,7 +121,7 @@ public class ArtistAlbumBrowser extends ListActivity {
         return false;
     }
 
-    private OnItemClickListener musicGridListener = new OnItemClickListener() {
+    private final OnItemClickListener musicGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             Intent intent = new Intent(ArtistAlbumBrowser.this,

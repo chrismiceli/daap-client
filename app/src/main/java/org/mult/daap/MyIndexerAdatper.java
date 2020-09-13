@@ -18,11 +18,11 @@ import java.util.List;
 
 class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
         Filterable {
-    ArrayList<String> myElements;
-    HashMap<String, Integer> alphaIndexer;
-    ArrayList<String> letterList;
-    Context vContext;
-    int font_size;
+    final ArrayList<String> myElements;
+    final HashMap<String, Integer> alphaIndexer;
+    final ArrayList<String> letterList;
+    final Context vContext;
+    final int font_size;
 
     public MyIndexerAdapter(Context context, int textViewResourceId,
                             List<T> objects) {

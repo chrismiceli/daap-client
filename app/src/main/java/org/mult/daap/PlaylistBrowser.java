@@ -67,7 +67,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         if (gsfp != null) {
             gsfp.addObserver(this);
             // Since lm is not null, we have to create a new pd
-            Integer lastMessage = gsfp.getLastMessage();
+            int lastMessage = gsfp.getLastMessage();
             if (lastMessage == INITIALIZED) {
                 update(gsfp, START);
             } else {
@@ -86,7 +86,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         }
     }
 
-    private OnItemClickListener playlistGridListener = new OnItemClickListener() {
+    private final OnItemClickListener playlistGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             try {
@@ -117,7 +117,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         }
     }
 
-    private Handler uiHandler = new Handler() {
+    private final Handler uiHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == FINISHED) { // Finished
@@ -161,7 +161,7 @@ public class PlaylistBrowser extends Activity implements Observer {
     }
 
     public class ProfilesAdapter extends BaseAdapter {
-        private Context vContext;
+        private final Context vContext;
 
         public ProfilesAdapter(Context c) {
             vContext = c;

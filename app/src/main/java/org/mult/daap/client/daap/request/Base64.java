@@ -7,12 +7,6 @@
  */
 package org.mult.daap.client.daap.request;
 
-/**
- * Description of the Class
- *
- * @author swooley
- * @created July 22, 2004
- */
 public class Base64 {
     private static final byte[] BASE64CHARS = {'A', 'B', 'C', 'D', 'E', 'F',
             'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
@@ -58,18 +52,15 @@ public class Base64 {
             if (remaining == 1) {
                 outbyte[2] = '=';
                 buffer <<= 4;
-                outbyte[1] = BASE64CHARS[buffer & 0x3F];
-                buffer >>= 6;
-                outbyte[0] = BASE64CHARS[buffer & 0x3F];
             } else {
                 buffer = (buffer << 8) | (input.charAt(pos + 1) & 0xff);
                 buffer <<= 2;
                 outbyte[2] = BASE64CHARS[buffer & 0x3F];
                 buffer >>= 6;
-                outbyte[1] = BASE64CHARS[buffer & 0x3F];
-                buffer >>= 6;
-                outbyte[0] = BASE64CHARS[buffer & 0x3F];
             }
+            outbyte[1] = BASE64CHARS[buffer & 0x3F];
+            buffer >>= 6;
+            outbyte[0] = BASE64CHARS[buffer & 0x3F];
             output += new String(outbyte);
         }
         return (output);

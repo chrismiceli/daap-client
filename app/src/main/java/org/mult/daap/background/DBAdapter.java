@@ -15,7 +15,6 @@ public class DBAdapter {
     public static final String KEY_SERVER_ADDRESS = "address";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_LOGIN_REQUIRED = "login_required";
-    @SuppressWarnings("unused")
     private static final String TAG = "DBAdapter";
     private static final String DATABASE_NAME = "servs";
     public static final String DATABASE_TABLE = "servers";
@@ -23,7 +22,7 @@ public class DBAdapter {
     private static final String DATABASE_CREATE = "create table servers (_id integer primary key autoincrement, "
             + "server_name text not null, address text not null, "
             + "password text not null, " + "login_required integer not null);";
-    private DatabaseHelper DBHelper;
+    private final DatabaseHelper DBHelper;
     private SQLiteDatabase db;
 
     public DBAdapter(Context ctx) {
@@ -53,9 +52,8 @@ public class DBAdapter {
     }
 
     // ---opens the database---
-    public DBAdapter open() throws SQLException {
+    public void open() throws SQLException {
         db = DBHelper.getWritableDatabase();
-        return this;
     }
 
     // ---closes the database---
@@ -64,7 +62,7 @@ public class DBAdapter {
     }
 
     // ---insert a title into the database---
-    public long insertServer(String name, String address, String password,
+    public void insertServer(String name, String address, String password,
                              boolean login_required) {
         int login_required_local;
         if (login_required)
@@ -76,12 +74,12 @@ public class DBAdapter {
         initialValues.put(KEY_SERVER_ADDRESS, address);
         initialValues.put(KEY_PASSWORD, password);
         initialValues.put(KEY_LOGIN_REQUIRED, login_required_local);
-        return db.insert(DATABASE_TABLE, null, initialValues);
+        db.insert(DATABASE_TABLE, null, initialValues);
     }
 
     // ---deletes a particular title---
-    public boolean deleteServer(int rowId) {
-        return db.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+    public void deleteServer(int rowId) {
+        db.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null);
     }
 
     public void deleteAllServer() {
@@ -165,8 +163,8 @@ public class DBAdapter {
         return db.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
-    public boolean updateServer(ContentValues update, int rowId) {
-        return (db.update(DATABASE_TABLE, update, "_id = ?",
-                new String[]{String.valueOf(rowId)}) != 0);
+    public void updateServer(ContentValues update, int rowId) {
+        db.update(DATABASE_TABLE, update, "_id = ?",
+                new String[]{String.valueOf(rowId)});
     }
 }

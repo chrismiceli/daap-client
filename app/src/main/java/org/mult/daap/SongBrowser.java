@@ -113,7 +113,7 @@ public class SongBrowser extends ListActivity {
             }
             TreeMap<Short, Short> track_num = new TreeMap<Short, Short>();
             for (Song s : Contents.filteredAlbumSongList) {
-                if (track_num.keySet().contains(s.disc_num) == false) {
+                if (!track_num.keySet().contains(s.disc_num)) {
                     track_num.put(s.disc_num, (short) 1);
                 } else {
                     track_num.put(s.disc_num,
@@ -161,7 +161,7 @@ public class SongBrowser extends ListActivity {
         }
     }
 
-    private OnItemClickListener musicGridListener = new OnItemClickListener() {
+    private final OnItemClickListener musicGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             if (from.equals("album")) {
@@ -282,12 +282,12 @@ public class SongBrowser extends ListActivity {
         return false;
     }
 
-    class MyArrayAdapter<T> extends ArrayAdapter<T> {
-        ArrayList<Song> myElements;
+    static class MyArrayAdapter<T> extends ArrayAdapter<T> {
+        final ArrayList<Song> myElements;
         HashMap<String, Integer> alphaIndexer;
         ArrayList<String> letterList;
-        Context vContext;
-        int font_size;
+        final Context vContext;
+        final int font_size;
 
         public MyArrayAdapter(Context context, int textViewResourceId,
                               List<T> objects) {

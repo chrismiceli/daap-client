@@ -24,10 +24,6 @@ import org.mult.daap.client.daap.DaapHost;
 
 import java.io.IOException;
 
-/**
- * @author jbarnett
- * @created July 15, 2004
- */
 public class UpdateRequest extends Request {
     private int mRevisionNumber = 0;
 

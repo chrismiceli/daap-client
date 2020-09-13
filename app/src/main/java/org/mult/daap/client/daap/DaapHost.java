@@ -5,13 +5,13 @@
  */
 package org.mult.daap.client.daap;
 
+import android.util.Base64;
 import android.util.Log;
 
 import org.mult.daap.client.Host;
 import org.mult.daap.client.Song;
 import org.mult.daap.client.SongIDComparator;
 import org.mult.daap.client.daap.request.BadResponseCodeException;
-import org.mult.daap.client.daap.request.Base64;
 import org.mult.daap.client.daap.request.DatabasesRequest;
 import org.mult.daap.client.daap.request.HangingUpdateRequest;
 import org.mult.daap.client.daap.request.LoginRequest;
@@ -42,9 +42,9 @@ public class DaapHost extends Host {
     public static final int RATING_UP = 1;
     public static final int RATING_DOWN = 2;
     public int rating = RATING_NONE;
-    public String address;
+    public final String address;
     protected String computer_name;
-    protected int port;
+    protected final int port;
     protected double daap_version;
     protected int revision_num;
     protected int database_id;
@@ -72,8 +72,7 @@ public class DaapHost extends Host {
     // dummy constructor, used by GetNewHost
     public DaapHost(String name, String pwd, InetAddress addy, int porty) {
         super(name);
-        Base64 base64 = new Base64();
-        password = base64.encode("Android_DAAP:" + pwd);
+        password = Base64.encodeToString(("Android_DAAP:" + pwd).getBytes(), Base64.DEFAULT);
         address = addy.getHostAddress();
         port = porty;
     }
@@ -112,11 +111,10 @@ public class DaapHost extends Host {
         } catch (BadResponseCodeException e) {
             if (e.response_code == 503) {
                 Log.d("DaapHost", "tooManyUsers");
-                throw e;
             } else {
                 e.printStackTrace();
-                throw e;
             }
+            throw e;
         } catch (java.net.ConnectException jce) {
             jce.printStackTrace();
             Log.d("DaapHost", "Net connection exception");
@@ -130,21 +128,18 @@ public class DaapHost extends Host {
         return true;
     }
 
-    public boolean logout() throws PasswordFailedException, IOException,
+    public void logout() throws PasswordFailedException, IOException,
             BadResponseCodeException {
         // don't logout when connected to a de.kapsi server:
         try {
-            @SuppressWarnings("unused")
             LogoutRequest lo = new LogoutRequest(this);
             if (hanging_update != null) {
                 hanging_update.disconnect();
             }
-            return true;
         } catch (BadResponseCodeException e) {
             if (e.response_code == 204) {
                 session_id = 0;
                 revision_num = 1;
-                return true;
             } else {
                 throw e;
             }
@@ -230,9 +225,8 @@ public class DaapHost extends Host {
         return session_id;
     }
 
-    public int getNextRequestNumber() {
+    public void getNextRequestNumber() {
         request_num++;
-        return request_num;
     }
 
     public int getThisRequestNumber() {

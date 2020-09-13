@@ -13,10 +13,10 @@ public class LoginManager extends Observable implements Runnable {
     public final static Integer CONNECTION_FINISHED = Integer.valueOf(1);
     public final static Integer ERROR = Integer.valueOf(2);
     public final static Integer PASSWORD_FAILED = Integer.valueOf(3);
-    public String name;
-    public String address;
-    public String password;
-    private boolean login_required;
+    public final String name;
+    public final String address;
+    public final String password;
+    private final boolean login_required;
     private Integer lastMessage;
     private boolean interrupted;
 

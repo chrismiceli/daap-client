@@ -112,7 +112,7 @@ public class AlbumBrowser extends ListActivity {
                 }
                 TreeMap<Short, Short> track_num = new TreeMap<Short, Short>();
                 for (Song s : Contents.filteredAlbumSongList) {
-                    if (track_num.keySet().contains(s.disc_num) == false) {
+                    if (!track_num.keySet().contains(s.disc_num)) {
                         track_num.put(s.disc_num, (short) 1);
                     } else {
                         track_num.put(s.disc_num,
@@ -141,7 +141,7 @@ public class AlbumBrowser extends ListActivity {
         return false;
     }
 
-    private OnItemClickListener musicGridListener = new OnItemClickListener() {
+    private final OnItemClickListener musicGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             Intent intent = new Intent(AlbumBrowser.this, SongBrowser.class);

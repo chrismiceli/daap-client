@@ -118,7 +118,7 @@ public class ArtistBrowser extends ListActivity {
         return false;
     }
 
-    private OnItemClickListener musicGridListener = new OnItemClickListener() {
+    private final OnItemClickListener musicGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             String artist = Contents.artistNameList.get(position);

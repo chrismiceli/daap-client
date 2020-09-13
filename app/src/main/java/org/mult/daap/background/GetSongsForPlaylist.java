@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 public class GetSongsForPlaylist extends Observable implements Runnable {
-    private DaapPlaylist playList;
+    private final DaapPlaylist playList;
     private int lastMessage;
 
     public GetSongsForPlaylist(DaapPlaylist playList) {
@@ -32,7 +32,7 @@ public class GetSongsForPlaylist extends Observable implements Runnable {
         MediaPlayback.clearState();
         Contents.clearLists();
         try {
-            if (playList.all_songs == true) {
+            if (playList.all_songs) {
                 if (Contents.daapHost.getSongs().size() == 0) {
                     notifyAndSet(PlaylistBrowser.EMPTY);
                     return;
@@ -54,8 +54,6 @@ public class GetSongsForPlaylist extends Observable implements Runnable {
                     }
                     Contents.songListAdd(song);
                 }
-                Contents.sortLists();
-                notifyAndSet(PlaylistBrowser.FINISHED);
             } else {
                 playList.initialize();
                 ArrayList<Song> el = (ArrayList<Song>) playList.getSongs();
@@ -80,9 +78,9 @@ public class GetSongsForPlaylist extends Observable implements Runnable {
                     }
                     Contents.songListAdd(song);
                 }
-                Contents.sortLists();
-                notifyAndSet(PlaylistBrowser.FINISHED);
             }
+            Contents.sortLists();
+            notifyAndSet(PlaylistBrowser.FINISHED);
         } catch (Exception e) {
             e.printStackTrace();
         }

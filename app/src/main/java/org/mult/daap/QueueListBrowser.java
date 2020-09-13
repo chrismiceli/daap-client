@@ -140,7 +140,7 @@ public class QueueListBrowser extends Activity {
         return false;
     }
 
-    private OnItemClickListener queuelistGridListener = new OnItemClickListener() {
+    private final OnItemClickListener queuelistGridListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             Contents.setSongPosition(Contents.queue, position);
@@ -162,8 +162,8 @@ public class QueueListBrowser extends Activity {
     }
 
     public class ProfilesAdapter extends BaseAdapter {
-        private Context vContext;
-        private int font_size;
+        private final Context vContext;
+        private final int font_size;
 
         public ProfilesAdapter(Context c) {
             vContext = c;

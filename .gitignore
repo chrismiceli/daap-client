@@ -2,3 +2,5 @@
 app/build
 local.properties
 .idea/libraries
+.idea/caches
+.idea/codeStyles
