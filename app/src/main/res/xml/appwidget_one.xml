@@ -17,4 +17,4 @@
     android:minWidth="294dip"
     android:minHeight="72dip"
     android:updatePeriodMillis="0"
-    android:initialLayout="@layout/appwidget_one"></appwidget-provider>
+    android:initialLayout="@layout/appwidget_one" />

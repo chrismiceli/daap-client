@@ -82,10 +82,6 @@ public class SeparatedListAdapter extends BaseAdapter {
         return -1;
     }
 
-    public boolean areAllItemsSelectable() {
-        return false;
-    }
-
     public boolean isEnabled(int position) {
         return (getItemViewType(position) != TYPE_SECTION_HEADER);
     }

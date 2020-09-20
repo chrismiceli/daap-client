@@ -70,7 +70,6 @@ public class Servers extends Activity implements Observer {
     private DBAdapter db;
     private JmDNSListener jmDNSListener = null;
     private String localLabel = null;
-    private final List<Map<String, String>> serversList = new ArrayList<>();
     private final ArrayList<Bundle> discoveredServers = new ArrayList<>();
     private ProgressDialog pd = null;
     private WrapMulticastLock fLock;
@@ -225,7 +224,7 @@ public class Servers extends Activity implements Observer {
             // Since lm is not null, we have to create a new pd
             Integer lastMessage = lm.getLastMessage();
             update(lm, LoginManager.INITIATED);
-            if (lastMessage != LoginManager.INITIATED) {
+            if (!lastMessage.equals(LoginManager.INITIATED)) {
                 update(lm, lastMessage);
             }
         }
@@ -512,19 +511,6 @@ public class Servers extends Activity implements Observer {
                              int resource, String[] from, int[] to) {
             super(context, data, resource, from, to);
             mList = data;
-            Map<String, String> header = new HashMap<>();
-            header.put(TITLE, "Section Header");
-            header.put(CAPTION, "header");
-            header.put(KEY, "header_key");
-            serversList.add(header);
-            header.clear();
-            for (int x = 0; x < data.size(); x++) {
-                Map<String, String> item = new HashMap<>();
-                item.put(TITLE, (String) data.get(x).get(TITLE));
-                item.put(CAPTION, (String) data.get(x).get(CAPTION));
-                item.put(KEY, (String) data.get(x).get(KEY));
-                serversList.add(item);
-            }
         }
 
         public int getCount() {
@@ -556,10 +542,11 @@ public class Servers extends Activity implements Observer {
     private final Handler labelChanger = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            localLabel = getString(R.string.local_servers);
+            StringBuilder stringBuilder = new StringBuilder(getString(R.string.local_servers));
             for (int i = 0; i < msg.what; i++) {
-                localLabel = localLabel + ".";
+                stringBuilder.append(".");
             }
+            localLabel = stringBuilder.toString();
             adapter.headers.clear();
             adapter.headers.add(getString(R.string.remembered_servers));
             adapter.headers.add(localLabel);
@@ -582,7 +569,7 @@ public class Servers extends Activity implements Observer {
     private void saveServer(String serverName, String serverAddress,
                             String password, boolean loginCheckBox) {
         db.open();
-        if (!db.serverExists(serverName, serverAddress, password, loginCheckBox)) {
+        if (db.serverNotExists(serverName, serverAddress, password, loginCheckBox)) {
             db.insertServer(serverName, serverAddress, password, loginCheckBox);
         }
         db.close();

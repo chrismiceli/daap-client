@@ -14,7 +14,7 @@
     <string name="play_artist">Reproducir Artista</string>
     <string name="all_songs">Todas las Canciones</string>
     <string name="current_song">Canción Actual</string>
-    <string name="upcoming_song"></string>
+    <string name="upcoming_song" />
     <string name="server_settings">Ajustes de Servidor</string>
     <string name="share_name">Nombre de "Share" de DAAP</string>
     <string name="url_description">URL y Puerto</string>

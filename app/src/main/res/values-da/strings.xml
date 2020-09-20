@@ -13,7 +13,7 @@
     <string name="play_artist">Afspil Artist</string>
     <string name="all_songs">Alle Sange</string>
     <string name="current_song">Nuværende Sang</string>
-    <string name="upcoming_song"></string>
+    <string name="upcoming_song" />
     <string name="share_name">DAAP Delings Navn</string>
     <string name="url_description">URL og Port</string>
     <string name="login_required">Login kræves</string>

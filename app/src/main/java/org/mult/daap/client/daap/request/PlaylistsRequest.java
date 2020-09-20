@@ -36,11 +36,11 @@ public class PlaylistsRequest extends Request {
         public final int size;
     }
 
-    private ArrayList<DaapPlaylist> mPlaylist;
+    private final ArrayList<DaapPlaylist> mPlaylist;
     private ArrayList<FieldPair> mlclList;
     private ArrayList<FieldPair> mlitList;
 
-    public PlaylistsRequest(DaapHost h) throws NoServerPermissionException,
+    public PlaylistsRequest(DaapHost h) throws
             BadResponseCodeException, PasswordFailedException, IOException {
         super(h);
         mlclList = new ArrayList<>();
@@ -118,16 +118,22 @@ public class PlaylistsRequest extends Request {
             position += 4;
             size = readInt(data, position);
             position += 4;
-            if (name.equals("minm"))
-                p.name = readString(data, position, size);
-            else if (name.equals("miid"))
-                p.id = readInt(data, position);
-            else if (name.equals("mper"))
-                p.persistent_id = readString(data, position, size);
-            else if (name.equals("mimc"))
-                p.song_count = readInt(data, position);
-            else if (name.equals("aeSP")) {
-                p.smart_playlist = true;
+            switch (name) {
+                case "minm":
+                    p.name = readString(data, position, size);
+                    break;
+                case "miid":
+                    p.id = readInt(data, position);
+                    break;
+                case "mper":
+                    p.persistent_id = readString(data, position, size);
+                    break;
+                case "mimc":
+                    p.song_count = readInt(data, position);
+                    break;
+                case "aeSP":
+                    p.smart_playlist = true;
+                    break;
             }
             position += size;
         }

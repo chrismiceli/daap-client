@@ -63,8 +63,7 @@ public class HangingUpdateRequest extends Request {
     protected void readResponse() {
     }
 
-    protected void query() throws BadResponseCodeException,
-            PasswordFailedException {
+    protected void query() {
         URL url;
         try {
             url = new URL("http://" + host.getAddress() + ":" + host.getPort()

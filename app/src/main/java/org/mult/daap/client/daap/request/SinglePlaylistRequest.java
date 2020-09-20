@@ -22,8 +22,8 @@ public class SinglePlaylistRequest extends Request {
         public final int size;
     }
 
-    private ArrayList<Song> mSongList;
-    protected DaapPlaylist playlist;
+    private final ArrayList<Song> mSongList;
+    protected final DaapPlaylist playlist;
     private ArrayList<FieldPair> mlclList;
     private ArrayList<FieldPair> mlitList;
 

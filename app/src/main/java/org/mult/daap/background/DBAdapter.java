@@ -106,8 +106,8 @@ public class DBAdapter {
     }
 
     // ---checks if a server already exists in the database---
-    public boolean serverExists(String name, String address, String password,
-                                boolean login_required) {
+    public boolean serverNotExists(String name, String address, String password,
+                                   boolean login_required) {
         StringBuilder selectionBuilder = new StringBuilder();
         ArrayList<String> selectionValuesList = new ArrayList<>();
         boolean exists = false;
@@ -143,7 +143,7 @@ public class DBAdapter {
             c.close();
         }
 
-        return exists;
+        return !exists;
     }
 
     // ---updates a title---

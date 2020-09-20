@@ -37,7 +37,7 @@ public class SingleDatabaseRequest extends Request {
         public final int size;
     }
 
-    private ArrayList<Song> mSongList;
+    private final ArrayList<Song> mSongList;
     private ArrayList<FieldPair> mlclList;
     private ArrayList<FieldPair> mlitList;
 
@@ -120,32 +120,42 @@ public class SingleDatabaseRequest extends Request {
             size = readInt(data, position);
             position += 4;
             s.host = host;
-            if (name.equals("miid")) {
-                s.id = Request.readInt(data, position, 4);
-            } else if (name.equals("minm")) {
-                s.name = readString(data, position, size).trim();
-                // } else if (name.equals("mper")) {
-                // s.persistent_id = readString(data, position, size).trim();
-            } else if (name.equals("asal")) {
-                s.album = readString(data, position, size).trim();
-            } else if (name.equals("asar")) {
-                s.artist = readString(data, position, size).trim();
-            } else if (name.equals("astn")) {
-                s.track = (short) readInt(data, position, 2);
-                // } else if (name.equals("asgn")) {
-                // s.genre = readString(data, position, size);
-            } else if (name.equals("asfm")) {
-                s.format = readString(data, position, size);
-            } else if (name.equals("astm")) {
-                s.time = readInt(data, position, 4);
-            } else if (name.equals("assz")) {
-                s.size = readInt(data, position, 4);
-                // } else if (name.equals("asco")) {
-                // s.compilation = (readInt(data, position, 1) == 1);
-            } else if (name.equals("asdn")) {
-                s.disc_num = (short) readInt(data, position, 2);
-                // } else if (name.equals("asbr")) {
-                // s.bitrate = readInt(data, position, 2);
+            switch (name) {
+                case "miid":
+                    s.id = Request.readInt(data, position, 4);
+                    break;
+                case "minm":
+                    s.name = readString(data, position, size).trim();
+                    // } else if (name.equals("mper")) {
+                    // s.persistent_id = readString(data, position, size).trim();
+                    break;
+                case "asal":
+                    s.album = readString(data, position, size).trim();
+                    break;
+                case "asar":
+                    s.artist = readString(data, position, size).trim();
+                    break;
+                case "astn":
+                    s.track = (short) readInt(data, position, 2);
+                    // } else if (name.equals("asgn")) {
+                    // s.genre = readString(data, position, size);
+                    break;
+                case "asfm":
+                    s.format = readString(data, position, size);
+                    break;
+                case "astm":
+                    s.time = readInt(data, position, 4);
+                    break;
+                case "assz":
+                    s.size = readInt(data, position, 4);
+                    // } else if (name.equals("asco")) {
+                    // s.compilation = (readInt(data, position, 1) == 1);
+                    break;
+                case "asdn":
+                    s.disc_num = (short) readInt(data, position, 2);
+                    // } else if (name.equals("asbr")) {
+                    // s.bitrate = readInt(data, position, 2);
+                    break;
             }
             position += size;
         }

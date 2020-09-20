@@ -117,7 +117,7 @@ public class AddServerMenu extends Activity {
             }
             serverAddress = serverAddress + ":" + port;
             db.open();
-            if (!db.serverExists(serverName, serverAddress, password,
+            if (db.serverNotExists(serverName, serverAddress, password,
                     loginCheckBox.isChecked())) {
                 db.insertServer(serverName, serverAddress, password,
                         loginCheckBox.isChecked());

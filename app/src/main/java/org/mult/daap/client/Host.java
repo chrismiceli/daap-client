@@ -88,8 +88,6 @@ public abstract class Host {
         return status;
     }
 
-    public abstract String getTypeString();
-
     public boolean isVisible() {
         return visible;
     }
@@ -99,7 +97,11 @@ public abstract class Host {
     }
 
     public boolean equals(Object o) {
-        return name.equals(((Host) o).getName());
+        if (o instanceof Host) {
+            return name.equals(((Host) o).getName());
+        }
+
+        return false;
     }
 
     public String getToolTipText() {

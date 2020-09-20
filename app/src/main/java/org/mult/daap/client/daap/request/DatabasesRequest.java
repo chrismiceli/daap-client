@@ -37,7 +37,7 @@ public class DatabasesRequest extends Request {
         public final int size;
     }
 
-    private ArrayList<Database> mDatabases;
+    private final ArrayList<Database> mDatabases;
     private ArrayList<FieldPair> mlclList;
     private ArrayList<FieldPair> mlitList;
 

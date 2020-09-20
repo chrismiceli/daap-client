@@ -30,8 +30,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class SongRequest extends Request {
     protected BufferedInputStream b;
-    protected long skip_bytes;
-    protected Song song;
+    protected final long skip_bytes;
+    protected final Song song;
 
     public SongRequest(DaapHost h, Song s, long bytes)
             throws PasswordFailedException, BadResponseCodeException,

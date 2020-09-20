@@ -11,50 +11,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="134d0892-19e3-4aad-9093-b40a23a956e1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AlbumBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AlbumBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistAlbumBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistAlbumBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Contents.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Contents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaButtonIntentReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaButtonIntentReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlayback.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlayback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlaybackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlaybackService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MyIndexerAdatper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MyIndexerAdatper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Preferences.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Preferences.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/QueueListBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/QueueListBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ServerEditorActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ServerEditorActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Servers.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/Servers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SongBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SongBrowser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/DBAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/DBAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/GetSongsForPlaylist.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/GetSongsForPlaylist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/LoginManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SearchThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SearchThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SeparatedListAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SeparatedListAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/WrapMulticastLock.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/WrapMulticastLock.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Host.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Host.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Song.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/SongIDComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/SongIDComparator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/DaapHost.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/DaapHost.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/DaapPlaylist.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/DaapPlaylist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/BadResponseCodeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/BadResponseCodeException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Base64.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/DatabasesRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/DatabasesRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/HangingUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/HangingUpdateRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/PlaylistsRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/PlaylistsRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Request.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SingleDatabaseRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SingleDatabaseRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SinglePlaylistRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SinglePlaylistRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/add_server_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/add_server_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/appwidget_one.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/appwidget_one.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/audio_player.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/audio_player.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/password_prompt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/password_prompt.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SongRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SongRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/widget/DAAPClientAppWidgetOneProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/widget/DAAPClientAppWidgetOneProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-da/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-da/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-es/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-es/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-ko/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-ko/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-no/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-no/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-zh-rCN/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-zh-rCN/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-zh-rTW/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-zh-rTW/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/appwidget_one.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/xml/appwidget_one.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/searchable.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/xml/searchable.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,14 +157,14 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="705" y="284" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600028189366" />
-    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1600029545260">
+    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1600632228833">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600029545260" />
-    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1600631181703">
+    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600632228833" />
+    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1600632623626">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1600631181703" />
+    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1600632623626" />
     <state width="2003" height="263" key="GridCell.Tab.0.bottom" timestamp="1599182420504">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
@@ -197,13 +181,17 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state width="2003" height="263" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1599182420504" />
+    <state x="605" y="299" key="IDE.errors.dialog" timestamp="1600632438232">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="605" y="299" key="IDE.errors.dialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600632438232" />
     <state x="629" y="304" key="caller.chooser.dialog" timestamp="1600630901123">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="629" y="304" key="caller.chooser.dialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600630901123" />
-    <state x="719" y="289" width="609" height="534" key="find.popup" timestamp="1600029564284">
+    <state x="719" y="289" width="611" height="534" key="find.popup" timestamp="1600632677107">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="719" y="289" width="609" height="534" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1600029564284" />
+    <state x="719" y="289" width="611" height="534" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1600632677107" />
   </component>
 </project>

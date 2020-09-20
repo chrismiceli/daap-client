@@ -13,7 +13,7 @@
     <string name="play_artist">聽藝術家</string>
     <string name="all_songs">每个歌</string>
     <string name="current_song">當前歌曲</string>
-    <string name="upcoming_song"></string>
+    <string name="upcoming_song" />
     <string name="share_name">DAAP 共用名稱</string>
     <string name="url_description">位址和連接埠</string>
     <string name="login_required">需要登入</string>

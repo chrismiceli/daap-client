@@ -156,13 +156,6 @@ public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
         pushUpdate(service, appWidgetIds, views);
     }
 
-    /**
-     * Link up various button actions using {@link PendingIntents}.
-     *
-     * @param playerActive True if player is active in background, which means
-     *                     widget click will launch {@link StreamMediaActivity},
-     *                     otherwise we launch {@link StreamListActivity}.
-     */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
         // Connect up various buttons and touch events
         Intent intent;

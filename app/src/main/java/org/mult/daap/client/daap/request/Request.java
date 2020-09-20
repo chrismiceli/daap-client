@@ -52,8 +52,7 @@ public abstract class Request {
     protected final int access_index;
 
     // start of song request.
-    public Request(DaapHost h) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public Request(DaapHost h) {
         // needed for bug in android:
         // http://code.google.com/p/android/issues/detail?id=7786
         System.setProperty("http.keepAlive", "false");

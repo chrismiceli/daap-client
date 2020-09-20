@@ -78,14 +78,11 @@ public class DaapHost extends Host {
     }
 
     public void connect() throws Exception {
-        boolean logged_in;
-        logged_in = login();
-        if (logged_in) {
-            grabSongs();
-        }
+        login();
+        grabSongs();
     }
 
-    public boolean login() throws Exception {
+    public void login() throws Exception {
         try {
             revision_num = 1;
             session_id = 0;
@@ -122,7 +119,6 @@ public class DaapHost extends Host {
             Log.d("DaapHost", "General exception!");
             throw e;
         }
-        return true;
     }
 
     public void logout() throws PasswordFailedException, IOException,
@@ -162,8 +158,8 @@ public class DaapHost extends Host {
             if (e.response_code == 500) {
                 Log.d("DaapHost", "500 Response code");
                 logout();
-                if (login())
-                    grabSongs(); // try again.
+                login();
+                grabSongs(); // try again.
             }
         }
     }
@@ -201,10 +197,6 @@ public class DaapHost extends Host {
 
     public int getPort() {
         return port;
-    }
-
-    public double getDaapVersion() {
-        return daap_version;
     }
 
     public int getRevisionNumber() {
@@ -272,10 +264,6 @@ public class DaapHost extends Host {
             }
         }
         return null;
-    }
-
-    public String getTypeString() {
-        return "Host";
     }
 
     public int getServerType() {
