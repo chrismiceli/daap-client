@@ -1,9 +1,7 @@
 package org.mult.daap;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,14 +20,10 @@ class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
     final HashMap<String, Integer> alphaIndexer;
     final ArrayList<String> letterList;
     final Context vContext;
-    final int font_size;
 
     public MyIndexerAdapter(Context context, int textViewResourceId,
                             List<T> objects) {
         super(context, textViewResourceId, objects);
-        SharedPreferences mPrefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        font_size = Integer.parseInt(mPrefs.getString("font_pref", "18"));
         vContext = context;
         myElements = (ArrayList<String>) objects;
         alphaIndexer = new HashMap<>();
@@ -55,7 +49,7 @@ class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView tv = new TextView(vContext.getApplicationContext());
-        tv.setTextSize(font_size);
+        tv.setTextSize(18);
         tv.setTextColor(Color.WHITE);
         tv.setText(myElements.get(position));
         return tv;

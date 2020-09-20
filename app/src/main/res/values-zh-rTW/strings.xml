@@ -57,7 +57,6 @@
     <string name="play_queue">播放清單</string>
     <string name="clear_queue">清除清單</string>
     <string name="search">搜尋</string>
-    <string name="preferences">偏好</string>
     <string name="streaming_pref_detail">音樂流 (測試)</string>
     <string name="streaming">流</string>
     <string name="artists">藝術家</string>

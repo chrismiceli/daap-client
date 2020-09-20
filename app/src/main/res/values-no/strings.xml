@@ -60,7 +60,6 @@
     <string name="play_queue">Spill Kø</string>
     <string name="clear_queue">Tøm Kø</string>
     <string name="search">Søk</string>
-    <string name="preferences">Innstillinger</string>
     <string name="artists">Artister</string>
     <string name="albums">Albumer</string>
     <string name="songs">Sanger</string>
@@ -68,11 +67,6 @@
     <string name="downloading_file">Lagrer sang…</string>
     <string name="save_complete">Sang lagret!</string>
     <string name="save_error">Feil ved lagring av sang</string>
-    <string name="font_size">Tekststørrelse</string>
-    <string name="scrobblerTitle">Scrobbler Støtte</string>
-    <string name="scrobblerSummary">Aktiver støtte for Last.fm\'s Scrobbler støtte.
-		Må ha en \"scrobbler\" installert.</string>
-    <string name="font_pref_detail">Endre tekststørrelse</string>
     <string name="menu_library">Bibliotek</string>
     <string name="media_playback_service_desc">"Tjenesten brukes til å håndtere wigets-handlinger"</string>
     <string name="widget_one_initial_text">"Berør for å velge media."</string>

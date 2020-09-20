@@ -58,7 +58,6 @@
     <string name="play_queue">Jouer la file</string>
     <string name="clear_queue">Effacer la file</string>
     <string name="search">Rechercher</string>
-    <string name="preferences">Préferences</string>
     <string name="streaming_pref_detail">Diffuser la musique en streaming (beta)</string>
     <string name="streaming">Streaming</string>
     <string name="artists">Artistes</string>

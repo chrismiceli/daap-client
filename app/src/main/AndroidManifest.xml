@@ -85,9 +85,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Preferences"
-            android:label="Preferences" />
-        <activity
             android:name=".SearchActivity"
             android:label="Search">
             <intent-filter>

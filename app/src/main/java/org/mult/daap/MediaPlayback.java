@@ -16,7 +16,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -27,7 +26,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.Html;
@@ -96,7 +94,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private int mTextWidth = 0;
     private int mViewWidth = 0;
     private boolean mDraggingLabel = false;
-    boolean scrobbler_support = false;
 
     private final DAAPClientAppWidgetOneProvider mAppWidgetProvider = DAAPClientAppWidgetOneProvider.getInstance();
 
@@ -134,8 +131,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mAlbumName = findViewById(R.id.albumname);
         mTrackName = findViewById(R.id.trackname);
         mSongSummary = findViewById(R.id.song_summary);
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        scrobbler_support = mPrefs.getBoolean("scrobbler_pref", false);
     }
 
     @Override
@@ -232,9 +227,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
             tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
             setUpActivity();
-            if (scrobbler_support) {
-                scrobble(0); // START
-            }
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, R.string.media_playback_error, Toast.LENGTH_LONG).show();
@@ -325,15 +317,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         public void onClick(View v) {
             if (mediaPlayer != null) {
                 if (mediaPlayer.isPlaying()) {
-                    if (scrobbler_support) {
-                        scrobble(2); // PAUSE
-                    }
                     mediaPlayer.pause();
                     stopNotification();
                 } else {
-                    if (scrobbler_support) {
-                        scrobble(1); // RESUME
-                    }
                     mediaPlayer.start();
                     startNotification();
                 }
@@ -402,9 +388,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     @Override
     public void onDestroy() {
         handler.removeMessages(REFRESH);
-        if (scrobbler_support) {
-            scrobble(3); // COMPLETE
-        }
         super.onDestroy();
 
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
@@ -730,9 +713,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private final OnCompletionListener normalOnCompletionListener = new OnCompletionListener() {
         public void onCompletion(MediaPlayer mp) {
             try {
-                if (scrobbler_support) {
-                    scrobble(3); // COMPLETE
-                }
                 if (Contents.shuffle) {
                     startSong(Contents.getRandomSong());
                 } else if (Contents.repeat) {
@@ -835,15 +815,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             } else if (MediaPlaybackService.TOGGLEPAUSE.equals(action)) {
                 if (mediaPlayer != null) {
                     if (mediaPlayer.isPlaying()) {
-                        if (scrobbler_support) {
-                            scrobble(2); // PAUSE
-                        }
                         mediaPlayer.pause();
                         stopNotification();
                     } else {
-                        if (scrobbler_support) {
-                            scrobble(1); // RESUME
-                        }
                         mediaPlayer.start();
                         startNotification();
                     }
@@ -854,15 +828,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             } else if (MediaPlaybackService.PAUSE.equals(action)) {
                 if (mediaPlayer != null) {
                     if (mediaPlayer.isPlaying()) {
-                        if (scrobbler_support) {
-                            scrobble(2); // PAUSE
-                        }
                         mediaPlayer.pause();
                         stopNotification();
                     } else {
-                        if (scrobbler_support) {
-                            scrobble(1); // RESUME
-                        }
                         mediaPlayer.start();
                         startNotification();
                     }
@@ -873,9 +841,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             } else if (MediaPlaybackService.STOP.equals(action)) {
                 if (mediaPlayer != null) {
                     if (mediaPlayer.isPlaying()) {
-                        if (scrobbler_support) {
-                            scrobble(2); // PAUSE
-                        }
                         mediaPlayer.pause();
                         mediaPlayer.seekTo(0);
                         stopNotification();
@@ -890,9 +855,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             } else if (MediaPlaybackService.HEADSET_CHANGE.equals(action)) {
                 if (mediaPlayer != null) {
                     if (mediaPlayer.isPlaying()) {
-                        if (scrobbler_support) {
-                            scrobble(2); // PAUSE
-                        }
                         mediaPlayer.pause();
                         stopNotification();
                     }

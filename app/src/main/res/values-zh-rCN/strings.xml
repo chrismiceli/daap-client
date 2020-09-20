@@ -57,7 +57,6 @@
     <string name="play_queue">播放列表</string>
     <string name="clear_queue">清除列表</string>
     <string name="search">搜索</string>
-    <string name="preferences">首选项</string>
     <string name="streaming_pref_detail">音乐流 (测试)</string>
     <string name="streaming">流</string>
     <string name="artists">艺术家</string>

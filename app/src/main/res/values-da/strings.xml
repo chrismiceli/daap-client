@@ -58,7 +58,6 @@
     <string name="play_queue">Afspil Queue</string>
     <string name="clear_queue">Ryd Kø</string>
     <string name="search">Søg</string>
-    <string name="preferences">Præferencer</string>
     <string name="streaming_pref_detail">Stream musik (beta)</string>
     <string name="streaming">Streaming</string>
     <string name="artists">Kunstnere</string>
@@ -66,8 +65,6 @@
     <string name="songs">Sange</string>
     <string name="save">Gæm</string>
     <string name="save_complete">Gemte filen til </string>
-    <string name="font_size">Skriftstørrelse</string>
-    <string name="font_pref_detail">Ændre skriftstørrelse</string>
     <string name="seeking_disabled">Søger er i øjeblikket deaktiveret, mens du henter.
 	</string>
 </resources>

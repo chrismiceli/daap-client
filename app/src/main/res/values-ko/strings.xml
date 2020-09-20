@@ -56,7 +56,6 @@
     <string name="play_queue">대기 목록을 재생합니다</string>
     <string name="clear_queue">대기 목록을 지웁니다</string>
     <string name="search">찾기</string>
-    <string name="preferences">환경 설정</string>
     <string name="streaming_pref_detail">스트림 음악 (beta)</string>
     <string name="streaming">스트리밍</string>
     <string name="artists">아티스트</string>

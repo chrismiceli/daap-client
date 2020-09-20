@@ -5,10 +5,8 @@ import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -286,14 +284,10 @@ public class SongBrowser extends ListActivity {
         HashMap<String, Integer> alphaIndexer;
         ArrayList<String> letterList;
         final Context vContext;
-        final int font_size;
 
         public MyArrayAdapter(Context context, int textViewResourceId,
                               List<T> objects) {
             super(context, textViewResourceId, objects);
-            SharedPreferences mPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(context);
-            font_size = Integer.parseInt(mPrefs.getString("font_pref", "18"));
             vContext = context;
             myElements = (ArrayList<Song>) objects;
         }
@@ -306,7 +300,7 @@ public class SongBrowser extends ListActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv = new TextView(vContext.getApplicationContext());
-            tv.setTextSize(font_size);
+            tv.setTextSize(18);
             tv.setTextColor(Color.WHITE);
             tv.setText(myElements.get(position).toString());
             return tv;

@@ -57,7 +57,6 @@
     <string name="play_queue">Tocar Fila</string>
     <string name="clear_queue">Apagar Fila</string>
     <string name="search">Pesquisar</string>
-    <string name="preferences">Preferências</string>
     <string name="streaming_pref_detail">Streaming Música (beta)</string>
     <string name="streaming">Streaming</string>
     <string name="artists">Artistas</string>
@@ -65,7 +64,5 @@
     <string name="songs">Músicas</string>
     <string name="save">Salvar</string>
     <string name="save_complete">Arquivo salvo para </string>
-    <string name="font_size">Tamanho da Fonte</string>
-    <string name="font_pref_detail">Alterar o tamanho da fonte</string>
     <string name="seeking_disabled">Pular está desativado durante o download.</string>
 </resources>

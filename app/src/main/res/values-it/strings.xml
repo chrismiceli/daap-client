@@ -56,7 +56,6 @@
     <string name="play_queue">Riproduci coda</string>
     <string name="clear_queue">Svuota coda</string>
     <string name="search">Cerca</string>
-    <string name="preferences">Preferenze</string>
     <string name="streaming_pref_detail">Streaming brani (beta)</string>
     <string name="streaming">Streaming</string>
     <string name="artists">Artisti</string>
