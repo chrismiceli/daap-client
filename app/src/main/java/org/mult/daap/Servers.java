@@ -70,13 +70,13 @@ public class Servers extends Activity implements Observer {
     private DBAdapter db;
     private JmDNSListener jmDNSListener = null;
     private String localLabel = null;
-    private final List<Map<String, String>> serversList = new ArrayList<Map<String, String>>();
-    private final ArrayList<Bundle> discoveredServers = new ArrayList<Bundle>();
+    private final List<Map<String, String>> serversList = new ArrayList<>();
+    private final ArrayList<Bundle> discoveredServers = new ArrayList<>();
     private ProgressDialog pd = null;
     private WrapMulticastLock fLock;
 
     public Map<String, ?> createItem(String title, String caption) {
-        Map<String, String> item = new HashMap<String, String>();
+        Map<String, String> item = new HashMap<>();
         item.put(TITLE, title);
         item.put(CAPTION, caption);
         return item;
@@ -90,45 +90,42 @@ public class Servers extends Activity implements Observer {
 
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
-        switch (id) {
-            case PASSWORD_DIALOG:
-                dialog = new Dialog(this);
-                dialog.setContentView(R.layout.password_prompt);
-                dialog.setTitle(getString(R.string.password));
-                dialog.setCancelable(true);
-                dialog.setCanceledOnTouchOutside(true);
-                Button buttonConfrim = (Button) dialog
-                        .findViewById(R.id.PasswordOkButton);
-                Button buttonCancel = (Button) dialog
-                        .findViewById(R.id.PasswordCancelButton);
-                final EditText password = (EditText) dialog
-                        .findViewById(R.id.PasswordEditText);
-                buttonConfrim
-                        .setOnClickListener(new android.view.View.OnClickListener() {
-                            public void onClick(View arg0) {
-                                Contents.loginManager.interrupt();
-                                Contents.loginManager.deleteObservers();
-                                LoginManager lm = new LoginManager(
-                                        Contents.loginManager.name,
-                                        Contents.loginManager.address, password
-                                        .getText().toString(), true);
-                                password.setText("");
-                                startLogin(lm);
-                                dismissDialog(PASSWORD_DIALOG);
-                            }
-                        });
-                buttonCancel
-                        .setOnClickListener(new android.view.View.OnClickListener() {
-                            public void onClick(View v) {
-                                Contents.loginManager = null;
-                                password.setText("");
-                                dismissDialog(PASSWORD_DIALOG);
-                            }
-                        });
-                break;
-            default:
-                dialog = null;
-                break;
+        if (id == PASSWORD_DIALOG) {
+            dialog = new Dialog(this);
+            dialog.setContentView(R.layout.password_prompt);
+            dialog.setTitle(getString(R.string.password));
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+            Button buttonConfrim = dialog
+                    .findViewById(R.id.PasswordOkButton);
+            Button buttonCancel = dialog
+                    .findViewById(R.id.PasswordCancelButton);
+            final EditText password = dialog
+                    .findViewById(R.id.PasswordEditText);
+            buttonConfrim
+                    .setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View arg0) {
+                            Contents.loginManager.interrupt();
+                            Contents.loginManager.deleteObservers();
+                            LoginManager lm = new LoginManager(
+                                    Contents.loginManager.name,
+                                    Contents.loginManager.address, password
+                                    .getText().toString(), true);
+                            password.setText("");
+                            startLogin(lm);
+                            dismissDialog(PASSWORD_DIALOG);
+                        }
+                    });
+            buttonCancel
+                    .setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Contents.loginManager = null;
+                            password.setText("");
+                            dismissDialog(PASSWORD_DIALOG);
+                        }
+                    });
+        } else {
+            dialog = null;
         }
         return dialog;
     }
@@ -145,9 +142,9 @@ public class Servers extends Activity implements Observer {
     @Override
     public void onResume() {
         super.onResume();
-        List<Map<String, ?>> rememberedServers = new LinkedList<Map<String, ?>>();
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-        boolean wiFi = false;
+        List<Map<String, ?>> rememberedServers = new LinkedList<>();
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        boolean wiFi;
         if (!wifiManager.isWifiEnabled()) {
             wiFi = false;
         } else {
@@ -190,7 +187,7 @@ public class Servers extends Activity implements Observer {
         }
         rememberedServers.add(createItem(getString(R.string.add_server),
                 getString(R.string.add_server_detail)));
-        localServers = new LinkedList<Map<String, ?>>();
+        localServers = new LinkedList<>();
         adapter = new SeparatedListAdapter(this);
         adapter.addSection(getString(R.string.remembered_servers),
                 new ServerAdapter(this, rememberedServers,
@@ -274,7 +271,7 @@ public class Servers extends Activity implements Observer {
 
     @Override
     public boolean onContextItemSelected(MenuItem aItem) {
-        Intent intent = null;
+        Intent intent;
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
         db = new DBAdapter(this);
@@ -408,22 +405,20 @@ public class Servers extends Activity implements Observer {
             };
             pd.setOnCancelListener(onCancelListener);
         } else if (((Integer) data).compareTo(LoginManager.CONNECTION_FINISHED) == 0) {
-            loginHandler.sendEmptyMessage(LoginManager.CONNECTION_FINISHED
-                    .intValue());
+            loginHandler.sendEmptyMessage(LoginManager.CONNECTION_FINISHED);
         } else if (((Integer) data).compareTo(LoginManager.PASSWORD_FAILED) == 0) {
-            loginHandler.sendEmptyMessage(LoginManager.PASSWORD_FAILED
-                    .intValue());
+            loginHandler.sendEmptyMessage(LoginManager.PASSWORD_FAILED);
         } else {
             // ERROR
             Contents.loginManager.deleteObserver(this);
-            loginHandler.sendEmptyMessage(LoginManager.ERROR.intValue());
+            loginHandler.sendEmptyMessage(LoginManager.ERROR);
         }
     }
 
     private final Handler loginHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == LoginManager.CONNECTION_FINISHED.intValue()) {
+            if (msg.what == LoginManager.CONNECTION_FINISHED) {
                 pd.dismiss();
                 // save the server
                 boolean loginRequired = Contents.loginManager.password
@@ -435,7 +430,7 @@ public class Servers extends Activity implements Observer {
                 final Intent intent = new Intent(Servers.this,
                         PlaylistBrowser.class);
                 startActivityForResult(intent, 1);
-            } else if (msg.what == LoginManager.PASSWORD_FAILED.intValue()) {
+            } else if (msg.what == LoginManager.PASSWORD_FAILED) {
                 pd.dismiss();
                 // Contents.loginManager = null;
                 showDialog(PASSWORD_DIALOG);
@@ -496,7 +491,7 @@ public class Servers extends Activity implements Observer {
 
             TextView getlcT() { // list_complex Title
                 if (vwlcT == null) {
-                    vwlcT = (TextView) base
+                    vwlcT = base
                             .findViewById(R.id.list_complex_title);
                 }
                 return vwlcT;
@@ -504,7 +499,7 @@ public class Servers extends Activity implements Observer {
 
             TextView getlcC() { // list_complex Caption
                 if (vwlcC == null) {
-                    vwlcC = (TextView) base
+                    vwlcC = base
                             .findViewById(R.id.list_complex_caption);
                 }
                 return vwlcC;
@@ -517,14 +512,14 @@ public class Servers extends Activity implements Observer {
                              int resource, String[] from, int[] to) {
             super(context, data, resource, from, to);
             mList = data;
-            Map<String, String> header = new HashMap<String, String>();
+            Map<String, String> header = new HashMap<>();
             header.put(TITLE, "Section Header");
             header.put(CAPTION, "header");
             header.put(KEY, "header_key");
             serversList.add(header);
             header.clear();
             for (int x = 0; x < data.size(); x++) {
-                Map<String, String> item = new HashMap<String, String>();
+                Map<String, String> item = new HashMap<>();
                 item.put(TITLE, (String) data.get(x).get(TITLE));
                 item.put(CAPTION, (String) data.get(x).get(CAPTION));
                 item.put(KEY, (String) data.get(x).get(KEY));
@@ -543,7 +538,7 @@ public class Servers extends Activity implements Observer {
         public View getView(final int position, View convertView,
                             ViewGroup parent) {
             View row = convertView;
-            ViewWrapper wrapper = null;
+            ViewWrapper wrapper;
             if (row == null) {
                 LayoutInflater inflater = getLayoutInflater();
                 row = inflater.inflate(R.layout.list_complex, null);
@@ -575,7 +570,7 @@ public class Servers extends Activity implements Observer {
     private final Handler mDNSHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Bundle bundle = (Bundle) msg.getData();
+            Bundle bundle = msg.getData();
             String name = bundle.getString("name");
             String address = bundle.getString("address");
             localServers.add(createItem(name, address));

@@ -45,7 +45,7 @@ public class WrapMulticastLock {
         public New(WifiManager wifim) {
             try {
                 mInstance = wifim.createMulticastLock("mylock");
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -53,7 +53,7 @@ public class WrapMulticastLock {
         public void acquire() {
             try {
                 mInstance.acquire();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -61,7 +61,7 @@ public class WrapMulticastLock {
         public void release() {
             try {
                 mInstance.release();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
     }

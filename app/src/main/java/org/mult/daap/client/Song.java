@@ -63,8 +63,7 @@ public class Song implements Comparable<Object> {
     }
 
     public String toString() {
-        String ret = artist + (artist.length() > 0 ? " - " : "") + name;
-        return ret;
+        return artist + (artist.length() > 0 ? " - " : "") + name;
     }
 
     public int compareTo(Object another) {

@@ -29,10 +29,10 @@ class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
         super(context, textViewResourceId, objects);
         SharedPreferences mPrefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
-        font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
+        font_size = Integer.parseInt(mPrefs.getString("font_pref", "18"));
         vContext = context;
         myElements = (ArrayList<String>) objects;
-        alphaIndexer = new HashMap<String, Integer>();
+        alphaIndexer = new HashMap<>();
         int size = myElements.size();
         for (int i = size - 1; i >= 0; i--) {
             String element = myElements.get(i);
@@ -42,7 +42,7 @@ class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
                 alphaIndexer.put(" ", i);
             }
         }
-        letterList = new ArrayList<String>(alphaIndexer.keySet()); // list can be
+        letterList = new ArrayList<>(alphaIndexer.keySet()); // list can be
         // sorted
         Collections.sort(letterList);
     }

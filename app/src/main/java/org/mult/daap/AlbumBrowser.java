@@ -75,8 +75,8 @@ public class AlbumBrowser extends ListActivity {
     }
 
     private void createList() {
-        ListView albumList = (ListView) findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+        ListView albumList = findViewById(android.R.id.list);
+        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.albumNameList);
         setListAdapter(adapter);
@@ -96,47 +96,46 @@ public class AlbumBrowser extends ListActivity {
     public boolean onContextItemSelected(MenuItem aItem) {
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
-        switch (aItem.getItemId()) {
-            case CONTEXT_PLAY_ALBUM:
-                Intent intent = new Intent(AlbumBrowser.this,
-                        MediaPlayback.class);
-                String albName = Contents.albumNameList.get(menuInfo.position);
-                if (albName.equals(getString(R.string.no_album_name))) {
-                    albName = "";
+        if (aItem.getItemId() == CONTEXT_PLAY_ALBUM) {
+            Intent intent = new Intent(AlbumBrowser.this,
+                    MediaPlayback.class);
+            String albName = Contents.albumNameList.get(menuInfo.position);
+            if (albName.equals(getString(R.string.no_album_name))) {
+                albName = "";
+            }
+            Contents.filteredAlbumSongList.clear();
+            for (Song s : Contents.songList) {
+                if (s.album.equals(albName)) {
+                    Contents.filteredAlbumSongList.add(s);
                 }
-                Contents.filteredAlbumSongList.clear();
-                for (Song s : Contents.songList) {
-                    if (s.album.equals(albName)) {
-                        Contents.filteredAlbumSongList.add(s);
-                    }
+            }
+            TreeMap<Short, Short> track_num = new TreeMap<>();
+            for (Song s : Contents.filteredAlbumSongList) {
+                if (!track_num.containsKey(s.disc_num)) {
+                    track_num.put(s.disc_num, (short) 1);
+                } else {
+                    track_num.put(s.disc_num,
+                            (short) (track_num.get(s.disc_num) + 1));
                 }
-                TreeMap<Short, Short> track_num = new TreeMap<Short, Short>();
-                for (Song s : Contents.filteredAlbumSongList) {
-                    if (!track_num.keySet().contains(s.disc_num)) {
-                        track_num.put(s.disc_num, (short) 1);
-                    } else {
-                        track_num.put(s.disc_num,
-                                (short) (track_num.get(s.disc_num) + 1));
-                    }
-                }
-                Comparator<Song> sdnc = new SongDiscNumComparator();
-                Comparator<Song> stnc = new SongTrackComparator();
-                Collections.sort(Contents.filteredAlbumSongList, sdnc);
-                // sorted by disc number now, but not within the disc
-                int pos = 0;
-                Short max_num_track;
-                for (Map.Entry<Short, Short> entry : track_num.entrySet()) {
-                    max_num_track = entry.getValue();
-                    Collections.sort(Contents.filteredAlbumSongList.subList(pos,
-                            (int) max_num_track + pos), stnc);
-                    pos += max_num_track;
-                }
-                Contents.setSongPosition(Contents.filteredAlbumSongList, 0);
-                MediaPlayback.clearState();
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                startActivityForResult(intent, 1);
-                return true;
+            }
+            Comparator<Song> sdnc = new SongDiscNumComparator();
+            Comparator<Song> stnc = new SongTrackComparator();
+            Collections.sort(Contents.filteredAlbumSongList, sdnc);
+            // sorted by disc number now, but not within the disc
+            int pos = 0;
+            Short max_num_track;
+            for (Map.Entry<Short, Short> entry : track_num.entrySet()) {
+                max_num_track = entry.getValue();
+                Collections.sort(Contents.filteredAlbumSongList.subList(pos,
+                        (int) max_num_track + pos), stnc);
+                pos += max_num_track;
+            }
+            Contents.setSongPosition(Contents.filteredAlbumSongList, 0);
+            MediaPlayback.clearState();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+            startActivityForResult(intent, 1);
+            return true;
         }
         return false;
     }

@@ -111,9 +111,9 @@ public class SongBrowser extends ListActivity {
                     Contents.filteredAlbumSongList.add(s);
                 }
             }
-            TreeMap<Short, Short> track_num = new TreeMap<Short, Short>();
+            TreeMap<Short, Short> track_num = new TreeMap<>();
             for (Song s : Contents.filteredAlbumSongList) {
-                if (!track_num.keySet().contains(s.disc_num)) {
+                if (!track_num.containsKey(s.disc_num)) {
                     track_num.put(s.disc_num, (short) 1);
                 } else {
                     track_num.put(s.disc_num,
@@ -133,7 +133,7 @@ public class SongBrowser extends ListActivity {
                 pos += max_num_track;
             }
             // Can't use myIndexAdapter because it sorts name, not by track
-            setListAdapter(new MyArrayAdapter<Song>(this,
+            setListAdapter(new MyArrayAdapter<>(this,
                     R.xml.long_list_text_view, Contents.filteredAlbumSongList));
         } else if (from.equals("artist")) {
             musicList.setFastScrollEnabled(true);
@@ -150,11 +150,11 @@ public class SongBrowser extends ListActivity {
                 }
             }
             // Can't use myIndexAdapter because it sorts name, not by track
-            setListAdapter(new MyArrayAdapter<Song>(this,
+            setListAdapter(new MyArrayAdapter<>(this,
                     R.xml.long_list_text_view, Contents.filteredArtistSongList));
         } else {
             musicList.setFastScrollEnabled(true);
-            MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+            MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                     getApplicationContext(), R.xml.long_list_text_view,
                     Contents.stringElements);
             setListAdapter(adapter);
@@ -193,37 +193,36 @@ public class SongBrowser extends ListActivity {
         } else {
             s = Contents.songList.get(menuInfo.position);
         }
-        switch (aItem.getItemId()) {
-            case CONTEXT_QUEUE:
-                if (Contents.queue.contains(s)) { // in
-                    // list
-                    Contents.queue.remove(Contents.queue.indexOf(s));
+        if (aItem.getItemId() == CONTEXT_QUEUE) {
+            if (Contents.queue.contains(s)) { // in
+                // list
+                Contents.queue.remove(s);
+                Toast tst = Toast.makeText(SongBrowser.this,
+                        getString(R.string.removed_from_queue),
+                        Toast.LENGTH_SHORT);
+                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                        tst.getYOffset() / 2);
+                tst.show();
+                return true;
+            } else {
+                if (Contents.queue.size() < 9) {
+                    Contents.addToQueue(s);
                     Toast tst = Toast.makeText(SongBrowser.this,
-                            getString(R.string.removed_from_queue),
+                            getString(R.string.added_to_queue),
+                            Toast.LENGTH_SHORT);
+                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                            tst.getYOffset() / 2);
+                    tst.show();
+                } else {
+                    Toast tst = Toast.makeText(SongBrowser.this,
+                            getString(R.string.queue_is_full),
                             Toast.LENGTH_SHORT);
                     tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
                             tst.getYOffset() / 2);
                     tst.show();
                     return true;
-                } else {
-                    if (Contents.queue.size() < 9) {
-                        Contents.addToQueue(s);
-                        Toast tst = Toast.makeText(SongBrowser.this,
-                                getString(R.string.added_to_queue),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                    } else {
-                        Toast tst = Toast.makeText(SongBrowser.this,
-                                getString(R.string.queue_is_full),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                        return true;
-                    }
                 }
+            }
         }
         return false;
     }
@@ -294,7 +293,7 @@ public class SongBrowser extends ListActivity {
             super(context, textViewResourceId, objects);
             SharedPreferences mPrefs = PreferenceManager
                     .getDefaultSharedPreferences(context);
-            font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
+            font_size = Integer.parseInt(mPrefs.getString("font_pref", "18"));
             vContext = context;
             myElements = (ArrayList<Song>) objects;
         }

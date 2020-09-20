@@ -122,18 +122,18 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         setContentView(R.layout.audio_player);
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
-        mProgress = (SeekBar) findViewById(android.R.id.progress);
-        mShuffleButton = (ImageButton) findViewById(R.id.shuffleButton);
-        mRepeatButton = (ImageButton) findViewById(R.id.repeatButton);
-        mPauseButton = (ImageButton) findViewById(R.id.pause);
-        mPrevButton = (ImageButton) findViewById(R.id.prev);
-        mNextButton = (ImageButton) findViewById(R.id.next);
-        mCurrentTime = (TextView) findViewById(R.id.currenttime);
-        mTotalTime = (TextView) findViewById(R.id.totaltime);
-        mArtistName = (TextView) findViewById(R.id.artistname);
-        mAlbumName = (TextView) findViewById(R.id.albumname);
-        mTrackName = (TextView) findViewById(R.id.trackname);
-        mSongSummary = (TextView) findViewById(R.id.song_summary);
+        mProgress = findViewById(android.R.id.progress);
+        mShuffleButton = findViewById(R.id.shuffleButton);
+        mRepeatButton = findViewById(R.id.repeatButton);
+        mPauseButton = findViewById(R.id.pause);
+        mPrevButton = findViewById(R.id.prev);
+        mNextButton = findViewById(R.id.next);
+        mCurrentTime = findViewById(R.id.currenttime);
+        mTotalTime = findViewById(R.id.totaltime);
+        mArtistName = findViewById(R.id.artistname);
+        mAlbumName = findViewById(R.id.albumname);
+        mTrackName = findViewById(R.id.trackname);
+        mSongSummary = findViewById(R.id.song_summary);
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         scrobbler_support = mPrefs.getBoolean("scrobbler_pref", false);
     }
@@ -280,11 +280,9 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             if (mediaPlayer == null) {
                 bar.setProgress(0);
             } else {
-                double doubleProgress = (double) progress;
-                double doubleDuration;
                 // get correct length of the song we are going to seek in
-                doubleDuration = mediaPlayer.getDuration();
-                int desiredSeek = (int) ((doubleProgress / 100.0) * doubleDuration);
+                double doubleDuration = mediaPlayer.getDuration();
+                int desiredSeek = (int) (((double) progress / 100.0) * doubleDuration);
                 mediaPlayer.seekTo(desiredSeek);
                 bar.setProgress(progress);
                 handler.removeMessages(REFRESH);
@@ -498,19 +496,15 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     private void setPauseButton() throws IllegalStateException {
-        try {
-            if (mediaPlayer != null) {
-                mPauseButton.setEnabled(true);
-                if (mediaPlayer.isPlaying()) {
-                    mPauseButton.setImageResource(android.R.drawable.ic_media_pause);
-                } else {
-                    mPauseButton.setImageResource(android.R.drawable.ic_media_play);
-                }
+        if (mediaPlayer != null) {
+            mPauseButton.setEnabled(true);
+            if (mediaPlayer.isPlaying()) {
+                mPauseButton.setImageResource(android.R.drawable.ic_media_pause);
             } else {
-                mPauseButton.setEnabled(false);
+                mPauseButton.setImageResource(android.R.drawable.ic_media_play);
             }
-        } catch (IllegalStateException e) {
-            throw e;
+        } else {
+            mPauseButton.setEnabled(false);
         }
     }
 
@@ -790,12 +784,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     private void scrobble(int code) {
-        boolean playing = false;
-        if (code == 0 || code == 1) {
-            playing = true;
-        } else { // 2, 3
-            playing = false;
-        }
+        boolean playing = code == 0 || code == 1;
         Intent bCast = new Intent("com.adam.aslfms.notify.playstatechanged");
         bCast.putExtra("state", code);
         bCast.putExtra("app-name", "Daap-client");

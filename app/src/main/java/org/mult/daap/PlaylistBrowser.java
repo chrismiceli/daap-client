@@ -55,7 +55,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         l.add(0, new DaapPlaylist(Contents.daapHost,
                 getString(R.string.all_songs), true));
         count = l.size();
-        ListView playlistList = (ListView) findViewById(R.id.playlistList);
+        ListView playlistList = findViewById(R.id.playlistList);
         playlistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
         playlistList.setOnItemClickListener(playlistGridListener);
     }

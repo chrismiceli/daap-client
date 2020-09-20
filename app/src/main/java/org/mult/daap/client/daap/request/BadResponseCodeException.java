@@ -14,11 +14,9 @@ package org.mult.daap.client.daap.request;
 @SuppressWarnings("serial")
 public class BadResponseCodeException extends Exception {
     public final int response_code;
-    public final String response_message;
 
     public BadResponseCodeException(int cde, String msg) {
         super(cde + ": " + msg);
         response_code = cde;
-        response_message = msg;
     }
 }

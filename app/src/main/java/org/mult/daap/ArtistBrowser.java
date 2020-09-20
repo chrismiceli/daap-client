@@ -72,8 +72,8 @@ public class ArtistBrowser extends ListActivity {
     }
 
     private void createList() {
-        ListView artistList = (ListView) findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+        ListView artistList = findViewById(android.R.id.list);
+        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.artistNameList);
         setListAdapter(adapter);
@@ -94,26 +94,25 @@ public class ArtistBrowser extends ListActivity {
     public boolean onContextItemSelected(MenuItem aItem) {
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
-        switch (aItem.getItemId()) {
-            case CONTEXT_PLAY_ARTIST:
-                Intent intent = new Intent(ArtistBrowser.this,
-                        MediaPlayback.class);
-                String albName = Contents.artistNameList.get(menuInfo.position);
-                if (albName.equals(getString(R.string.no_artist_name))) {
-                    albName = "";
+        if (aItem.getItemId() == CONTEXT_PLAY_ARTIST) {
+            Intent intent = new Intent(ArtistBrowser.this,
+                    MediaPlayback.class);
+            String albName = Contents.artistNameList.get(menuInfo.position);
+            if (albName.equals(getString(R.string.no_artist_name))) {
+                albName = "";
+            }
+            Contents.filteredArtistSongList.clear();
+            for (Song s : Contents.songList) {
+                if (s.artist.equals(albName)) {
+                    Contents.filteredArtistSongList.add(s);
                 }
-                Contents.filteredArtistSongList.clear();
-                for (Song s : Contents.songList) {
-                    if (s.artist.equals(albName)) {
-                        Contents.filteredArtistSongList.add(s);
-                    }
-                }
-                Contents.setSongPosition(Contents.filteredArtistSongList, 0);
-                MediaPlayback.clearState();
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                startActivityForResult(intent, 1);
-                return true;
+            }
+            Contents.setSongPosition(Contents.filteredArtistSongList, 0);
+            MediaPlayback.clearState();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+            startActivityForResult(intent, 1);
+            return true;
         }
         return false;
     }
@@ -129,7 +128,7 @@ public class ArtistBrowser extends ListActivity {
                         Contents.ArtistAlbumElements.get(song.album).add(
                                 song.id);
                     } else {
-                        ArrayList<Integer> t = new ArrayList<Integer>();
+                        ArrayList<Integer> t = new ArrayList<>();
                         t.add(song.id);
                         Contents.ArtistAlbumElements.put(song.album, t);
                         Contents.artistAlbumNameList.add(song.album);

@@ -55,7 +55,7 @@ public class DaapHost extends Host {
     protected HangingUpdateRequest hanging_update;
     protected int host_prog;
     // a program-specific integer, so we can hack together compatibility.
-    protected ArrayList<Song> songs = new ArrayList<Song>();
+    protected ArrayList<Song> songs = new ArrayList<>();
     public static final String[] host_strings = {"Unknown", "iTunes",
             "Get It Together", "mt-daapd", "Limewire"};
     public static final int UNKNOWN_SERVER = 0;
@@ -96,13 +96,10 @@ public class DaapHost extends Host {
             daap_version = s.getServerVersion();
             if (s.getServerProgram() != null)
                 host_prog = parseServerTypeString(s.getServerProgram());
-            s = null;
             LoginRequest l = new LoginRequest(this);
             session_id = l.getSessionId();
-            l = null;
             UpdateRequest u = new UpdateRequest(this);
             revision_num = u.getRevNum();
-            u = null;
         } catch (PasswordFailedException e) {
             e.printStackTrace();
             Log.d("DaapHost", "Password failed");
@@ -149,18 +146,15 @@ public class DaapHost extends Host {
     public void grabSongs() throws Exception {
         try {
             DatabasesRequest d = new DatabasesRequest(this);
-            database_id = ((Database) d.getDbs().get(0)).id;
-            d = null;
+            database_id = d.getDbs().get(0).id;
             SingleDatabaseRequest g = new SingleDatabaseRequest(this);
             songs = g.getSongs();
             Log.d("DaapHost", "# of songs = " + songs.size());
             Comparator<Song> sic = new SongIDComparator();
             Collections.sort(songs, sic); // for efficiency in getSongById in
             // Host
-            g = null;
             PlaylistsRequest p = new PlaylistsRequest(this);
             playlists = p.getPlaylists();
-            p = null;
             Log.d("DaapHost", "playlist count = " + playlists.size());
             if (getServerType() == DaapHost.GIT_SERVER)
                 hanging_update = new HangingUpdateRequest(this);

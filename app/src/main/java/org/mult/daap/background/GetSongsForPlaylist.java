@@ -41,14 +41,14 @@ public class GetSongsForPlaylist extends Observable implements Runnable {
                     if (Contents.ArtistElements.containsKey(song.artist)) {
                         Contents.ArtistElements.get(song.artist).add(song.id);
                     } else {
-                        ArrayList<Integer> t = new ArrayList<Integer>();
+                        ArrayList<Integer> t = new ArrayList<>();
                         t.add(song.id);
                         Contents.ArtistElements.put(song.artist, t);
                     }
                     if (Contents.AlbumElements.containsKey(song.album)) {
                         Contents.AlbumElements.get(song.album).add(song.id);
                     } else {
-                        ArrayList<Integer> t = new ArrayList<Integer>();
+                        ArrayList<Integer> t = new ArrayList<>();
                         t.add(song.id);
                         Contents.AlbumElements.put(song.album, t);
                     }
@@ -65,14 +65,14 @@ public class GetSongsForPlaylist extends Observable implements Runnable {
                     if (Contents.ArtistElements.containsKey(song.artist)) {
                         Contents.ArtistElements.get(song.artist).add(song.id);
                     } else {
-                        ArrayList<Integer> t = new ArrayList<Integer>();
+                        ArrayList<Integer> t = new ArrayList<>();
                         t.add(song.id);
                         Contents.ArtistElements.put(song.artist, t);
                     }
                     if (Contents.AlbumElements.containsKey(song.album)) {
                         Contents.AlbumElements.get(song.album).add(song.id);
                     } else {
-                        ArrayList<Integer> t = new ArrayList<Integer>();
+                        ArrayList<Integer> t = new ArrayList<>();
                         t.add(song.id);
                         Contents.AlbumElements.put(song.album, t);
                     }

@@ -31,7 +31,7 @@ public class Preferences extends PreferenceActivity {
                         fontSizePref.setValue((String) newValue);
                         SharedPreferences.Editor ed = mPrefs.edit();
                         ed.putInt("font_size",
-                                Integer.valueOf((String) newValue));
+                                Integer.parseInt((String) newValue));
                         ed.commit();
                         return false;
                     }
@@ -43,7 +43,7 @@ public class Preferences extends PreferenceActivity {
                         scrobblerPref.setChecked((Boolean) newValue);
                         SharedPreferences.Editor ed = mPrefs.edit();
                         ed.putBoolean("scrobbler_pref",
-                                Boolean.valueOf((Boolean) newValue));
+                                (Boolean) newValue);
                         ed.commit();
                         return false;
                     }

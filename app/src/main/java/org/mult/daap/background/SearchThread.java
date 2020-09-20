@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 public class SearchThread extends Observable implements Runnable {
-    public final static Integer INITIATED = Integer.valueOf(-1);
-    public final static Integer CONNECTION_FINISHED = Integer.valueOf(1);
-    public final static Integer ERROR = Integer.valueOf(2);
+    public final static Integer INITIATED = -1;
+    public final static Integer CONNECTION_FINISHED = 1;
+    public final static Integer ERROR = 2;
     private final String searchQuery;
     private ArrayList<Song> lastMessage;
     public ArrayList<Song> srList = null;
@@ -30,7 +30,7 @@ public class SearchThread extends Observable implements Runnable {
     }
 
     public void run() {
-        srList = new ArrayList<Song>();
+        srList = new ArrayList<>();
         for (Song s : Contents.songList) {
             if (s.name.toUpperCase().contains(searchQuery.toUpperCase())
                     || s.artist.toUpperCase().contains(searchQuery.toUpperCase())

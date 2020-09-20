@@ -109,7 +109,7 @@ public class DBAdapter {
     public boolean serverExists(String name, String address, String password,
                                 boolean login_required) {
         StringBuilder selectionBuilder = new StringBuilder();
-        ArrayList<String> selectionValuesList = new ArrayList<String>();
+        ArrayList<String> selectionValuesList = new ArrayList<>();
         boolean exists = false;
 
         selectionBuilder.append(KEY_SERVER_NAME).append(" = ?");
@@ -131,7 +131,6 @@ public class DBAdapter {
 
         String[] selectionValues = new String[selectionValuesList.size()];
         selectionValuesList.toArray(selectionValues);
-        selectionValuesList = null;
 
         synchronized (db) {
             Cursor c = db.query(DATABASE_TABLE, null,

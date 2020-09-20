@@ -31,9 +31,9 @@ public class SinglePlaylistRequest extends Request {
             throws BadResponseCodeException, PasswordFailedException,
             IOException {
         super(p.getHost());
-        mlclList = new ArrayList<FieldPair>();
-        mlitList = new ArrayList<FieldPair>();
-        mSongList = new ArrayList<Song>();
+        mlclList = new ArrayList<>();
+        mlitList = new ArrayList<>();
+        mSongList = new ArrayList<>();
         playlist = p;
         query("SinglePlaylistRequest");
         readResponse();
@@ -100,7 +100,7 @@ public class SinglePlaylistRequest extends Request {
     }
 
     public void processmlitItem(int position, int argSize) {
-        String name = "";
+        String name;
         int size;
         int startPos = position;
         int song_id = 0;

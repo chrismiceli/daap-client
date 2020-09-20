@@ -48,7 +48,6 @@ public class DaapPlaylist extends Playlist {
             SinglePlaylistRequest p = new SinglePlaylistRequest(this);
             // should be like singledatabaserequest
             songs = p.getSongs();
-            p = null;
             setStatus(Playlist.STATUS_INITIALIZED);
         } catch (BadResponseCodeException e) {
             Log.d("DaapPlaylist", "BadResponse " + e.getMessage());
@@ -79,7 +78,7 @@ public class DaapPlaylist extends Playlist {
 
     public Collection<Song> getSongs() {
         if (songs == null)
-            return new ArrayList<Song>();
+            return new ArrayList<>();
         return songs;
     }
 }

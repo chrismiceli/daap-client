@@ -8,11 +8,11 @@ import java.net.InetAddress;
 import java.util.Observable;
 
 public class LoginManager extends Observable implements Runnable {
-    public final static Integer INITIATED = Integer.valueOf(-1);
+    public final static Integer INITIATED = -1;
     // public final static Integer FETCHED_MUSIC = new Integer(0);
-    public final static Integer CONNECTION_FINISHED = Integer.valueOf(1);
-    public final static Integer ERROR = Integer.valueOf(2);
-    public final static Integer PASSWORD_FAILED = Integer.valueOf(3);
+    public final static Integer CONNECTION_FINISHED = 1;
+    public final static Integer ERROR = 2;
+    public final static Integer PASSWORD_FAILED = 3;
     public final String name;
     public final String address;
     public final String password;
@@ -51,9 +51,9 @@ public class LoginManager extends Observable implements Runnable {
             int port = 3689;
             if (urlAddress.length == 1) { // No port specified use default
             } else if (urlAddress.length == 2) { // port specified
-                port = Integer.valueOf(urlAddress[1]);
+                port = Integer.parseInt(urlAddress[1]);
             } else if (urlAddress.length > 2) { // ipv6
-                port = Integer.valueOf(urlAddress[urlAddress.length - 1]);
+                port = Integer.parseInt(urlAddress[urlAddress.length - 1]);
             }
             Contents.address = InetAddress.getByName(hostname);
             if (Contents.daapHost != null) {

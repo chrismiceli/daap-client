@@ -53,14 +53,12 @@ public class QueueListBrowser extends Activity {
     public void onResume() {
         super.onResume(); // this.position = position;
         this.setContentView(R.xml.music_browser);
-        s = new ArrayList<Song>();
+        s = new ArrayList<>();
         if (Contents.queue.size() == 0) {
             finish();
         }
-        for (int x = 0; x < Contents.queue.size(); x++) {
-            s.add(Contents.queue.get(x));
-        }
-        ListView queuelistList = (ListView) findViewById(android.R.id.list);
+        s.addAll(Contents.queue);
+        ListView queuelistList = findViewById(android.R.id.list);
         count = s.size();
         queuelistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
         queuelistList
@@ -79,24 +77,23 @@ public class QueueListBrowser extends Activity {
     public boolean onContextItemSelected(MenuItem aItem) {
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
-        switch (aItem.getItemId()) {
-            case REMOVE_FROM_QUEUE:
-                Contents.queue.remove(menuInfo.position);
-                Toast tst = Toast.makeText(QueueListBrowser.this,
-                        getString(R.string.removed_from_queue),
-                        Toast.LENGTH_SHORT);
-                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                        tst.getYOffset() / 2);
-                tst.show();
-                if (Contents.queue.size() == 0) {
-                    finish();
-                } else {
-                    final Intent intent = new Intent(QueueListBrowser.this,
-                            QueueListBrowser.class);
-                    startActivityForResult(intent, 1);
-                    finish();
-                }
-                return true;
+        if (aItem.getItemId() == REMOVE_FROM_QUEUE) {
+            Contents.queue.remove(menuInfo.position);
+            Toast tst = Toast.makeText(QueueListBrowser.this,
+                    getString(R.string.removed_from_queue),
+                    Toast.LENGTH_SHORT);
+            tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                    tst.getYOffset() / 2);
+            tst.show();
+            if (Contents.queue.size() == 0) {
+                finish();
+            } else {
+                final Intent intent = new Intent(QueueListBrowser.this,
+                        QueueListBrowser.class);
+                startActivityForResult(intent, 1);
+                finish();
+            }
+            return true;
         }
         return false;
     }
@@ -169,7 +166,7 @@ public class QueueListBrowser extends Activity {
             vContext = c;
             SharedPreferences mPrefs = PreferenceManager
                     .getDefaultSharedPreferences(c);
-            font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
+            font_size = Integer.parseInt(mPrefs.getString("font_pref", "18"));
         }
 
         public int getCount() {

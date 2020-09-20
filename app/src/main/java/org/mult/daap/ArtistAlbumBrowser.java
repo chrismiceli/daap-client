@@ -74,8 +74,8 @@ public class ArtistAlbumBrowser extends ListActivity {
     }
 
     private void createList() {
-        ListView albumList = (ListView) findViewById(android.R.id.list);
-        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<String>(
+        ListView albumList = findViewById(android.R.id.list);
+        MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
                 getApplicationContext(), R.xml.long_list_text_view,
                 Contents.artistAlbumNameList);
         setListAdapter(adapter);
@@ -95,28 +95,27 @@ public class ArtistAlbumBrowser extends ListActivity {
     public boolean onContextItemSelected(MenuItem aItem) {
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
-        switch (aItem.getItemId()) {
-            case CONTEXT_PLAY_ALBUM:
-                Intent intent = new Intent(ArtistAlbumBrowser.this,
-                        MediaPlayback.class);
-                String albName = Contents.artistAlbumNameList.get(menuInfo.position);
-                if (albName.equals(getString(R.string.no_album_name))) {
-                    albName = "";
+        if (aItem.getItemId() == CONTEXT_PLAY_ALBUM) {
+            Intent intent = new Intent(ArtistAlbumBrowser.this,
+                    MediaPlayback.class);
+            String albName = Contents.artistAlbumNameList.get(menuInfo.position);
+            if (albName.equals(getString(R.string.no_album_name))) {
+                albName = "";
+            }
+            Contents.filteredArtistSongList.clear();
+            for (Song s : Contents.songList) {
+                if (s.album.equals(albName)) {
+                    Contents.filteredArtistSongList.add(s);
                 }
-                Contents.filteredArtistSongList.clear();
-                for (Song s : Contents.songList) {
-                    if (s.album.equals(albName)) {
-                        Contents.filteredArtistSongList.add(s);
-                    }
-                }
-                Comparator<Song> stnc = new SongTrackComparator();
-                Collections.sort(Contents.filteredArtistSongList, stnc);
-                Contents.setSongPosition(Contents.filteredArtistSongList, 0);
-                MediaPlayback.clearState();
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                startActivityForResult(intent, 1);
-                return true;
+            }
+            Comparator<Song> stnc = new SongTrackComparator();
+            Collections.sort(Contents.filteredArtistSongList, stnc);
+            Contents.setSongPosition(Contents.filteredArtistSongList, 0);
+            MediaPlayback.clearState();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+            startActivityForResult(intent, 1);
+            return true;
         }
         return false;
     }

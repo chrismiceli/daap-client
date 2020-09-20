@@ -160,7 +160,7 @@ public class MediaPlaybackService extends Service {
     private static void initializeRemoteControlRegistrationMethods() {
         try {
             if (mRegisterMediaButtonEventReceiver == null) {
-                mRegisterMediaButtonEventReceiver = AudioManager.class.getMethod("registerMediaButtonEventReceiver", new Class[]{ComponentName.class});
+                mRegisterMediaButtonEventReceiver = AudioManager.class.getMethod("registerMediaButtonEventReceiver", ComponentName.class);
             }
             /* success, this device will take advantage of better remote */
             /* control event handling */

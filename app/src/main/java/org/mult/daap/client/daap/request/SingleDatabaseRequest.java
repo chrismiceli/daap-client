@@ -44,9 +44,9 @@ public class SingleDatabaseRequest extends Request {
     public SingleDatabaseRequest(DaapHost h) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(h);
-        mSongList = new ArrayList<Song>();
-        mlclList = new ArrayList<FieldPair>();
-        mlitList = new ArrayList<FieldPair>();
+        mSongList = new ArrayList<>();
+        mlclList = new ArrayList<>();
+        mlitList = new ArrayList<>();
         query("SingleDatabaseRequest");
         readResponse();
         process();
@@ -110,7 +110,7 @@ public class SingleDatabaseRequest extends Request {
     }
 
     public void processmlitItem(int position, int argSize) {
-        String name = "";
+        String name;
         int size;
         int startPos = position;
         Song s = new Song();

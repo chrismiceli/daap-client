@@ -25,7 +25,7 @@ public class ServerEditorActivity extends PreferenceActivity implements
         protected final String table;
         protected final long id;
 
-        protected final Map<String, String> values = new HashMap<String, String>();
+        protected final Map<String, String> values = new HashMap<>();
 
         public CursorPreferenceHack(String table, long id) {
             this.table = table;
@@ -139,16 +139,16 @@ public class ServerEditorActivity extends PreferenceActivity implements
         }
 
         public float getFloat(String key, float defValue) {
-            return Float.valueOf(this.getString(key, Float.toString(defValue)));
+            return Float.parseFloat(this.getString(key, Float.toString(defValue)));
         }
 
         public int getInt(String key, int defValue) {
-            return Integer.valueOf(this.getString(key,
+            return Integer.parseInt(this.getString(key,
                     Integer.toString(defValue)));
         }
 
         public long getLong(String key, long defValue) {
-            return Long.valueOf(this.getString(key, Long.toString(defValue)));
+            return Long.parseLong(this.getString(key, Long.toString(defValue)));
         }
 
         public String getString(String key, String defValue) {
@@ -159,7 +159,7 @@ public class ServerEditorActivity extends PreferenceActivity implements
             return values.get(key);
         }
 
-        protected final List<OnSharedPreferenceChangeListener> listeners = new LinkedList<OnSharedPreferenceChangeListener>();
+        protected final List<OnSharedPreferenceChangeListener> listeners = new LinkedList<>();
 
         public void registerOnSharedPreferenceChangeListener(
                 OnSharedPreferenceChangeListener listener) {

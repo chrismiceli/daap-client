@@ -110,46 +110,45 @@ public class SearchActivity extends ListActivity implements Observer {
     public boolean onContextItemSelected(MenuItem aItem) {
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem
                 .getMenuInfo();
-        switch (aItem.getItemId()) {
-            case CONTEXT_QUEUE:
-                Song s = Contents.songList.get(Contents.songList.indexOf(srList
-                        .get(menuInfo.position)));
-                if (Contents.queue.contains(s)) { // in
-                    // list
-                    Contents.queue.remove(Contents.queue.indexOf(s));
+        if (aItem.getItemId() == CONTEXT_QUEUE) {
+            Song s = Contents.songList.get(Contents.songList.indexOf(srList
+                    .get(menuInfo.position)));
+            if (Contents.queue.contains(s)) { // in
+                // list
+                Contents.queue.remove(s);
+                Toast tst = Toast.makeText(SearchActivity.this,
+                        getString(R.string.removed_from_queue),
+                        Toast.LENGTH_SHORT);
+                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                        tst.getYOffset() / 2);
+                tst.show();
+                return true;
+            } else {
+                if (Contents.queue.size() < 9) {
+                    Contents.addToQueue(s);
                     Toast tst = Toast.makeText(SearchActivity.this,
-                            getString(R.string.removed_from_queue),
+                            getString(R.string.added_to_queue),
+                            Toast.LENGTH_SHORT);
+                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                            tst.getYOffset() / 2);
+                    tst.show();
+                } else {
+                    Toast tst = Toast.makeText(SearchActivity.this,
+                            getString(R.string.queue_is_full),
                             Toast.LENGTH_SHORT);
                     tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
                             tst.getYOffset() / 2);
                     tst.show();
                     return true;
-                } else {
-                    if (Contents.queue.size() < 9) {
-                        Contents.addToQueue(s);
-                        Toast tst = Toast.makeText(SearchActivity.this,
-                                getString(R.string.added_to_queue),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                    } else {
-                        Toast tst = Toast.makeText(SearchActivity.this,
-                                getString(R.string.queue_is_full),
-                                Toast.LENGTH_SHORT);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                        return true;
-                    }
                 }
+            }
         }
         return false;
     }
 
     private void createList() {
-        ListView searchResultsList = (ListView) findViewById(android.R.id.list);
-        setListAdapter(new MyArrayAdapter<Song>(this,
+        ListView searchResultsList = findViewById(android.R.id.list);
+        setListAdapter(new MyArrayAdapter<>(this,
                 R.xml.long_list_text_view, srList));
         searchResultsList.setOnItemClickListener(songListListener);
         searchResultsList
@@ -264,7 +263,7 @@ public class SearchActivity extends ListActivity implements Observer {
             super(context, textViewResourceId, objects);
             SharedPreferences mPrefs = PreferenceManager
                     .getDefaultSharedPreferences(context);
-            font_size = Integer.valueOf(mPrefs.getString("font_pref", "18"));
+            font_size = Integer.parseInt(mPrefs.getString("font_pref", "18"));
             vContext = context;
             myElements = (ArrayList<Song>) objects;
         }

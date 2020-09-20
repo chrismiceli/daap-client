@@ -36,7 +36,7 @@ public abstract class Host {
      */
     public Host(String nayme) {
         name = nayme;
-        status_listeners = new ArrayList<StatusListener>();
+        status_listeners = new ArrayList<>();
         visible = false;
     }
 

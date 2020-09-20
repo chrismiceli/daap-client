@@ -43,9 +43,9 @@ public class PlaylistsRequest extends Request {
     public PlaylistsRequest(DaapHost h) throws NoServerPermissionException,
             BadResponseCodeException, PasswordFailedException, IOException {
         super(h);
-        mlclList = new ArrayList<FieldPair>();
-        mlitList = new ArrayList<FieldPair>();
-        mPlaylist = new ArrayList<DaapPlaylist>();
+        mlclList = new ArrayList<>();
+        mlitList = new ArrayList<>();
+        mPlaylist = new ArrayList<>();
         query("PlaylistRequest");
         readResponse();
         process();
@@ -109,7 +109,7 @@ public class PlaylistsRequest extends Request {
     }
 
     public void processmlitItem(int position, int argSize) {
-        String name = "";
+        String name;
         int size;
         int startPos = position;
         DaapPlaylist p = new DaapPlaylist(host);

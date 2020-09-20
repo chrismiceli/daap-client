@@ -44,9 +44,9 @@ public class DatabasesRequest extends Request {
     public DatabasesRequest(DaapHost h) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(h);
-        mlclList = new ArrayList<FieldPair>();
-        mlitList = new ArrayList<FieldPair>();
-        mDatabases = new ArrayList<Database>();
+        mlclList = new ArrayList<>();
+        mlitList = new ArrayList<>();
+        mDatabases = new ArrayList<>();
         query("DabasesRequest");
         readResponse();
         process();
@@ -64,8 +64,8 @@ public class DatabasesRequest extends Request {
     }
 
     protected void process() {
-        mlclList = new ArrayList<FieldPair>();
-        mlitList = new ArrayList<FieldPair>();
+        mlclList = new ArrayList<>();
+        mlitList = new ArrayList<>();
         if (data.length == 0) {
             Log.d("Request", "Zero Length");
             return;
@@ -127,7 +127,7 @@ public class DatabasesRequest extends Request {
     }
 
     public void processmLitList(int position, int argSize) {
-        String name = "";
+        String name;
         int size;
         int startPos = position;
         Database d = new Database();
@@ -147,8 +147,6 @@ public class DatabasesRequest extends Request {
             }
             if (bMiid && bMinm) {
                 mDatabases.add(d);
-                bMiid = false;
-                bMinm = false;
                 break;
             }
             position += size;

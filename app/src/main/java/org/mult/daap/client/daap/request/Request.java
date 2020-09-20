@@ -150,11 +150,9 @@ public abstract class Request {
     }
 
     protected static int readInt(byte[] data, int offset) {
-        int i = 0;
-        i = (((data[offset] & 0xff) << 24)
+        return (((data[offset] & 0xff) << 24)
                 | ((data[1 + offset] & 0xff) << 16)
                 | ((data[2 + offset] & 0xff) << 8) | (data[3 + offset] & 0xff));
-        return i;
     }
 
     public DaapHost getHost() {
