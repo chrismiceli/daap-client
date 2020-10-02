@@ -251,8 +251,6 @@ public class SearchActivity extends ListActivity implements Observer {
 
     static class MyArrayAdapter<T> extends ArrayAdapter<T> {
         final ArrayList<Song> myElements;
-        HashMap<String, Integer> alphaIndexer;
-        ArrayList<String> letterList;
         final Context vContext;
 
         public MyArrayAdapter(Context context, int textViewResourceId,

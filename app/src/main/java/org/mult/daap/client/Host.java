@@ -21,21 +21,12 @@ public abstract class Host {
     protected boolean visible;
     @SuppressWarnings("rawtypes")
     protected ArrayList playlists = new ArrayList();
-    // public GetItTogether git;
-
-    public static final String[] status_strings = {"Unavailable / Error",
-            "Not Connected", "Connecting", "Connected", "Connected"};
-    public static final int STATUS_NOT_AVAILABLE = 0;
-    public static final int STATUS_NOT_CONNECTED = 1;
-    public static final int STATUS_CONNECTING = 2;
-    public static final int STATUS_CONNECTED = 3;
-    public static final int STATUS_PLAYLISTS_LOADED = 4;
 
     /**
      * Creates a new instance of Host
      */
-    public Host(String nayme) {
-        name = nayme;
+    public Host(String name) {
+        this.name = name;
         status_listeners = new ArrayList<>();
         visible = false;
     }
@@ -127,5 +118,4 @@ public abstract class Host {
     public void setAutoConnect(boolean aut) {
         auto_connect = aut;
     }
-
 }

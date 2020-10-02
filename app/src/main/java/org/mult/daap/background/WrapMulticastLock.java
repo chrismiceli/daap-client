@@ -18,25 +18,11 @@ public class WrapMulticastLock {
     }
 
     public WrapMulticastLock(WifiManager wifim) {
-        instance = Integer.parseInt(Build.VERSION.SDK) < 4 ? new Old(wifim)
-                : new New(wifim);
+        instance = new New(wifim);
     }
 
     public WrapMulticastLock getInstance() {
         return instance;
-    }
-
-    private static class Old extends WrapMulticastLock {
-        public Old(WifiManager wifim) {
-        }
-
-        @Override
-        public void acquire() {
-        }
-
-        @Override
-        public void release() {
-        }
     }
 
     private class New extends WrapMulticastLock {

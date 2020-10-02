@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 public class SearchThread extends Observable implements Runnable {
-    public final static Integer INITIATED = -1;
-    public final static Integer CONNECTION_FINISHED = 1;
-    public final static Integer ERROR = 2;
     private final String searchQuery;
     private ArrayList<Song> lastMessage;
     public ArrayList<Song> srList = null;

@@ -26,8 +26,7 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 public class HangingUpdateRequest extends Request {
-    public HangingUpdateRequest(DaapHost h) throws BadResponseCodeException,
-            PasswordFailedException, IOException {
+    public HangingUpdateRequest(DaapHost h) {
         super(h);
         query();
         readResponse();
