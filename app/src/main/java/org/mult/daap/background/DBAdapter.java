@@ -15,7 +15,6 @@ public class DBAdapter {
     public static final String KEY_SERVER_ADDRESS = "address";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_LOGIN_REQUIRED = "login_required";
-    private static final String TAG = "DBAdapter";
     private static final String DATABASE_NAME = "servs";
     public static final String DATABASE_TABLE = "servers";
     private static final int DATABASE_VERSION = 1;
@@ -82,11 +81,6 @@ public class DBAdapter {
         db.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null);
     }
 
-    public void deleteAllServer() {
-        db.execSQL("DROP TABLE IF EXISTS servers");
-        db.execSQL(DATABASE_CREATE);
-    }
-
     public Cursor getAllServers() {
         return db.query(DATABASE_TABLE, new String[]{KEY_ROWID,
                 KEY_SERVER_NAME, KEY_SERVER_ADDRESS, KEY_PASSWORD,
@@ -144,22 +138,6 @@ public class DBAdapter {
         }
 
         return !exists;
-    }
-
-    // ---updates a title---
-    public boolean updateServer(int rowId, String name, String address,
-                                String login, String password, boolean login_required) {
-        ContentValues args = new ContentValues();
-        int login_required_local;
-        if (login_required)
-            login_required_local = 1;
-        else
-            login_required_local = 0;
-        args.put(KEY_SERVER_NAME, name);
-        args.put(KEY_SERVER_ADDRESS, address);
-        args.put(KEY_PASSWORD, password);
-        args.put(KEY_LOGIN_REQUIRED, login_required_local);
-        return db.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
     public void updateServer(ContentValues update, int rowId) {

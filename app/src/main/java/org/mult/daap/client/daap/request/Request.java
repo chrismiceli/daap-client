@@ -132,20 +132,12 @@ public abstract class Request {
         // httpc.addRequestProperty("Connection", "Close");
     }
 
-    public int getResponseCode() {
-        return response_code;
-    }
-
     String getHashCode(Request r) throws NoSuchAlgorithmException {
         return Hasher.GenerateHash("/" + r.getRequestString());
     }
 
     public static String readString(byte[] data, int offset, int length) {
         return new String(data, offset, length, StandardCharsets.UTF_8);
-    }
-
-    protected int dataInt() {
-        return readInt(data, offset, 4);
     }
 
     protected static int readInt(byte[] data, int offset) {
@@ -156,10 +148,6 @@ public abstract class Request {
 
     public DaapHost getHost() {
         return host;
-    }
-
-    public int getAccessIndex() {
-        return access_index;
     }
 
     /* convert from hex in binary to decimal */

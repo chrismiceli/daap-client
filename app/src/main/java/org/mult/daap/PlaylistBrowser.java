@@ -32,7 +32,6 @@ public class PlaylistBrowser extends Activity implements Observer {
     public final static int FINISHED = 1;
     public final static int EMPTY = 2;
     public final static int INITIALIZED = 3;
-    public final static int MENU_STOP = 4;
     private ArrayList<DaapPlaylist> l;
     private ProgressDialog pd = null;
 
@@ -197,5 +196,5 @@ public class PlaylistBrowser extends Activity implements Observer {
                 }
             }
         }
-    };
+    }
 }

@@ -73,11 +73,7 @@ public class AddServerMenu extends Activity {
     private class loginRequiredListener implements OnCheckedChangeListener {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
-            if (isChecked) {
-                passwordEditText.setEnabled(true);
-            } else {
-                passwordEditText.setEnabled(false);
-            }
+            passwordEditText.setEnabled(isChecked);
         }
     }
 
