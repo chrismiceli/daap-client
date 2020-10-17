@@ -50,7 +50,7 @@ public class QueueListBrowser extends Activity {
     @Override
     public void onResume() {
         super.onResume(); // this.position = position;
-        this.setContentView(R.xml.music_browser);
+        this.setContentView(R.layout.music_browser);
         s = new ArrayList<>();
         if (Contents.queue.size() == 0) {
             finish();

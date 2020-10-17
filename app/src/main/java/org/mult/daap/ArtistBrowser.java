@@ -60,7 +60,7 @@ public class ArtistBrowser extends ListActivity {
             Comparator<String> snicc = new StringIgnoreCaseComparator();
             Collections.sort(Contents.artistNameList, snicc);
         }
-        setContentView(R.xml.music_browser);
+        setContentView(R.layout.music_browser);
         createList();
     }
 

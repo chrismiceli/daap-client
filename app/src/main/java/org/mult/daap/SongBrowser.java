@@ -56,7 +56,7 @@ public class SongBrowser extends ListActivity {
             finish();
             return;
         }
-        setContentView(R.xml.music_browser);
+        setContentView(R.layout.music_browser);
         Bundle b = getIntent().getExtras();
         from = b.getString("from");
         createList();

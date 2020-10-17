@@ -64,7 +64,7 @@ public class SearchActivity extends ListActivity implements Observer {
                     .getStringExtra(SearchManager.QUERY);
             setTitle(getString(R.string.search_result_title) + " "
                     + searchKeywords);
-            setContentView(R.xml.music_browser);
+            setContentView(R.layout.music_browser);
             SearchThread sr = Contents.searchResult;
             if (sr == null) {
                 // A new search

@@ -14,15 +14,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="134d0892-19e3-4aad-9093-b40a23a956e1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AlbumBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AlbumBrowser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistAlbumBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistAlbumBrowser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/ArtistBrowser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/DBAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/DBAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/QueueListBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/QueueListBrowser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SongBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SongBrowser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/TabMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/TabMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/ic_tab_artists.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_tab_artists.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/ic_tab_songs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_tab_songs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/music_browser.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/music_browser.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/playlist_browser.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/playlist_browser.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/tab_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/tab_main.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +73,12 @@
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="show.inlinked.gradle.project.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\chris\Documents\Repositories\daap-client\app\src\main\res\drawable" />
+      <recent name="C:\Users\chris\Documents\Repositories\daap-client\app\src\main\res\layout" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -161,11 +172,11 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="649" y="0" key="#org.jetbrains.kotlin.idea.refactoring.safeDelete.KotlinOverridingDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1602966599626" />
-    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1602966545651">
+    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1602967214059">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="514" y="270" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.728@0.0.1366.728" timestamp="1601606085764" />
-    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1602966545651" />
+    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1602967214059" />
     <state width="2003" height="263" key="GridCell.Tab.0.bottom" timestamp="1599182420504">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
@@ -190,10 +201,10 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="629" y="304" key="caller.chooser.dialog/0.0.2048.1112@0.0.2048.1112" timestamp="1602966616456" />
-    <state x="719" y="289" width="611" height="592" key="find.popup" timestamp="1602966726914">
+    <state x="719" y="289" width="611" height="592" key="find.popup" timestamp="1602967205993">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="480" y="189" width="607" height="534" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1601606658663" />
-    <state x="719" y="289" width="611" height="592" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1602966726914" />
+    <state x="719" y="289" width="611" height="592" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1602967205993" />
   </component>
 </project>
