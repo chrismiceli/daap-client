@@ -254,14 +254,6 @@ public class DaapHost extends Host {
             SongRequest sr = new SongRequest(this, s, bytes);
             return sr.getStream();
         } catch (BadResponseCodeException e) {
-            if (e.response_code == 500) {
-                // FIXME: This code here can help with failed song requests, but
-                // if the iTunes internal server error
-                // really is internal, it causes an infinite loop.
-                // System.out.println("Error 500: forbidden.. attempting to re-login ONCE");
-                // if (login(false))
-                // return getSongStream(s, bytes);
-            }
         }
         return null;
     }

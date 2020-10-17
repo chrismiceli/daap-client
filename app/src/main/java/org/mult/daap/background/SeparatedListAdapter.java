@@ -96,7 +96,7 @@ public class SeparatedListAdapter extends BaseAdapter {
                 TextView label = headers.getView(sectionnum,
                         convertView, parent).findViewById(R.id.list_complex_title);
                 if (label != null)
-                    label.setText("HEY");
+                    label.setText("");
                 return headers.getView(sectionnum, convertView, parent);
             }
             if (position < size) {

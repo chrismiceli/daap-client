@@ -180,7 +180,7 @@
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="3"
-            android:gravity="right"
+            android:gravity="end"
             android:paddingEnd="5dip"
             android:layout_gravity="bottom"
             android:layout_weight="1"
