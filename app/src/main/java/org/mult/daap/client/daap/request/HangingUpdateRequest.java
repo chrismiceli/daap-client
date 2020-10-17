@@ -20,7 +20,6 @@ package org.mult.daap.client.daap.request;
 
 import org.mult.daap.client.daap.DaapHost;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -54,9 +53,6 @@ public class HangingUpdateRequest extends Request {
         ret += "&revision-number=" + host.getRevisionNumber();
         ret += "&delta=" + host.getRevisionNumber();
         return ret;
-    }
-
-    protected void process() {
     }
 
     protected void readResponse() {

@@ -11,9 +11,10 @@
 
         <TextView
             android:id="@+id/serverNameLabel"
+            android:labelFor="@+id/serverNameText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="16dip"
+            android:layout_marginStart="16dip"
             android:text="@string/share_name" />
 
         <EditText
@@ -21,9 +22,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:layout_marginRight="20dip"
-            android:layout_marginLeft="10dip"
-            android:inputType="text" />
+            android:layout_marginEnd="20dip"
+            android:layout_marginStart="10dip"
+            android:inputType="text"
+            android:importantForAutofill="no" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -32,9 +34,10 @@
 
             <TextView
                 android:id="@+id/serverUrlLabel"
+                android:labelFor="@+id/serverUrlText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dip"
+                android:layout_marginStart="16dip"
                 android:text="@string/url_description" />
         </LinearLayout>
 
@@ -45,22 +48,25 @@
 
             <EditText
                 android:id="@+id/serverUrlText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:inputType="textUri"
-                android:layout_marginLeft="10dip" />
+                android:importantForAutofill="no"
+                android:layout_marginStart="10dip" />
 
             <EditText
                 android:id="@+id/serverPortText"
+                android:hint="@string/daap_server_port"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:layout_marginRight="20dip"
+                android:layout_marginEnd="20dip"
                 android:minEms="3"
                 android:inputType="number"
-                android:text="3689" />
+                android:text="3689"
+                android:importantForAutofill="no" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,7 +76,7 @@
 
             <CheckBox
                 android:id="@+id/loginCheckBox"
-                android:layout_marginLeft="10dip"
+                android:layout_marginStart="10dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -83,9 +89,10 @@
 
         <TextView
             android:id="@+id/serverPasswordLabel"
+            android:labelFor="@+id/serverPasswordText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dip"
+            android:layout_marginStart="16dip"
             android:text="@string/password"
             android:state_enabled="false" />
 
@@ -94,28 +101,32 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:layout_marginRight="20dip"
-            android:layout_marginLeft="10dip"
+            android:layout_marginEnd="20dip"
+            android:layout_marginStart="10dip"
             android:state_enabled="false"
+            android:autofillHints="password"
             android:inputType="textPassword" />
 
         <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/serverOkButton"
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_height="wrap_content"
-                android:text="@string/add_server" />
-
-            <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/serverCancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@android:string/cancel" />
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/serverOkButton"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dip"
+                android:layout_height="wrap_content"
+                android:text="@string/add_server" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

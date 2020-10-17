@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="daap-client/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/daap-client.iml" filepath="$PROJECT_DIR$/.idea/modules/daap-client.iml" group="daap-client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/daap-client.iml" filepath="$PROJECT_DIR$/.idea/modules/daap-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/daap-client.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/daap-client.app.iml" />
     </modules>
   </component>
 </project>

@@ -51,10 +51,6 @@ public class SinglePlaylistRequest extends Request {
         return ret;
     }
 
-    protected void addRequestProperties() {
-        super.addRequestProperties();
-    }
-
     protected void process() {
         if (data.length == 0) {
             Log.d("Request", "Zero Length");

@@ -22,8 +22,8 @@
         android:clickable="true"
         android:focusable="true"
         android:background="@drawable/appwidget_button_left"
-        android:paddingLeft="18dip"
-        android:paddingRight="8dip">
+        android:paddingStart="18dip"
+        android:paddingEnd="8dip">
 
         <TextView
             android:id="@+id/title"

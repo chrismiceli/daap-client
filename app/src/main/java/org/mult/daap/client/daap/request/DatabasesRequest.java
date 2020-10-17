@@ -59,10 +59,6 @@ public class DatabasesRequest extends Request {
         return ret;
     }
 
-    protected void addRequestProperties() {
-        super.addRequestProperties();
-    }
-
     protected void process() {
         mlclList = new ArrayList<>();
         mlitList = new ArrayList<>();

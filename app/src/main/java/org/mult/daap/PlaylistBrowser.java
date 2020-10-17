@@ -21,6 +21,7 @@ import android.widget.Toast;
 import org.mult.daap.background.GetSongsForPlaylist;
 import org.mult.daap.client.daap.DaapPlaylist;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -117,29 +118,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         }
     }
 
-    private final Handler uiHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == FINISHED) { // Finished
-                if (pd != null) {
-                    pd.dismiss();
-                }
-                Contents.getSongsForPlaylist = null;
-                Intent intent = new Intent(PlaylistBrowser.this, TabMain.class);
-                startActivityForResult(intent, 1);
-            } else if (msg.what == EMPTY) {
-                if (pd != null) {
-                    pd.dismiss();
-                }
-                Contents.getSongsForPlaylist = null;
-                Toast tst = Toast.makeText(PlaylistBrowser.this,
-                        getString(R.string.empty_playlist), Toast.LENGTH_LONG);
-                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                        tst.getYOffset() / 2);
-                tst.show();
-            }
-        }
-    };
+    private final Handler uiHandler = new UIHandler(this);
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_CANCELED) {
@@ -187,4 +166,36 @@ public class PlaylistBrowser extends Activity implements Observer {
             return tv;
         }
     }
+
+    private static class UIHandler extends Handler {
+        private final WeakReference<PlaylistBrowser> playlistBrowserWeakReference;
+
+        UIHandler(PlaylistBrowser playlistBrowser) {
+            this.playlistBrowserWeakReference = new WeakReference<>(playlistBrowser);
+        }
+        @Override
+        public void handleMessage(Message msg) {
+            PlaylistBrowser playlistBrowser = playlistBrowserWeakReference.get();
+            if (playlistBrowser != null) {
+                if (msg.what == FINISHED) { // Finished
+                    if (playlistBrowser.pd != null) {
+                        playlistBrowser.pd.dismiss();
+                    }
+                    Contents.getSongsForPlaylist = null;
+                    Intent intent = new Intent(playlistBrowser, TabMain.class);
+                    playlistBrowser.startActivityForResult(intent, 1);
+                } else if (msg.what == EMPTY) {
+                    if (playlistBrowser.pd != null) {
+                        playlistBrowser.pd.dismiss();
+                    }
+                    Contents.getSongsForPlaylist = null;
+                    Toast tst = Toast.makeText(playlistBrowser,
+                            playlistBrowser.getString(R.string.empty_playlist), Toast.LENGTH_LONG);
+                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                            tst.getYOffset() / 2);
+                    tst.show();
+                }
+            }
+        }
+    };
 }

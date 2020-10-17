@@ -42,10 +42,6 @@ public class LoginRequest extends Request {
         return "login";
     }
 
-    protected void addRequestProperties() {
-        super.addRequestProperties();
-    }
-
     protected void process() {
         if (data.length == 0) {
             Log.d("Request", "Zero Length");

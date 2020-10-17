@@ -53,6 +53,7 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -67,10 +68,10 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private static final int MENU_STOP = 0;
     private static final int MENU_LIBRARY = 1;
     private static final int MENU_DOWNLOAD = 2;
-    private static final int REFRESH = 0;
-    private static final int COPYING_DIALOG = 1;
-    private static final int SUCCESS_COPYING_DIALOG = 2;
-    private static final int ERROR_COPYING_DIALOG = 3;
+    static final int REFRESH = 0;
+    static final int COPYING_DIALOG = 1;
+    static final int SUCCESS_COPYING_DIALOG = 2;
+    static final int ERROR_COPYING_DIALOG = 3;
     private static final String logTag = MediaPlayer.class.getName();
 
     private static MediaPlayer mediaPlayer;
@@ -242,7 +243,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mProgress.setSecondaryProgress(0);
         // Share this notification directly with our widgets
         mAppWidgetProvider.notifyChange(mMediaPlaybackService, this, MediaPlaybackService.META_CHANGED);
-        new LastFMGetSongInfo().execute(song);
+        new LastFMGetSongInfo(this).execute(song);
     }
 
     public String getTrackName() {
@@ -404,11 +405,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (mediaPlayer != null && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            menu.findItem(MENU_DOWNLOAD).setEnabled(true);
-        } else {
-            menu.findItem(MENU_DOWNLOAD).setEnabled(false);
-        }
+        menu.findItem(MENU_DOWNLOAD).setEnabled(mediaPlayer != null && Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED));
         return true;
     }
 
@@ -491,32 +488,14 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     }
 
-    private final Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            switch (message.what) {
-                case REFRESH:
-                    queueNextRefresh(refreshNow());
-                    break;
-                case COPYING_DIALOG:
-                    dismissDialog(COPYING_DIALOG);
-                    break;
-                case SUCCESS_COPYING_DIALOG:
-                    showDialog(SUCCESS_COPYING_DIALOG);
-                    break;
-                case ERROR_COPYING_DIALOG:
-                    showDialog(ERROR_COPYING_DIALOG);
-                    break;
-            }
-        }
-    };
+    private final Handler handler = new CopyHandler(this);
 
-    private void queueNextRefresh(long delay) {
+    void queueNextRefresh(long delay) {
         handler.removeMessages(REFRESH);
         handler.sendEmptyMessageDelayed(REFRESH, delay);
     }
 
-    private long refreshNow() {
+    long refreshNow() {
         try {
             if (mediaPlayer == null) {
                 return 500;
@@ -673,21 +652,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         return false;
     }
 
-    final Handler mLabelScroller = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            TextView tv = (TextView) msg.obj;
-            int x = tv.getScrollX();
-            x = x * 3 / 4;
-            tv.scrollTo(x, 0);
-            if (x == 0) {
-                tv.setEllipsize(TruncateAt.END);
-            } else {
-                Message newmsg = obtainMessage(0, tv);
-                mLabelScroller.sendMessageDelayed(newmsg, 15);
-            }
-        }
-    };
+    final Handler mLabelScroller = new ScrollHandler(this);
 
     public static void clearState() {
         if (mediaPlayer != null) {
@@ -731,7 +696,13 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
     };
 
-    private class LastFMGetSongInfo extends AsyncTask<Song, Void, String> {
+    static private class LastFMGetSongInfo extends AsyncTask<Song, Void, String> {
+        private final WeakReference<MediaPlayback> mediaPlaybackWeakReference;
+
+        LastFMGetSongInfo(MediaPlayback mediaPlayback) {
+            this.mediaPlaybackWeakReference = new WeakReference<>(mediaPlayback);
+        }
+
         protected String doInBackground(Song... song) {
             String key = "47c0f71763c30293aa52f0ac166e410f";
             String retval = "";
@@ -758,8 +729,11 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         }
 
         protected void onPostExecute(String result) {
-            mSongSummary.setText(Html.fromHtml(result));
-            mSongSummary.setMovementMethod(LinkMovementMethod.getInstance());
+            MediaPlayback mediaPlayback = mediaPlaybackWeakReference.get();
+            if (mediaPlayback != null) {
+                mediaPlayback.mSongSummary.setText(Html.fromHtml(result));
+                mediaPlayback.mSongSummary.setMovementMethod(LinkMovementMethod.getInstance());
+            }
         }
     }
 
@@ -865,4 +839,29 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             }
         }
     };
+
+    private static class ScrollHandler extends Handler {
+        private final WeakReference<MediaPlayback> mediaPlaybackWeakReference;
+
+        ScrollHandler(MediaPlayback mediaPlayback) {
+            this.mediaPlaybackWeakReference = new WeakReference<>(mediaPlayback);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            TextView tv = (TextView) msg.obj;
+            int x = tv.getScrollX();
+            x = x * 3 / 4;
+            tv.scrollTo(x, 0);
+            if (x == 0) {
+                tv.setEllipsize(TruncateAt.END);
+            } else {
+                Message newMessage = obtainMessage(0, tv);
+                MediaPlayback mediaPlayback = this.mediaPlaybackWeakReference.get();
+                if (mediaPlayback != null) {
+                    mediaPlayback.mLabelScroller.sendMessageDelayed(newMessage, 15);
+                }
+            }
+        }
+    }
 }

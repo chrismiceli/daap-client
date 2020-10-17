@@ -14,7 +14,7 @@
         android:id="@+id/list_complex_caption"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="44dp"
+        android:paddingEnd="44dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_below="@id/list_complex_title" />
 </RelativeLayout>

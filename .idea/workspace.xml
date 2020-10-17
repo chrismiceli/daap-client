@@ -9,26 +9,48 @@
     <option name="TOOL_WINDOW_LOG_LEVEL" value="warn" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="134d0892-19e3-4aad-9093-b40a23a956e1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/app/daap-client.app.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/CopyHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__javax_jmdns_jmdns_3_4_1_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/app.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/daap-client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/daap-client.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/FileUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/AddServerMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlayback.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/MediaPlayback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/PlaylistBrowser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/SearchActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SearchThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/SearchThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/LoginManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/WrapMulticastLock.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/background/WrapMulticastLock.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Host.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/Host.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/DatabasesRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/DatabasesRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/HangingUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/HangingUpdateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/NoServerPermissionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/PasswordFailedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/PasswordFailedException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-et/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-et/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/LogoutRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/LogoutRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/PlaylistsRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/PlaylistsRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SinglePlaylistRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/mult/daap/client/daap/request/SinglePlaylistRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/add_server_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/add_server_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/appwidget_one.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/appwidget_one.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/audio_player.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/audio_player.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_complex.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_complex.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_header.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_header.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/password_prompt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/password_prompt.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_3_API_29" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_3_API_29]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -46,13 +68,19 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1gykHVkL7SKwaIXHVgM6PxdNSiF" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -71,12 +99,13 @@
       </method>
     </configuration>
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="app" />
+      <module name="daap-client.app" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
@@ -112,11 +141,16 @@
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
@@ -136,19 +170,19 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="705" y="284" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1600028189366">
+    <state x="705" y="284" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602851082402">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="705" y="284" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600028189366" />
-    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1600633727437">
+    <state x="705" y="284" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1602851082402" />
+    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1602963871041">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600633727437" />
-    <state x="514" y="270" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1601606085764">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1602963871041" />
+    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1602965659807">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="514" y="270" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.728@0.0.1366.728" timestamp="1601606085764" />
-    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1600634019683" />
+    <state x="771" y="412" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2048.1112@0.0.2048.1112" timestamp="1602965659807" />
     <state width="2003" height="263" key="GridCell.Tab.0.bottom" timestamp="1599182420504">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
@@ -173,10 +207,10 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="629" y="304" key="caller.chooser.dialog/0.0.2048.1112@0.0.2048.1112" timestamp="1600630901123" />
-    <state x="480" y="189" width="607" height="534" key="find.popup" timestamp="1601606658663">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="719" y="289" width="611" height="592" key="find.popup" timestamp="1602966113535">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="480" y="189" width="607" height="534" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1601606658663" />
-    <state x="719" y="289" width="611" height="534" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1600634059165" />
+    <state x="719" y="289" width="611" height="592" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1602966113535" />
   </component>
 </project>

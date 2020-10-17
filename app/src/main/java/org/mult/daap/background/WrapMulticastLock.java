@@ -2,7 +2,6 @@ package org.mult.daap.background;
 
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
-import android.os.Build;
 
 public class WrapMulticastLock {
     public final WrapMulticastLock instance;

@@ -49,8 +49,7 @@ public class LoginManager extends Observable implements Runnable {
             String[] urlAddress = address.split(":");
             String hostname = urlAddress[0];
             int port = 3689;
-            if (urlAddress.length == 1) { // No port specified use default
-            } else if (urlAddress.length == 2) { // port specified
+            if (urlAddress.length == 2) { // port specified
                 port = Integer.parseInt(urlAddress[1]);
             } else if (urlAddress.length > 2) { // ipv6
                 port = Integer.parseInt(urlAddress[urlAddress.length - 1]);

@@ -30,8 +30,8 @@ import android.widget.Toast;
 import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Song;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -224,23 +224,7 @@ public class SearchActivity extends ListActivity implements Observer {
         return false;
     }
 
-    private final Handler searchHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            createList();
-            if (pd != null)
-                pd.dismiss();
-            if (srList.size() == 0) {
-                Toast tst = Toast.makeText(SearchActivity.this,
-                        getString(R.string.no_search_results),
-                        Toast.LENGTH_LONG);
-                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                        tst.getYOffset() / 2);
-                tst.show();
-                finish();
-            }
-        }
-    };
+    private final Handler searchHandler = new SearchHandler(this);
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_CANCELED) {
@@ -273,5 +257,31 @@ public class SearchActivity extends ListActivity implements Observer {
             tv.setText(myElements.get(position).toString());
             return tv;
         }
+    }
+
+    private static class SearchHandler extends Handler {
+        private final WeakReference<SearchActivity> searchActivityWeakReference;
+
+        SearchHandler(SearchActivity searchActivity) {
+            searchActivityWeakReference = new WeakReference<>(searchActivity);
+        }
+            @Override
+            public void handleMessage(Message msg) {
+                SearchActivity searchActivity = searchActivityWeakReference.get();
+                if (searchActivity != null) {
+                    searchActivity.createList();
+                    if (searchActivity.pd != null)
+                        searchActivity.pd.dismiss();
+                    if (searchActivity.srList.size() == 0) {
+                        Toast tst = Toast.makeText(searchActivity,
+                                searchActivity.getString(R.string.no_search_results),
+                                Toast.LENGTH_LONG);
+                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                                tst.getYOffset() / 2);
+                        tst.show();
+                        searchActivity.finish();
+                    }
+                }
+            }
     }
 }

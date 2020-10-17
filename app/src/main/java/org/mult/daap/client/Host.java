@@ -37,13 +37,6 @@ public abstract class Host {
     public void loadPlaylists() throws Exception {
     }
 
-    /**
-     * Causes this Host to disconnect from the song source and remove the songs
-     * from memory.
-     */
-    public void disconnect() {
-    }
-
     public abstract ArrayList<Song> getSongs();
 
     public Song getSongById(Integer id) {

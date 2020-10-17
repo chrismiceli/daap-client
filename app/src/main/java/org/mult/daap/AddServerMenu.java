@@ -58,11 +58,7 @@ public class AddServerMenu extends Activity {
 
     private class tw implements TextWatcher {
         public void afterTextChanged(Editable s) {
-            if (s.length() != 0) {
-                okButton.setEnabled(true);
-            } else {
-                okButton.setEnabled(false);
-            }
+            okButton.setEnabled(s.length() != 0);
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count,
