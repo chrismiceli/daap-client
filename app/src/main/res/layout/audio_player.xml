@@ -13,6 +13,7 @@
         android:paddingTop="2dip"
         android:paddingBottom="2dip"
         android:paddingStart="5dip"
+        android:paddingEnd="5dip"
         android:text="@string/current_song"
         style="?android:attr/listSeparatorTextViewStyle" />
 
@@ -22,6 +23,7 @@
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:paddingStart="11dip"
+        android:paddingEnd="11dip"
         android:layout_gravity="top"
         android:paddingTop="4dip"
         android:paddingBottom="8dip">
@@ -50,6 +52,7 @@
         android:layout_gravity="top"
         android:baselineAligned="false"
         android:paddingStart="11dip"
+        android:paddingEnd="11dip"
         android:paddingTop="4dip"
         android:paddingBottom="8dip">
 
@@ -76,6 +79,7 @@
         android:layout_gravity="top"
         android:baselineAligned="false"
         android:paddingStart="11dip"
+        android:paddingEnd="11dip"
         android:paddingTop="0dip">
 
         <ImageView
@@ -147,6 +151,7 @@
             android:layout_weight="1"
             android:layout_width="0dip"
             android:paddingStart="5dip"
+            android:paddingEnd="0dip"
             android:layout_height="wrap_content" />
 
         <LinearLayout
@@ -160,14 +165,20 @@
 
             <ImageButton
                 android:id="@+id/prev"
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
                 style="@android:style/MediaButton.Previous" />
 
             <ImageButton
                 android:id="@+id/pause"
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
                 style="@android:style/MediaButton.Play" />
 
             <ImageButton
                 android:id="@+id/next"
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
                 style="@android:style/MediaButton.Next" />
         </LinearLayout>
 
@@ -181,6 +192,7 @@
             android:shadowDy="0"
             android:shadowRadius="3"
             android:gravity="end"
+            android:paddingStart="0dip"
             android:paddingEnd="5dip"
             android:layout_gravity="bottom"
             android:layout_weight="1"

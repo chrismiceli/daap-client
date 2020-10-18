@@ -253,7 +253,7 @@ public class DaapHost extends Host {
             // DaapSong song = (DaapSong)s;
             SongRequest sr = new SongRequest(this, s, bytes);
             return sr.getStream();
-        } catch (BadResponseCodeException e) {
+        } catch (BadResponseCodeException ignored) {
         }
         return null;
     }

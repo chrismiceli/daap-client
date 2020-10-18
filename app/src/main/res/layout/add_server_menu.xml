@@ -65,7 +65,7 @@
                 android:layout_marginEnd="20dip"
                 android:minEms="3"
                 android:inputType="number"
-                android:text="3689"
+                android:text="@string/daap_default_port"
                 android:importantForAutofill="no" />
         </LinearLayout>
 

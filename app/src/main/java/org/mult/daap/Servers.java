@@ -43,6 +43,7 @@ import org.mult.daap.background.LoginManager;
 import org.mult.daap.background.SeparatedListAdapter;
 import org.mult.daap.background.WrapMulticastLock;
 
+import java.lang.ref.WeakReference;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -411,40 +412,7 @@ public class Servers extends Activity implements Observer {
         }
     }
 
-    private final Handler loginHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == LoginManager.CONNECTION_FINISHED) {
-                pd.dismiss();
-                // save the server
-                boolean loginRequired = Contents.loginManager.password
-                        .length() != 0;
-                saveServer(Contents.loginManager.name,
-                        Contents.loginManager.address,
-                        Contents.loginManager.password, loginRequired);
-                Contents.loginManager = null;
-                final Intent intent = new Intent(Servers.this,
-                        PlaylistBrowser.class);
-                startActivityForResult(intent, 1);
-            } else if (msg.what == LoginManager.PASSWORD_FAILED) {
-                pd.dismiss();
-                // Contents.loginManager = null;
-                showDialog(PASSWORD_DIALOG);
-                // Contents.loginManager = null;
-            } else {
-                // ERROR
-                pd.dismiss();
-                Contents.loginManager = null;
-                Toast tst = Toast.makeText(Servers.this,
-                        getString(R.string.unable_to_connect),
-                        Toast.LENGTH_LONG);
-                tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                        tst.getYOffset() / 2);
-                tst.show();
-                Contents.loginManager = null;
-            }
-        }
-    };
+    private final Handler loginHandler = new LoginHandler(this);
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -532,32 +500,9 @@ public class Servers extends Activity implements Observer {
         }
     }
 
-    private final Handler labelChanger = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            StringBuilder stringBuilder = new StringBuilder(getString(R.string.local_servers));
-            for (int i = 0; i < msg.what; i++) {
-                stringBuilder.append(".");
-            }
-            localLabel = stringBuilder.toString();
-            adapter.headers.clear();
-            adapter.headers.add(getString(R.string.remembered_servers));
-            adapter.headers.add(localLabel);
-            adapter.notifyDataSetChanged();
-            labelChanger.sendEmptyMessageDelayed((msg.what + 1) % 4, 1000);
-        }
-    };
-    private final Handler mDNSHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String name = bundle.getString("name");
-            String address = bundle.getString("address");
-            localServers.add(createItem(name, address));
-            discoveredServers.add(bundle);
-            adapter.notifyDataSetChanged();
-        }
-    };
+    private final Handler labelChanger = new LabelChangeHandler(this);
+
+    private final Handler mDNSHandler = new MdnsHandler(this);
 
     private void saveServer(String serverName, String serverAddress,
                             String password, boolean loginCheckBox) {
@@ -566,5 +511,95 @@ public class Servers extends Activity implements Observer {
             db.insertServer(serverName, serverAddress, password, loginCheckBox);
         }
         db.close();
+    }
+
+    private static class LoginHandler extends Handler {
+        private final WeakReference<Servers> serversWeakReference;
+
+        LoginHandler(Servers servers) {
+            serversWeakReference = new WeakReference<>(servers);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Servers servers = serversWeakReference.get();
+            if (servers != null) {
+                if (msg.what == LoginManager.CONNECTION_FINISHED) {
+                    servers.pd.dismiss();
+                    // save the server
+                    boolean loginRequired = Contents.loginManager.password
+                            .length() != 0;
+                    servers.saveServer(Contents.loginManager.name,
+                            Contents.loginManager.address,
+                            Contents.loginManager.password, loginRequired);
+                    Contents.loginManager = null;
+                    final Intent intent = new Intent(servers,
+                            PlaylistBrowser.class);
+                    servers.startActivityForResult(intent, 1);
+                } else if (msg.what == LoginManager.PASSWORD_FAILED) {
+                    servers.pd.dismiss();
+                    // Contents.loginManager = null;
+                    servers.showDialog(PASSWORD_DIALOG);
+                    // Contents.loginManager = null;
+                } else {
+                    // ERROR
+                    servers.pd.dismiss();
+                    Contents.loginManager = null;
+                    Toast tst = Toast.makeText(servers,
+                            servers.getString(R.string.unable_to_connect),
+                            Toast.LENGTH_LONG);
+                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                            tst.getYOffset() / 2);
+                    tst.show();
+                    Contents.loginManager = null;
+                }
+            }
+        }
+    }
+
+    private static class LabelChangeHandler extends Handler {
+        private final WeakReference<Servers> serversWeakReference;
+
+        LabelChangeHandler(Servers servers) {
+            this.serversWeakReference = new WeakReference<>(servers);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Servers servers = serversWeakReference.get();
+            if (servers != null) {
+                StringBuilder stringBuilder = new StringBuilder(servers.getString(R.string.local_servers));
+                for (int i = 0; i < msg.what; i++) {
+                    stringBuilder.append(".");
+                }
+                servers.localLabel = stringBuilder.toString();
+                servers.adapter.headers.clear();
+                servers.adapter.headers.add(servers.getString(R.string.remembered_servers));
+                servers.adapter.headers.add(servers.localLabel);
+                servers.adapter.notifyDataSetChanged();
+                servers.labelChanger.sendEmptyMessageDelayed((msg.what + 1) % 4, 1000);
+            }
+        }
+    }
+
+    private static class MdnsHandler extends Handler {
+        private final WeakReference<Servers> serversWeakReference;
+
+        MdnsHandler(Servers servers) {
+            this.serversWeakReference = new WeakReference<>(servers);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Servers servers = serversWeakReference.get();
+            if (servers != null) {
+                Bundle bundle = msg.getData();
+                String name = bundle.getString("name");
+                String address = bundle.getString("address");
+                localServers.add(servers.createItem(name, address));
+                servers.discoveredServers.add(bundle);
+                servers.adapter.notifyDataSetChanged();
+            }
+        }
     }
 }

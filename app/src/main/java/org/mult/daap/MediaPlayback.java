@@ -454,10 +454,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                     while ((len = songStream.read(buffer)) > 0) {
                         destinationStream.write(buffer, 0, len);
                     }
-                    if (songStream != null)
-                        songStream.close();
-                    if (destinationStream != null)
-                        destinationStream.close();
+                    songStream.close();
+                    destinationStream.close();
                     destination.deleteOnExit();
                     handler.sendEmptyMessage(COPYING_DIALOG);
 

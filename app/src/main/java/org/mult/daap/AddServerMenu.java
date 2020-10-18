@@ -90,7 +90,7 @@ public class AddServerMenu extends Activity {
             String password = passwordEditText.getText().toString();
             String port = serverPortEditText.getText().toString();
             if (port.equals("")) {
-                serverPortEditText.setText("3689");
+                serverPortEditText.setText(R.string.daap_default_port);
                 port = "3689";
             }
             if (serverName.equals("") || serverAddress.equals("")) {

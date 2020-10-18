@@ -105,10 +105,6 @@ public class QueueListBrowser extends Activity {
                     .setIcon(R.drawable.ic_menu_play);
             menu.add(0, MENU_CLEAR_QUEUE, 0, getString(R.string.clear_queue))
                     .setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-        } else if (Contents.queue.size() > 0) {
-            menu.clear();
-            menu.add(0, MENU_PLAY_QUEUE, 0, getString(R.string.play_queue))
-                    .setIcon(R.drawable.ic_menu_play);
         }
         return true;
     }

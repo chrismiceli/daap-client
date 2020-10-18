@@ -19,6 +19,7 @@
     <string name="share_name">DAAP Share Name</string>
     <string name="url_description">URL and Port</string>
     <string name="daap_server_port">DAAP Server Port</string>
+    <string name="daap_default_port">3689</string>
     <string name="login_required">Login required</string>
     <string name="menu_stop">Stop</string>
     <string name="password">Password</string>
