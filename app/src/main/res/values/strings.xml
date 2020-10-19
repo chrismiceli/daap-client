@@ -71,4 +71,7 @@
     <string name="media_playback_service_desc">"Service used to handle widget actions"</string>
     <string name="widget_one_initial_text">"Touch to select media."</string>
     <string name="widget_one_track_info_unavailable">"No track info available"</string>
+    <string name="play_button_description">A play button</string>
+    <string name="next_song_button_description">Play next song button</string>
+    <string name="previous_song_button_description">Play previous song  button</string>
 </resources>
