@@ -32,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dip"
+            android:contentDescription="@string/artists"
             android:src="@drawable/ic_mp_artist_playback" />
 
         <TextView
@@ -60,6 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dip"
+            android:contentDescription="@string/albums"
             android:src="@drawable/ic_mp_album_playback" />
 
         <TextView
@@ -86,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dip"
+            android:contentDescription="@string/current_song"
             android:src="@drawable/ic_mp_song_playback" />
 
         <TextView
@@ -110,12 +113,14 @@
             android:id="@+id/shuffleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/shuffle"
             android:src="@drawable/ic_menu_shuffle" />
 
         <ImageButton
             android:id="@+id/repeatButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/repeat"
             android:src="@drawable/ic_menu_repeat" />
     </LinearLayout>
 
@@ -167,18 +172,21 @@
                 android:id="@+id/prev"
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/previous_song_button_description"
                 style="@android:style/MediaButton.Previous" />
 
             <ImageButton
                 android:id="@+id/pause"
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/play_button_description"
                 style="@android:style/MediaButton.Play" />
 
             <ImageButton
                 android:id="@+id/next"
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/next_song_button_description"
                 style="@android:style/MediaButton.Next" />
         </LinearLayout>
 
