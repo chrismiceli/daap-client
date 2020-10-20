@@ -172,6 +172,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         UIHandler(PlaylistBrowser playlistBrowser) {
             this.playlistBrowserWeakReference = new WeakReference<>(playlistBrowser);
         }
+
         @Override
         public void handleMessage(Message msg) {
             PlaylistBrowser playlistBrowser = playlistBrowserWeakReference.get();

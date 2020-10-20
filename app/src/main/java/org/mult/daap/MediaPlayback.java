@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mult.daap.client.Song;
+import org.mult.daap.client.daap.ISongUrlConsumer;
 import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -63,7 +64,7 @@ import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class MediaPlayback extends Activity implements View.OnTouchListener, View.OnLongClickListener {
+public class MediaPlayback extends Activity implements View.OnTouchListener, View.OnLongClickListener, ISongUrlConsumer {
 
     private static final int MENU_STOP = 0;
     private static final int MENU_LIBRARY = 1;
@@ -209,30 +210,8 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mProgress.setEnabled(false);
         mediaPlayer = new MediaPlayer();
         MediaPlayback.song = song;
-        try {
-            mediaPlayer.setDataSource(Contents.daapHost.getSongURL(song));
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setOnCompletionListener(normalOnCompletionListener);
-            mediaPlayer.setOnErrorListener(mediaPlayerErrorListener);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                    mProgress.setEnabled(true);
-                    stopNotification();
-                    startNotification();
-                    queueNextRefresh(refreshNow());
-                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-                }
-            });
-            mediaPlayer.prepareAsync();
-            TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-            setUpActivity();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, R.string.media_playback_error, Toast.LENGTH_LONG).show();
-            finish();
-        }
+        setUpActivity();
+        Contents.daapHost.getSongURLAsync(song, this);
     }
 
     private void setUpActivity() {
@@ -436,6 +415,34 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onSongUrlRetrieved(String songUrl) {
+        try {
+            mediaPlayer.setDataSource(songUrl);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setOnCompletionListener(normalOnCompletionListener);
+            mediaPlayer.setOnErrorListener(mediaPlayerErrorListener);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                    mProgress.setEnabled(true);
+                    stopNotification();
+                    startNotification();
+                    queueNextRefresh(refreshNow());
+                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
+                }
+            });
+            mediaPlayer.prepareAsync();
+            TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            setUpActivity();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, R.string.media_playback_error, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     private class FileCopier implements Runnable {

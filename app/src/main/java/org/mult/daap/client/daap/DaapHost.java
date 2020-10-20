@@ -5,6 +5,7 @@
  */
 package org.mult.daap.client.daap;
 
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
@@ -25,7 +26,9 @@ import org.mult.daap.client.daap.request.UpdateRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -238,10 +241,9 @@ public class DaapHost extends Host {
         return getSongStream(s, 0);
     }
 
-    public String getSongURL(Song s) throws PasswordFailedException,
-            BadResponseCodeException, IOException {
-        SongRequest sr = new SongRequest(this, s, 0);
-        return sr.getSongURL().toString();
+    public void getSongURLAsync(Song song, ISongUrlConsumer songUrlConsumer) {
+        GetSongURLAsyncTask songURLAsyncTask = new GetSongURLAsyncTask(this, song, songUrlConsumer);
+        songURLAsyncTask.execute();
     }
 
     public InputStream getSongStream(Song s, long bytes) throws Exception {
@@ -272,5 +274,47 @@ public class DaapHost extends Host {
             return MT_DAAPD;
         else
             return UNKNOWN_SERVER;
+    }
+
+    static class GetSongURLAsyncTask extends AsyncTask<Void, Void, String> {
+        final DaapHost host;
+        final Song song;
+        final WeakReference<ISongUrlConsumer> songUrlConsumerWeakReference;
+
+        GetSongURLAsyncTask(DaapHost host, Song song, ISongUrlConsumer songUrlConsumer) {
+            this.host = host;
+            this.song = song;
+            this.songUrlConsumerWeakReference = new WeakReference<>(songUrlConsumer);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            SongRequest sr = null;
+            try {
+                sr = new SongRequest(this.host, this.song, 0);
+            } catch (PasswordFailedException | BadResponseCodeException | IOException ignored) {
+            }
+            String result = null;
+
+            try {
+                sr.getSongURL();
+            } catch (IOException ignored) {
+            }
+
+            try {
+                result = sr.getSongURL().toString();
+            } catch (MalformedURLException ignored) {
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String songUrl) {
+            ISongUrlConsumer songUrlConsumer = this.songUrlConsumerWeakReference.get();
+            if (null != songUrlConsumer) {
+                songUrlConsumer.onSongUrlRetrieved(songUrl);
+            }
+        }
     }
 }

@@ -265,23 +265,24 @@ public class SearchActivity extends ListActivity implements Observer {
         SearchHandler(SearchActivity searchActivity) {
             searchActivityWeakReference = new WeakReference<>(searchActivity);
         }
-            @Override
-            public void handleMessage(Message msg) {
-                SearchActivity searchActivity = searchActivityWeakReference.get();
-                if (searchActivity != null) {
-                    searchActivity.createList();
-                    if (searchActivity.pd != null)
-                        searchActivity.pd.dismiss();
-                    if (searchActivity.srList.size() == 0) {
-                        Toast tst = Toast.makeText(searchActivity,
-                                searchActivity.getString(R.string.no_search_results),
-                                Toast.LENGTH_LONG);
-                        tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
-                                tst.getYOffset() / 2);
-                        tst.show();
-                        searchActivity.finish();
-                    }
+
+        @Override
+        public void handleMessage(Message msg) {
+            SearchActivity searchActivity = searchActivityWeakReference.get();
+            if (searchActivity != null) {
+                searchActivity.createList();
+                if (searchActivity.pd != null)
+                    searchActivity.pd.dismiss();
+                if (searchActivity.srList.size() == 0) {
+                    Toast tst = Toast.makeText(searchActivity,
+                            searchActivity.getString(R.string.no_search_results),
+                            Toast.LENGTH_LONG);
+                    tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2,
+                            tst.getYOffset() / 2);
+                    tst.show();
+                    searchActivity.finish();
                 }
             }
+        }
     }
 }
