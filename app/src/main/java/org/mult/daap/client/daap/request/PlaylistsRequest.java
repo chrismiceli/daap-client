@@ -122,13 +122,12 @@ public class PlaylistsRequest extends Request {
                     p.id = readInt(data, position);
                     break;
                 case "mper":
-                    p.persistent_id = readString(data, position, size);
+                    readString(data, position, size);
                     break;
                 case "mimc":
-                    p.song_count = readInt(data, position);
+                    readInt(data, position);
                     break;
                 case "aeSP":
-                    p.smart_playlist = true;
                     break;
             }
             position += size;

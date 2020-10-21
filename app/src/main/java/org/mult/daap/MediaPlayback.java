@@ -411,7 +411,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 break;
             case MENU_DOWNLOAD:
                 showDialog(COPYING_DIALOG);
-                new Thread(new FileCopier()).start();
+                new Thread(new FileCopier(this.getExternalFilesDir(Environment.DIRECTORY_MUSIC))).start();
                 break;
         }
         return true;
@@ -446,12 +446,16 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     private class FileCopier implements Runnable {
+        private final File directory;
+
+        FileCopier(File directory) {
+            this.directory = directory;
+        }
+
         public void run() {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && mediaPlayer != null) {
                 boolean wasPlaying = mediaPlayer.isPlaying();
                 try {
-                    File directory = new File(Environment.getExternalStorageDirectory(), "DAAP");
-                    directory.mkdirs();
                     File destination = new File(directory, "DAAP-" + song.id + "." + song.format);
                     mediaPlayer.pause();
                     InputStream songStream = Contents.daapHost.getSongStream(song);
@@ -461,13 +465,14 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                     while ((len = songStream.read(buffer)) > 0) {
                         destinationStream.write(buffer, 0, len);
                     }
+
                     songStream.close();
                     destinationStream.close();
-                    destination.deleteOnExit();
                     handler.sendEmptyMessage(COPYING_DIALOG);
 
-                    if (wasPlaying)
+                    if (wasPlaying) {
                         mediaPlayer.start();
+                    }
                     handler.sendEmptyMessage(SUCCESS_COPYING_DIALOG);
                 } catch (Exception e) {
                     if (wasPlaying)
@@ -740,26 +745,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 mediaPlayback.mSongSummary.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
-    }
-
-    private void scrobble(int code) {
-        boolean playing = code == 0 || code == 1;
-        Intent bCast = new Intent("com.adam.aslfms.notify.playstatechanged");
-        bCast.putExtra("state", code);
-        bCast.putExtra("app-name", "Daap-client");
-        bCast.putExtra("app-package", "org.mult.daap");
-        bCast.putExtra("artist", song.artist);
-        bCast.putExtra("album", song.album);
-        bCast.putExtra("track", song.name);
-        bCast.putExtra("duration", song.time / 1000);
-        sendBroadcast(bCast);
-        Intent i = new Intent("net.jjc1138.android.scrobbler.action.MUSIC_STATUS");
-        i.putExtra("playing", playing);
-        i.putExtra("artist", song.artist);
-        i.putExtra("album", song.album);
-        i.putExtra("track", song.name);
-        i.putExtra("secs", song.time / 1000);
-        sendBroadcast(i);
     }
 
     private final ServiceConnection connection = new ServiceConnection() {

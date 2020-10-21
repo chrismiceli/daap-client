@@ -22,13 +22,11 @@ import java.util.Set;
 public class ServerEditorActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
     public class CursorPreferenceHack implements SharedPreferences {
-        protected final String table;
         protected final long id;
 
         protected final Map<String, String> values = new HashMap<>();
 
-        public CursorPreferenceHack(String table, long id) {
-            this.table = table;
+        public CursorPreferenceHack(long id) {
             this.id = id;
 
             cacheValues();
@@ -182,7 +180,6 @@ public class ServerEditorActivity extends PreferenceActivity implements
         return this.pref;
     }
 
-    protected static final String TAG = ServerEditorActivity.class.getName();
     protected DBAdapter db = null;
     private CursorPreferenceHack pref;
 
@@ -191,7 +188,7 @@ public class ServerEditorActivity extends PreferenceActivity implements
         super.onCreate(icicle);
         long rowId = this.getIntent().getIntExtra(Intent.EXTRA_TITLE, -1);
         this.db = new DBAdapter(this);
-        this.pref = new CursorPreferenceHack(DBAdapter.DATABASE_TABLE, rowId);
+        this.pref = new CursorPreferenceHack(rowId);
         this.pref.registerOnSharedPreferenceChangeListener(this);
         this.addPreferencesFromResource(R.xml.server_prefs);
         this.updateSummaries();

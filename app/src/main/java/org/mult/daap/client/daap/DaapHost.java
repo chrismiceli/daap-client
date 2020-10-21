@@ -14,7 +14,6 @@ import org.mult.daap.client.Song;
 import org.mult.daap.client.SongIDComparator;
 import org.mult.daap.client.daap.request.BadResponseCodeException;
 import org.mult.daap.client.daap.request.DatabasesRequest;
-import org.mult.daap.client.daap.request.HangingUpdateRequest;
 import org.mult.daap.client.daap.request.LoginRequest;
 import org.mult.daap.client.daap.request.LogoutRequest;
 import org.mult.daap.client.daap.request.PasswordFailedException;
@@ -41,38 +40,21 @@ import java.util.Comparator;
  * @author Greg
  */
 public class DaapHost extends Host {
-    public static final int RATING_NONE = 0;
-    public static final int RATING_UP = 1;
-    public static final int RATING_DOWN = 2;
-    public int rating = RATING_NONE;
     public final String address;
-    protected String computer_name;
     protected final int port;
-    protected double daap_version;
     protected int revision_num;
     protected int database_id;
     protected int session_id;
     protected int request_num;
-    protected boolean password_protected;
     protected String password;
-    protected HangingUpdateRequest hanging_update;
     protected int host_prog;
     // a program-specific integer, so we can hack together compatibility.
     protected ArrayList<Song> songs = new ArrayList<>();
-    public static final String[] host_strings = {"Unknown", "iTunes",
-            "Get It Together", "mt-daapd", "Limewire"};
     public static final int UNKNOWN_SERVER = 0;
     public static final int ITUNES = 1;
     public static final int GIT_SERVER = 2;
     public static final int MT_DAAPD = 3;
-    public static final int LIMEWIRE = 4;
-    // don't change these... the authorization hashing is based on these
-    // numbers.
-    public static double ITUNES_LEGACY = 1;
-    public static double ITUNES_40 = 2;
-    public static double ITUNES_45 = 3;
 
-    // dummy constructor, used by GetNewHost
     public DaapHost(String name, String pwd, InetAddress addy, int porty) {
         super(name);
         password = Base64.encodeToString(("Android_DAAP:" + pwd).getBytes(), Base64.DEFAULT);
@@ -93,7 +75,6 @@ public class DaapHost extends Host {
             Log.d("DAAPHost",
                     "ServerInfo:  " + s.getServerVersion() + " "
                             + s.getServerProgram() + " " + s.getHost());
-            daap_version = s.getServerVersion();
             if (s.getServerProgram() != null)
                 host_prog = parseServerTypeString(s.getServerProgram());
             LoginRequest l = new LoginRequest(this);
@@ -128,10 +109,7 @@ public class DaapHost extends Host {
             BadResponseCodeException {
         // don't logout when connected to a de.kapsi server:
         try {
-            LogoutRequest lo = new LogoutRequest(this);
-            if (hanging_update != null) {
-                hanging_update.disconnect();
-            }
+            new LogoutRequest(this);
         } catch (BadResponseCodeException e) {
             if (e.response_code == 204) {
                 session_id = 0;
@@ -155,8 +133,6 @@ public class DaapHost extends Host {
             PlaylistsRequest p = new PlaylistsRequest(this);
             playlists = p.getPlaylists();
             Log.d("DaapHost", "playlist count = " + playlists.size());
-            if (getServerType() == DaapHost.GIT_SERVER)
-                hanging_update = new HangingUpdateRequest(this);
         } catch (BadResponseCodeException e) {
             if (e.response_code == 500) {
                 Log.d("DaapHost", "500 Response code");
@@ -170,7 +146,7 @@ public class DaapHost extends Host {
     public void loadPlaylists() throws Exception {
         login();
         for (int i = 0; i < playlists.size(); i++) {
-            DaapPlaylist playlist = (DaapPlaylist) playlists.get(i);
+            DaapPlaylist playlist = playlists.get(i);
             playlist.initialize();
         }
         // logout();
@@ -183,11 +159,6 @@ public class DaapHost extends Host {
         database_id = 0;
         session_id = 0;
         request_num = 0;
-    }
-
-    public void remove() {
-        nullify();
-        setVisible(false);
     }
 
     public boolean isPasswordProtected() {
@@ -226,10 +197,9 @@ public class DaapHost extends Host {
         return password;
     }
 
-    @SuppressWarnings("rawtypes")
-    public Collection getPlaylists() {
+    public Collection<DaapPlaylist> getPlaylists() {
         if (playlists == null)
-            playlists = new ArrayList();
+            playlists = new ArrayList<>();
         return playlists;
     }
 
@@ -252,16 +222,11 @@ public class DaapHost extends Host {
             if (session_id == 0 || host_prog == GIT_SERVER) {
                 login();
             }
-            // DaapSong song = (DaapSong)s;
             SongRequest sr = new SongRequest(this, s, bytes);
             return sr.getStream();
         } catch (BadResponseCodeException ignored) {
         }
         return null;
-    }
-
-    public int getServerType() {
-        return host_prog;
     }
 
     public static int parseServerTypeString(String s) {

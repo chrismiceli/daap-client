@@ -35,7 +35,6 @@ public class PlaylistBrowser extends Activity implements Observer {
     private ArrayList<DaapPlaylist> l;
     private ProgressDialog pd = null;
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +50,7 @@ public class PlaylistBrowser extends Activity implements Observer {
             return;
         }
         this.setContentView(R.layout.playlist_browser);
-        l = new ArrayList<DaapPlaylist>(Contents.daapHost.getPlaylists());
+        l = new ArrayList<>(Contents.daapHost.getPlaylists());
         l.add(0, new DaapPlaylist(Contents.daapHost,
                 getString(R.string.all_songs), true));
         count = l.size();

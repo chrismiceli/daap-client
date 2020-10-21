@@ -37,29 +37,14 @@ public class Song implements Comparable<Object> {
     public short track;
     public short disc_num;
     public String format;
-    public int size;
-    public Host host;
 
-    // public int status;
-    // public static int STATUS_OK = 0;
-    // public static int STATUS_NOT_FOUND = 2;
-    // public static int STATUS_ERROR = 3;
-    // public boolean compilation;
-    // public int bitrate;
-    // public String persistent_id;
-    // public String genre;
-    // public boolean is_available;
     public Song() {
         name = "";
         id = 0;
         album = "";
         artist = "";
         track = -1;
-        // genre = "";
         format = "";
-        // compilation = false;
-        host = null;
-        // status = Song.STATUS_OK;
     }
 
     public String toString() {
@@ -72,6 +57,6 @@ public class Song implements Comparable<Object> {
         } else if (another instanceof Integer) {
             return (this.id - (Integer) another);
         }
-        return 0; // all the same if can't compare
+        return 0;
     }
 }

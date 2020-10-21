@@ -119,7 +119,6 @@ public class SingleDatabaseRequest extends Request {
             position += 4;
             size = readInt(data, position);
             position += 4;
-            s.host = host;
             switch (name) {
                 case "miid":
                     s.id = Request.readInt(data, position, 4);
@@ -147,7 +146,7 @@ public class SingleDatabaseRequest extends Request {
                     s.time = readInt(data, position, 4);
                     break;
                 case "assz":
-                    s.size = readInt(data, position, 4);
+                    readInt(data, position, 4);
                     // } else if (name.equals("asco")) {
                     // s.compilation = (readInt(data, position, 1) == 1);
                     break;

@@ -30,8 +30,6 @@ import java.io.IOException;
  * @created July 15, 2004
  */
 public class LogoutRequest extends Request {
-    private int mSessionId;
-
     public LogoutRequest(DaapHost h) throws BadResponseCodeException,
             PasswordFailedException, IOException {
         super(h);
@@ -67,14 +65,11 @@ public class LogoutRequest extends Request {
             if (size > 10000000)
                 Log.d("Request", "This host probably uses gzip encoding");
             if (name.equals("mlid")) {
-                mSessionId = readInt(data, offset); // read 4 bytes
+                readInt(data, offset); // read 4 bytes
                 break;
             }
             offset += size;
         }
     }
 
-    public int getSessionId() {
-        return mSessionId;
-    }
 }

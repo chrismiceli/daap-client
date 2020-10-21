@@ -30,7 +30,6 @@ import org.mult.daap.client.SongTrackComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -281,8 +280,6 @@ public class SongBrowser extends ListActivity {
 
     static class MyArrayAdapter<T> extends ArrayAdapter<T> {
         final ArrayList<Song> myElements;
-        HashMap<String, Integer> alphaIndexer;
-        ArrayList<String> letterList;
         final Context vContext;
 
         public MyArrayAdapter(Context context, int textViewResourceId,

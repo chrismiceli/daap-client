@@ -23,15 +23,11 @@ import java.util.Collection;
  */
 public class DaapPlaylist extends Playlist {
     public int id;
-    public String persistent_id;
-    public boolean smart_playlist;
-    public int song_count = 0;
     protected ArrayList<Song> songs;
     protected final DaapHost host;
 
     public DaapPlaylist(DaapHost h) {
         host = h;
-        setStatus(Playlist.STATUS_NOT_INITIALIZED);
         this.all_songs = false;
     }
 
@@ -39,22 +35,18 @@ public class DaapPlaylist extends Playlist {
         host = h;
         name = n;
         this.all_songs = as;
-        setStatus(Playlist.STATUS_NOT_INITIALIZED);
     }
 
     public void initialize() throws Exception {
-        setStatus(Playlist.STATUS_INITIALIZING);
         try {
             SinglePlaylistRequest p = new SinglePlaylistRequest(this);
             // should be like singledatabaserequest
             songs = p.getSongs();
-            setStatus(Playlist.STATUS_INITIALIZED);
         } catch (BadResponseCodeException e) {
             Log.d("DaapPlaylist", "BadResponse " + e.getMessage());
             host.login();
             initialize();
         } catch (Exception e) {
-            setStatus(Playlist.STATUS_NOT_INITIALIZED);
             e.printStackTrace();
             Log.d("DaapPlaylist", "Error code " + e
                     + " on playlist");
@@ -63,10 +55,6 @@ public class DaapPlaylist extends Playlist {
 
     public DaapHost getHost() {
         return host;
-    }
-
-    public String getPersistentId() {
-        return persistent_id;
     }
 
     public int getId() {

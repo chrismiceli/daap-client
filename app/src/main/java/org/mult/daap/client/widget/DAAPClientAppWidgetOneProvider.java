@@ -36,8 +36,6 @@ import org.mult.daap.Servers;
  * with play/pause and next track buttons.
  */
 public class DAAPClientAppWidgetOneProvider extends AppWidgetProvider {
-    static final String TAG = DAAPClientAppWidgetOneProvider.class.getName();
-
     public static final String CMDAPPWIDGETUPDATE = "appwidgetupdate";
 
     private static DAAPClientAppWidgetOneProvider sInstance;

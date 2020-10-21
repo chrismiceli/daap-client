@@ -31,7 +31,6 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -57,7 +56,6 @@ import java.util.Observer;
 public class Servers extends Activity implements Observer {
     public final static String TITLE = "title";
     public final static String CAPTION = "caption";
-    public final static String KEY = "key";
     private static final int MENU_ABOUT = 1;
     private static final int MENU_ADD = 2;
     private static final int CONTEXT_DELETE = 3;
@@ -443,7 +441,6 @@ public class Servers extends Activity implements Observer {
             final View base;
             TextView vwlcT = null;
             TextView vwlcC = null;
-            ImageView vwimage = null;
 
             ViewWrapper(View base) {
                 this.base = base;
@@ -476,10 +473,6 @@ public class Servers extends Activity implements Observer {
 
         public int getCount() {
             return mList.size();
-        }
-
-        public List<? extends Map<String, ?>> getList() {
-            return mList;
         }
 
         public View getView(final int position, View convertView,

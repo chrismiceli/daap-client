@@ -42,7 +42,6 @@ public class SongRequest extends Request {
         skip_bytes = bytes;
         query("SongRequest");
         readResponse();
-        process();
     }
 
     protected void addRequestProperties() {
@@ -77,9 +76,6 @@ public class SongRequest extends Request {
 
     protected String getHashCode(Request r) throws NoSuchAlgorithmException {
         return Hasher.GenerateHash("/" + r.getRequestString());
-    }
-
-    protected void process() {
     }
 
     public InputStream getStream() {
