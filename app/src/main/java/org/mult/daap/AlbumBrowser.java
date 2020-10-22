@@ -111,11 +111,11 @@ public class AlbumBrowser extends ListActivity {
             }
             TreeMap<Short, Short> track_num = new TreeMap<>();
             for (Song s : Contents.filteredAlbumSongList) {
-                if (!track_num.containsKey(s.disc_num)) {
+                Short count = track_num.get(s.disc_num);
+                if (count == null) {
                     track_num.put(s.disc_num, (short) 1);
                 } else {
-                    track_num.put(s.disc_num,
-                            (short) (track_num.get(s.disc_num) + 1));
+                    track_num.put(s.disc_num, (short) (count + 1));
                 }
             }
             Comparator<Song> sdnc = new SongDiscNumComparator();

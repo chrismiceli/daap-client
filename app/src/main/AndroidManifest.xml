@@ -18,6 +18,9 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".Servers"

@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import org.mult.daap.background.GetSongsForPlaylist;
 import org.mult.daap.client.daap.DaapPlaylist;
 
@@ -173,7 +175,7 @@ public class PlaylistBrowser extends Activity implements Observer {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             PlaylistBrowser playlistBrowser = playlistBrowserWeakReference.get();
             if (playlistBrowser != null) {
                 if (msg.what == FINISHED) { // Finished

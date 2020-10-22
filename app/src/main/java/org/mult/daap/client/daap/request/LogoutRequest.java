@@ -55,21 +55,14 @@ public class LogoutRequest extends Request {
     }
 
     public void processLogoutRequest() {
-        String name;
         int size;
         while (offset < data.length) {
-            name = readString(data, offset, 4);
             offset += 4;
             size = readInt(data, offset);
             offset += 4;
             if (size > 10000000)
                 Log.d("Request", "This host probably uses gzip encoding");
-            if (name.equals("mlid")) {
-                readInt(data, offset); // read 4 bytes
-                break;
-            }
             offset += size;
         }
     }
-
 }

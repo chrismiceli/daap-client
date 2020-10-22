@@ -13,7 +13,6 @@
     <string name="play_artist">Jouer l\'Artist</string>
     <string name="all_songs">Toutes Les Chansons</string>
     <string name="current_song">Chanson en cours</string>
-    <string name="upcoming_song" />
     <string name="share_name">Nom de partage DAAP</string>
     <string name="url_description">URL et Port</string>
     <string name="login_required">Authentification requise</string>
@@ -58,13 +57,9 @@
     <string name="play_queue">Jouer la file</string>
     <string name="clear_queue">Effacer la file</string>
     <string name="search">Rechercher</string>
-    <string name="streaming_pref_detail">Diffuser la musique en streaming (beta)</string>
-    <string name="streaming">Streaming</string>
     <string name="artists">Artistes</string>
     <string name="albums">Albums</string>
     <string name="songs">Chansons</string>
     <string name="save">Télécharger</string>
     <string name="save_complete">Sauvegarde musique à </string>
-    <string name="seeking_disabled">Cherche est actuellement désactivé pendant le
-		téléchargement.</string>
 </resources>

@@ -14,7 +14,6 @@
     <string name="play_artist">Mängi artisti</string>
     <string name="all_songs">Kõik lood</string>
     <string name="current_song">Praegune lugu</string>
-    <string name="upcoming_song">Järgmine lugu</string>
     <string name="server_settings">Serveri sätted</string>
     <string name="share_name">DAAP-jao nimi</string>
     <string name="url_description">Aadress ja port</string>

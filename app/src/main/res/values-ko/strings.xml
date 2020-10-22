@@ -11,7 +11,6 @@
     <string name="repeat">반복</string>
     <string name="delete_entry">엔트리 삭제</string>
     <string name="current_song">현재 재생되고 있는 노래</string>
-    <string name="upcoming_song" />
     <string name="share_name">DAAP 공유 이름</string>
     <string name="url_description">URL와 포트</string>
     <string name="login_required">로그인이 필요합니다</string>
@@ -56,12 +55,9 @@
     <string name="play_queue">대기 목록을 재생합니다</string>
     <string name="clear_queue">대기 목록을 지웁니다</string>
     <string name="search">찾기</string>
-    <string name="streaming_pref_detail">스트림 음악 (beta)</string>
-    <string name="streaming">스트리밍</string>
     <string name="artists">아티스트</string>
     <string name="albums">앨범</string>
     <string name="songs">노래</string>
     <string name="save">저장</string>
     <string name="save_complete">파일을 저장했습니다 </string>
-    <string name="seeking_disabled">다운로드 중에는 쉽게 찾을 수 없습니다.</string>
 </resources>

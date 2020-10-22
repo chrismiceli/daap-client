@@ -3,6 +3,8 @@ package org.mult.daap;
 import android.os.Handler;
 import android.os.Message;
 
+import androidx.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 
 class CopyHandler extends Handler {
@@ -13,7 +15,7 @@ class CopyHandler extends Handler {
     }
 
     @Override
-    public void handleMessage(Message message) {
+    public void handleMessage(@NonNull Message message) {
         MediaPlayback mediaPlayback = this.mediaPlaybackActivityWeakReference.get();
         if (mediaPlayback != null) {
             switch (message.what) {

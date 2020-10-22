@@ -15,7 +15,6 @@
     <string name="play_artist">Spill Artist</string>
     <string name="all_songs">Alle Sanger</string>
     <string name="current_song">Gjeldende Sang</string>
-    <string name="upcoming_song" />
     <string name="server_settings">Server innstillinger</string>
     <string name="share_name">DAAP Delt Navn</string>
     <string name="url_description">URL og Port</string>

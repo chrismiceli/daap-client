@@ -14,7 +14,6 @@
     <string name="play_artist">Play Artist</string>
     <string name="all_songs">All Songs</string>
     <string name="current_song">Current Song</string>
-    <string name="upcoming_song" />
     <string name="server_settings">Server settings</string>
     <string name="share_name">DAAP Share Name</string>
     <string name="url_description">URL and Port</string>

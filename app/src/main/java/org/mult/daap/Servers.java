@@ -36,6 +36,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import org.mult.daap.background.DBAdapter;
 import org.mult.daap.background.JmDNSListener;
 import org.mult.daap.background.LoginManager;
@@ -514,7 +516,7 @@ public class Servers extends Activity implements Observer {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             Servers servers = serversWeakReference.get();
             if (servers != null) {
                 if (msg.what == LoginManager.CONNECTION_FINISHED) {
@@ -558,7 +560,7 @@ public class Servers extends Activity implements Observer {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             Servers servers = serversWeakReference.get();
             if (servers != null) {
                 StringBuilder stringBuilder = new StringBuilder(servers.getString(R.string.local_servers));
@@ -583,7 +585,7 @@ public class Servers extends Activity implements Observer {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             Servers servers = serversWeakReference.get();
             if (servers != null) {
                 Bundle bundle = msg.getData();

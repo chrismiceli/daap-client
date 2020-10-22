@@ -27,6 +27,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import org.mult.daap.background.SearchThread;
 import org.mult.daap.client.Song;
 
@@ -267,7 +269,7 @@ public class SearchActivity extends ListActivity implements Observer {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             SearchActivity searchActivity = searchActivityWeakReference.get();
             if (searchActivity != null) {
                 searchActivity.createList();

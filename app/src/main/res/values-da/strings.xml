@@ -13,7 +13,6 @@
     <string name="play_artist">Afspil Artist</string>
     <string name="all_songs">Alle Sange</string>
     <string name="current_song">Nuværende Sang</string>
-    <string name="upcoming_song" />
     <string name="share_name">DAAP Delings Navn</string>
     <string name="url_description">URL og Port</string>
     <string name="login_required">Login kræves</string>
@@ -58,13 +57,9 @@
     <string name="play_queue">Afspil Queue</string>
     <string name="clear_queue">Ryd Kø</string>
     <string name="search">Søg</string>
-    <string name="streaming_pref_detail">Stream musik (beta)</string>
-    <string name="streaming">Streaming</string>
     <string name="artists">Kunstnere</string>
     <string name="albums">Albums</string>
     <string name="songs">Sange</string>
     <string name="save">Gæm</string>
     <string name="save_complete">Gemte filen til </string>
-    <string name="seeking_disabled">Søger er i øjeblikket deaktiveret, mens du henter.
-	</string>
 </resources>

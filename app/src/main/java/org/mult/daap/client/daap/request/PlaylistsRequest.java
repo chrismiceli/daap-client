@@ -124,9 +124,6 @@ public class PlaylistsRequest extends Request {
                 case "mper":
                     readString(data, position, size);
                     break;
-                case "mimc":
-                    readInt(data, position);
-                    break;
                 case "aeSP":
                     break;
             }

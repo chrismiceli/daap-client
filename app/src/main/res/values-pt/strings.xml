@@ -14,7 +14,6 @@
     <string name="play_artist">Reproduzir Artista</string>
     <string name="all_songs">Todas Faixas</string>
     <string name="current_song">Faixa Corrente</string>
-    <string name="upcoming_song">Próxima Faixa</string>
     <string name="share_name">Nome do servidor DAAP</string>
     <string name="url_description">URL e Porta</string>
     <string name="login_required">Login requisitado</string>
@@ -57,12 +56,9 @@
     <string name="play_queue">Tocar Fila</string>
     <string name="clear_queue">Apagar Fila</string>
     <string name="search">Pesquisar</string>
-    <string name="streaming_pref_detail">Streaming Música (beta)</string>
-    <string name="streaming">Streaming</string>
     <string name="artists">Artistas</string>
     <string name="albums">Discos</string>
     <string name="songs">Músicas</string>
     <string name="save">Salvar</string>
     <string name="save_complete">Arquivo salvo para </string>
-    <string name="seeking_disabled">Pular está desativado durante o download.</string>
 </resources>

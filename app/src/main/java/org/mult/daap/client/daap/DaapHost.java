@@ -143,15 +143,6 @@ public class DaapHost extends Host {
         }
     }
 
-    public void loadPlaylists() throws Exception {
-        login();
-        for (int i = 0; i < playlists.size(); i++) {
-            DaapPlaylist playlist = playlists.get(i);
-            playlist.initialize();
-        }
-        // logout();
-    }
-
     private void nullify() {
         songs.clear();
         playlists = null;
@@ -261,14 +252,16 @@ public class DaapHost extends Host {
             }
             String result = null;
 
-            try {
-                sr.getSongURL();
-            } catch (IOException ignored) {
-            }
+            if (sr != null) {
+                try {
+                    sr.getSongURL();
+                } catch (IOException ignored) {
+                }
 
-            try {
-                result = sr.getSongURL().toString();
-            } catch (MalformedURLException ignored) {
+                try {
+                    result = sr.getSongURL().toString();
+                } catch (MalformedURLException ignored) {
+                }
             }
 
             return result;

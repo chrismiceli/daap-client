@@ -32,7 +32,7 @@ public class SeparatedListAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        for (Object section : this.sections.keySet()) {
+        for (String section : this.sections.keySet()) {
             Adapter adapter = sections.get(section);
             int size = adapter.getCount() + 1;
 
@@ -66,7 +66,7 @@ public class SeparatedListAdapter extends BaseAdapter {
 
     public int getItemViewType(int position) {
         int type = 1;
-        for (Object section : this.sections.keySet()) {
+        for (String section : this.sections.keySet()) {
             Adapter adapter = sections.get(section);
             int size = adapter.getCount() + 1;
             // check if position inside this section
@@ -88,7 +88,7 @@ public class SeparatedListAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         int sectionnum = 0;
-        for (Object section : this.sections.keySet()) {
+        for (String section : this.sections.keySet()) {
             Adapter adapter = sections.get(section);
             int size = adapter.getCount() + 1;
             // check if position inside this section

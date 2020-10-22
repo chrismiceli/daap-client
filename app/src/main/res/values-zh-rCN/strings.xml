@@ -13,7 +13,6 @@
     <string name="play_artist">听艺术家</string>
     <string name="all_songs">每个歌</string>
     <string name="current_song">当前歌曲</string>
-    <string name="upcoming_song" />
     <string name="share_name">DAAP 共享名称</string>
     <string name="url_description">地址和端口</string>
     <string name="login_required">需要登录</string>
@@ -57,14 +56,11 @@
     <string name="play_queue">播放列表</string>
     <string name="clear_queue">清除列表</string>
     <string name="search">搜索</string>
-    <string name="streaming_pref_detail">音乐流 (测试)</string>
-    <string name="streaming">流</string>
     <string name="artists">艺术家</string>
     <string name="albums">唱片集</string>
     <string name="songs">歌曲</string>
     <string name="save">保存</string>
     <string name="save_complete">保存文件到 </string>
-    <string name="seeking_disabled">当下载的时候停用搜索。</string>
 </resources>
 
 

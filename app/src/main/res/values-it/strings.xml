@@ -14,7 +14,6 @@
     <string name="play_artist">Riproduci Artista</string>
     <string name="all_songs">Tutti i brani</string>
     <string name="current_song">Brano corrente</string>
-    <string name="upcoming_song">Brano successivo</string>
     <string name="share_name">Nome server DAAP</string>
     <string name="url_description">URL e porta</string>
     <string name="login_required">Login necessario</string>
@@ -56,13 +55,9 @@
     <string name="play_queue">Riproduci coda</string>
     <string name="clear_queue">Svuota coda</string>
     <string name="search">Cerca</string>
-    <string name="streaming_pref_detail">Streaming brani (beta)</string>
-    <string name="streaming">Streaming</string>
     <string name="artists">Artisti</string>
     <string name="albums">Album</string>
     <string name="songs">Brani</string>
     <string name="save">Salva</string>
     <string name="save_complete">File salvato in </string>
-    <string name="seeking_disabled">Impossibile cercare nel brano con lo streaming
-		attivato.</string>
 </resources>
