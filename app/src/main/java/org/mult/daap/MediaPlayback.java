@@ -3,7 +3,7 @@ package org.mult.daap;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -21,6 +21,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -44,6 +45,10 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.TaskStackBuilder;
+
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.ISongUrlConsumer;
 import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
@@ -65,7 +70,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MediaPlayback extends Activity implements View.OnTouchListener, View.OnLongClickListener, ISongUrlConsumer {
-
+    private static final String CHANNEL_ID = "daap_channel_song_playing";
     private static final int MENU_STOP = 0;
     private static final int MENU_LIBRARY = 1;
     private static final int MENU_DOWNLOAD = 2;
@@ -108,6 +113,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        createNotificationChannel();
         setResult(Activity.RESULT_OK);
         if (Contents.address == null) {
             // We got kicked out of memory probably
@@ -133,6 +139,25 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mAlbumName = findViewById(R.id.albumname);
         mTrackName = findViewById(R.id.trackname);
         mSongSummary = findViewById(R.id.song_summary);
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.media_playback_notification_channel_name);
+            String description = getString(R.string.media_playback_notification_channel_name);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            channel.setSound(null, null);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
     }
 
     @Override
@@ -554,13 +579,21 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     public void startNotification() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(R.drawable.stat_notify_musicplayer, song.name, System.currentTimeMillis());
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                        .setSmallIcon(R.drawable.stat_notify_musicplayer)
+                        .setContentTitle(song.name)
+                        .setContentText(song.artist)
+                        .setSmallIcon(R.drawable.stat_notify_musicplayer)
+                        .setSound(null);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
-        // notification.setLatestEventInfo(getApplicationContext(), song.name, song.artist, contentIntent);
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-        notificationManager.notify(0, notification);
+        Intent resultIntent = new Intent(this, MediaPlayback.class);
+        stackBuilder.addParentStack(MediaPlayback.class);
+        stackBuilder.addNextIntent(resultIntent);
+        mBuilder.setContentIntent(contentIntent);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(0, mBuilder.build());
     }
 
     public void stopNotification() {

@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -255,7 +254,6 @@ public class SearchActivity extends ListActivity implements Observer {
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv = new TextView(vContext.getApplicationContext());
             tv.setTextSize(18);
-            tv.setTextColor(Color.WHITE);
             tv.setText(myElements.get(position).toString());
             return tv;
         }

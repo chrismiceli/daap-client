@@ -12,7 +12,6 @@ public class TabMain extends TabActivity {
         super.onCreate(savedInstanceState);
         setResult(Activity.RESULT_OK);
         setContentView(R.layout.tab_main);
-        Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost(); // The activity TabHost
         TabHost.TabSpec spec; // Resusable TabSpec for each tab
         Intent intent = new Intent(); // Reusable Intent for each tab
@@ -20,16 +19,14 @@ public class TabMain extends TabActivity {
         intent.setClass(this, SongBrowser.class);
         spec = tabHost
                 .newTabSpec("songs")
-                .setIndicator(getString(R.string.songs),
-                        res.getDrawable(R.drawable.ic_tab_songs)).setContent(intent);
+                .setIndicator(getString(R.string.songs)).setContent(intent);
         tabHost.addTab(spec);
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, ArtistBrowser.class);
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost
                 .newTabSpec("artists")
-                .setIndicator(getString(R.string.artists),
-                        res.getDrawable(R.drawable.ic_tab_artists))
+                .setIndicator(getString(R.string.artists))
                 .setContent(intent);
         tabHost.addTab(spec);
         // Do the same for the other tabs
@@ -37,8 +34,7 @@ public class TabMain extends TabActivity {
         intent.putExtra("from", "TabMain");
         spec = tabHost
                 .newTabSpec("albums")
-                .setIndicator(getString(R.string.albums),
-                        res.getDrawable(R.drawable.ic_tab_albums))
+                .setIndicator(getString(R.string.albums))
                 .setContent(intent);
         tabHost.addTab(spec);
         tabHost.setCurrentTab(0);

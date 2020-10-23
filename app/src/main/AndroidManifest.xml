@@ -52,14 +52,12 @@
                 android:value=".SearchActivity" />
         </activity>
         <activity
-            android:name=".TabMain"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:name=".TabMain" />
         <activity
             android:name=".PlaylistBrowser"
             android:label="@string/playlist_browser_activity" />
         <activity
-            android:name=".ArtistBrowser"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:name=".ArtistBrowser">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />

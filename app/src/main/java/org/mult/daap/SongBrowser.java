@@ -5,7 +5,6 @@ import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -152,7 +151,7 @@ public class SongBrowser extends ListActivity {
         } else {
             musicList.setFastScrollEnabled(true);
             MyIndexerAdapter<String> adapter = new MyIndexerAdapter<>(
-                    getApplicationContext(), R.xml.long_list_text_view,
+                    this, R.xml.long_list_text_view,
                     Contents.stringElements);
             setListAdapter(adapter);
         }
@@ -298,7 +297,6 @@ public class SongBrowser extends ListActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv = new TextView(vContext.getApplicationContext());
             tv.setTextSize(18);
-            tv.setTextColor(Color.WHITE);
             tv.setText(myElements.get(position).toString());
             return tv;
         }

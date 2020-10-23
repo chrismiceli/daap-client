@@ -1,7 +1,6 @@
 package org.mult.daap;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -50,7 +49,6 @@ class MyIndexerAdapter<T> extends ArrayAdapter<T> implements SectionIndexer,
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView tv = new TextView(vContext.getApplicationContext());
         tv.setTextSize(18);
-        tv.setTextColor(Color.WHITE);
         tv.setText(myElements.get(position));
         return tv;
     }
