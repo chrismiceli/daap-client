@@ -61,6 +61,12 @@
     <string name="songs">歌曲</string>
     <string name="save">保存</string>
     <string name="save_complete">保存文件到 </string>
+    <string name="daap_default_port">3689</string>
+    <string name="save_error">保存文件时出错</string>
+    <string name="menu_library">数据库</string>
+    <string name="media_playback_service_desc">守护进程用于接受应用微件的命令</string>
+    <string name="widget_one_initial_text">按按钮选媒体。</string>
+    <string name="widget_one_track_info_unavailable">没有歌曲的信息</string>
 </resources>
 
 

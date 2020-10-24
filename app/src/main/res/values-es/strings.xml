@@ -68,4 +68,5 @@
     <string name="media_playback_service_desc">"Servicio utilizado para gestionar las acciones de los widgets"</string>
     <string name="widget_one_initial_text">"Tocar para seleccionar media."</string>
     <string name="widget_one_track_info_unavailable">"Información sobre la pista no disponible"</string>
+    <string name="daap_default_port">3689</string>
 </resources>

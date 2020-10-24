@@ -574,6 +574,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         return sFormatter.format(durationformat, timeArgs).toString();
     }
 
+    @Override
     public boolean onLongClick(View arg0) {
         return false;
     }
@@ -630,6 +631,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         return null;
     }
 
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
         int action = event.getAction();
         TextView tv = textViewForContainer(v);

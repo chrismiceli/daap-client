@@ -62,4 +62,11 @@
     <string name="songs">Chansons</string>
     <string name="save">Télécharger</string>
     <string name="save_complete">Sauvegarde musique à </string>
+    <string name="daap_default_port">3689</string>
+    <string name="media_playback_service_desc">Service utilisé pour gérer les actions des widgets</string>
+    <string name="menu_library">Bibliothèque</string>
+    <string name="save_error">Erreur lors du téléchargement de la chanson</string>
+    <string name="downloading_file">Télécharger la chanson…</string>
+    <string name="widget_one_initial_text">Toucher pour sélectionner le média</string>
+    <string name="widget_one_track_info_unavailable">Informations de suivi non disponibles</string>
 </resources>
