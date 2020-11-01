@@ -67,6 +67,15 @@
     <string name="media_playback_service_desc">守护进程用于接受应用微件的命令</string>
     <string name="widget_one_initial_text">按按钮选媒体。</string>
     <string name="widget_one_track_info_unavailable">没有歌曲的信息</string>
+    <string name="edit_entry">编辑条目</string>
+    <string name="server_settings">服务器设定</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">DAAP服务器端口</string>
+    <string name="duplicate_server_error_title">服务器已经存在！</string>
+    <string name="downloading_file">正在储存歌曲…</string>
+    <string name="play_button_description">播放按钮</string>
+    <string name="next_song_button_description">播放下一首歌按钮</string>
+    <string name="previous_song_button_description">播放上一首歌曲按钮</string>
 </resources>
 
 

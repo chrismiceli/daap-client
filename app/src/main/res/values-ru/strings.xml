@@ -68,4 +68,9 @@
     <string name="widget_one_initial_text">Нажмите, чтобы выбрать источник.</string>
     <string name="widget_one_track_info_unavailable">Информация недоступна</string>
     <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">Порт сервера DAAP</string>
+    <string name="play_button_description">Кнопка воспроизведения</string>
+    <string name="next_song_button_description">Кнопка \"Воспроизвести следующую песню\"</string>
+    <string name="previous_song_button_description">Кнопка воспроизведения предыдущей песни</string>
 </resources>

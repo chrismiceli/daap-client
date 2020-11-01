@@ -20,7 +20,7 @@
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>
     <string name="daap_server_port">DAAP Server Port</string>
     <string name="daap_default_port">3689</string>
-    <string name="login_required" translatable="false">Login required</string>
+    <string name="login_required">Login required</string>
     <string name="menu_stop">Stop</string>
     <string name="password">Password</string>
     <string name="error_title">Error!</string>

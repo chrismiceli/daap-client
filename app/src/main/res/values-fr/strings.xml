@@ -69,4 +69,12 @@
     <string name="downloading_file">Télécharger la chanson…</string>
     <string name="widget_one_initial_text">Toucher pour sélectionner le média</string>
     <string name="widget_one_track_info_unavailable">Informations de suivi non disponibles</string>
+    <string name="edit_entry">Modifier l\'entrée</string>
+    <string name="server_settings">Paramètres du serveur</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">Port du serveur DAAP</string>
+    <string name="duplicate_server_error_title">Le serveur existe déjà!</string>
+    <string name="play_button_description">Un bouton de lecture</string>
+    <string name="next_song_button_description">Bouton de lecture de la chanson suivante</string>
+    <string name="previous_song_button_description">Bouton de lecture de la chanson précédente</string>
 </resources>

@@ -67,4 +67,12 @@
     <string name="menu_library">Libreria</string>
     <string name="save_error">Errore durante la il salvataggio</string>
     <string name="downloading_file">Salvataggio della canzone…</string>
+    <string name="edit_entry">Modifica voce</string>
+    <string name="server_settings">Impostazioni del server</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">Port du serveur DAAP</string>
+    <string name="duplicate_server_error_title">Il server esiste già!</string>
+    <string name="play_button_description">Un pulsante di riproduzione</string>
+    <string name="next_song_button_description">Pulsante Riproduci brano successivo</string>
+    <string name="previous_song_button_description">Pulsante Riproduci brano precedente</string>
 </resources>

@@ -69,4 +69,9 @@
     <string name="widget_one_initial_text">"Meediumi valimiseks puuduta."</string>
     <string name="widget_one_track_info_unavailable">"Loo kohta pole infot"</string>
     <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">DAAP-serveri port</string>
+    <string name="play_button_description">Esitusnupp</string>
+    <string name="next_song_button_description">Järgmise loo nupu esitamine</string>
+    <string name="previous_song_button_description">Eelmise loo nupu esitamine</string>
 </resources>

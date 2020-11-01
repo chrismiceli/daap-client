@@ -68,4 +68,12 @@
     <string name="media_playback_service_desc">Serviço usado para lidar com ações do widget</string>
     <string name="widget_one_initial_text">Toque para selecionar a mídia.</string>
     <string name="widget_one_track_info_unavailable">Nenhuma informação de faixa disponível</string>
+    <string name="edit_entry">Editar entrada</string>
+    <string name="server_settings">Configurações do servidor</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">Porta do servidor DAAP</string>
+    <string name="duplicate_server_error_title">O servidor já existe!</string>
+    <string name="play_button_description">Um botão play</string>
+    <string name="next_song_button_description">Botão para tocar a próxima música</string>
+    <string name="previous_song_button_description">Botão para reproduzir a música anterior</string>
 </resources>

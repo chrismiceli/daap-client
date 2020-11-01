@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class DBAdapter {
+    private static final Object LOCK = new Object();
     public static final String KEY_ROWID = "_id";
     public static final String KEY_SERVER_NAME = "server_name";
     public static final String KEY_SERVER_ADDRESS = "address";
@@ -126,7 +127,7 @@ public class DBAdapter {
         String[] selectionValues = new String[selectionValuesList.size()];
         selectionValuesList.toArray(selectionValues);
 
-        synchronized (db) {
+        synchronized (LOCK) {
             Cursor c = db.query(DATABASE_TABLE, null,
                     selectionBuilder.toString(), selectionValues, null, null,
                     null);

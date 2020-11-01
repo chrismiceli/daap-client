@@ -69,4 +69,9 @@
     <string name="widget_one_initial_text">"Tocar para seleccionar media."</string>
     <string name="widget_one_track_info_unavailable">"Información sobre la pista no disponible"</string>
     <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">Puerto del servidor DAAP</string>
+    <string name="play_button_description">Un botón de reproducción</string>
+    <string name="next_song_button_description">Botón reproducir la siguiente canción</string>
+    <string name="previous_song_button_description">Botón reproducir canción anterior</string>
 </resources>

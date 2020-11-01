@@ -71,4 +71,9 @@
     <string name="widget_one_initial_text">"Berør for å velge media."</string>
     <string name="widget_one_track_info_unavailable">"Ingen informasjon om sporet er tilgjengelig"</string>
     <string name="daap_default_port">3689</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">DAAP-serverport</string>
+    <string name="play_button_description">En avspillingsknapp</string>
+    <string name="next_song_button_description">Spill av neste sangknapp</string>
+    <string name="previous_song_button_description">Spill av forrige sangknapp</string>
 </resources>

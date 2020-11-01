@@ -67,6 +67,15 @@
     <string name="save_error">保存文件時出錯</string>
     <string name="widget_one_initial_text">按按鈕選媒體。</string>
     <string name="widget_one_track_info_unavailable">沒有歌曲的信息</string>
+    <string name="edit_entry">編輯條目</string>
+    <string name="server_settings">服務器設定</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">DAAP服務器端口</string>
+    <string name="duplicate_server_error_title">服務器已經存在！</string>
+    <string name="downloading_file">正在儲存歌曲…</string>
+    <string name="play_button_description">播放按鈕</string>
+    <string name="next_song_button_description">播放下一首歌按鈕</string>
+    <string name="previous_song_button_description">播放上一首歌曲按鈕</string>
 </resources>
 
 
