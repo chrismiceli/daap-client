@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_dialog_title">关于</string>
+    <string name="app_name">DAAP</string>
+    <string name="about_info">关于</string>
+    <string name="info">Android DAAP 客户端。\n\n程序师:\nMichael
+		Miceli\nChristopher Miceli</string>
+    <string name="shuffle">随机</string>
+    <string name="donate">捐赠</string>
+    <string name="repeat">重复</string>
+    <string name="delete_entry">删除条目</string>
+    <string name="play_album">听唱片集</string>
+    <string name="play_artist">听艺术家</string>
+    <string name="all_songs">每个歌</string>
+    <string name="current_song">当前歌曲</string>
+    <string name="share_name">DAAP 共享名称</string>
+    <string name="url_description">地址和端口</string>
+    <string name="login_required">需要登录</string>
+    <string name="menu_stop">停止</string>
+    <string name="password">密码</string>
+    <string name="error_title">错误!</string>
+    <string name="add_or_remove_from_queue">从列表中添加或删除</string>
+    <string name="remove_from_queue">从列表中删除</string>
+    <string name="removed_from_queue">从列表中删除。</string>
+    <string name="added_to_queue">添加到队列。</string>
+    <string name="queue_is_full">队列已满。</string>
+    <string name="add_server_error_message">请确保正确填写所有字段。
+        </string>
+    <string name="add_server">添加服务器</string>
+    <string name="add_server_menu_activity">DAAP - 添加服务器</string>
+    <string name="queue_browser_activity">DAAP - 列表</string>
+    <string name="playlist_browser_activity">DAAP - 播放列表</string>
+    <string name="song_browser_activity">DAAP - 所有歌曲</string>
+    <string name="media_playback_activity">DAAP - 媒体播放机</string>
+    <string name="media_playback_error">播放歌曲时发生错误, 请再试一次。</string>
+    <string name="add_server_detail">点击此处添加 DAAP 服务器</string>
+    <string name="local_servers">收听本地服务器</string>
+    <string name="remembered_servers">记住服务器</string>
+    <string name="options">选项</string>
+    <string name="fetching_music_title">获取音乐中…</string>
+    <string name="fetching_music_detail">请稍候获取音乐。</string>
+    <string name="unable_to_connect">无法连接!</string>
+    <string name="connecting_title">连接中…</string>
+    <string name="connecting_detail">请耐心等待，因为这可能需要一些时间。
+        </string>
+    <string name="empty_playlist">选定的播放列表是空的。</string>
+    <string name="search_hint">搜索歌曲</string>
+    <string name="search_label">搜索标签</string>
+    <string name="no_search_results">没有找到结果。</string>
+    <string name="searching_title">搜索…</string>
+    <string name="search_result_title">结果:</string>
+    <string name="search_result_caption">搜索</string>
+    <string name="no_artist_name">(没有艺术家姓名)</string>
+    <string name="no_album_name">(没有唱片集名称)</string>
+    <string name="view_queue">查看列表</string>
+    <string name="play_queue">播放列表</string>
+    <string name="clear_queue">清除列表</string>
+    <string name="search">搜索</string>
+    <string name="artists">艺术家</string>
+    <string name="albums">唱片集</string>
+    <string name="songs">歌曲</string>
+    <string name="save">保存</string>
+    <string name="save_complete">保存文件到 </string>
+    <string name="daap_default_port">3689</string>
+    <string name="save_error">保存文件时出错</string>
+    <string name="menu_library">数据库</string>
+    <string name="media_playback_service_desc">守护进程用于接受应用微件的命令</string>
+    <string name="widget_one_initial_text">按按钮选媒体。</string>
+    <string name="widget_one_track_info_unavailable">没有歌曲的信息</string>
+    <string name="edit_entry">编辑条目</string>
+    <string name="server_settings">服务器设定</string>
+    <string name="media_playback_notification_channel_name">DAAP Media Player</string>
+    <string name="daap_server_port">DAAP服务器端口</string>
+    <string name="duplicate_server_error_title">服务器已经存在！</string>
+    <string name="downloading_file">正在储存歌曲…</string>
+    <string name="play_button_description">播放按钮</string>
+    <string name="next_song_button_description">播放下一首歌按钮</string>
+    <string name="previous_song_button_description">播放上一首歌曲按钮</string>
+</resources>
+
+
