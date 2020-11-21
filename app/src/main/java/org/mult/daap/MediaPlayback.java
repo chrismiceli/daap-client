@@ -7,15 +7,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -25,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -51,7 +45,6 @@ import androidx.core.app.TaskStackBuilder;
 
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.ISongUrlConsumer;
-import org.mult.daap.client.widget.DAAPClientAppWidgetOneProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -81,7 +74,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private static final String logTag = MediaPlayer.class.getName();
 
     private static MediaPlayer mediaPlayer;
-    private MediaPlaybackService mMediaPlaybackService = null;
     private static Song song;
     private TextView mArtistName;
     private TextView mAlbumName;
@@ -101,8 +93,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private int mTextWidth = 0;
     private int mViewWidth = 0;
     private boolean mDraggingLabel = false;
-
-    private final DAAPClientAppWidgetOneProvider mAppWidgetProvider = DAAPClientAppWidgetOneProvider.getInstance();
 
     public MediaPlayback() {
     }
@@ -245,24 +235,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mTrackName.setText(song.name);
         mProgress.setProgress(0);
         mProgress.setSecondaryProgress(0);
-        // Share this notification directly with our widgets
-        mAppWidgetProvider.notifyChange(mMediaPlaybackService, this, MediaPlaybackService.META_CHANGED);
         new LastFMGetSongInfo(this).execute(song);
-    }
-
-    public String getTrackName() {
-        return song.name;
-    }
-
-    public String getArtistName() {
-        return song.artist;
-    }
-
-    public boolean isPlaying() {
-        if (mediaPlayer != null)
-            return mediaPlayer.isPlaying();
-
-        return false;
     }
 
     private final OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
@@ -330,7 +303,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                 }
                 setPauseButton();
                 queueNextRefresh(refreshNow());
-                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
             }
         }
     };
@@ -338,7 +310,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         public void onClick(View v) {
             try {
                 startSong(Contents.getPreviousSong());
-                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
             } catch (IndexOutOfBoundsException e) {
                 handler.removeMessages(REFRESH);
                 stopNotification();
@@ -350,7 +321,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     private final View.OnClickListener mNextListener = new View.OnClickListener() {
         public void onClick(View v) {
             normalOnCompletionListener.onCompletion(mediaPlayer);
-            mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
         }
     };
 
@@ -367,25 +337,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        IntentFilter f = new IntentFilter();
-        f.addAction(MediaPlaybackService.PREVIOUS);
-        f.addAction(MediaPlaybackService.NEXT);
-        f.addAction(MediaPlaybackService.TOGGLEPAUSE);
-        f.addAction(MediaPlaybackService.PAUSE);
-        f.addAction(MediaPlaybackService.STOP);
-        f.addAction(MediaPlaybackService.ADDED);
-        f.addAction(MediaPlaybackService.HEADSET_CHANGE);
-        registerReceiver(mStatusListener, new IntentFilter(f));
-
-        if (mMediaPlaybackService == null) {
-            bindService(new Intent(this, MediaPlaybackService.class), connection, Context.BIND_AUTO_CREATE);
-        }
-    }
-
-    @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);
     }
@@ -394,16 +345,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
     public void onDestroy() {
         handler.removeMessages(REFRESH);
         super.onDestroy();
-
-        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-            // Share this notification directly with our widgets
-            mAppWidgetProvider.notifyChange(mMediaPlaybackService, this, MediaPlaybackService.PLAYER_CLOSED);
-
-            unregisterReceiver(mStatusListener);
-            // Detach our existing connection.
-            unbindService(connection);
-            mMediaPlaybackService = null;
-        }
     }
 
     @Override
@@ -456,7 +397,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                     stopNotification();
                     startNotification();
                     queueNextRefresh(refreshNow());
-                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
                 }
             });
             mediaPlayer.prepareAsync();
@@ -781,89 +721,6 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             }
         }
     }
-
-    private final ServiceConnection connection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName classname, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the service object we can use to
-            // interact with the service. Because we have bound to a explicit
-            // service that we know is running in our own process, we can
-            // cast its IBinder to a concrete class and directly access it.
-            mMediaPlaybackService = ((MediaPlaybackService.LocalBinder) service).getService();
-        }
-
-        public void onServiceDisconnected(ComponentName classname) {
-            // This is called when the connection with the service has been
-            // unexpectedly disconnected -- that is, its process crashed.
-            // Because it is running in our same process, we should never
-            // see this happen.
-            mMediaPlaybackService = null;
-        }
-    };
-
-    private final BroadcastReceiver mStatusListener = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (MediaPlaybackService.PREVIOUS.equals(action)) {
-                startSong(Contents.getPreviousSong());
-                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-            } else if (MediaPlaybackService.NEXT.equals(action)) {
-                normalOnCompletionListener.onCompletion(mediaPlayer);
-                mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-            } else if (MediaPlaybackService.TOGGLEPAUSE.equals(action)) {
-                if (mediaPlayer != null) {
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                        stopNotification();
-                    } else {
-                        mediaPlayer.start();
-                        startNotification();
-                    }
-                    setPauseButton();
-                    queueNextRefresh(refreshNow());
-                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-                }
-            } else if (MediaPlaybackService.PAUSE.equals(action)) {
-                if (mediaPlayer != null) {
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                        stopNotification();
-                    } else {
-                        mediaPlayer.start();
-                        startNotification();
-                    }
-                    setPauseButton();
-                    queueNextRefresh(refreshNow());
-                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-                }
-            } else if (MediaPlaybackService.STOP.equals(action)) {
-                if (mediaPlayer != null) {
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                        mediaPlayer.seekTo(0);
-                        stopNotification();
-                    }
-                    setPauseButton();
-                    queueNextRefresh(refreshNow());
-                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-                }
-            } else if (MediaPlaybackService.ADDED.equals(action)) {
-                int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-                mAppWidgetProvider.performUpdate(mMediaPlaybackService, MediaPlayback.this, appWidgetIds, "");
-            } else if (MediaPlaybackService.HEADSET_CHANGE.equals(action)) {
-                if (mediaPlayer != null) {
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                        stopNotification();
-                    }
-                    setPauseButton();
-                    queueNextRefresh(refreshNow());
-                    mAppWidgetProvider.notifyChange(mMediaPlaybackService, MediaPlayback.this, MediaPlaybackService.PLAYSTATE_CHANGED);
-                }
-            }
-        }
-    };
 
     private static class ScrollHandler extends Handler {
         private final WeakReference<MediaPlayback> mediaPlaybackWeakReference;

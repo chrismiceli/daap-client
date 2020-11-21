@@ -65,9 +65,6 @@
     <string name="save_complete">Lugu salvestatud!</string>
     <string name="save_error">Loo salvestamine ebaõnnestus</string>
     <string name="menu_library">Teek</string>
-    <string name="media_playback_service_desc">"Vidinaga seotud teenus"</string>
-    <string name="widget_one_initial_text">"Meediumi valimiseks puuduta."</string>
-    <string name="widget_one_track_info_unavailable">"Loo kohta pole infot"</string>
     <string name="daap_default_port">3689</string>
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>
     <string name="daap_server_port">DAAP-serveri port</string>
