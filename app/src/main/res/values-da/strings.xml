@@ -63,11 +63,8 @@
     <string name="save">Gæm</string>
     <string name="save_complete">Gemte filen til </string>
     <string name="daap_default_port">3689</string>
-    <string name="media_playback_service_desc">Tjeneste, der bruges til at håndtere widget-handlinger</string>
     <string name="menu_library">bibliotek</string>
     <string name="save_error">fejl ved lagring af sang</string>
-    <string name="widget_one_track_info_unavailable">Ingen sporinformation tilgængelig</string>
-    <string name="widget_one_initial_text">Tryk for at vælge medie.</string>
     <string name="edit_entry">Rediger post</string>
     <string name="server_settings">Serverindstillinger</string>
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>

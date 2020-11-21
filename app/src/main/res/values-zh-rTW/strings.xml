@@ -62,11 +62,8 @@
     <string name="save">儲存檔案</string>
     <string name="save_complete">儲存檔案檔案到 </string>
     <string name="daap_default_port">3689</string>
-    <string name="media_playback_service_desc">守護進程用於接受應用微件的命令</string>
     <string name="menu_library">數據庫</string>
     <string name="save_error">保存文件時出錯</string>
-    <string name="widget_one_initial_text">按按鈕選媒體。</string>
-    <string name="widget_one_track_info_unavailable">沒有歌曲的信息</string>
     <string name="edit_entry">編輯條目</string>
     <string name="server_settings">服務器設定</string>
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>

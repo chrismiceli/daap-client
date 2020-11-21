@@ -67,9 +67,6 @@
     <string name="save_complete">Sang lagret!</string>
     <string name="save_error">Feil ved lagring av sang</string>
     <string name="menu_library">Bibliotek</string>
-    <string name="media_playback_service_desc">"Tjenesten brukes til å håndtere wigets-handlinger"</string>
-    <string name="widget_one_initial_text">"Berør for å velge media."</string>
-    <string name="widget_one_track_info_unavailable">"Ingen informasjon om sporet er tilgjengelig"</string>
     <string name="daap_default_port">3689</string>
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>
     <string name="daap_server_port">DAAP-serverport</string>

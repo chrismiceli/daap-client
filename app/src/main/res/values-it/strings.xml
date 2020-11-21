@@ -61,9 +61,6 @@
     <string name="save">Salva</string>
     <string name="save_complete">File salvato in </string>
     <string name="daap_default_port">3689</string>
-    <string name="widget_one_initial_text">Toccare per selezionare media</string>
-    <string name="widget_one_track_info_unavailable">Nessuna informazione sulla traccia disponibile</string>
-    <string name="media_playback_service_desc">Servizio utilizzato per gestire le azioni dei widget</string>
     <string name="menu_library">Libreria</string>
     <string name="save_error">Errore durante la il salvataggio</string>
     <string name="downloading_file">Salvataggio della canzone…</string>

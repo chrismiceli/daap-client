@@ -64,9 +64,6 @@
     <string name="save_complete">Песня сохранена!</string>
     <string name="save_error">Ошибка сохранения песни</string>
     <string name="menu_library">Библиотека</string>
-    <string name="media_playback_service_desc">Сервис поддержки виджета</string>
-    <string name="widget_one_initial_text">Нажмите, чтобы выбрать источник.</string>
-    <string name="widget_one_track_info_unavailable">Информация недоступна</string>
     <string name="daap_default_port">3689</string>
     <string name="media_playback_notification_channel_name">DAAP Media Player</string>
     <string name="daap_server_port">Порт сервера DAAP</string>

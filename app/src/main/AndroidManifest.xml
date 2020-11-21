@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.mult.daap"
-    android:versionName="1.0.0"
-    android:versionCode="50"
+    android:versionName="1.0.1"
+    android:versionCode="51"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -95,26 +95,5 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-        <service
-            android:name=".MediaPlaybackService"
-            android:configChanges="keyboardHidden|orientation"
-            android:description="@string/media_playback_service_desc" />
-
-        <receiver android:name=".client.widget.DAAPClientAppWidgetOneProvider">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_one" />
-        </receiver>
-        <receiver android:name=".MediaButtonIntentReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-                <action android:name="android.intent.action.CALL_BUTTON" />
-                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
-            </intent-filter>
-        </receiver>
     </application>
 </manifest>
