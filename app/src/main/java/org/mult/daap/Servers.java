@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,14 +16,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -102,26 +98,22 @@ public class Servers extends Activity implements Observer {
             final EditText password = dialog
                     .findViewById(R.id.PasswordEditText);
             buttonConfrim
-                    .setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View arg0) {
-                            Contents.loginManager.interrupt();
-                            Contents.loginManager.deleteObservers();
-                            LoginManager lm = new LoginManager(
-                                    Contents.loginManager.name,
-                                    Contents.loginManager.address, password
-                                    .getText().toString(), true);
-                            password.setText("");
-                            startLogin(lm);
-                            dismissDialog(PASSWORD_DIALOG);
-                        }
+                    .setOnClickListener(arg0 -> {
+                        Contents.loginManager.interrupt();
+                        Contents.loginManager.deleteObservers();
+                        LoginManager lm = new LoginManager(
+                                Contents.loginManager.name,
+                                Contents.loginManager.address, password
+                                .getText().toString(), true);
+                        password.setText("");
+                        startLogin(lm);
+                        dismissDialog(PASSWORD_DIALOG);
                     });
             buttonCancel
-                    .setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            Contents.loginManager = null;
-                            password.setText("");
-                            dismissDialog(PASSWORD_DIALOG);
-                        }
+                    .setOnClickListener(v -> {
+                        Contents.loginManager = null;
+                        password.setText("");
+                        dismissDialog(PASSWORD_DIALOG);
                     });
         } else {
             dialog = null;
@@ -209,13 +201,10 @@ public class Servers extends Activity implements Observer {
         ListView list = new ListView(this);
         list.setAdapter(adapter);
         list.setOnItemClickListener(clickListener);
-        list.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-            public void onCreateContextMenu(ContextMenu menu, View v,
-                                            ContextMenuInfo menuInfo) {
-                menu.setHeaderTitle(getString(R.string.options));
-                menu.add(0, CONTEXT_DELETE, 0, R.string.delete_entry);
-                menu.add(0, CONTEXT_EDIT, 0, R.string.edit_entry);
-            }
+        list.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+            menu.setHeaderTitle(getString(R.string.options));
+            menu.add(0, CONTEXT_DELETE, 0, R.string.delete_entry);
+            menu.add(0, CONTEXT_EDIT, 0, R.string.edit_entry);
         });
         this.setContentView(list);
         LoginManager lm = Contents.loginManager;
@@ -345,16 +334,16 @@ public class Servers extends Activity implements Observer {
                     c.moveToNext();
                 }
                 LoginManager lm;
-                if (c.getInt(c.getColumnIndex("login_required")) == 0) {
+                if (c.getInt(c.getColumnIndexOrThrow("login_required")) == 0) {
                     lm = new LoginManager(c.getString(c
-                            .getColumnIndex("server_name")), c.getString(c
-                            .getColumnIndex("address")), c.getString(c
-                            .getColumnIndex("password")), false);
+                            .getColumnIndexOrThrow("server_name")), c.getString(c
+                            .getColumnIndexOrThrow("address")), c.getString(c
+                            .getColumnIndexOrThrow("password")), false);
                 } else {
                     lm = new LoginManager(c.getString(c
-                            .getColumnIndex("server_name")), c.getString(c
-                            .getColumnIndex("address")), c.getString(c
-                            .getColumnIndex("password")), true);
+                            .getColumnIndexOrThrow("server_name")), c.getString(c
+                            .getColumnIndexOrThrow("address")), c.getString(c
+                            .getColumnIndexOrThrow("password")), true);
                 }
                 c.close();
                 db.close();
@@ -391,13 +380,11 @@ public class Servers extends Activity implements Observer {
             pd = ProgressDialog.show(this,
                     getString(R.string.connecting_title),
                     getString(R.string.connecting_detail), true, true);
-            OnCancelListener onCancelListener = new OnCancelListener() {
-                public void onCancel(DialogInterface dialog) {
-                    if (Contents.loginManager != null) {
-                        Contents.loginManager.interrupt();
-                        Contents.loginManager.deleteObservers();
-                        Contents.loginManager = null;
-                    }
+            OnCancelListener onCancelListener = dialog -> {
+                if (Contents.loginManager != null) {
+                    Contents.loginManager.interrupt();
+                    Contents.loginManager.deleteObservers();
+                    Contents.loginManager = null;
                 }
             };
             pd.setOnCancelListener(onCancelListener);

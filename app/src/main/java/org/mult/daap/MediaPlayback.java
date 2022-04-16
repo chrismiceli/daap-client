@@ -9,8 +9,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -215,11 +213,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             } else {
                 builder.setMessage(R.string.save_complete);
             }
-            builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            builder.setPositiveButton(android.R.string.ok, (dialog1, which) -> dialog1.dismiss());
             dialog = builder.create();
         }
         return dialog;
@@ -395,14 +389,12 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnCompletionListener(normalOnCompletionListener);
             mediaPlayer.setOnErrorListener(mediaPlayerErrorListener);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                    mProgress.setEnabled(true);
-                    stopNotification();
-                    startNotification();
-                    queueNextRefresh(refreshNow());
-                }
+            mediaPlayer.setOnPreparedListener(mp -> {
+                mp.start();
+                mProgress.setEnabled(true);
+                stopNotification();
+                startNotification();
+                queueNextRefresh(refreshNow());
             });
             mediaPlayer.prepareAsync();
             TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -674,32 +666,28 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mediaPlayer = null;
     }
 
-    private final OnErrorListener mediaPlayerErrorListener = new MediaPlayer.OnErrorListener() {
-        public boolean onError(MediaPlayer mp, int what, int extra) {
-            Log.e(logTag, "Error in MediaPlayer: (" + what + ") with extra (" + extra + ")");
-            clearState();
-            return false;
-        }
+    private final OnErrorListener mediaPlayerErrorListener = (mp, what, extra) -> {
+        Log.e(logTag, "Error in MediaPlayer: (" + what + ") with extra (" + extra + ")");
+        clearState();
+        return false;
     };
 
-    private final OnCompletionListener normalOnCompletionListener = new OnCompletionListener() {
-        public void onCompletion(MediaPlayer mp) {
-            try {
-                if (Contents.shuffle) {
-                    startSong(Contents.getRandomSong());
-                } else if (Contents.repeat) {
-                    mp.seekTo(0);
-                    mp.start();
-                    queueNextRefresh(refreshNow());
-                } else {
-                    startSong(Contents.getNextSong());
-                }
-            } catch (IndexOutOfBoundsException e) {
-                handler.removeMessages(REFRESH);
-                stopNotification();
-                clearState();
-                finish();
+    private final OnCompletionListener normalOnCompletionListener = mp -> {
+        try {
+            if (Contents.shuffle) {
+                startSong(Contents.getRandomSong());
+            } else if (Contents.repeat) {
+                mp.seekTo(0);
+                mp.start();
+                queueNextRefresh(refreshNow());
+            } else {
+                startSong(Contents.getNextSong());
             }
+        } catch (IndexOutOfBoundsException e) {
+            handler.removeMessages(REFRESH);
+            stopNotification();
+            clearState();
+            finish();
         }
     };
 

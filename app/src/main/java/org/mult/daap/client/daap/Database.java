@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package org.mult.daap.client.daap;
 
+import androidx.annotation.NonNull;
+
 /**
  * @author jbarnett
  * To change the template for this generated type comment go to
@@ -38,6 +40,7 @@ public class Database {
         id = 0;
     }
 
+    @NonNull
     public String toString() {
         return name;
     }

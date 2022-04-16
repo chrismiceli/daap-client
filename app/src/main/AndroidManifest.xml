@@ -21,7 +21,8 @@
         android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:exported="true"
             android:name=".Servers">
@@ -51,13 +52,11 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />
         </activity>
-        <activity
-            android:name=".TabMain" />
+        <activity android:name=".TabMain" />
         <activity
             android:name=".PlaylistBrowser"
             android:label="@string/playlist_browser_activity" />
-        <activity
-            android:name=".ArtistBrowser">
+        <activity android:name=".ArtistBrowser">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchActivity" />

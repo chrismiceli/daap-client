@@ -6,6 +6,8 @@
  */
 package org.mult.daap.client;
 
+import androidx.annotation.NonNull;
+
 /**
  * @author Greg, for GIT
  */
@@ -17,6 +19,7 @@ public abstract class Playlist {
         return name;
     }
 
+    @NonNull
     public String toString() {
         return name;
     }

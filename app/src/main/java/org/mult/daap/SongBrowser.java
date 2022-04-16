@@ -6,15 +6,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -85,13 +81,10 @@ public class SongBrowser extends ListActivity {
         ListView musicList = getListView();
         musicList.setOnItemClickListener(musicGridListener);
         musicList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, CONTEXT_QUEUE, 0,
-                                R.string.add_or_remove_from_queue);
-                    }
+                .setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                    menu.setHeaderTitle(getString(R.string.options));
+                    menu.add(0, CONTEXT_QUEUE, 0,
+                            R.string.add_or_remove_from_queue);
                 });
         if (from.equals("album")) {
             musicList.setFastScrollEnabled(true);
@@ -157,24 +150,21 @@ public class SongBrowser extends ListActivity {
         }
     }
 
-    private final OnItemClickListener musicGridListener = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position,
-                                long id) {
-            if (from.equals("album")) {
-                Contents.setSongPosition(Contents.filteredAlbumSongList,
-                        position);
-            } else if (from.equals("artist")) {
-                Contents.setSongPosition(Contents.filteredArtistSongList,
-                        position);
-            } else {
-                Contents.setSongPosition(Contents.songList, position);
-            }
-            MediaPlayback.clearState();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            Intent intent = new Intent(SongBrowser.this, MediaPlayback.class);
-            startActivityForResult(intent, 1);
+    private final OnItemClickListener musicGridListener = (parent, v, position, id) -> {
+        if (from.equals("album")) {
+            Contents.setSongPosition(Contents.filteredAlbumSongList,
+                    position);
+        } else if (from.equals("artist")) {
+            Contents.setSongPosition(Contents.filteredArtistSongList,
+                    position);
+        } else {
+            Contents.setSongPosition(Contents.songList, position);
         }
+        MediaPlayback.clearState();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        Intent intent = new Intent(SongBrowser.this, MediaPlayback.class);
+        startActivityForResult(intent, 1);
     };
 
     @Override
