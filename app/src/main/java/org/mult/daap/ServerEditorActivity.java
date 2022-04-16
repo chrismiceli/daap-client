@@ -150,8 +150,6 @@ public class ServerEditorActivity extends PreferenceActivity implements
         }
 
         public String getString(String key, String defValue) {
-            // Log.d(this.getClass().toString(),
-            // String.format("getString(key=%s, defValue=%s)", key, defValue));
             if (!values.containsKey(key))
                 return defValue;
             return values.get(key);

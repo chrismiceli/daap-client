@@ -1,5 +1,6 @@
 package org.mult.daap;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -22,6 +24,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyCallback;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.Layout;
@@ -39,9 +42,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
 
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.ISongUrlConsumer;
@@ -401,7 +406,18 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             });
             mediaPlayer.prepareAsync();
             TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                    tm.registerTelephonyCallback(getMainExecutor(), new PhoneTelephonyCallback());
+                }
+            } else {
+                tm.listen(new PhoneStateListener() {
+                    @Override
+                    public void onCallStateChanged(int state, String incomingNumsber) {
+                        handleCallStateChanged(state);
+                    }
+                }, PhoneStateListener.LISTEN_CALL_STATE);
+            }
             setUpActivity();
         } catch (Exception e) {
             e.printStackTrace();
@@ -528,7 +544,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                         .setSmallIcon(R.drawable.stat_notify_musicplayer)
                         .setSound(null);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), PendingIntent.FLAG_IMMUTABLE);
         Intent resultIntent = new Intent(this, MediaPlayback.class);
         stackBuilder.addParentStack(MediaPlayback.class);
         stackBuilder.addNextIntent(resultIntent);
@@ -542,21 +558,27 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         notificationManager.cancelAll();
     }
 
-    private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
-        public void onCallStateChanged(int state, String incomingNumsber) {
-            switch (state) {
-                // change to idle
-                case TelephonyManager.CALL_STATE_IDLE:
-                    break;
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                case TelephonyManager.CALL_STATE_RINGING:
-                    if (mediaPlayer != null) {
-                        mediaPlayer.pause();
-                    }
-                    break;
-            }
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private class PhoneTelephonyCallback extends TelephonyCallback implements TelephonyCallback.CallStateListener {
+        @Override
+        public void onCallStateChanged(int state) {
+            handleCallStateChanged(state);
         }
-    };
+    }
+
+    private void handleCallStateChanged(int state) {
+        switch (state) {
+            // change to idle
+            case TelephonyManager.CALL_STATE_IDLE:
+                break;
+            case TelephonyManager.CALL_STATE_OFFHOOK:
+            case TelephonyManager.CALL_STATE_RINGING:
+                if (mediaPlayer != null) {
+                    mediaPlayer.pause();
+                }
+                break;
+        }
+    }
 
     TextView textViewForContainer(View v) {
         View vv = v.findViewById(R.id.artistname);
