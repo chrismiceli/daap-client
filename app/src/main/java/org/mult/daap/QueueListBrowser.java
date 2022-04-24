@@ -5,15 +5,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -60,13 +56,10 @@ public class QueueListBrowser extends Activity {
         count = s.size();
         queuelistList.setAdapter(new ProfilesAdapter(getApplicationContext()));
         queuelistList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, REMOVE_FROM_QUEUE, 0,
-                                R.string.remove_from_queue);
-                    }
+                .setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                    menu.setHeaderTitle(getString(R.string.options));
+                    menu.add(0, REMOVE_FROM_QUEUE, 0,
+                            R.string.remove_from_queue);
                 });
         queuelistList.setOnItemClickListener(queuelistGridListener);
     }
@@ -131,18 +124,15 @@ public class QueueListBrowser extends Activity {
         return false;
     }
 
-    private final OnItemClickListener queuelistGridListener = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position,
-                                long id) {
-            Contents.setSongPosition(Contents.queue, position);
-            MediaPlayback.clearState();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            Intent intent = new Intent(QueueListBrowser.this,
-                    MediaPlayback.class);
-            startActivityForResult(intent, 1);
-            // Contents.playlist_position = (short) position;
-        }
+    private final OnItemClickListener queuelistGridListener = (parent, v, position, id) -> {
+        Contents.setSongPosition(Contents.queue, position);
+        MediaPlayback.clearState();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        Intent intent = new Intent(QueueListBrowser.this,
+                MediaPlayback.class);
+        startActivityForResult(intent, 1);
+        // Contents.playlist_position = (short) position;
     };
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

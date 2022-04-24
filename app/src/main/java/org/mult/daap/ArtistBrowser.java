@@ -6,13 +6,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -80,13 +75,10 @@ public class ArtistBrowser extends ListActivity {
         artistList.setOnItemClickListener(musicGridListener);
         artistList.setFastScrollEnabled(true);
         artistList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, CONTEXT_PLAY_ARTIST, 0,
-                                R.string.play_artist);
-                    }
+                .setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                    menu.setHeaderTitle(getString(R.string.options));
+                    menu.add(0, CONTEXT_PLAY_ARTIST, 0,
+                            R.string.play_artist);
                 });
     }
 
@@ -117,31 +109,28 @@ public class ArtistBrowser extends ListActivity {
         return false;
     }
 
-    private final OnItemClickListener musicGridListener = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position,
-                                long id) {
-            String artist = Contents.artistNameList.get(position);
-            Contents.ArtistAlbumElements.clear();
-            for (Song song : Contents.songList) {
-                if (song.artist.equals(artist)) {
-                    if (Contents.ArtistAlbumElements.containsKey(song.album)) {
-                        Contents.ArtistAlbumElements.get(song.album).add(
-                                song.id);
-                    } else {
-                        ArrayList<Integer> t = new ArrayList<>();
-                        t.add(song.id);
-                        Contents.ArtistAlbumElements.put(song.album, t);
-                        Contents.artistAlbumNameList.add(song.album);
-                    }
+    private final OnItemClickListener musicGridListener = (parent, v, position, id) -> {
+        String artist = Contents.artistNameList.get(position);
+        Contents.ArtistAlbumElements.clear();
+        for (Song song : Contents.songList) {
+            if (song.artist.equals(artist)) {
+                if (Contents.ArtistAlbumElements.containsKey(song.album)) {
+                    Contents.ArtistAlbumElements.get(song.album).add(
+                            song.id);
+                } else {
+                    ArrayList<Integer> t = new ArrayList<>();
+                    t.add(song.id);
+                    Contents.ArtistAlbumElements.put(song.album, t);
+                    Contents.artistAlbumNameList.add(song.album);
                 }
             }
-            Contents.artistAlbumNameList.clear();
-            Intent intent = new Intent(ArtistBrowser.this,
-                    ArtistAlbumBrowser.class);
-            intent.putExtra("from", "artist");
-            intent.putExtra("artistName", Contents.artistNameList.get(position));
-            startActivityForResult(intent, 1);
         }
+        Contents.artistAlbumNameList.clear();
+        Intent intent = new Intent(ArtistBrowser.this,
+                ArtistAlbumBrowser.class);
+        intent.putExtra("from", "artist");
+        intent.putExtra("artistName", Contents.artistNameList.get(position));
+        startActivityForResult(intent, 1);
     };
 
     @Override

@@ -1,5 +1,6 @@
 package org.mult.daap;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,9 +9,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -22,6 +22,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyCallback;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.Layout;
@@ -39,9 +40,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
 
 import org.mult.daap.client.Song;
 import org.mult.daap.client.daap.ISongUrlConsumer;
@@ -210,11 +213,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             } else {
                 builder.setMessage(R.string.save_complete);
             }
-            builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            builder.setPositiveButton(android.R.string.ok, (dialog1, which) -> dialog1.dismiss());
             dialog = builder.create();
         }
         return dialog;
@@ -390,18 +389,27 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnCompletionListener(normalOnCompletionListener);
             mediaPlayer.setOnErrorListener(mediaPlayerErrorListener);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                    mProgress.setEnabled(true);
-                    stopNotification();
-                    startNotification();
-                    queueNextRefresh(refreshNow());
-                }
+            mediaPlayer.setOnPreparedListener(mp -> {
+                mp.start();
+                mProgress.setEnabled(true);
+                stopNotification();
+                startNotification();
+                queueNextRefresh(refreshNow());
             });
             mediaPlayer.prepareAsync();
             TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                    tm.registerTelephonyCallback(getMainExecutor(), new PhoneTelephonyCallback());
+                }
+            } else {
+                tm.listen(new PhoneStateListener() {
+                    @Override
+                    public void onCallStateChanged(int state, String incomingNumsber) {
+                        handleCallStateChanged(state);
+                    }
+                }, PhoneStateListener.LISTEN_CALL_STATE);
+            }
             setUpActivity();
         } catch (Exception e) {
             e.printStackTrace();
@@ -528,7 +536,7 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
                         .setSmallIcon(R.drawable.stat_notify_musicplayer)
                         .setSound(null);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, getIntent(), PendingIntent.FLAG_IMMUTABLE);
         Intent resultIntent = new Intent(this, MediaPlayback.class);
         stackBuilder.addParentStack(MediaPlayback.class);
         stackBuilder.addNextIntent(resultIntent);
@@ -542,21 +550,27 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         notificationManager.cancelAll();
     }
 
-    private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
-        public void onCallStateChanged(int state, String incomingNumsber) {
-            switch (state) {
-                // change to idle
-                case TelephonyManager.CALL_STATE_IDLE:
-                    break;
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                case TelephonyManager.CALL_STATE_RINGING:
-                    if (mediaPlayer != null) {
-                        mediaPlayer.pause();
-                    }
-                    break;
-            }
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private class PhoneTelephonyCallback extends TelephonyCallback implements TelephonyCallback.CallStateListener {
+        @Override
+        public void onCallStateChanged(int state) {
+            handleCallStateChanged(state);
         }
-    };
+    }
+
+    private void handleCallStateChanged(int state) {
+        switch (state) {
+            // change to idle
+            case TelephonyManager.CALL_STATE_IDLE:
+                break;
+            case TelephonyManager.CALL_STATE_OFFHOOK:
+            case TelephonyManager.CALL_STATE_RINGING:
+                if (mediaPlayer != null) {
+                    mediaPlayer.pause();
+                }
+                break;
+        }
+    }
 
     TextView textViewForContainer(View v) {
         View vv = v.findViewById(R.id.artistname);
@@ -652,32 +666,28 @@ public class MediaPlayback extends Activity implements View.OnTouchListener, Vie
         mediaPlayer = null;
     }
 
-    private final OnErrorListener mediaPlayerErrorListener = new MediaPlayer.OnErrorListener() {
-        public boolean onError(MediaPlayer mp, int what, int extra) {
-            Log.e(logTag, "Error in MediaPlayer: (" + what + ") with extra (" + extra + ")");
-            clearState();
-            return false;
-        }
+    private final OnErrorListener mediaPlayerErrorListener = (mp, what, extra) -> {
+        Log.e(logTag, "Error in MediaPlayer: (" + what + ") with extra (" + extra + ")");
+        clearState();
+        return false;
     };
 
-    private final OnCompletionListener normalOnCompletionListener = new OnCompletionListener() {
-        public void onCompletion(MediaPlayer mp) {
-            try {
-                if (Contents.shuffle) {
-                    startSong(Contents.getRandomSong());
-                } else if (Contents.repeat) {
-                    mp.seekTo(0);
-                    mp.start();
-                    queueNextRefresh(refreshNow());
-                } else {
-                    startSong(Contents.getNextSong());
-                }
-            } catch (IndexOutOfBoundsException e) {
-                handler.removeMessages(REFRESH);
-                stopNotification();
-                clearState();
-                finish();
+    private final OnCompletionListener normalOnCompletionListener = mp -> {
+        try {
+            if (Contents.shuffle) {
+                startSong(Contents.getRandomSong());
+            } else if (Contents.repeat) {
+                mp.seekTo(0);
+                mp.start();
+                queueNextRefresh(refreshNow());
+            } else {
+                startSong(Contents.getNextSong());
             }
+        } catch (IndexOutOfBoundsException e) {
+            handler.removeMessages(REFRESH);
+            stopNotification();
+            clearState();
+            finish();
         }
     };
 

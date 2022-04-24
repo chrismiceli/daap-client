@@ -33,9 +33,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-// import ca.odell.glazedlists.BasicEventList;
-// import ca.odell.glazedlists.EventList;
-
 /**
  * @author Greg
  */

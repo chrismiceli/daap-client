@@ -6,13 +6,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -83,12 +78,9 @@ public class AlbumBrowser extends ListActivity {
         albumList.setOnItemClickListener(musicGridListener);
         albumList.setFastScrollEnabled(true);
         albumList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, CONTEXT_PLAY_ALBUM, 0, R.string.play_album);
-                    }
+                .setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                    menu.setHeaderTitle(getString(R.string.options));
+                    menu.add(0, CONTEXT_PLAY_ALBUM, 0, R.string.play_album);
                 });
     }
 
@@ -140,14 +132,11 @@ public class AlbumBrowser extends ListActivity {
         return false;
     }
 
-    private final OnItemClickListener musicGridListener = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position,
-                                long id) {
-            Intent intent = new Intent(AlbumBrowser.this, SongBrowser.class);
-            intent.putExtra("from", "album");
-            intent.putExtra("albumName", Contents.albumNameList.get(position));
-            startActivityForResult(intent, 1);
-        }
+    private final OnItemClickListener musicGridListener = (parent, v, position, id) -> {
+        Intent intent = new Intent(AlbumBrowser.this, SongBrowser.class);
+        intent.putExtra("from", "album");
+        intent.putExtra("albumName", Contents.albumNameList.get(position));
+        startActivityForResult(intent, 1);
     };
 
     @Override

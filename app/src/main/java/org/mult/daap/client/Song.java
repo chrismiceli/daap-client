@@ -23,6 +23,8 @@
  */
 package org.mult.daap.client;
 
+import androidx.annotation.NonNull;
+
 /**
  * @author jbarnett
  * To change the template for this generated type comment go to
@@ -47,6 +49,7 @@ public class Song implements Comparable<Object> {
         format = "";
     }
 
+    @NonNull
     public String toString() {
         return artist + (artist.length() > 0 ? " - " : "") + name;
     }

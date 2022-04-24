@@ -45,8 +45,6 @@ public class SongRequest extends Request {
     }
 
     protected void addRequestProperties() {
-        // httpc.addRequestProperty("Host", "" + host.getAddress() + ":"
-        // + host.getPort() + "/");
         httpc.addRequestProperty("Host", "" + host.getAddress());
         httpc.addRequestProperty("Accept", "*/*");
         httpc.addRequestProperty("Cache-Control", "no-cache");

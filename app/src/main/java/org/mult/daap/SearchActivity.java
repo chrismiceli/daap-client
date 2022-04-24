@@ -10,15 +10,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -151,29 +147,23 @@ public class SearchActivity extends ListActivity implements Observer {
                 R.xml.long_list_text_view, srList));
         searchResultsList.setOnItemClickListener(songListListener);
         searchResultsList
-                .setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-                    public void onCreateContextMenu(ContextMenu menu, View v,
-                                                    ContextMenuInfo menuInfo) {
-                        menu.setHeaderTitle(getString(R.string.options));
-                        menu.add(0, CONTEXT_QUEUE, 0,
-                                R.string.add_or_remove_from_queue);
-                    }
+                .setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                    menu.setHeaderTitle(getString(R.string.options));
+                    menu.add(0, CONTEXT_QUEUE, 0,
+                            R.string.add_or_remove_from_queue);
                 });
         searchResultsList.setTextFilterEnabled(true);
         searchResultsList.setFastScrollEnabled(true);
     }
 
-    private final OnItemClickListener songListListener = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position,
-                                long id) {
-            Contents.setSongPosition(Contents.songList,
-                    Contents.songList.indexOf(srList.get(position)));
-            MediaPlayback.clearState();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            Intent intent = new Intent(SearchActivity.this, MediaPlayback.class);
-            startActivityForResult(intent, 1);
-        }
+    private final OnItemClickListener songListListener = (parent, v, position, id) -> {
+        Contents.setSongPosition(Contents.songList,
+                Contents.songList.indexOf(srList.get(position)));
+        MediaPlayback.clearState();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        Intent intent = new Intent(SearchActivity.this, MediaPlayback.class);
+        startActivityForResult(intent, 1);
     };
 
     @SuppressWarnings("unchecked")

@@ -57,8 +57,6 @@ public class SingleDatabaseRequest extends Request {
         ret += host.getDatabaseID() + "/";
         ret += "items?";
         ret += "type=music&";
-        // ret +=
-        // "meta=dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songtracknumber,daap.songgenre,daap.songformat,daap.songtime,daap.songsize,daap.songbitrate,daap.songcompilation";
         ret += "meta=dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songtime,daap.songsize,daap.songtracknumber,daap.songdiscnumber,daap.songformat";
         ret += "&session-id=" + host.getSessionID();
         ret += "&revision-number=" + host.getRevisionNumber();

@@ -6,6 +6,8 @@
 
 package org.mult.daap.client;
 
+import androidx.annotation.NonNull;
+
 import org.mult.daap.client.daap.DaapPlaylist;
 
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public abstract class Host {
         return false;
     }
 
+    @NonNull
     public String toString() {
         return name;
     }
