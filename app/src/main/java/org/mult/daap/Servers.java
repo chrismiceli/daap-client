@@ -58,9 +58,7 @@ public class Servers extends Activity implements Observer {
     private static final int MENU_ADD = 2;
     private static final int CONTEXT_DELETE = 3;
     private static final int CONTEXT_EDIT = 4;
-    private static final int MENU_DONATE = 5;
     private static final int PASSWORD_DIALOG = 0;
-    private static final String donateLink = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=chrismiceli%40gmail%2ecom&lc=US&item_name=DAAP%20%2d%20Android%20Application&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted";
     private static List<Map<String, ?>> localServers = null;
     private SeparatedListAdapter adapter = null;
     private DBAdapter db;
@@ -359,8 +357,6 @@ public class Servers extends Activity implements Observer {
                 R.drawable.ic_menu_add);
         menu.add(0, MENU_ABOUT, 0, R.string.about_info).setIcon(
                 R.drawable.ic_menu_about);
-        menu.add(0, MENU_DONATE, 0, R.string.donate).setIcon(
-                R.drawable.ic_menu_send);
         return true;
     }
 
@@ -416,11 +412,6 @@ public class Servers extends Activity implements Observer {
                 intent = new Intent(Servers.this, AddServerMenu.class);
                 startActivityForResult(intent, 1);
                 return true;
-            case MENU_DONATE:
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse(donateLink));
-                startActivityForResult(intent, 1);
         }
         return false;
     }
