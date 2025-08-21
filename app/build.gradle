@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         applicationId "org.mult.daap"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 36
     }
 
     dependencies {
         implementation 'javax.jmdns:jmdns:3.4.1'
-        implementation 'androidx.annotation:annotation:1.8.1'
-        implementation 'androidx.core:core:1.13.1'
+        implementation 'androidx.annotation:annotation:1.9.1'
+        implementation 'androidx.core:core:1.17.0'
     }
 
     buildTypes {
